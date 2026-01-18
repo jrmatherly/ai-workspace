@@ -185,9 +185,10 @@ CI/CD workflows using Claude Code GitHub App (`.github/workflows/`):
 | `claude.yml` | @claude mentions in issues/PRs | General assistant |
 | `claude-code-review.yml` | PR opened/updated | Automated code review |
 | `claude-triage.yml` | Issue opened | Auto-triage new issues |
+| `codeql.yml` | Push/PR to main, weekly | Security scanning for workflows |
 | `markdown-lint.yml` | PR with markdown changes | Lint markdown files |
 
-All Claude workflows use `CLAUDE_CODE_OAUTH_TOKEN` for authentication via the Claude Code GitHub App.
+Claude workflows use `CLAUDE_CODE_OAUTH_TOKEN` for authentication via the Claude Code GitHub App.
 
 ## When to Read What
 
