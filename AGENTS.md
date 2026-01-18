@@ -74,14 +74,64 @@ go test -race -v -run TestName ./pkg/...
 ```bash
 # From workspace root
 mise install                 # Install all tools (go, node, python, golangci-lint, gita)
-mise all                     # Validate ALL projects
-mise test-all                # Test ALL projects
-mise gita-status             # Git status across all repos
+mise run help                # Show all available tasks
+```
 
-# From any project directory
-mise :test                   # Run project tests
-mise :build                  # Build project
-mise :validate-ci            # CI validation
+#### Cross-Project Validation
+
+```bash
+mise run all                 # Validate ALL projects
+mise run test-all            # Test ALL projects
+mise run tidy-all            # go mod tidy on all projects
+mise run status              # Git status summary
+mise run deps-check          # Check outdated dependencies
+```
+
+#### Multi-Repo Management (gita)
+
+**CRITICAL:** Always use these for multi-repo operations instead of raw git commands.
+
+```bash
+mise run gita-status         # Git status across all repos (alias: mise gs)
+mise run gita-fetch          # Fetch all repos (alias: mise gf)
+mise run gita-pull           # Pull all repos (alias: mise gp)
+mise run gita-push           # Push all repos (use with caution)
+mise run gita-init           # Register all repos with gita (first-time setup)
+```
+
+#### Conventional Commits (Per-Project)
+
+```bash
+# Format: mise run commit:PROJECT -m "type(scope): message"
+mise run commit:obot-entraid -m "feat(auth): add SSO support"   # alias: mise ce
+mise run commit:obot-tools -m "fix(provider): resolve timeout"  # alias: mise ct
+mise run commit:nah -m "refactor(router): simplify handlers"    # alias: mise cn
+mise run commit:kinm -m "test(storage): add edge cases"         # alias: mise ck
+mise run commit:mcp-oauth-proxy -m "docs: update README"        # alias: mise cm
+mise run commit:mcp-catalog -m "chore: update configs"          # alias: mise cc
+mise run commit:namegenerator -m "fix: improve randomness"      # alias: mise cng
+```
+
+#### Push (Per-Project)
+
+```bash
+mise run push:obot-entraid   # alias: mise pe
+mise run push:obot-tools     # alias: mise pt
+mise run push:nah            # alias: mise pn
+mise run push:kinm           # alias: mise pk
+mise run push:mcp-oauth-proxy # alias: mise pm
+mise run push:mcp-catalog    # alias: mise pc
+mise run push:namegenerator  # alias: mise png
+mise run push-all            # Push all projects (use with caution)
+```
+
+#### Single Project Operations
+
+```bash
+mise //nah:test              # Test nah only
+mise //kinm:build            # Build kinm only
+mise :test                   # Test current directory project
+mise :validate-ci            # CI validation for current project
 ```
 
 ### Using make (Traditional)

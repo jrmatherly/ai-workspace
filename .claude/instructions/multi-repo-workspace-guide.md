@@ -319,34 +319,28 @@ namegenerator/
 
 ### Phase 2: Commit Configuration to Child Repositories
 
-Each project's mise.toml needs to be committed to that project's repository:
+Each project's mise.toml needs to be committed to that project's repository.
+
+**Using mise tasks (recommended):**
+
+```bash
+# From workspace root, use mise commit tasks
+mise run commit:nah -m "feat: add mise configuration for task management"
+mise run commit:kinm -m "feat: add mise configuration for task management"
+mise run commit:obot-entraid -m "feat: add mise configuration for task management"
+mise run commit:mcp-oauth-proxy -m "feat: add mise configuration for task management"
+mise run commit:namegenerator -m "feat: add mise configuration for task management"
+mise run commit:obot-tools -m "feat: add mise configuration for task management"
+```
+
+**Or manually (not recommended):**
 
 ```bash
 # Navigate to each project and commit mise.toml
-
 cd /Users/jason/dev/AI/nah
 git add mise.toml
 git commit -m "feat: add mise configuration for task management"
-
-cd /Users/jason/dev/AI/kinm
-git add mise.toml
-git commit -m "feat: add mise configuration for task management"
-
-cd /Users/jason/dev/AI/obot-entraid
-git add mise.toml
-git commit -m "feat: add mise configuration for task management"
-
-cd /Users/jason/dev/AI/mcp-oauth-proxy
-git add mise.toml
-git commit -m "feat: add mise configuration for task management"
-
-cd /Users/jason/dev/AI/namegenerator
-git add mise.toml
-git commit -m "feat: add mise configuration for task management"
-
-cd /Users/jason/dev/AI/obot-tools
-git add mise.toml
-git commit -m "feat: add mise configuration for task management"
+# ... repeat for each project
 ```
 
 ### Phase 3: Commit Root Repository Changes
@@ -359,17 +353,35 @@ git commit -m "feat: add shared mise configuration and documentation"
 
 ### Phase 4: Push All Repositories
 
+**Using mise/gita (recommended):**
+
 ```bash
-# Push each project
-cd /Users/jason/dev/AI/nah && git push origin main
-cd /Users/jason/dev/AI/kinm && git push origin main
-cd /Users/jason/dev/AI/obot-entraid && git push origin main
-cd /Users/jason/dev/AI/mcp-oauth-proxy && git push origin main
-cd /Users/jason/dev/AI/namegenerator && git push origin main
-cd /Users/jason/dev/AI/obot-tools && git push origin main
+# Push all child repos from workspace root
+mise run gita-push
+
+# Then push root repository
+git push origin main
+```
+
+**Or using individual push tasks:**
+
+```bash
+mise run push:nah
+mise run push:kinm
+mise run push:obot-entraid
+mise run push:mcp-oauth-proxy
+mise run push:namegenerator
+mise run push:obot-tools
 
 # Push root repository
-cd /Users/jason/dev/AI && git push origin main
+git push origin main
+```
+
+**Or using push-all:**
+
+```bash
+mise run push-all
+git push origin main
 ```
 
 ---
@@ -427,6 +439,39 @@ mise gita-push
 # Run arbitrary git command on all repos
 mise gita-cmd -- status
 mise gita-cmd -- log --oneline -3
+```
+
+#### Conventional Commits via mise
+
+The root mise.toml includes tasks for conventional commits per project:
+
+```bash
+# Format: mise run commit:PROJECT -m "type(scope): message"
+mise run commit:obot-entraid -m "feat(auth): add feature"  # alias: mise ce
+mise run commit:obot-tools -m "fix(provider): bug fix"     # alias: mise ct
+mise run commit:nah -m "refactor: cleanup"                 # alias: mise cn
+mise run commit:kinm -m "test: add tests"                  # alias: mise ck
+mise run commit:mcp-oauth-proxy -m "docs: update docs"     # alias: mise cm
+mise run commit:mcp-catalog -m "chore: update config"      # alias: mise cc
+mise run commit:namegenerator -m "fix: improve algo"       # alias: mise cng
+```
+
+**Commit Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
+
+#### Push Operations via mise
+
+```bash
+# Push individual projects
+mise run push:obot-entraid   # alias: mise pe
+mise run push:obot-tools     # alias: mise pt
+mise run push:nah            # alias: mise pn
+mise run push:kinm           # alias: mise pk
+mise run push:mcp-oauth-proxy # alias: mise pm
+mise run push:mcp-catalog    # alias: mise pc
+mise run push:namegenerator  # alias: mise png
+
+# Push all projects (use with caution)
+mise run push-all
 ```
 
 #### Direct gita Commands

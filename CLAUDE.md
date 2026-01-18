@@ -10,6 +10,45 @@ Claude Code-specific guidance for the AI/MCP multi-repo workspace. This file com
 2. **Claude-specific**: This file for Serena MCP, memories, and Claude Code features
 3. **Initialization**: Run `/expert-mode` to activate full context with Serena integration
 
+## Multi-Repo Quick Reference (mise + gita)
+
+**CRITICAL:** This is a multi-repo workspace. Always use mise tasks for git operations.
+
+### Status & Sync
+
+```bash
+mise run gita-status   # Check all repos (alias: mise gs)
+mise run gita-fetch    # Fetch all repos (alias: mise gf)
+mise run gita-pull     # Pull all repos (alias: mise gp)
+mise run gita-push     # Push all repos
+```
+
+### Commits (Conventional Format)
+
+```bash
+mise run commit:PROJECT -m "type(scope): message"
+
+# Aliases: ce (obot-entraid), ct (obot-tools), cn (nah), ck (kinm),
+#          cm (mcp-oauth-proxy), cc (mcp-catalog), cng (namegenerator)
+```
+
+### Push
+
+```bash
+mise run push:PROJECT   # Push single project
+mise run push-all       # Push all projects
+```
+
+### Cross-Project Tasks
+
+```bash
+mise run all            # Validate all projects
+mise run test-all       # Test all projects
+mise run tidy-all       # go mod tidy on all
+```
+
+**See `AGENTS.md` for full command reference.**
+
 ## Serena MCP Integration
 
 This project uses [Serena MCP](https://github.com/serena-ai/serena) for enhanced code intelligence. Activate the project before working:

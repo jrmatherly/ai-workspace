@@ -23,18 +23,26 @@ Activate the AI workspace Serena project for access to memories and symbolic too
 mcp__plugin_serena_serena__activate_project with project: "AI"
 ```
 
-### 2. Check Current State
+### 2. Check Current State (Use mise/gita)
 
-Understand the current working context:
+**IMPORTANT:** Always use mise tasks and gita for multi-repo operations. Never use raw git commands for cross-repo work.
+
+Check workspace status with gita:
 
 ```bash
-pwd && git status && git branch --show-current && git log --oneline -5
+mise run gita-status   # or: mise gs
+```
+
+For single project context:
+
+```bash
+pwd && git branch --show-current && git log --oneline -5
 ```
 
 **Identify:**
 
 - Current directory (which project?)
-- Uncommitted changes
+- Uncommitted changes across all repos (via gita-status)
 - Current branch and recent work context
 
 ### 3. Identify Active Project
@@ -60,11 +68,88 @@ Based on working directory or user's task, determine which project(s) to focus o
 Confirm readiness:
 
 - Serena project activated
-- Current directory and git state understood
+- Current directory and git state understood (via `mise gs`)
 - Active project identified
 - Ready to load project-specific context on-demand
 
 **What would you like to work on?**
+
+---
+
+## Multi-Repo Management (mise + gita)
+
+**CRITICAL:** This is a multi-repo workspace. Always use mise tasks for cross-repo operations.
+
+### Quick Reference Commands
+
+| Task | Command | Alias |
+| ---- | ------- | ----- |
+| **Check all repos status** | `mise run gita-status` | `mise gs` |
+| **Fetch all repos** | `mise run gita-fetch` | `mise gf` |
+| **Pull all repos** | `mise run gita-pull` | `mise gp` |
+| **Push all repos** | `mise run gita-push` | - |
+
+### Committing Changes (Conventional Commits)
+
+**Always use mise commit tasks** - they enforce conventional commit format and add Co-Authored-By:
+
+| Project | Command | Alias |
+| ------- | ------- | ----- |
+| obot-entraid | `mise run commit:obot-entraid -m "type(scope): msg"` | `mise ce` |
+| obot-tools | `mise run commit:obot-tools -m "type(scope): msg"` | `mise ct` |
+| nah | `mise run commit:nah -m "type(scope): msg"` | `mise cn` |
+| kinm | `mise run commit:kinm -m "type(scope): msg"` | `mise ck` |
+| mcp-oauth-proxy | `mise run commit:mcp-oauth-proxy -m "type(scope): msg"` | `mise cm` |
+| mcp-catalog | `mise run commit:mcp-catalog -m "type(scope): msg"` | `mise cc` |
+| namegenerator | `mise run commit:namegenerator -m "type(scope): msg"` | `mise cng` |
+
+**Commit Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`
+
+### Pushing Changes
+
+| Project | Command | Alias |
+| ------- | ------- | ----- |
+| obot-entraid | `mise run push:obot-entraid` | `mise pe` |
+| obot-tools | `mise run push:obot-tools` | `mise pt` |
+| nah | `mise run push:nah` | `mise pn` |
+| kinm | `mise run push:kinm` | `mise pk` |
+| mcp-oauth-proxy | `mise run push:mcp-oauth-proxy` | `mise pm` |
+| mcp-catalog | `mise run push:mcp-catalog` | `mise pc` |
+| namegenerator | `mise run push:namegenerator` | `mise png` |
+| **All projects** | `mise run push-all` | - |
+
+### Cross-Project Operations
+
+```bash
+mise run all           # Validate all projects
+mise run test-all      # Test all projects
+mise run tidy-all      # go mod tidy on all projects
+mise run status        # Git status summary
+mise run deps-check    # Check outdated dependencies
+```
+
+### Single Project Operations
+
+```bash
+mise //nah:test        # Test nah only
+mise //kinm:build      # Build kinm only
+mise :test             # Test current directory project
+```
+
+### Anti-Pattern: Raw Git Commands
+
+**DO NOT use these for cross-repo work:**
+
+```bash
+# ❌ DON'T: Manual git across repos
+cd nah && git add . && git commit -m "msg" && cd ..
+cd kinm && git add . && git commit -m "msg" && cd ..
+
+# ✅ DO: Use mise tasks
+mise run commit:nah -m "type(scope): msg"
+mise run commit:kinm -m "type(scope): msg"
+mise run gita-push
+```
 
 ---
 
@@ -100,7 +185,7 @@ Load the project's `CLAUDE.md` when working on that project:
 
 | Task Type | Load |
 | ----------- | ------ |
-| Architecture/Design | `documentation/reference/ARCHITECTURE.md`, `codebase_architecture` memory |
+| Architecture/Design | `documentation/docs/reference/architecture.md`, `codebase_architecture` memory |
 | Documentation | `.claude/instructions/documentation-standards.md` |
 | GPTScript Development | `.claude/instructions/gptscript-development-guide.md` |
 | Troubleshooting | `TROUBLESHOOTING.md` |
@@ -127,7 +212,7 @@ Load the project's `CLAUDE.md` when working on that project:
 
 - Activate Serena once
 - Load each project's `CLAUDE.md` only when switching to that project
-- Use `documentation/reference/ARCHITECTURE.md` for understanding cross-project relationships
+- Use `documentation/docs/reference/architecture.md` for understanding cross-project relationships
 
 ---
 
