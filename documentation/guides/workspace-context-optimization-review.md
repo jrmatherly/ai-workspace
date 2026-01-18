@@ -1,6 +1,6 @@
 # Workspace Context Optimization Review
 
-> **Version**: 1.0.0 | **Created**: 2026-01-18 | **Status**: IN PROGRESS (Living Document)
+> **Version**: 1.0.0 | **Created**: 2026-01-18 | **Status**: ✅ COMPLETE (All 3 Phases)
 
 Systematic review of documentation, Serena memories, and Claude Code configuration across all projects in the AI/MCP multi-repo workspace to optimize context window utilization and eliminate redundancy.
 
@@ -1169,11 +1169,13 @@ This is the largest and most complex project (full-stack MCP platform with 40+ c
 
 **Phase 2 COMPLETE: All 69 files archived across 7 projects.**
 
-### Phase 3: Cross-Project Standardization
+### Phase 3: Cross-Project Standardization ✅ COMPLETE
 
-- [ ] Define standard CLAUDE.md template based on findings
-- [ ] Document inheritance patterns
-- [ ] Create validation checklist
+- [x] Define standard CLAUDE.md template based on findings
+- [x] Document inheritance patterns
+- [x] Create validation checklist
+
+**Phase 3 COMPLETE: See detailed deliverables in [Phase 3 section](#phase-3-cross-project-standardization-1) below.**
 
 ---
 
@@ -1189,14 +1191,214 @@ This is the largest and most complex project (full-stack MCP platform with 40+ c
 | 2026-01-18 | obot-entraid | Initial analysis | 0 (analysis only) | 0 |
 | 2026-01-18 | obot-tools | Initial analysis | 0 (analysis only) | 0 |
 | 2026-01-18 | **ALL PROJECTS** | **Phase 1 Complete** | **0 (analysis only)** | **~135,655 identified** |
-| 2026-01-18 | kinm | Phase 2 archival | 8 files archived | ~17,190 |
+| 2026-01-18 | kinm | Phase 2 archival | 9 files archived | ~17,190 |
 | 2026-01-18 | mcp-catalog | Phase 2 archival | 9 files archived | ~10,900 |
 | 2026-01-18 | mcp-oauth-proxy | Phase 2 archival | 11 files archived | ~19,300 |
-| 2026-01-18 | nah | Phase 2 archival | 9 files archived | ~30,295 |
+| 2026-01-18 | nah | Phase 2 archival | 12 files archived | ~30,295 |
 | 2026-01-18 | namegenerator | Phase 2 archival | 15 files archived | ~32,385 |
 | 2026-01-18 | obot-entraid | Phase 2 archival | 6 files archived | ~6,830 |
-| 2026-01-18 | obot-tools | Phase 2 archival | 11 files archived | ~18,550 |
-| 2026-01-18 | **ALL PROJECTS** | **Phase 2 Complete** | **69 files archived** | **~135,450 tokens saved** |
+| 2026-01-18 | obot-tools | Phase 2 archival | 12 files archived | ~18,550 |
+| 2026-01-18 | **ALL PROJECTS** | **Phase 2 Complete** | **74 files archived** | **~135,450 tokens saved** |
+| 2026-01-18 | VALIDATION | Reflection validation | Serena MCP analysis | Confirmed complete |
+| 2026-01-18 | STANDARDIZATION | Standard CLAUDE.md template | Template created | N/A |
+| 2026-01-18 | STANDARDIZATION | Inheritance patterns | Documentation added | N/A |
+| 2026-01-18 | STANDARDIZATION | Validation checklist | Checklist created | N/A |
+| 2026-01-18 | **ALL PHASES** | **Phase 3 Complete** | **All 3 deliverables** | **Optimization complete** |
+
+---
+
+## Phase 3: Cross-Project Standardization
+
+### Standard CLAUDE.md Template
+
+Based on analysis of all 7 project CLAUDE.md files, the following template represents the optimal structure:
+
+```markdown
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+**{project-name}** is a {brief-description}. {1-2 sentences about purpose and key technology}.
+
+- **Module**: `github.com/obot-platform/{project}`
+- **Go Version**: {version}
+- **Primary Dependencies**: {key dependencies}
+
+## Development Commands
+
+### Building
+
+\`\`\`bash
+make build            # Build the project
+go build ./...        # Direct build
+\`\`\`
+
+### Testing
+
+\`\`\`bash
+make test             # Run all tests
+go test ./...         # Direct test
+go test -race ./...   # With race detector
+go test -cover ./...  # With coverage
+\`\`\`
+
+### Code Quality
+
+\`\`\`bash
+make fmt              # Format code
+make lint             # Run linters
+make validate         # Full validation
+make validate-ci      # CI simulation
+\`\`\`
+
+## Architecture
+
+### Core Components
+
+| Package | Purpose |
+|---------|---------|
+| `pkg/component1` | Description |
+| `pkg/component2` | Description |
+
+### Key Patterns
+
+{Describe 2-3 key architectural patterns used in the project}
+
+### Data Flow
+
+{Brief description or simple diagram of how data flows through the system}
+
+## Code Conventions
+
+### Naming
+
+- **Exported**: PascalCase
+- **Unexported**: camelCase
+- **Package names**: lowercase
+
+### Error Handling
+
+- Wrap errors with context: `fmt.Errorf("failed to X: %w", err)`
+- {Project-specific error patterns}
+
+### Testing
+
+- Table-driven tests
+- Use `testify` for assertions
+- {Project-specific testing patterns}
+
+## Common Tasks
+
+### {Task Category 1}
+
+{Step-by-step instructions for common task}
+
+### {Task Category 2}
+
+{Step-by-step instructions for common task}
+
+## Workspace Integration
+
+This project is part of the AI workspace. Additional resources:
+
+- **Claude Code commands**: `AI/.claude/commands/` (expert-mode, etc.)
+- **Shared agents**: `AI/.claude/agents/` (explore, security-audit, etc.)
+- **SuperClaude skills**: `/sc:analyze`, `/sc:test`, `/sc:git`, etc.
+- **Serena memories**: `AI/.serena/memories/` (task_completion_checklist, etc.)
+- **GitHub Actions**: Workspace-level PR review and issue triage
+
+For session initialization with full context, run `/expert-mode` from the workspace root.
+```
+
+### Inheritance Patterns
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    AI/ (WORKSPACE ROOT)                              │
+├─────────────────────────────────────────────────────────────────────┤
+│  CLAUDE.md          → Claude Code-specific integration              │
+│  AGENTS.md          → Universal guidelines (ALL AI tools)           │
+│  .claude/           → Shared commands, agents, rules, skills        │
+│  .serena/memories/  → Workspace-wide context memories               │
+│  .github/workflows/ → Shared GitHub Actions                         │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+                              │  INHERITS (projects reference, not duplicate)
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                    project/ (PROJECT LEVEL)                          │
+├─────────────────────────────────────────────────────────────────────┤
+│  CLAUDE.md          → Project-specific context ONLY                 │
+│  README.md          → User-facing documentation                     │
+│  docs/              → Detailed documentation (if needed)            │
+│  .claude/           → ONLY settings.local.json (if needed)          │
+│                       OR project-specific rules (rare)              │
+│  .serena/memories/  → ONLY unique project knowledge (rare)          │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+#### What Belongs Where
+
+| Content Type | Root AI/ | Project |
+|--------------|----------|---------|
+| Universal code conventions | ✅ AGENTS.md | ❌ Don't duplicate |
+| Language-specific patterns | ✅ .claude/rules/ | ❌ Reference root |
+| Project architecture | ❌ | ✅ CLAUDE.md |
+| Project commands | ❌ | ✅ CLAUDE.md |
+| Shared agents (explore, etc.) | ✅ .claude/agents/ | ❌ Reference root |
+| Project-specific agents | ❌ | ✅ .claude/agents/ (rare) |
+| SuperClaude skills | ✅ .claude/skills/ | ❌ Reference root |
+| Serena memories (general) | ✅ .serena/memories/ | ❌ Don't duplicate |
+| Serena memories (project-unique) | ❌ | ✅ Only if unique |
+| GitHub Actions | ✅ .github/workflows/ | ❌ Reference root |
+
+#### Inheritance Principles
+
+1. **Root provides shared foundation** - Common patterns, shared agents, commands, skills
+2. **Projects provide specifics** - Architecture, commands, conventions unique to that project
+3. **Never duplicate** - If content exists in root, reference it, don't copy
+4. **Standard footer** - All projects include "Workspace Integration" section linking to root
+5. **Minimal .claude/** - Projects should only have `settings.local.json` unless truly unique rules needed
+
+### Validation Checklist
+
+#### Required Elements ✅
+
+- [ ] Starts with `# CLAUDE.md` header
+- [ ] Contains intro sentence: "This file provides guidance to Claude Code..."
+- [ ] Has "Project Overview" section with tech stack
+- [ ] Has "Development Commands" with build/test/lint
+- [ ] Has "Architecture" section
+- [ ] Has "Workspace Integration" footer (standard text)
+- [ ] Minimum ~150 lines (adequate context)
+
+#### Quality Indicators ✅
+
+- [ ] Code examples in fenced code blocks
+- [ ] Command tables or organized lists
+- [ ] Architecture diagrams or component tables
+- [ ] Error handling patterns documented
+- [ ] Testing strategy documented
+- [ ] Common tasks section
+
+#### Anti-Patterns ❌
+
+- [ ] No PROJECT_INDEX.md/json files (use CLAUDE.md instead)
+- [ ] No claudedocs/ directories (archived pattern)
+- [ ] No duplicated AGENTS.md content
+- [ ] No redundant .serena/memories duplicating root
+- [ ] No external URL documentation that requires fetching
+- [ ] No outdated version numbers or placeholder content
+- [ ] No .claude/instructions/, .claude/agents/, .claude/commands/ duplicating root
+
+#### Project-Specific Extensions (Optional)
+
+- [ ] `.claude/rules/` - Only for truly project-specific file patterns
+- [ ] `.claude/settings.local.json` - Local tool/hook overrides
+- [ ] `.serena/memories/` - Only for unique project knowledge not in root
+- [ ] `docs/` - Detailed API/architecture beyond CLAUDE.md scope
 
 ---
 
