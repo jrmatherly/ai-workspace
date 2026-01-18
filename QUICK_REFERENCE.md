@@ -317,10 +317,10 @@ Key skills: `validate-project`, `code-review`, `new-provider`
 | `README.md` | Project overview |
 | `CLAUDE.md` | AI assistant guide (DETAILED) |
 | `.claude/instructions/claude-code-enhancements-guide-v2.md` | Full enhancement reference |
-| `documentation/reference/PROJECT_INDEX.md` | Comprehensive reference |
-| `documentation/reference/DOCUMENTATION_GUIDE.md` | Navigation |
-| `documentation/reference/API_REFERENCE.md` | API docs |
-| `documentation/reference/ARCHITECTURE.md` | Visual architecture |
+| `documentation/docs/reference/project-index.md` | Comprehensive reference |
+| `documentation/docs/reference/documentation-guide.md` | Navigation |
+| `documentation/docs/reference/api-reference.md` | API docs |
+| `documentation/docs/reference/architecture.md` | Visual architecture |
 | `QUICK_REFERENCE.md` | This file |
 
 ---
@@ -360,9 +360,9 @@ func TestMyFunction(t *testing.T) {
 ## 🎓 Learning Path
 
 1. **Start:** Read `README.md`
-2. **Navigate:** Use `documentation/reference/DOCUMENTATION_GUIDE.md`
+2. **Navigate:** Use `documentation/docs/reference/documentation-guide.md`
 3. **Deep Dive:** Read project `CLAUDE.md`
-4. **Reference:** Use `documentation/reference/PROJECT_INDEX.md`
+4. **Reference:** Use `documentation/docs/reference/project-index.md`
 5. **Build:** Follow project `README.md` setup
 6. **Code:** Follow conventions in `.serena/memories/`
 
@@ -385,7 +385,7 @@ func TestMyFunction(t *testing.T) {
 
 1. Check project `README.md`
 2. Read project `CLAUDE.md` for architecture
-3. Search `documentation/reference/PROJECT_INDEX.md` for keywords
+3. Search `documentation/docs/reference/project-index.md` for keywords
 4. Check `.serena/memories/` for conventions
 5. File GitHub issue if stuck
 
@@ -394,6 +394,6 @@ func TestMyFunction(t *testing.T) {
 **For complete documentation, see:**
 
 - [README.md](README.md) - Workspace overview
-- [documentation/reference/DOCUMENTATION_GUIDE.md](documentation/reference/DOCUMENTATION_GUIDE.md) - Full navigation
-- [documentation/reference/PROJECT_INDEX.md](documentation/reference/PROJECT_INDEX.md) - Comprehensive reference
+- [documentation/docs/reference/documentation-guide.md](documentation/docs/reference/documentation-guide.md) - Full navigation
+- [documentation/docs/reference/project-index.md](documentation/docs/reference/project-index.md) - Comprehensive reference
 - Individual project `CLAUDE.md` files - Detailed architecture

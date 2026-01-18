@@ -134,10 +134,10 @@ git config commit.template .gitmessage  # If exists
 cat README.md
 
 # Check documentation guide
-cat documentation/reference/DOCUMENTATION_GUIDE.md
+cat documentation/docs/reference/documentation-guide.md
 
 # View project index
-cat documentation/reference/PROJECT_INDEX.md
+cat documentation/docs/reference/project-index.md
 
 # Quick reference
 cat QUICK_REFERENCE.md
@@ -806,8 +806,8 @@ Once approved:
 | [README.md](../../README.md) | Workspace overview |
 | [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md) | One-page reference |
 | [TROUBLESHOOTING.md](../../TROUBLESHOOTING.md) | Common issues |
-| [DOCUMENTATION_GUIDE.md](./DOCUMENTATION_GUIDE.md) | Navigation |
-| [PROJECT_INDEX.md](./PROJECT_INDEX.md) | Comprehensive reference |
+| [DOCUMENTATION_GUIDE.md](./documentation-guide.md) | Navigation |
+| [PROJECT_INDEX.md](./project-index.md) | Comprehensive reference |
 | Project `CLAUDE.md` | Detailed architecture |
 
 ### Learning Resources

@@ -97,7 +97,7 @@ Start minimal, expand as needed:
 
 - Load universal context once (shared across all projects)
 - Load each project's CLAUDE.md only when working on that project
-- Use `documentation/reference/ARCHITECTURE.md` for understanding relationships without loading all details
+- Use `documentation/docs/reference/architecture.md` for understanding relationships without loading all details
 
 ## Context Refresh Patterns
 
@@ -154,7 +154,7 @@ When creating documentation:
 
 ### Architecture/Design Work
 
-- Load: All universal memories, project CLAUDE.md, documentation/reference/ARCHITECTURE.md
+- Load: All universal memories, project CLAUDE.md, documentation/docs/reference/architecture.md
 - Load: codebase_architecture memory for patterns
 
 ### Documentation Work
@@ -167,7 +167,7 @@ When creating documentation:
 
 - Use: Auto-loaded CLAUDE.md for cross-project overview
 - Load: Each project's CLAUDE.md only when switching to that project
-- Load: documentation/reference/ARCHITECTURE.md for visual relationships
+- Load: documentation/docs/reference/architecture.md for visual relationships
 - Skip: Deep project-specific details unless actively working in that project
 
 ## Monitoring Usage

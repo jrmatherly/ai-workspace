@@ -522,10 +522,10 @@ make validate-ci
 | **CLAUDE.md** | Claude Code integration guide |
 | **QUICK_REFERENCE.md** | One-page command reference |
 | **TROUBLESHOOTING.md** | Problem resolution |
-| **documentation/reference/PROJECT_INDEX.md** | This file - Project reference |
-| **documentation/reference/DOCUMENTATION_GUIDE.md** | Navigation guide |
-| **documentation/reference/ARCHITECTURE.md** | Visual architecture |
-| **documentation/reference/API_REFERENCE.md** | API documentation |
+| **documentation/docs/reference/project-index.md** | This file - Project reference |
+| **documentation/docs/reference/documentation-guide.md** | Navigation guide |
+| **documentation/docs/reference/architecture.md** | Visual architecture |
+| **documentation/docs/reference/api-reference.md** | API documentation |
 
 **Project-Specific:**
 

@@ -1414,8 +1414,8 @@ Token estimates are calculated as:
 
 | Document | Location | Purpose |
 |----------|----------|---------|
-| Project Documentation Alignment Guide | `documentation/guides/project-documentation-alignment-guide.md` | Adding features (agents, workflows) |
-| This Document | `documentation/guides/workspace-context-optimization-review.md` | Optimization and cleanup |
+| Project Documentation Alignment Guide | `documentation/docs/guides/project-documentation-alignment-guide.md` | Adding features (agents, workflows) |
+| This Document | `documentation/docs/guides/workspace-context-optimization-review.md` | Optimization and cleanup |
 | Root CLAUDE.md | `CLAUDE.md` | Workspace-level Claude integration |
 | Root AGENTS.md | `AGENTS.md` | Universal AI guidelines |
 

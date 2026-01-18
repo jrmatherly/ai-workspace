@@ -525,7 +525,7 @@ Create a cross-project documentation index for discovering related documentation
 
 | Document | Location | Purpose |
 | ---------- | ---------- | --------- |
-| Claude Code v2 Guide | `documentation/guides/claude-code-enhancements-v2.md` | Comprehensive enhancement guide |
+| Claude Code v2 Guide | `.claude/instructions/claude-code-enhancements-guide-v2.md` | Comprehensive enhancement guide |
 | AGENTS.md | `AI/AGENTS.md` | Universal project guidelines |
 | Monorepo CLAUDE.md | `AI/CLAUDE.md` | Monorepo-level Claude guidance |
 | Task Completion Checklist | `AI/.serena/memories/task_completion_checklist.md` | Pre-commit validation |

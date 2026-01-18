@@ -6,7 +6,7 @@
 
 **A comprehensive collection of AI/MCP technologies, Kubernetes tools, and authentication systems.**
 
-> 🚀 **Quick Start:** [Documentation Guide](./documentation/reference/DOCUMENTATION_GUIDE.md) • [Project Index](./documentation/reference/PROJECT_INDEX.md) • [API Reference](./documentation/reference/API_REFERENCE.md)
+> 🚀 **Quick Start:** [Documentation Guide](./documentation/docs/reference/documentation-guide.md) • [Project Index](./documentation/docs/reference/project-index.md) • [API Reference](./documentation/docs/reference/api-reference.md)
 
 ---
 
@@ -131,12 +131,12 @@ make build
 | Document | Purpose | Audience |
 | ---------- | --------- | ---------- |
 | **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** | One-page command reference | Active developers |
-| **[DEVELOPER_ONBOARDING.md](./documentation/reference/DEVELOPER_ONBOARDING.md)** | Complete onboarding guide | New contributors |
+| **[developer-onboarding.md](./documentation/docs/reference/developer-onboarding.md)** | Complete onboarding guide | New contributors |
 | **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** | Issue resolution guide | Debugging |
-| **[ARCHITECTURE.md](./documentation/reference/ARCHITECTURE.md)** | Visual architecture diagrams | Architects, visual learners |
-| **[DOCUMENTATION_GUIDE.md](./documentation/reference/DOCUMENTATION_GUIDE.md)** | Navigation and learning paths | Everyone |
-| **[PROJECT_INDEX.md](./documentation/reference/PROJECT_INDEX.md)** | Comprehensive project reference | Developers, AI |
-| **[API_REFERENCE.md](./documentation/reference/API_REFERENCE.md)** | Cross-project API documentation | API integrators |
+| **[architecture.md](./documentation/docs/reference/architecture.md)** | Visual architecture diagrams | Architects, visual learners |
+| **[documentation-guide.md](./documentation/docs/reference/documentation-guide.md)** | Navigation and learning paths | Everyone |
+| **[project-index.md](./documentation/docs/reference/project-index.md)** | Comprehensive project reference | Developers, AI |
+| **[api-reference.md](./documentation/docs/reference/api-reference.md)** | Cross-project API documentation | API integrators |
 
 ### 🎯 By Task
 
@@ -198,14 +198,12 @@ AI/
 ├── .claude/              # Claude Code config
 ├── .serena/              # Serena AI memories
 ├── documentation/
-│   ├── reference/        # Consolidated reference docs
-│   │   ├── PROJECT_INDEX.md
-│   │   ├── API_REFERENCE.md
-│   │   ├── ARCHITECTURE.md
-│   │   ├── DOCUMENTATION_GUIDE.md
-│   │   └── DEVELOPER_ONBOARDING.md
-│   ├── projects/         # Project work docs
-│   └── archive/          # Superseded docs
+│   ├── docs/             # Docusaurus source content
+│   │   ├── reference/    # Consolidated reference docs
+│   │   ├── guides/       # Implementation guides
+│   │   └── projects/     # Project work docs
+│   ├── archive/          # Superseded docs
+│   └── static/           # Static assets
 └── QUICK_REFERENCE.md    # Command reference
 ```
 
@@ -272,7 +270,7 @@ See [task completion checklist](./.serena/memories/task_completion_checklist.md)
 
 - **[nah Examples](./nah/docs/examples/)** - Kubernetes controller examples
 - **[obot-tools Guide](./obot-tools/docs/DEVELOPER_GUIDE.md)** - Tool development
-- **[Project Index](./documentation/reference/PROJECT_INDEX.md)** - Comprehensive reference
+- **[Project Index](./documentation/docs/reference/project-index.md)** - Comprehensive reference
 
 ### Architecture Docs
 
@@ -404,7 +402,7 @@ See individual LICENSE files in each project directory.
 
 ## 📞 Support
 
-- **Documentation:** See [DOCUMENTATION_GUIDE.md](./documentation/reference/DOCUMENTATION_GUIDE.md)
+- **Documentation:** See [documentation-guide.md](./documentation/docs/reference/documentation-guide.md)
 - **Issues:** Open in respective project directories
 - **Questions:** Use GitHub Discussions
 
@@ -414,8 +412,8 @@ See individual LICENSE files in each project directory.
 
 ### New Users
 
-1. Read [DOCUMENTATION_GUIDE.md](./documentation/reference/DOCUMENTATION_GUIDE.md)
-2. Choose a project from [PROJECT_INDEX.md](./documentation/reference/PROJECT_INDEX.md)
+1. Read [documentation-guide.md](./documentation/docs/reference/documentation-guide.md)
+2. Choose a project from [project-index.md](./documentation/docs/reference/project-index.md)
 3. Follow project README for setup
 4. Review examples and start coding
 

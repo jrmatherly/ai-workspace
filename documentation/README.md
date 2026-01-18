@@ -13,26 +13,29 @@
 ```
 documentation/
 ├── README.md (this file)
-├── projects/                        # Project-based documentation
-│   ├── fork-references/             # ✅ Phase 1 COMPLETE | ⏳ Phase 2-3 PENDING
-│   ├── docusaurus-config/           # ✅ COMPLETE
-│   ├── auth-providers/              # 📊 ANALYSIS COMPLETE | ⏳ IMPLEMENTATION PENDING
-│   ├── documentation-org/           # 📊 REPORTS COMPLETE
-│   ├── ai-context/                  # ✅ COMPLETE
-│   ├── expert-mode/                 # ✅ COMPLETE
-│   ├── gptscript-integration/       # ✅ COMPLETE
-│   ├── token-tracking-optimization/ # ✅ COMPLETE
-│   ├── obot-entraid/                # ✅ COMPLETE
-│   ├── obot-tools/                  # ✅ COMPLETE
-│   └── documentation-standards/     # ✅ COMPLETE
-├── guides/                          # Implementation guides and recommendations
-│   └── project-documentation-alignment-guide.md  # ⏳ IMPLEMENTATION PENDING
+├── docs/                            # Docusaurus source content
+│   ├── overview.md                  # Documentation home page
+│   ├── reference/                   # Reference documentation
+│   │   ├── architecture.md
+│   │   ├── api-reference.md
+│   │   ├── developer-onboarding.md
+│   │   ├── documentation-guide.md
+│   │   └── project-index.md
+│   ├── guides/                      # Implementation guides
+│   │   ├── branch-protection-checklist.md
+│   │   ├── project-documentation-alignment-guide.md
+│   │   └── workspace-context-optimization-review.md
+│   └── projects/                    # Project-based documentation
+│       ├── fork-references/         # ✅ Phase 1 COMPLETE | ⏳ Phase 2-3 PENDING
+│       ├── auth-providers/          # 📊 ANALYSIS COMPLETE | ⏳ IMPLEMENTATION PENDING
+│       └── ...                      # Other project docs
+├── archive/                         # Superseded/deprecated documentation
 ├── metadata/                        # Machine-readable indexes
-│   ├── .documentation-manifest
-│   ├── DOCUMENTATION_INDEX.json
-│   └── REPOSITORY_INDEX.json
-└── archive/                         # Superseded/deprecated documentation
-    └── Historical and superseded reports
+├── static/                          # Static assets (logos, images)
+├── src/                             # Custom CSS
+├── docusaurus.config.ts             # Docusaurus configuration
+├── sidebars.ts                      # Sidebar navigation
+└── package.json                     # Dependencies
 
 # Related: Claude Code Enhancements (.claude/) - workspace-level tooling
 .claude/
@@ -59,7 +62,7 @@ documentation/
 
 ### 1. Fork References Migration
 
-**Location**: `projects/fork-references/`
+**Location**: `docs/projects/fork-references/`
 
 **Status**: ✅ Phase 1 COMPLETE | ⏳ Phase 2-3 PENDING
 
@@ -91,7 +94,7 @@ documentation/
 
 ### 2. Docusaurus Version Configuration
 
-**Location**: `projects/docusaurus-config/`
+**Location**: `docs/projects/docusaurus-config/`
 
 **Status**: ✅ COMPLETE
 
@@ -117,7 +120,7 @@ documentation/
 
 ### 3. Auth Providers Migration
 
-**Location**: `projects/auth-providers/`
+**Location**: `docs/projects/auth-providers/`
 
 **Status**: 📊 ANALYSIS COMPLETE | ⏳ IMPLEMENTATION PENDING
 
@@ -144,7 +147,7 @@ documentation/
 
 ### 4. Documentation Organization
 
-**Location**: `projects/documentation-org/`
+**Location**: `docs/projects/documentation-org/`
 
 **Status**: 📊 REPORTS COMPLETE
 
@@ -166,7 +169,7 @@ documentation/
 
 ### 5. AI Context Pattern Implementation
 
-**Location**: `projects/ai-context/`
+**Location**: `docs/projects/ai-context/`
 
 **Status**: ✅ COMPLETE
 
@@ -186,7 +189,7 @@ documentation/
 
 ### 6. Expert Mode Documentation
 
-**Location**: `projects/expert-mode/`
+**Location**: `docs/projects/expert-mode/`
 
 **Status**: ✅ COMPLETE
 
@@ -206,7 +209,7 @@ documentation/
 
 ### 7. GPTScript Integration
 
-**Location**: `projects/gptscript-integration/`
+**Location**: `docs/projects/gptscript-integration/`
 
 **Status**: ✅ COMPLETE
 
@@ -237,7 +240,7 @@ documentation/
 
 ### 8. Token Tracking Optimization
 
-**Location**: `projects/token-tracking-optimization/`
+**Location**: `docs/projects/token-tracking-optimization/`
 
 **Status**: ✅ COMPLETE
 
@@ -272,7 +275,7 @@ documentation/
 
 ### 9. Obot Entra ID Project
 
-**Location**: `projects/obot-entraid/`
+**Location**: `docs/projects/obot-entraid/`
 
 **Status**: ✅ COMPLETE
 
@@ -286,7 +289,7 @@ documentation/
 
 ### 10. Obot Tools Project
 
-**Location**: `projects/obot-tools/`
+**Location**: `docs/projects/obot-tools/`
 
 **Status**: ✅ COMPLETE
 
@@ -300,7 +303,7 @@ documentation/
 
 ### 11. Documentation Standards
 
-**Location**: `projects/documentation-standards/`
+**Location**: `docs/projects/documentation-standards/`
 
 **Status**: ✅ COMPLETE
 
@@ -324,7 +327,7 @@ documentation/
 
 ### 13. Project Documentation Alignment
 
-**Location**: `guides/project-documentation-alignment-guide.md`
+**Location**: `docs/guides/project-documentation-alignment-guide.md`
 
 **Status**: ⏳ IMPLEMENTATION PENDING
 
@@ -347,7 +350,7 @@ documentation/
 
 **Documents**:
 
-- `guides/project-documentation-alignment-guide.md` - Complete implementation guide with checklists
+- `docs/guides/project-documentation-alignment-guide.md` - Complete implementation guide with checklists
 
 **Key Components**:
 
@@ -490,31 +493,31 @@ Superseded or deprecated documentation that may have historical value but is no 
 
 **Infrastructure & Configuration**:
 
-- `projects/fork-references/` - Fork repository migration
-- `projects/docusaurus-config/` - Documentation serving configuration
+- `docs/projects/fork-references/` - Fork repository migration
+- `docs/projects/docusaurus-config/` - Documentation serving configuration
 
 **Authentication & Security**:
 
-- `projects/auth-providers/` - Auth provider migration planning
+- `docs/projects/auth-providers/` - Auth provider migration planning
 
 **Documentation & Organization**:
 
-- `projects/documentation-org/` - Documentation cleanup
-- `projects/documentation-standards/` - Standards and guidelines
-- `projects/ai-context/` - AI context patterns
+- `docs/projects/documentation-org/` - Documentation cleanup
+- `docs/projects/documentation-standards/` - Standards and guidelines
+- `docs/projects/ai-context/` - AI context patterns
 
 **Development Optimization**:
 
-- `projects/expert-mode/` - Expert mode enhancements
-- `projects/gptscript-integration/` - GPTScript format integration
-- `projects/token-tracking-optimization/` - Context overhead optimization
+- `docs/projects/expert-mode/` - Expert mode enhancements
+- `docs/projects/gptscript-integration/` - GPTScript format integration
+- `docs/projects/token-tracking-optimization/` - Context overhead optimization
 - `.claude/` - Claude Code enhancements (agents, rules, skills, hooks)
-- `guides/project-documentation-alignment-guide.md` - Project documentation alignment
+- `docs/guides/project-documentation-alignment-guide.md` - Project documentation alignment
 
 **Project-Specific**:
 
-- `projects/obot-entraid/` - Obot Entra ID platform
-- `projects/obot-tools/` - Tools, model providers, auth providers
+- `docs/projects/obot-entraid/` - Obot Entra ID platform
+- `docs/projects/obot-tools/` - Tools, model providers, auth providers
 
 ### By Document Type
 
@@ -525,28 +528,25 @@ Superseded or deprecated documentation that may have historical value but is no 
 
 ---
 
-## Active Documentation (Root Directory)
+## Active Documentation
 
-The following documentation remains in the workspace root for active use:
-
-**Core Documentation**:
+**Workspace Root** (quick access):
 
 - `CLAUDE.md` - Main AI assistant instructions
 - `README.md` - Workspace overview
-
-**User Guides**:
-
-- `PROJECT_INDEX.md` - Comprehensive project index
 - `QUICK_REFERENCE.md` - One-page developer guide
-- `DEVELOPER_ONBOARDING.md` - Onboarding guide
 - `TROUBLESHOOTING.md` - Common issues and solutions
-- `ARCHITECTURE_DIAGRAM.md` - Architecture overview
-- `MERMAID_DIAGRAMS.md` - Interactive diagrams
-- `API_REFERENCE.md` - Cross-project API documentation
-- `DOCUMENTATION_GUIDE.md` - Navigation and learning paths
-- `DOCUMENTATION_INDEX_MASTER.md` - Master documentation index
-- `DOCUMENTATION_SUMMARY.md` - Documentation summary
-- `REPOSITORY_INDEX.md` - Repository index
+- `AGENTS.md` - Universal project guidelines
+
+**Docusaurus Site** (`documentation/docs/`):
+
+- `docs/reference/project-index.md` - Comprehensive project index
+- `docs/reference/developer-onboarding.md` - Onboarding guide
+- `docs/reference/architecture.md` - Architecture overview
+- `docs/reference/api-reference.md` - Cross-project API documentation
+- `docs/reference/documentation-guide.md` - Navigation and learning paths
+
+**Run locally**: `cd documentation && npm run start`
 
 ---
 
@@ -594,7 +594,7 @@ All project documentation should include:
 
 | Date | Change | Description |
 | ------ | ------ | ------ |
-| 2026-01-17 | **Project Documentation Alignment** | Added guides/project-documentation-alignment-guide.md with 4-phase implementation plan |
+| 2026-01-17 | **Project Documentation Alignment** | Added docs/guides/project-documentation-alignment-guide.md with 4-phase implementation plan |
 | 2026-01-17 | **Claude Code Enhancements** | Added project 12: Claude Code enhancements (agents, rules, skills, hooks, GitHub Actions) |
 | 2026-01-16 | **Major reorganization** | Restructured from type-based (reports/implementations) to project-based organization |
 | 2026-01-16 | **Created projects/** | Consolidated 11 projects with README status files |
@@ -614,19 +614,19 @@ All project documentation should include:
 ### Finding Specific Information
 
 **"Where is the fork migration work?"**
-→ `projects/fork-references/`
+→ `docs/projects/fork-references/`
 
 **"What's the status of auth provider migration?"**
-→ `projects/auth-providers/README.md` (Status: 📊 ANALYSIS COMPLETE | ⏳ IMPLEMENTATION PENDING)
+→ `docs/projects/auth-providers/README.md` (Status: 📊 ANALYSIS COMPLETE | ⏳ IMPLEMENTATION PENDING)
 
 **"How do I fix the documentation versioning?"**
-→ `projects/docusaurus-config/01-version-config-update.md`
+→ `docs/projects/docusaurus-config/01-version-config-update.md`
 
 **"What token optimizations were done?"**
-→ `projects/token-tracking-optimization/` (2 phases documented)
+→ `docs/projects/token-tracking-optimization/` (2 phases documented)
 
 **"What GPTScript patterns are documented?"**
-→ `projects/gptscript-integration/` + `.serena/memories/gptscript_tool_format.md`
+→ `docs/projects/gptscript-integration/` + `.serena/memories/gptscript_tool_format.md`
 
 ### Cross-References
 
@@ -642,8 +642,8 @@ All project documentation should include:
 
 - `CLAUDE.md` - Main AI assistant instructions
 - `README.md` - Monorepo overview
-- `PROJECT_INDEX.md` - Comprehensive project index
-- `DOCUMENTATION_GUIDE.md` - Navigation and learning paths
+- `documentation/docs/reference/project-index.md` - Comprehensive project index
+- `documentation/docs/reference/documentation-guide.md` - Navigation and learning paths
 
 ---
 

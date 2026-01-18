@@ -826,7 +826,7 @@ kill -SIGQUIT <pid>
 
 1. **Read the error message carefully** - Often contains the solution
 2. **Check project CLAUDE.md** - Detailed architecture and patterns
-3. **Search documentation/reference/PROJECT_INDEX.md** - Comprehensive reference
+3. **Search documentation/docs/reference/project-index.md** - Comprehensive reference
 4. **Review `.serena/memories/`** - Conventions and best practices
 5. **Check Git history** - `git log --all --grep="keyword"`
 
@@ -846,9 +846,9 @@ Include:
 ## 📚 Additional Resources
 
 - [README.md](README.md) - Workspace overview
-- [documentation/reference/DOCUMENTATION_GUIDE.md](documentation/reference/DOCUMENTATION_GUIDE.md) - Navigation
+- [documentation/docs/reference/documentation-guide.md](documentation/docs/reference/documentation-guide.md) - Navigation
 - [QUICK_REFERENCE.md](QUICK_REFERENCE.md) - One-page reference
-- [documentation/reference/PROJECT_INDEX.md](documentation/reference/PROJECT_INDEX.md) - Comprehensive index
+- [documentation/docs/reference/project-index.md](documentation/docs/reference/project-index.md) - Comprehensive index
 - Project-specific `CLAUDE.md` files - Detailed architecture
 
 ---

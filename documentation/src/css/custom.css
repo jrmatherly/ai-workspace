@@ -1,0 +1,92 @@
+/**
+ * AI Workspace Documentation - Custom CSS
+ *
+ * Colors and theming for the documentation site.
+ * Uses Docusaurus CSS variables for customization.
+ */
+
+/* Infima CSS variables for light mode */
+:root {
+  --ifm-color-primary: #2563eb;
+  --ifm-color-primary-dark: #1d4ed8;
+  --ifm-color-primary-darker: #1e40af;
+  --ifm-color-primary-darkest: #1e3a8a;
+  --ifm-color-primary-light: #3b82f6;
+  --ifm-color-primary-lighter: #60a5fa;
+  --ifm-color-primary-lightest: #93c5fd;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --ifm-color-primary: #60a5fa;
+  --ifm-color-primary-dark: #3b82f6;
+  --ifm-color-primary-darker: #2563eb;
+  --ifm-color-primary-darkest: #1d4ed8;
+  --ifm-color-primary-light: #93c5fd;
+  --ifm-color-primary-lighter: #bfdbfe;
+  --ifm-color-primary-lightest: #dbeafe;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Custom styling for code blocks */
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+[data-theme="dark"] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced table styling */
+table {
+  display: table;
+  width: 100%;
+}
+
+/* Sidebar category labels */
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > a {
+  font-weight: 600;
+}
+
+/* Navbar adjustments */
+.navbar__title {
+  font-weight: 700;
+}
+
+/* Footer links styling */
+.footer__link-item {
+  line-height: 2;
+}
+
+/* Admonition styling improvements */
+.admonition {
+  margin-bottom: 1.5em;
+}
+
+/* Improve readability of inline code */
+code {
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.2rem;
+}
+
+/* Custom styling for project status badges */
+.badge--success {
+  background-color: #10b981;
+}
+
+.badge--warning {
+  background-color: #f59e0b;
+}
+
+.badge--danger {
+  background-color: #ef4444;
+}
+
+.badge--info {
+  background-color: #3b82f6;
+}

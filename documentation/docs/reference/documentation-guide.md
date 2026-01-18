@@ -79,11 +79,11 @@ AI/
 | Goal | Read This |
 |------|-----------|
 | **Understand the workspace** | [README.md](../../README.md) |
-| **Get started contributing** | [DEVELOPER_ONBOARDING.md](./DEVELOPER_ONBOARDING.md) |
+| **Get started contributing** | [DEVELOPER_ONBOARDING.md](./developer-onboarding.md) |
 | **Quick command reference** | [QUICK_REFERENCE.md](../../QUICK_REFERENCE.md) |
-| **Understand architecture** | [ARCHITECTURE.md](./ARCHITECTURE.md) |
-| **Find a specific project** | [PROJECT_INDEX.md](./PROJECT_INDEX.md) |
-| **Learn API structure** | [API_REFERENCE.md](./API_REFERENCE.md) |
+| **Understand architecture** | [ARCHITECTURE.md](./architecture.md) |
+| **Find a specific project** | [PROJECT_INDEX.md](./project-index.md) |
+| **Learn API structure** | [API_REFERENCE.md](./api-reference.md) |
 | **Debug an issue** | [TROUBLESHOOTING.md](../../TROUBLESHOOTING.md) |
 | **Use Claude Code** | [CLAUDE.md](../../CLAUDE.md) |
 | **Deep dive into project** | Project-specific `CLAUDE.md` |
@@ -96,7 +96,7 @@ AI/
 2. [nah/CLAUDE.md](../../nah/CLAUDE.md) - Development guide
 3. [nah/docs/guides/controllers.md](../../nah/docs/guides/controllers.md) - Controller patterns
 4. [nah/docs/examples/](../../nah/docs/examples/) - Code examples
-5. [API_REFERENCE.md](./API_REFERENCE.md) - API reference
+5. [API_REFERENCE.md](./api-reference.md) - API reference
 
 **Key Concepts:** Router API, Apply for declarative reconciliation, Leader election for HA
 
@@ -357,7 +357,7 @@ Each project with a `CLAUDE.md` provides:
 
 ```
 # Master API reference
--> documentation/reference/API_REFERENCE.md
+-> documentation/docs/reference/api-reference.md
 
 # Project-specific APIs
 -> kinm/docs/API.md
@@ -369,7 +369,7 @@ Each project with a `CLAUDE.md` provides:
 
 ```
 # Workspace architecture
--> documentation/reference/ARCHITECTURE.md
+-> documentation/docs/reference/architecture.md
 -> .serena/memories/codebase_architecture.md
 
 # Project architecture
