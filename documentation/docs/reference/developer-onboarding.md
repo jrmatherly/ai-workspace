@@ -5,7 +5,7 @@
 
 This guide covers everything you need to get started contributing to any of the 7 projects in this workspace.
 
-> **Quick Nav:** [Prerequisites](#prerequisites) | [Initial Setup](#initial-setup) | [Repository Setup](#repository-setup) | [Project Selection](#project-selection) | [Development](#development-environment) | [Contributing](#your-first-contribution) | [Testing](#testing--validation)
+> **Quick Nav:** [Prerequisites](#prerequisites) | [Initial Setup](#initial-setup) | [Repository Setup](#repository-setup-github) | [Project Selection](#project-selection) | [Development](#development-environment) | [Contributing](#your-first-contribution) | [Testing](#testing--validation)
 
 ---
 

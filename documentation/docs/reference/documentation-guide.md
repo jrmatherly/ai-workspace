@@ -3,7 +3,7 @@
 **AI/MCP Multi-Repo Workspace** - Navigation and Reference Guide
 **Last Updated:** 2026-01-17
 
-> **Quick Links:** [Getting Started](#-getting-started) | [By Task](#-documentation-by-task) | [By Project](#-documentation-by-project) | [AI Assistants](#-ai-assistant-guides) | [Learning Paths](#-learning-paths)
+> **Quick Links:** [Getting Started](#getting-started) | [By Task](#documentation-by-task) | [By Project](#documentation-by-project) | [AI Assistants](#ai-assistant-guides) | [Learning Paths](#learning-paths)
 
 ---
 

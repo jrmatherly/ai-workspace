@@ -34,8 +34,11 @@ const sidebars = {
         {
           type: "category",
           label: "Fork References Migration",
+          link: {
+            type: "doc",
+            id: "projects/fork-references/readme",
+          },
           items: [
-            "projects/fork-references/readme",
             "projects/fork-references/analysis",
             "projects/fork-references/02a-phase1-initial-implementation",
             "projects/fork-references/02b-phase1-critical-fixes",
@@ -46,8 +49,11 @@ const sidebars = {
         {
           type: "category",
           label: "Auth Providers",
+          link: {
+            type: "doc",
+            id: "projects/auth-providers/readme",
+          },
           items: [
-            "projects/auth-providers/readme",
             "projects/auth-providers/analysis",
             "projects/auth-providers/validation",
           ],
@@ -55,16 +61,22 @@ const sidebars = {
         {
           type: "category",
           label: "AI Context",
+          link: {
+            type: "doc",
+            id: "projects/ai-context/readme",
+          },
           items: [
-            "projects/ai-context/readme",
             "projects/ai-context/implementation-report",
           ],
         },
         {
           type: "category",
           label: "Documentation Organization",
+          link: {
+            type: "doc",
+            id: "projects/documentation-org/readme",
+          },
           items: [
-            "projects/documentation-org/readme",
             "projects/documentation-org/cleanup-report",
             "projects/documentation-org/organization-phase2",
           ],
@@ -72,8 +84,11 @@ const sidebars = {
         {
           type: "category",
           label: "Docusaurus Configuration",
+          link: {
+            type: "doc",
+            id: "projects/docusaurus-config/readme",
+          },
           items: [
-            "projects/docusaurus-config/readme",
             "projects/docusaurus-config/version-config-update",
           ],
         },
@@ -85,8 +100,11 @@ const sidebars = {
         {
           type: "category",
           label: "Expert Mode",
+          link: {
+            type: "doc",
+            id: "projects/expert-mode/readme",
+          },
           items: [
-            "projects/expert-mode/readme",
             "projects/expert-mode/analysis",
             "projects/expert-mode/enhancement-report",
           ],

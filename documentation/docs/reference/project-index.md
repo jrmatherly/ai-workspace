@@ -5,7 +5,7 @@
 **Primary Language:** Go 1.23-1.25
 **Token Efficiency:** ~15K tokens vs 300K+ full codebase read
 
-> **Quick Nav:** [Projects](#-projects) | [Structure](#-structure) | [Entry Points](#-entry-points) | [APIs](#-key-apis) | [Development](#-development)
+> **Quick Nav:** [Projects](#projects) | [Structure](#structure) | [Entry Points](#entry-points) | [APIs](#key-apis) | [Development](#development)
 
 ---
 

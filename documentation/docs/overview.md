@@ -44,13 +44,13 @@ Detailed documentation for specific projects and implementations:
 
 ### Active Projects
 
-- **[Fork References Migration](/projects/fork-references/readme)** - Migration from upstream to fork repositories
-- **[Auth Providers](/projects/auth-providers/readme)** - Authentication provider implementations
+- **[Fork References Migration](/projects/fork-references/)** - Migration from upstream to fork repositories
+- **[Auth Providers](/projects/auth-providers/)** - Authentication provider implementations
 - **[Token Tracking Optimization](/projects/token-tracking-optimization/phase1-slash-command/phase1-reflection-validation-report)** - Context and token efficiency
 
 ### Completed Projects
 
-- **[Docusaurus Configuration](/projects/docusaurus-config/readme)** - Documentation site versioning
+- **[Docusaurus Configuration](/projects/docusaurus-config/)** - Documentation site versioning
 - **[Documentation Standards](/projects/documentation-standards/validation-report)** - Quality validation
 
 ## Development Resources

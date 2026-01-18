@@ -18,6 +18,7 @@ const config: Config = {
   projectName: "ai-workspace",
 
   onBrokenLinks: "warn",
+  onBrokenAnchors: "warn",
 
   // Use CommonMark format instead of MDX to avoid JSX parsing issues
   markdown: {
@@ -29,6 +30,10 @@ const config: Config = {
     },
     anchors: {
       maintainCase: false,
+    },
+    hooks: {
+      onBrokenMarkdownLinks: "warn",
+      onBrokenMarkdownImages: "warn",
     },
   },
 
