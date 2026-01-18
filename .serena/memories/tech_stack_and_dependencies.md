@@ -117,6 +117,17 @@
 - **pnpm**: Fast, disk-efficient Node.js package manager
 - **pip/uv**: Python package management
 
+### Dependency Updates
+
+- **Renovate**: Automated dependency updates (used by all projects)
+  - Configuration: `renovate.json` in each repository
+  - Features: Semantic commits, auto-merge for patches, vulnerability alerts
+  - Schedule: 10pm-6am America/New_York
+  - Grouping: GitHub Actions, Kubernetes packages, language-specific packages
+- **Dependabot**: GitHub-native alternative (workspace root only, disabled)
+  - Configuration: `.github/dependabot.yml`
+  - Status: Disabled in workspace root (superseded by Renovate)
+
 ## Infrastructure
 
 ### Container Base Images
