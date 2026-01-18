@@ -89,9 +89,29 @@ echo "  mise lint-md-fix      - Auto-fix markdown issues"
 echo ""
 echo "Multi-repo management (gita):"
 echo "  mise gita-init        - Register all child repos with gita"
-echo "  mise gita-status      - Show git status across all repos"
-echo "  mise gita-fetch       - Fetch all repos"
-echo "  mise gita-pull        - Pull all repos"
+echo "  mise gita-status (gs) - Show git status across all repos"
+echo "  mise gita-fetch (gf)  - Fetch all repos"
+echo "  mise gita-pull (gp)   - Pull all repos"
+echo ""
+echo "Project commits (conventional commits):"
+echo "  mise commit:obot-entraid (ce)  - Commit obot-entraid changes"
+echo "  mise commit:obot-tools (ct)    - Commit obot-tools changes"
+echo "  mise commit:nah (cn)           - Commit nah changes"
+echo "  mise commit:kinm (ck)          - Commit kinm changes"
+echo "  mise commit:mcp-oauth-proxy (cm) - Commit mcp-oauth-proxy changes"
+echo "  mise commit:mcp-catalog (cc)   - Commit mcp-catalog changes"
+echo ""
+echo "  Usage: mise commit:PROJECT -m 'type(scope): message'"
+echo "  Types: feat|fix|docs|style|refactor|perf|test|build|ci|chore"
+echo ""
+echo "Project push:"
+echo "  mise push:obot-entraid (pe)    - Push obot-entraid to remote"
+echo "  mise push:obot-tools (pt)      - Push obot-tools to remote"
+echo "  mise push:nah (pn)             - Push nah to remote"
+echo "  mise push:kinm (pk)            - Push kinm to remote"
+echo "  mise push:mcp-oauth-proxy (pm) - Push mcp-oauth-proxy to remote"
+echo "  mise push:mcp-catalog (pc)     - Push mcp-catalog to remote"
+echo "  mise push-all                  - Push all projects (use with caution)"
 echo ""
 echo "Single project (examples):"
 echo "  mise //nah:test       - Test nah only"
@@ -224,3 +244,333 @@ run = "gita push"
 [tasks.gita-cmd]
 description = "Run arbitrary git command on all repos (use: mise gita-cmd -- status)"
 run = "gita super {{arg(name='cmd')}}"
+
+# =============================================================================
+# PROJECT COMMIT TASKS (Conventional Commits)
+# =============================================================================
+# Format: <type>(<scope>): <description>
+#
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+#
+# Usage:
+#   mise commit:obot-entraid                    # Interactive (opens editor)
+#   mise commit:obot-entraid -m "feat: add X"  # With message
+#   mise commit:obot-tools -m "fix(auth): Y"   # With scope
+
+[tasks."commit:obot-entraid"]
+alias = "ce"
+description = "Commit changes in obot-entraid (conventional commits)"
+run = """
+cd obot-entraid
+echo "=== obot-entraid: Staged & Unstaged Changes ==="
+git status --short
+echo ""
+echo "=== Files to be committed ==="
+git add -A
+git status --short
+echo ""
+
+if [ -n "{{option(name='message', short='m', default='')}}" ]; then
+    git commit -m "{{option(name='message', short='m')}}
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+else
+    echo "Opening editor for commit message..."
+    echo "# Conventional Commit Format: <type>(<scope>): <description>"
+    echo "# Types: feat|fix|docs|style|refactor|perf|test|build|ci|chore"
+    git commit -t /dev/stdin <<'TEMPLATE'
+# <type>(<scope>): <short description>
+#
+# [optional body]
+#
+# [optional footer]
+#
+# Co-Authored-By: Claude <noreply@anthropic.com>
+# ---
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+# Scope: optional, e.g., auth, ui, api, controller
+TEMPLATE
+fi
+"""
+
+[tasks."commit:obot-tools"]
+alias = "ct"
+description = "Commit changes in obot-tools (conventional commits)"
+run = """
+cd obot-tools
+echo "=== obot-tools: Staged & Unstaged Changes ==="
+git status --short
+echo ""
+echo "=== Files to be committed ==="
+git add -A
+git status --short
+echo ""
+
+if [ -n "{{option(name='message', short='m', default='')}}" ]; then
+    git commit -m "{{option(name='message', short='m')}}
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+else
+    git commit -t /dev/stdin <<'TEMPLATE'
+# <type>(<scope>): <short description>
+#
+# [optional body]
+#
+# [optional footer]
+#
+# Co-Authored-By: Claude <noreply@anthropic.com>
+# ---
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+# Scope: optional, e.g., auth, knowledge, model-provider
+TEMPLATE
+fi
+"""
+
+[tasks."commit:nah"]
+alias = "cn"
+description = "Commit changes in nah (conventional commits)"
+run = """
+cd nah
+echo "=== nah: Staged & Unstaged Changes ==="
+git status --short
+echo ""
+git add -A
+
+if [ -n "{{option(name='message', short='m', default='')}}" ]; then
+    git commit -m "{{option(name='message', short='m')}}
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+else
+    git commit -t /dev/stdin <<'TEMPLATE'
+# <type>(<scope>): <short description>
+#
+# [optional body]
+#
+# Co-Authored-By: Claude <noreply@anthropic.com>
+# ---
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+# Scope: optional, e.g., router, backend, apply
+TEMPLATE
+fi
+"""
+
+[tasks."commit:kinm"]
+alias = "ck"
+description = "Commit changes in kinm (conventional commits)"
+run = """
+cd kinm
+echo "=== kinm: Staged & Unstaged Changes ==="
+git status --short
+echo ""
+git add -A
+
+if [ -n "{{option(name='message', short='m', default='')}}" ]; then
+    git commit -m "{{option(name='message', short='m')}}
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+else
+    git commit -t /dev/stdin <<'TEMPLATE'
+# <type>(<scope>): <short description>
+#
+# [optional body]
+#
+# Co-Authored-By: Claude <noreply@anthropic.com>
+# ---
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+# Scope: optional, e.g., apiserver, storage, client
+TEMPLATE
+fi
+"""
+
+[tasks."commit:mcp-oauth-proxy"]
+alias = "cm"
+description = "Commit changes in mcp-oauth-proxy (conventional commits)"
+run = """
+cd mcp-oauth-proxy
+echo "=== mcp-oauth-proxy: Staged & Unstaged Changes ==="
+git status --short
+echo ""
+git add -A
+
+if [ -n "{{option(name='message', short='m', default='')}}" ]; then
+    git commit -m "{{option(name='message', short='m')}}
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+else
+    git commit -t /dev/stdin <<'TEMPLATE'
+# <type>(<scope>): <short description>
+#
+# [optional body]
+#
+# Co-Authored-By: Claude <noreply@anthropic.com>
+# ---
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+# Scope: optional, e.g., oauth, pkce, token, proxy
+TEMPLATE
+fi
+"""
+
+[tasks."commit:mcp-catalog"]
+alias = "cc"
+description = "Commit changes in mcp-catalog (conventional commits)"
+run = """
+cd mcp-catalog
+echo "=== mcp-catalog: Staged & Unstaged Changes ==="
+git status --short
+echo ""
+git add -A
+
+if [ -n "{{option(name='message', short='m', default='')}}" ]; then
+    git commit -m "{{option(name='message', short='m')}}
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+else
+    git commit -t /dev/stdin <<'TEMPLATE'
+# <type>(<scope>): <short description>
+#
+# [optional body]
+#
+# Co-Authored-By: Claude <noreply@anthropic.com>
+# ---
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+# Scope: optional, e.g., servers, registry
+TEMPLATE
+fi
+"""
+
+[tasks."commit:namegenerator"]
+alias = "cng"
+description = "Commit changes in namegenerator (conventional commits)"
+run = """
+cd namegenerator
+echo "=== namegenerator: Staged & Unstaged Changes ==="
+git status --short
+echo ""
+git add -A
+
+if [ -n "{{option(name='message', short='m', default='')}}" ]; then
+    git commit -m "{{option(name='message', short='m')}}
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+else
+    git commit -t /dev/stdin <<'TEMPLATE'
+# <type>(<scope>): <short description>
+#
+# [optional body]
+#
+# Co-Authored-By: Claude <noreply@anthropic.com>
+# ---
+# Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore
+TEMPLATE
+fi
+"""
+
+# =============================================================================
+# PROJECT PUSH TASKS
+# =============================================================================
+# Push changes to remote for each project
+#
+# Usage:
+#   mise push:obot-entraid           # Push current branch
+#   mise push:obot-tools             # Push current branch
+#   mise push-all                    # Push all projects (use with caution)
+
+[tasks."push:obot-entraid"]
+alias = "pe"
+description = "Push obot-entraid changes to remote"
+run = """
+cd obot-entraid
+BRANCH=$(git branch --show-current)
+echo "=== obot-entraid: Pushing $BRANCH ==="
+git push -u origin "$BRANCH"
+echo "✅ Pushed $BRANCH"
+"""
+
+[tasks."push:obot-tools"]
+alias = "pt"
+description = "Push obot-tools changes to remote"
+run = """
+cd obot-tools
+BRANCH=$(git branch --show-current)
+echo "=== obot-tools: Pushing $BRANCH ==="
+git push -u origin "$BRANCH"
+echo "✅ Pushed $BRANCH"
+"""
+
+[tasks."push:nah"]
+alias = "pn"
+description = "Push nah changes to remote"
+run = """
+cd nah
+BRANCH=$(git branch --show-current)
+echo "=== nah: Pushing $BRANCH ==="
+git push -u origin "$BRANCH"
+echo "✅ Pushed $BRANCH"
+"""
+
+[tasks."push:kinm"]
+alias = "pk"
+description = "Push kinm changes to remote"
+run = """
+cd kinm
+BRANCH=$(git branch --show-current)
+echo "=== kinm: Pushing $BRANCH ==="
+git push -u origin "$BRANCH"
+echo "✅ Pushed $BRANCH"
+"""
+
+[tasks."push:mcp-oauth-proxy"]
+alias = "pm"
+description = "Push mcp-oauth-proxy changes to remote"
+run = """
+cd mcp-oauth-proxy
+BRANCH=$(git branch --show-current)
+echo "=== mcp-oauth-proxy: Pushing $BRANCH ==="
+git push -u origin "$BRANCH"
+echo "✅ Pushed $BRANCH"
+"""
+
+[tasks."push:mcp-catalog"]
+alias = "pc"
+description = "Push mcp-catalog changes to remote"
+run = """
+cd mcp-catalog
+BRANCH=$(git branch --show-current)
+echo "=== mcp-catalog: Pushing $BRANCH ==="
+git push -u origin "$BRANCH"
+echo "✅ Pushed $BRANCH"
+"""
+
+[tasks."push:namegenerator"]
+alias = "png"
+description = "Push namegenerator changes to remote"
+run = """
+cd namegenerator
+BRANCH=$(git branch --show-current)
+echo "=== namegenerator: Pushing $BRANCH ==="
+git push -u origin "$BRANCH"
+echo "✅ Pushed $BRANCH"
+"""
+
+[tasks.push-all]
+description = "Push all projects to remote (use with caution)"
+run = """
+echo "=== Pushing all projects ==="
+echo ""
+for dir in obot-entraid obot-tools nah kinm mcp-oauth-proxy mcp-catalog namegenerator; do
+    if [ -d "$dir/.git" ]; then
+        cd "$dir"
+        BRANCH=$(git branch --show-current)
+        AHEAD=$(git rev-list --count origin/$BRANCH..$BRANCH 2>/dev/null || echo "0")
+        if [ "$AHEAD" -gt 0 ]; then
+            echo "Pushing $dir ($BRANCH, $AHEAD commits ahead)..."
+            git push -u origin "$BRANCH" || echo "  ⚠️ Push failed for $dir"
+        else
+            echo "Skipping $dir (nothing to push)"
+        fi
+        cd ..
+    fi
+done
+echo ""
+echo "✅ Done"
+"""
