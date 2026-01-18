@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Child Project Issues
+    url: https://github.com/jrmatherly
+    about: For issues specific to individual projects (nah, kinm, obot-entraid, etc.), please open issues in the respective repository.
+  - name: Security Vulnerabilities
+    url: https://github.com/jrmatherly/ai-workspace/security/advisories/new
+    about: Please report security vulnerabilities through GitHub Security Advisories, not public issues.

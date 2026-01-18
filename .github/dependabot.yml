@@ -1,0 +1,19 @@
+# Dependabot Configuration
+# Note: This workspace primarily uses mise.toml for tool version management.
+# Dependabot is configured but disabled (open-pull-requests-limit: 0) to maintain
+# a valid configuration while avoiding automated PRs.
+#
+# For child project dependencies, see each project's own dependabot.yml/renovate.json.
+
+version: 2
+
+updates:
+  # GitHub Actions - monitor but don't auto-create PRs
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    labels:
+      - "dependencies"
+      - "github-actions"

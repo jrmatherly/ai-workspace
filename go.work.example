@@ -1,0 +1,58 @@
+// go.work.example
+//
+// Go Workspace for local AI/MCP multi-repo workspace development.
+//
+// Usage:
+//   cp go.work.example go.work
+//   # Edit to include only the modules you're working with
+//   go work sync
+//
+// Benefits:
+//   - Cross-module changes work without 'replace' directives
+//   - IDE understands all modules in the workspace
+//   - 'go build' and 'go test' work across modules
+//
+// Note: go.work is gitignored - this file is a template only.
+//
+// See: .claude/instructions/multi-repo-workspace-guide.md
+
+go 1.23
+
+use (
+    // Core projects
+    ./obot-entraid
+    ./obot-entraid/apiclient
+    ./obot-entraid/logger
+    ./nah
+    ./kinm
+    ./mcp-oauth-proxy
+    ./namegenerator
+
+    // Uncomment obot-tools modules as needed:
+    // ./obot-tools/openai-model-provider
+    // ./obot-tools/anthropic-model-provider-go
+    // ./obot-tools/ollama-model-provider
+    // ./obot-tools/groq-model-provider
+    // ./obot-tools/deepseek-model-provider
+    // ./obot-tools/xai-model-provider
+    // ./obot-tools/vllm-model-provider
+    // ./obot-tools/generic-openai-model-provider
+    // ./obot-tools/obot-model-provider
+    // ./obot-tools/google-auth-provider
+    // ./obot-tools/github-auth-provider
+    // ./obot-tools/entra-auth-provider
+    // ./obot-tools/keycloak-auth-provider
+    // ./obot-tools/credential-stores
+    // ./obot-tools/generic-credential
+    // ./obot-tools/oauth2
+    // ./obot-tools/auth-providers-common
+    // ./obot-tools/knowledge
+    // ./obot-tools/memory
+    // ./obot-tools/tasks
+    // ./obot-tools/workflow
+    // ./obot-tools/loop-data
+    // ./obot-tools/workspace-files
+    // ./obot-tools/result-formatter
+    // ./obot-tools/task-invoke
+    // ./obot-tools/tests
+)

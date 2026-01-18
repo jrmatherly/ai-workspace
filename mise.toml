@@ -1,0 +1,226 @@
+#:schema https://mise.jdx.dev/schema/mise.json
+# AI/MCP Multi-Repo Workspace Root Configuration
+# https://mise.jdx.dev
+#
+# This is a multi-repo workspace (not a monorepo). Each subdirectory is an
+# independent git repository. mise's task discovery works across all repos.
+# See: .claude/instructions/multi-repo-workspace-guide.md
+#
+# Quick Start:
+#   curl https://mise.run | sh
+#   mise trust
+#   mise install
+#   mise tasks
+#
+# Cross-project commands:
+#   mise all              - Validate all projects
+#   mise test-all         - Test all projects
+#   mise //nah:test       - Test specific project
+#   mise '//...:test'     - Test all (wildcard)
+
+# =============================================================================
+# SETTINGS
+# =============================================================================
+
+[settings]
+# Enable experimental features for multi-repo task discovery
+# Note: mise uses "monorepo" terminology for its task discovery feature,
+# but it works equally well for multi-repo workspaces like this one.
+experimental = true
+
+[settings.task]
+# Reduce search depth for performance (projects are at depth 1-2)
+monorepo_depth = 3
+# Exclude common directories from task search
+monorepo_exclude_dirs = ["node_modules", ".archive", "vendor", "dist", "build", ".venv", ".git"]
+
+# =============================================================================
+# ENVIRONMENT VARIABLES
+# =============================================================================
+
+[env]
+# Go environment
+GOPATH = "{{env.HOME}}/go"
+GOBIN = "{{env.HOME}}/go/bin"
+CGO_ENABLED = "0"
+
+# Mise multi-repo task discovery mode
+MISE_EXPERIMENTAL = "1"
+
+# =============================================================================
+# SHARED TOOLS
+# =============================================================================
+
+[tools]
+# Core languages
+go = "1.25"
+node = "24"
+python = "3.14"
+
+# Go tooling (via aqua for version pinning)
+"aqua:golangci/golangci-lint" = "2.8.0"
+
+# Git and CI tools
+"aqua:cli/cli" = "latest"  # GitHub CLI
+
+# Multi-repo management (see .claude/instructions/multi-repo-workspace-guide.md)
+"pipx:gita" = "latest"  # Bulk git operations across child repositories
+
+# =============================================================================
+# ROOT-LEVEL TASKS
+# =============================================================================
+
+[tasks.help]
+description = "Show available workspace tasks"
+run = """
+echo "AI/MCP Multi-Repo Workspace - mise tasks"
+echo ""
+echo "Cross-project commands:"
+echo "  mise all              - Validate all projects"
+echo "  mise test-all         - Test all projects"
+echo "  mise tidy-all         - Tidy all Go modules"
+echo "  mise status           - Show git status across projects"
+echo "  mise deps-check       - Check for outdated dependencies"
+echo "  mise clean            - Clean build artifacts"
+echo ""
+echo "Linting:"
+echo "  mise lint-md          - Lint markdown files"
+echo "  mise lint-md-fix      - Auto-fix markdown issues"
+echo ""
+echo "Multi-repo management (gita):"
+echo "  mise gita-init        - Register all child repos with gita"
+echo "  mise gita-status      - Show git status across all repos"
+echo "  mise gita-fetch       - Fetch all repos"
+echo "  mise gita-pull        - Pull all repos"
+echo ""
+echo "Single project (examples):"
+echo "  mise //nah:test       - Test nah only"
+echo "  mise //obot-entraid:dev - Run obot-entraid dev server"
+echo "  mise :test            - Test current directory project"
+echo ""
+echo "View all tasks:"
+echo "  mise tasks --all"
+"""
+
+[tasks.all]
+alias = "validate-all"
+description = "Run validate-ci on all Go projects"
+depends = [
+    "//nah:validate-ci",
+    "//kinm:validate-ci",
+    "//obot-entraid:validate-ci",
+    "//mcp-oauth-proxy:validate-ci",
+    "//namegenerator:validate"
+]
+
+[tasks.test-all]
+description = "Run tests on all Go projects"
+depends = [
+    "//nah:test",
+    "//kinm:test",
+    "//obot-entraid:test",
+    "//mcp-oauth-proxy:test",
+    "//namegenerator:test"
+]
+
+[tasks.tidy-all]
+description = "Run go mod tidy on all projects"
+run = """
+for dir in obot-entraid nah kinm mcp-oauth-proxy namegenerator; do
+    echo "=== Tidying $dir ==="
+    cd $dir && go mod tidy && cd ..
+done
+echo "Done!"
+"""
+
+[tasks.status]
+description = "Show git status across all projects"
+run = """
+echo "=== Multi-Repo Workspace Git Status ==="
+git status --short
+echo ""
+for dir in obot-entraid nah kinm mcp-oauth-proxy obot-tools mcp-catalog namegenerator; do
+    changes=$(git status --short "$dir" 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$changes" -gt 0 ]; then
+        echo "$dir: $changes change(s)"
+    fi
+done
+"""
+
+[tasks.deps-check]
+description = "Check for outdated Go dependencies"
+run = """
+echo "Checking for outdated dependencies..."
+for dir in obot-entraid nah kinm mcp-oauth-proxy namegenerator; do
+    echo "=== $dir ==="
+    cd $dir && go list -u -m all 2>/dev/null | grep '\\[' || echo "  All up to date"
+    cd ..
+done
+"""
+
+[tasks.clean]
+description = "Clean build artifacts across all projects"
+run = """
+echo "Cleaning build artifacts..."
+find . -name "bin" -type d -not -path "*/node_modules/*" -not -path "*/.archive/*" -exec rm -rf {} + 2>/dev/null || true
+find . -name "*.test" -type f -delete 2>/dev/null || true
+find . -name "coverage.out" -type f -delete 2>/dev/null || true
+find . -name "coverage.html" -type f -delete 2>/dev/null || true
+echo "Done!"
+"""
+
+# =============================================================================
+# LINTING TASKS
+# =============================================================================
+
+[tasks.lint-md]
+alias = "mdlint"
+description = "Lint markdown files across the workspace"
+run = 'npx markdownlint-cli2 "**/*.md"'
+
+[tasks.lint-md-fix]
+alias = "mdfix"
+description = "Auto-fix markdown lint issues where possible"
+run = 'npx markdownlint-cli2 --fix "**/*.md"'
+
+# =============================================================================
+# MULTI-REPO MANAGEMENT (gita)
+# =============================================================================
+# See: .claude/instructions/multi-repo-workspace-guide.md
+
+[tasks.gita-init]
+description = "Register all child repositories with gita"
+run = """
+echo "Registering child repositories with gita..."
+for dir in obot-entraid nah kinm mcp-oauth-proxy obot-tools mcp-catalog namegenerator; do
+    if [ -d "$dir/.git" ]; then
+        gita add "$dir" 2>/dev/null || echo "  $dir already registered or failed"
+    fi
+done
+echo ""
+echo "Registered repositories:"
+gita ll
+"""
+
+[tasks.gita-status]
+alias = "gs"
+description = "Show git status across all registered repos"
+run = "gita ll"
+
+[tasks.gita-fetch]
+alias = "gf"
+description = "Fetch all registered repos"
+run = "gita fetch"
+
+[tasks.gita-pull]
+alias = "gp"
+description = "Pull all registered repos"
+run = "gita pull"
+
+[tasks.gita-push]
+description = "Push all registered repos (use with caution)"
+run = "gita push"
+
+[tasks.gita-cmd]
+description = "Run arbitrary git command on all repos (use: mise gita-cmd -- status)"
+run = "gita super {{arg(name='cmd')}}"

@@ -1,0 +1,104 @@
+# AI/MCP Multi-Repo Workspace CODEOWNERS
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# This file defines code ownership for the workspace root repository.
+# Each child project (nah, kinm, obot-entraid, etc.) has its own repository
+# and may have its own CODEOWNERS file.
+#
+# See: .claude/instructions/multi-repo-workspace-guide.md
+
+# =============================================================================
+# DEFAULT OWNER
+# =============================================================================
+
+# Default owner for everything in the workspace root
+* @jrmatherly
+
+# =============================================================================
+# WORKSPACE DOCUMENTATION
+# =============================================================================
+
+# Cross-agent guidelines (used by 25+ AI tools)
+/AGENTS.md @jrmatherly
+
+# Claude Code-specific integration
+/CLAUDE.md @jrmatherly
+
+# Repository setup and onboarding
+/README.md @jrmatherly
+/DEVELOPER_ONBOARDING.md @jrmatherly
+/REPOSITORY_SETUP.md @jrmatherly
+
+# Architecture and reference documentation
+/ARCHITECTURE_DIAGRAM.md @jrmatherly
+/API_REFERENCE.md @jrmatherly
+/QUICK_REFERENCE.md @jrmatherly
+/TROUBLESHOOTING.md @jrmatherly
+
+# Documentation index files
+/DOCUMENTATION_*.md @jrmatherly
+/PROJECT_INDEX.md @jrmatherly
+/REPOSITORY_INDEX.md @jrmatherly
+/MERMAID_DIAGRAMS.md @jrmatherly
+
+# Supplementary documentation
+/documentation/ @jrmatherly
+
+# =============================================================================
+# CLAUDE CODE CONFIGURATION
+# =============================================================================
+
+# Claude Code customization (commands, instructions, rules, skills, agents)
+/.claude/ @jrmatherly
+
+# =============================================================================
+# SERENA MCP CONFIGURATION
+# =============================================================================
+
+# Serena MCP memories and project configuration
+/.serena/ @jrmatherly
+
+# =============================================================================
+# CI/CD AND AUTOMATION
+# =============================================================================
+
+# GitHub Actions workflows (can run arbitrary code - security sensitive)
+/.github/workflows/ @jrmatherly
+
+# This file
+/.github/CODEOWNERS @jrmatherly
+
+# =============================================================================
+# CONFIGURATION FILES
+# =============================================================================
+
+# Tool versioning and task management
+/mise.toml @jrmatherly
+
+# Go workspace template
+/go.work.example @jrmatherly
+
+# Git configuration
+/.gitignore @jrmatherly
+
+# Markdown linting
+/.markdownlint-cli2.yaml @jrmatherly
+
+# =============================================================================
+# SECURITY-SENSITIVE PATTERNS
+# =============================================================================
+
+# Any security-related files
+**/SECURITY.md @jrmatherly
+
+# Environment files (should not be committed, but catch if they are)
+**/.env* @jrmatherly
+
+# Secrets directories
+**/secrets/ @jrmatherly
+
+# Dependency files (supply chain risk)
+**/go.mod @jrmatherly
+**/go.sum @jrmatherly
+**/package.json @jrmatherly
+**/pnpm-lock.yaml @jrmatherly

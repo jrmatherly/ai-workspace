@@ -1,0 +1,416 @@
+{
+  "metadata": {
+    "generated": "2026-01-15",
+    "version": "2.0.0",
+    "repository": "AI/MCP Development Monorepo",
+    "location": "/Users/jason/dev/AI",
+    "totalProjects": 6,
+    "primaryLanguage": "Go",
+    "goVersion": "1.23-1.25",
+    "license": "Apache 2.0",
+    "tokenEfficiency": "99%",
+    "indexSize": "15KB",
+    "fullCodebaseSize": "300KB+"
+  },
+  "structure": {
+    "root": "/Users/jason/dev/AI",
+    "projects": [
+      {
+        "name": "obot-entraid",
+        "path": "./obot-entraid/",
+        "type": "Full-stack Platform",
+        "language": "Go + SvelteKit",
+        "loc": "20000+",
+        "files": "500+",
+        "mainEntry": "main.go"
+      },
+      {
+        "name": "nah",
+        "path": "./nah/",
+        "type": "Library",
+        "language": "Go",
+        "loc": "15000+",
+        "files": "68",
+        "mainEntry": "router.go"
+      },
+      {
+        "name": "kinm",
+        "path": "./kinm/",
+        "type": "API Server",
+        "language": "Go",
+        "loc": "8000+",
+        "files": "50+",
+        "mainEntry": "TBD"
+      },
+      {
+        "name": "mcp-oauth-proxy",
+        "path": "./mcp-oauth-proxy/",
+        "type": "OAuth Proxy",
+        "language": "Go",
+        "loc": "5000+",
+        "files": "30+",
+        "mainEntry": "TBD"
+      },
+      {
+        "name": "obot-tools",
+        "path": "./obot-tools/",
+        "type": "Tool Collection",
+        "language": "Go/Python/TypeScript",
+        "loc": "15000+",
+        "files": "200+",
+        "mainEntry": "Multiple main.go"
+      },
+      {
+        "name": "mcp-catalog",
+        "path": "./mcp-catalog/",
+        "type": "Configuration Catalog",
+        "language": "YAML",
+        "loc": "0",
+        "files": "100+ YAML",
+        "mainEntry": "N/A"
+      }
+    ]
+  },
+  "entryPoints": {
+    "applications": [
+      {
+        "path": "obot-entraid/main.go",
+        "type": "server",
+        "purpose": "MCP platform server",
+        "startCommand": "go run main.go"
+      },
+      {
+        "path": "obot-entraid/ui/user/",
+        "type": "frontend",
+        "purpose": "SvelteKit UI",
+        "startCommand": "pnpm run dev"
+      },
+      {
+        "path": "nah/router.go",
+        "type": "library",
+        "purpose": "Controller framework API",
+        "startCommand": "import in code"
+      }
+    ],
+    "modelProviders": [
+      {
+        "path": "obot-tools/openai-model-provider/main.go",
+        "provider": "OpenAI",
+        "models": ["GPT-4", "GPT-3.5", "embeddings"]
+      },
+      {
+        "path": "obot-tools/anthropic-model-provider-go/main.go",
+        "provider": "Anthropic",
+        "models": ["Claude 3.5 Sonnet", "Opus", "Haiku"]
+      },
+      {
+        "path": "obot-tools/ollama-model-provider/main.go",
+        "provider": "Ollama",
+        "models": ["Local models"]
+      },
+      {
+        "path": "obot-tools/groq-model-provider/main.go",
+        "provider": "Groq",
+        "models": ["Groq-hosted models"]
+      },
+      {
+        "path": "obot-tools/xai-model-provider/main.go",
+        "provider": "xAI",
+        "models": ["Grok"]
+      },
+      {
+        "path": "obot-tools/deepseek-model-provider/main.go",
+        "provider": "DeepSeek",
+        "models": ["DeepSeek models"]
+      },
+      {
+        "path": "obot-tools/voyage-model-provider/",
+        "provider": "Voyage",
+        "models": ["Embeddings"],
+        "language": "Python"
+      }
+    ],
+    "authProviders": [
+      {
+        "path": "obot-tools/github-auth-provider/main.go",
+        "provider": "GitHub",
+        "type": "OAuth2"
+      },
+      {
+        "path": "obot-entraid/tools/entra-auth-provider/main.go",
+        "provider": "Microsoft Entra ID",
+        "type": "OAuth2/OIDC"
+      },
+      {
+        "path": "obot-entraid/tools/keycloak-auth-provider/main.go",
+        "provider": "Keycloak",
+        "type": "OIDC"
+      }
+    ],
+    "coreTools": [
+      {
+        "path": "obot-tools/memory/main.go",
+        "tool": "memory",
+        "purpose": "Long-term agent memory"
+      },
+      {
+        "path": "obot-tools/tasks/main.go",
+        "tool": "tasks",
+        "purpose": "Task management"
+      },
+      {
+        "path": "obot-tools/workspace-files/main.go",
+        "tool": "workspace-files",
+        "purpose": "File operations"
+      }
+    ],
+    "codeGeneration": [
+      {
+        "path": "nah/cmd/deepcopy/main.go",
+        "purpose": "Deep copy generator for K8s types"
+      }
+    ]
+  },
+  "coreModules": {
+    "obotEntraid": {
+      "backend": [
+        "pkg/server",
+        "pkg/mcp",
+        "pkg/invoke",
+        "pkg/cli",
+        "pkg/oauth",
+        "pkg/credstores",
+        "pkg/bootstrap"
+      ],
+      "apiClient": [
+        "apiclient/client.go",
+        "apiclient/types",
+        "apiclient/agent.go",
+        "apiclient/workflow.go"
+      ],
+      "tools": ["tools/entra-auth-provider", "tools/keycloak-auth-provider"]
+    },
+    "nah": {
+      "core": [
+        "pkg/router (15 files)",
+        "pkg/apply (11 files)",
+        "pkg/runtime (10 files)"
+      ],
+      "support": ["pkg/backend", "pkg/leader", "pkg/watcher"],
+      "publicAPI": "router.go"
+    },
+    "obotTools": {
+      "pattern": "Each tool: main.go + tool.gpt + pkg/ + README.md",
+      "registry": "index.yaml",
+      "categories": ["Model Providers", "Auth Providers", "Core Tools"]
+    }
+  },
+  "apis": {
+    "nah": {
+      "createRouter": "nah.DefaultRouter(name, scheme)",
+      "registerHandler": "router.Type(&Resource{}).HandlerFunc(handler)",
+      "declarativeApply": "apply.New(backend, name).Apply(owner, desired)"
+    },
+    "modelProvider": {
+      "chatCompletions": "POST /v1/chat/completions",
+      "embeddings": "POST /v1/embeddings",
+      "standard": "OpenAI-compatible"
+    },
+    "oauthProxy": {
+      "startFlow": "GET /oauth2/start",
+      "callback": "GET /oauth2/callback",
+      "proxyMCP": "POST /mcp/{path}",
+      "headersInjected": [
+        "X-Forwarded-User",
+        "X-Forwarded-Email",
+        "X-Forwarded-Access-Token"
+      ]
+    }
+  },
+  "dependencies": {
+    "go": {
+      "totalModules": 28,
+      "major": {
+        "k8s.io/client-go": "v0.31.1",
+        "sigs.k8s.io/controller-runtime": "v0.19.0",
+        "go.opentelemetry.io/otel": "v1.35.0",
+        "github.com/sirupsen/logrus": "v1.9.3"
+      }
+    },
+    "frontend": {
+      "framework": "SvelteKit 5",
+      "language": "TypeScript",
+      "styling": "Tailwind CSS 4",
+      "packageManager": "pnpm"
+    },
+    "python": {
+      "framework": "FastAPI",
+      "tools": ["Voyage embeddings", "File summarizer"]
+    }
+  },
+  "testing": {
+    "go": {
+      "command": "make test",
+      "framework": "testing + testify",
+      "raceDetector": "go test -race ./..."
+    },
+    "validation": {
+      "command": "make validate",
+      "linter": "golangci-lint"
+    }
+  },
+  "configuration": {
+    "build": ["Makefiles", "Docker", "Helm"],
+    "goModules": 28,
+    "packageJson": 5,
+    "toolRegistry": "obot-tools/index.yaml",
+    "linterConfig": ".golangci.yaml",
+    "containerConfig": "Dockerfile"
+  },
+  "quickStart": {
+    "buildAll": [
+      "cd obot-entraid && make build",
+      "cd nah && make build && make test",
+      "cd kinm && make build",
+      "cd mcp-oauth-proxy && go build",
+      "cd obot-tools && make build"
+    ],
+    "runPlatform": ["cd obot-entraid", "make build", "./bin/obot"],
+    "runOAuthProxy": [
+      "cd mcp-oauth-proxy",
+      "export OAUTH_CLIENT_ID=... OAUTH_CLIENT_SECRET=...",
+      "export ENCRYPTION_KEY=$(openssl rand -base64 32)",
+      "go run ."
+    ],
+    "runModelProvider": [
+      "cd obot-tools/openai-model-provider",
+      "export OBOT_OPENAI_MODEL_PROVIDER_API_KEY=sk-...",
+      "go run main.go"
+    ]
+  },
+  "documentation": {
+    "master": [
+      {
+        "file": "REPOSITORY_INDEX.md",
+        "size": "15K",
+        "purpose": "Quick reference index"
+      },
+      {
+        "file": "README.md",
+        "size": "11K",
+        "purpose": "Entry point"
+      },
+      {
+        "file": "PROJECT_INDEX.md",
+        "size": "14K",
+        "purpose": "Cross-project reference"
+      },
+      {
+        "file": "API_REFERENCE.md",
+        "size": "21K",
+        "purpose": "API documentation"
+      },
+      {
+        "file": "DOCUMENTATION_GUIDE.md",
+        "size": "21K",
+        "purpose": "Navigation guide"
+      },
+      {
+        "file": "ARCHITECTURE_DIAGRAM.md",
+        "size": "26K",
+        "purpose": "Visual architecture"
+      }
+    ],
+    "projectSpecific": [
+      {
+        "file": "nah/PROJECT_INDEX.md",
+        "size": "3K",
+        "tokenSavings": "94%"
+      },
+      {
+        "file": "obot-tools/PROJECT_INDEX.md",
+        "size": "10K",
+        "tokenSavings": "~90%"
+      },
+      {
+        "file": "kinm/PROJECT_INDEX.md",
+        "size": "5K",
+        "tokenSavings": "~85%"
+      },
+      {
+        "file": "mcp-oauth-proxy/PROJECT_INDEX.md",
+        "size": "5K",
+        "tokenSavings": "~85%"
+      }
+    ]
+  },
+  "commonTasks": {
+    "buildController": {
+      "project": "nah",
+      "docs": ["nah/README.md", "nah/docs/examples/"],
+      "commands": ["cd nah", "make build", "make test"]
+    },
+    "deployPlatform": {
+      "project": "obot-entraid",
+      "docs": ["obot-entraid/README.md"],
+      "commands": ["cd obot-entraid", "make build", "configure auth", "deploy"]
+    },
+    "createModelProvider": {
+      "project": "obot-tools",
+      "docs": ["obot-tools/docs/DEVELOPER_GUIDE.md"],
+      "commands": [
+        "cd obot-tools",
+        "study example",
+        "create provider",
+        "register in index.yaml"
+      ]
+    },
+    "addOAuth": {
+      "project": "mcp-oauth-proxy",
+      "docs": ["mcp-oauth-proxy/README.md"],
+      "commands": ["cd mcp-oauth-proxy", "configure", "go run ."]
+    }
+  },
+  "statistics": {
+    "totalGoFiles": "500+",
+    "totalPackages": "140+",
+    "entryPoints": "25+ main.go",
+    "goModules": 28,
+    "documentationFiles": "90+",
+    "yamlConfigs": "100+"
+  },
+  "tokenEfficiency": {
+    "indexSize": "15KB ≈ 4000 tokens",
+    "fullCodebaseRead": "300000+ tokens",
+    "savings": "296000 tokens (99% reduction)",
+    "perSessionSavings": "290K tokens",
+    "roi": {
+      "indexCreation": "5K tokens (one-time)",
+      "breakEven": "<1 session",
+      "100Sessions": "29M tokens saved"
+    }
+  },
+  "searchKeywords": [
+    "Kubernetes",
+    "controller",
+    "operator",
+    "MCP",
+    "Model Context Protocol",
+    "OAuth",
+    "authentication",
+    "PostgreSQL",
+    "Go",
+    "SvelteKit",
+    "AI",
+    "LLM",
+    "RAG",
+    "declarative",
+    "apply",
+    "reconciliation",
+    "model provider",
+    "auth provider",
+    "platform",
+    "proxy",
+    "gateway"
+  ]
+}

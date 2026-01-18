@@ -1,0 +1,357 @@
+{
+  "metadata": {
+    "generated": "2026-01-15",
+    "version": "1.0.0",
+    "monorepo": "AI/MCP Development Monorepo",
+    "location": "/Users/jason/dev/AI",
+    "totalProjects": 6,
+    "primaryLanguage": "Go",
+    "license": "Apache 2.0"
+  },
+  "masterDocuments": {
+    "README.md": {
+      "size": "11K",
+      "purpose": "Entry point and overview",
+      "audience": "All users",
+      "sections": [
+        "What's Inside",
+        "Key Features",
+        "Quick Start",
+        "Documentation",
+        "Architecture",
+        "Development",
+        "Contributing"
+      ]
+    },
+    "PROJECT_INDEX.md": {
+      "size": "14K",
+      "purpose": "Comprehensive project reference",
+      "audience": "Developers, AI assistants",
+      "sections": [
+        "Overview",
+        "Projects (6 detailed summaries)",
+        "Architecture",
+        "Getting Started",
+        "Documentation",
+        "Development",
+        "Statistics"
+      ]
+    },
+    "API_REFERENCE.md": {
+      "size": "21K",
+      "purpose": "Cross-project API documentation",
+      "audience": "API integrators, developers",
+      "sections": [
+        "Quick Reference",
+        "nah API (Backend, Apply, Handler, Router, Leader Election)",
+        "mcp-oauth-proxy API (OAuth endpoints, MCP proxy)",
+        "kinm API (REST CRUD operations)",
+        "obot-tools API (Model providers, Auth providers)",
+        "Integration Patterns",
+        "Examples"
+      ]
+    },
+    "DOCUMENTATION_GUIDE.md": {
+      "size": "21K",
+      "purpose": "Navigation and learning paths",
+      "audience": "All users, especially newcomers",
+      "sections": [
+        "Documentation Structure",
+        "Getting Started",
+        "Documentation by Task",
+        "Documentation by Project",
+        "AI Assistant Guides",
+        "Finding Information",
+        "Learning Paths"
+      ]
+    },
+    "ARCHITECTURE_DIAGRAM.md": {
+      "size": "26K",
+      "purpose": "Visual architecture reference",
+      "audience": "Architects, developers",
+      "sections": [
+        "Monorepo Structure",
+        "Project Relationships",
+        "Data Flows",
+        "Component Architectures",
+        "Integration Patterns",
+        "Technology Stack",
+        "Security Architecture"
+      ]
+    }
+  },
+  "projects": {
+    "obot-entraid": {
+      "path": "./obot-entraid/",
+      "type": "Full-stack MCP platform",
+      "status": "Production fork",
+      "techStack": "Go 1.25.5, SvelteKit 5, PostgreSQL",
+      "documentation": {
+        "README.md": "Platform overview and setup",
+        "CONTRIBUTING.md": "Fork workflow and guidelines",
+        "CLAUDE.md": "AI assistant guide",
+        "tools/README.md": "Authentication providers",
+        "docs/contributing/": "Fork-specific workflows"
+      }
+    },
+    "nah": {
+      "path": "./nah/",
+      "type": "Kubernetes controller framework",
+      "status": "Stable library",
+      "techStack": "Go 1.24.0, controller-runtime, client-go",
+      "documentation": {
+        "README.md": "Framework overview",
+        "PROJECT_INDEX.md": "Comprehensive reference (94% token savings)",
+        "CLAUDE.md": "Development guide",
+        "CONTRIBUTING.md": "Contribution guidelines",
+        "docs/examples/": "Code examples",
+        "docs/guides/": "How-to guides",
+        "docs/packages/": "Package documentation",
+        "docs/architecture/": "Architecture decisions"
+      }
+    },
+    "kinm": {
+      "path": "./kinm/",
+      "type": "K8s-like API server",
+      "status": "Active development",
+      "techStack": "Go, PostgreSQL",
+      "documentation": {
+        "README.md": "API server overview",
+        "PROJECT_INDEX.md": "Detailed reference",
+        "docs/API.md": "REST API specification"
+      }
+    },
+    "mcp-oauth-proxy": {
+      "path": "./mcp-oauth-proxy/",
+      "type": "OAuth 2.1 proxy server",
+      "status": "Production-ready",
+      "techStack": "Go, PostgreSQL/SQLite",
+      "documentation": {
+        "README.md": "Setup and configuration",
+        "PROJECT_INDEX.md": "Project reference",
+        "docs/API_REFERENCE.md": "OAuth API details",
+        "docs/README.md": "Additional documentation"
+      }
+    },
+    "obot-tools": {
+      "path": "./obot-tools/",
+      "type": "Tool and provider collection",
+      "status": "Active development",
+      "techStack": "Go 1.23+, Python 3.13+, TypeScript",
+      "documentation": {
+        "README.md": "Tools overview",
+        "PROJECT_INDEX.md": "Detailed reference",
+        "CLAUDE.md": "AI development guide",
+        "docs/ARCHITECTURE.md": "System architecture",
+        "docs/API_REFERENCE.md": "API specifications",
+        "docs/DEVELOPER_GUIDE.md": "Development workflow",
+        "index.yaml": "Central tool registry"
+      }
+    },
+    "mcp-catalog": {
+      "path": "./mcp-catalog/",
+      "type": "MCP configuration catalog",
+      "status": "Active catalog",
+      "techStack": "YAML configurations",
+      "documentation": {
+        "PROJECT_INDEX.md": "Catalog reference",
+        "CLAUDE.md": "AI assistance guide",
+        "docs/API_REFERENCE.md": "Configuration schema",
+        "docs/README.md": "Usage guide",
+        "*.yaml": "MCP server configurations"
+      }
+    }
+  },
+  "aiMemories": {
+    "location": ".serena/memories/",
+    "purpose": "AI assistant context and guidance",
+    "files": {
+      "project_purpose_and_structure.md": "Project overview and organization",
+      "tech_stack_and_dependencies.md": "Technology stack details",
+      "code_style_and_conventions.md": "Coding standards and practices",
+      "suggested_commands.md": "Common development commands",
+      "task_completion_checklist.md": "Quality assurance checklist",
+      "codebase_architecture.md": "Detailed architecture documentation"
+    }
+  },
+  "navigationPaths": {
+    "newUser": [
+      "README.md",
+      "DOCUMENTATION_GUIDE.md",
+      "Choose project",
+      "Read project README",
+      "Follow setup instructions"
+    ],
+    "developer": [
+      "PROJECT_INDEX.md",
+      "Select project",
+      "Read CLAUDE.md",
+      "Review code examples",
+      "Check API_REFERENCE.md"
+    ],
+    "contributor": [
+      "PROJECT_INDEX.md",
+      "CONTRIBUTING.md (project-specific)",
+      "code_style_and_conventions.md",
+      "task_completion_checklist.md",
+      "Make changes",
+      "Run validation"
+    ],
+    "architect": [
+      "ARCHITECTURE_DIAGRAM.md",
+      "codebase_architecture.md",
+      "PROJECT_INDEX.md",
+      "docs/architecture/ (per project)"
+    ],
+    "apiIntegrator": [
+      "API_REFERENCE.md",
+      "Project-specific API docs",
+      "Integration examples",
+      "Test endpoints"
+    ]
+  },
+  "learningPaths": {
+    "kubernetesControllerDeveloper": {
+      "focus": "Build custom Kubernetes controllers",
+      "project": "nah",
+      "steps": [
+        "Read nah/README.md",
+        "Study nah/CLAUDE.md",
+        "Work through examples",
+        "Read guides",
+        "Deep dive PROJECT_INDEX.md",
+        "Study API_REFERENCE.md"
+      ]
+    },
+    "mcpPlatformIntegrator": {
+      "focus": "Deploy and extend Obot platform",
+      "projects": ["obot-entraid", "mcp-oauth-proxy", "obot-tools"],
+      "steps": [
+        "Read obot-entraid/README.md",
+        "Configure authentication",
+        "Study obot-tools/README.md",
+        "Review mcp-oauth-proxy/README.md",
+        "Deploy platform",
+        "Add custom tools"
+      ]
+    },
+    "toolProviderDeveloper": {
+      "focus": "Create custom tools and providers",
+      "project": "obot-tools",
+      "steps": [
+        "Read obot-tools/docs/ARCHITECTURE.md",
+        "Study DEVELOPER_GUIDE.md",
+        "Review existing providers",
+        "Check API_REFERENCE.md",
+        "Create custom provider",
+        "Register in index.yaml"
+      ]
+    }
+  },
+  "commonTasks": {
+    "buildController": {
+      "project": "nah",
+      "docs": [
+        "nah/README.md",
+        "nah/docs/guides/controllers.md",
+        "API_REFERENCE.md#nah"
+      ],
+      "commands": ["cd nah", "make build", "make test"]
+    },
+    "addOAuth": {
+      "project": "mcp-oauth-proxy",
+      "docs": ["mcp-oauth-proxy/README.md", "API_REFERENCE.md#mcp-oauth-proxy"],
+      "commands": ["cd mcp-oauth-proxy", "configure env vars", "go run ."]
+    },
+    "deployObot": {
+      "project": "obot-entraid",
+      "docs": ["obot-entraid/README.md", "obot-entraid/CONTRIBUTING.md"],
+      "commands": ["cd obot-entraid", "make build", "configure auth", "deploy"]
+    },
+    "createModelProvider": {
+      "project": "obot-tools",
+      "docs": [
+        "obot-tools/docs/ARCHITECTURE.md",
+        "obot-tools/docs/DEVELOPER_GUIDE.md"
+      ],
+      "commands": [
+        "cd obot-tools",
+        "study existing provider",
+        "implement provider",
+        "update index.yaml"
+      ]
+    },
+    "buildAPI": {
+      "project": "kinm",
+      "docs": ["kinm/README.md", "kinm/docs/API.md", "API_REFERENCE.md#kinm"],
+      "commands": ["cd kinm", "make build", "make test-integration"]
+    }
+  },
+  "statistics": {
+    "totalDocumentationFiles": 90,
+    "masterDocuments": 5,
+    "projectDocuments": 40,
+    "aiMemories": 6,
+    "totalSize": "~100K",
+    "tokenSavings": "94% for nah PROJECT_INDEX (3KB vs 58KB)",
+    "coverage": {
+      "gettingStarted": "100%",
+      "apiReference": "83%",
+      "architecture": "50%",
+      "examples": "50%",
+      "aiGuides": "67%",
+      "contributing": "33%"
+    }
+  },
+  "quickReference": {
+    "commandsByTask": {
+      "build": "make build",
+      "test": "make test",
+      "lint": "make validate",
+      "format": "go fmt ./...",
+      "ciValidation": "make validate-ci",
+      "dependencies": "go mod tidy"
+    },
+    "documentsByTask": {
+      "whatProjectDoes": "README.md",
+      "howToSetup": "README.md → Getting Started",
+      "apiEndpoints": "API_REFERENCE.md",
+      "codeArchitecture": "PROJECT_INDEX.md or ARCHITECTURE_DIAGRAM.md",
+      "codeExamples": "docs/examples/ or README.md",
+      "contribute": "CONTRIBUTING.md",
+      "commands": "CLAUDE.md or .serena/memories/suggested_commands.md",
+      "codeStyle": ".serena/memories/code_style_and_conventions.md"
+    }
+  },
+  "integrationPatterns": {
+    "nahController": {
+      "description": "Build K8s controller with declarative apply",
+      "docs": "API_REFERENCE.md#pattern-1-nah-controller-with-apply",
+      "example": "nah/docs/examples/"
+    },
+    "mcpOAuthProxy": {
+      "description": "Add OAuth to MCP servers",
+      "docs": "API_REFERENCE.md#pattern-2-mcp-server-with-oauth-proxy",
+      "flow": "Client → OAuth → Proxy → MCP Server"
+    },
+    "obotPlatform": {
+      "description": "Deploy full MCP platform",
+      "docs": "API_REFERENCE.md#pattern-3-obot-platform-integration",
+      "components": ["obot-entraid", "mcp-oauth-proxy", "obot-tools"]
+    },
+    "multiModelAI": {
+      "description": "Use multiple AI model providers",
+      "docs": "API_REFERENCE.md#pattern-4-multi-provider-model-access",
+      "providers": ["OpenAI", "Anthropic", "Ollama", "Groq"]
+    }
+  },
+  "externalResources": {
+    "kubernetes": "https://kubernetes.io/docs/",
+    "go": "https://go.dev/doc/",
+    "sveltekit": "https://kit.svelte.dev/docs",
+    "postgresql": "https://www.postgresql.org/docs/",
+    "oauth21": "https://oauth.net/2.1/",
+    "obotPlatform": "https://docs.obot.ai/",
+    "mcpSpec": "https://modelcontextprotocol.io/"
+  }
+}

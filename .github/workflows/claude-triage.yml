@@ -1,0 +1,59 @@
+name: Claude Issue Triage
+
+on:
+  issues:
+    types: [opened]
+  issue_comment:
+    types: [created]
+
+jobs:
+  triage:
+    # Only on new issues or @claude mentions
+    if: |
+      github.event_name == 'issues' ||
+      contains(github.event.comment.body, '@claude')
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Claude Triage
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+
+          # Fast, cost-effective model for triage with read-only tools
+          claude_args: "--model claude-haiku-3-20250514 --allowedTools Read,Glob,Grep"
+
+          prompt: |
+            Analyze this issue and:
+
+            1. **Identify Project**: Which project does this relate to?
+               - obot-entraid: Full-stack MCP platform
+               - nah: Kubernetes controller framework
+               - kinm: Kubernetes-like API server
+               - mcp-oauth-proxy: OAuth 2.1 proxy
+               - obot-tools: GPTScript tools and providers
+               - mcp-catalog: MCP server catalog
+               - namegenerator: Name generator
+
+            2. **Suggest Labels**: Based on the issue type
+               - bug: Something isn't working
+               - enhancement: New feature or request
+               - documentation: Docs improvement
+               - question: Information needed
+               - security: Security-related
+
+            3. **Identify Files**: If it's a bug, list likely affected files
+
+            4. **Architecture Notes**: If it's a feature request, note any
+               architectural considerations from AGENTS.md or project CLAUDE.md
+
+            Keep response under 200 words.
+            Format with clear sections for easy scanning.
