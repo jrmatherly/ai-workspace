@@ -219,31 +219,31 @@ for dir in obot-entraid nah kinm mcp-oauth-proxy obot-tools mcp-catalog namegene
 done
 echo ""
 echo "Registered repositories:"
-gita ll
+MISE_NO_CONFIG=1 gita ll
 """
 
 [tasks.gita-status]
 alias = "gs"
 description = "Show git status across all registered repos"
-run = "gita ll"
+run = "MISE_NO_CONFIG=1 gita ll"
 
 [tasks.gita-fetch]
 alias = "gf"
 description = "Fetch all registered repos"
-run = "gita fetch"
+run = "MISE_NO_CONFIG=1 gita fetch"
 
 [tasks.gita-pull]
 alias = "gp"
 description = "Pull all registered repos"
-run = "gita pull"
+run = "MISE_NO_CONFIG=1 gita pull"
 
 [tasks.gita-push]
 description = "Push all registered repos (use with caution)"
-run = "gita push"
+run = "MISE_NO_CONFIG=1 gita push"
 
 [tasks.gita-cmd]
 description = "Run arbitrary git command on all repos (use: mise gita-cmd -- status)"
-run = "gita super {{arg(name='cmd')}}"
+run = "MISE_NO_CONFIG=1 gita super {{arg(name='cmd')}}"
 
 # =============================================================================
 # PROJECT COMMIT TASKS (Conventional Commits)
