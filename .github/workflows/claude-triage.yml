@@ -3,21 +3,15 @@ name: Claude Issue Triage
 on:
   issues:
     types: [opened]
-  issue_comment:
-    types: [created]
 
 jobs:
   triage:
-    # Only on new issues or @claude mentions
-    if: |
-      github.event_name == 'issues' ||
-      contains(github.event.comment.body, '@claude')
-
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
       issues: write
+      id-token: write
 
     steps:
       - name: Checkout
@@ -26,13 +20,10 @@ jobs:
       - name: Claude Triage
         uses: anthropics/claude-code-action@a017b830c03e23789b11fb69ed571ea61c12e45c # v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-
-          # Fast, cost-effective model for triage with read-only tools
-          claude_args: "--model claude-haiku-3-20250514 --allowedTools Read,Glob,Grep"
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
           prompt: |
-            Analyze this issue and:
+            Analyze this issue and provide a brief triage:
 
             1. **Identify Project**: Which project does this relate to?
                - obot-entraid: Full-stack MCP platform
@@ -42,6 +33,7 @@ jobs:
                - obot-tools: GPTScript tools and providers
                - mcp-catalog: MCP server catalog
                - namegenerator: Name generator
+               - workspace root: Shared configuration
 
             2. **Suggest Labels**: Based on the issue type
                - bug: Something isn't working

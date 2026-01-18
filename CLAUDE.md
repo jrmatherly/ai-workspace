@@ -178,14 +178,16 @@ Configured in `.claude/settings.json`:
 
 ## GitHub Actions Integration
 
-CI/CD workflows using Claude Code (`.github/workflows/`):
+CI/CD workflows using Claude Code GitHub App (`.github/workflows/`):
 
-| Workflow | Trigger | Model | Purpose |
-| --------- | --------- | --------- | --------- |
-| `claude-review.yml` | PR opened/updated | sonnet | Automated code review |
-| `claude-triage.yml` | Issue opened | haiku | Issue triage and labeling |
+| Workflow | Trigger | Purpose |
+| --------- | --------- | --------- |
+| `claude.yml` | @claude mentions in issues/PRs | General assistant |
+| `claude-code-review.yml` | PR opened/updated | Automated code review |
+| `claude-triage.yml` | Issue opened | Auto-triage new issues |
+| `markdown-lint.yml` | PR with markdown changes | Lint markdown files |
 
-Both workflows use read-only tools (Read, Glob, Grep, Task) for safety.
+All Claude workflows use `CLAUDE_CODE_OAUTH_TOKEN` for authentication via the Claude Code GitHub App.
 
 ## When to Read What
 
