@@ -113,6 +113,18 @@ echo "  mise push:mcp-oauth-proxy (pm) - Push mcp-oauth-proxy to remote"
 echo "  mise push:mcp-catalog (pc)     - Push mcp-catalog to remote"
 echo "  mise push-all                  - Push all projects (use with caution)"
 echo ""
+echo "Fork dependency management:"
+echo "  mise update-forks (uf)         - Update fork deps to latest (review)"
+echo "  mise update-forks-commit (ufc) - Update fork deps and auto-commit"
+echo ""
+echo "Release management:"
+echo "  mise release:kinm VERSION (rk)           - Create kinm release"
+echo "  mise release:nah VERSION (rn)            - Create nah release"
+echo "  mise release:mcp-oauth-proxy VERSION (rm)- Create mcp-oauth-proxy release"
+echo "  mise release:mcp-catalog VERSION (rc)    - Create mcp-catalog release"
+echo "  mise release:obot-entraid VERSION (re)   - Create obot-entraid release"
+echo "  mise releases                            - Show latest releases"
+echo ""
 echo "Single project (examples):"
 echo "  mise //nah:test       - Test nah only"
 echo "  mise //obot-entraid:dev - Run obot-entraid dev server"
@@ -574,3 +586,261 @@ done
 echo ""
 echo "✅ Done"
 """
+
+# =============================================================================
+# FORK DEPENDENCY MANAGEMENT
+# =============================================================================
+# Tools for managing forked dependencies across projects
+#
+# The jrmatherly/* forks are used via replace directives in go.mod.
+# These tasks help keep them updated without manual version editing.
+
+[tasks.update-forks]
+alias = "uf"
+description = "Update all jrmatherly fork dependencies in obot-entraid to latest"
+run = """
+echo "=== Updating Fork Dependencies ==="
+echo ""
+cd obot-entraid
+
+echo "Current fork versions:"
+grep 'github.com/jrmatherly' go.mod | grep -v '//' || echo "  No forks found"
+echo ""
+
+echo "Fetching latest versions..."
+go get github.com/jrmatherly/kinm@latest
+go get github.com/jrmatherly/mcp-oauth-proxy@latest
+go get github.com/jrmatherly/nah@latest
+
+echo ""
+echo "Running go mod tidy..."
+go mod tidy
+
+echo ""
+echo "Updated fork versions:"
+grep 'github.com/jrmatherly' go.mod | grep -v '//' || echo "  No forks found"
+
+echo ""
+echo "Changes to go.mod:"
+git diff --stat go.mod go.sum 2>/dev/null || echo "  No changes"
+
+echo ""
+echo "✅ Done! Review changes and commit if satisfied."
+"""
+
+[tasks.update-forks-commit]
+alias = "ufc"
+description = "Update forks and auto-commit changes"
+run = '''
+echo "=== Updating Fork Dependencies with Auto-Commit ==="
+cd obot-entraid
+
+# Get current versions for commit message
+OLD_KINM=$(grep 'jrmatherly/kinm' go.mod | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "unknown")
+OLD_PROXY=$(grep 'jrmatherly/mcp-oauth-proxy' go.mod | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "unknown")
+OLD_NAH=$(grep 'jrmatherly/nah' go.mod | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "unknown")
+
+# Update dependencies
+go get github.com/jrmatherly/kinm@latest
+go get github.com/jrmatherly/mcp-oauth-proxy@latest
+go get github.com/jrmatherly/nah@latest
+go mod tidy
+
+# Get new versions
+NEW_KINM=$(grep 'jrmatherly/kinm' go.mod | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "unknown")
+NEW_PROXY=$(grep 'jrmatherly/mcp-oauth-proxy' go.mod | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "unknown")
+NEW_NAH=$(grep 'jrmatherly/nah' go.mod | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -1 || echo "unknown")
+
+# Check if there are changes
+if git diff --quiet go.mod go.sum; then
+    echo "✅ All forks already at latest versions"
+    exit 0
+fi
+
+# Build commit message
+UPDATES=""
+[ "$OLD_KINM" != "$NEW_KINM" ] && UPDATES="${UPDATES}kinm $OLD_KINM→$NEW_KINM, "
+[ "$OLD_PROXY" != "$NEW_PROXY" ] && UPDATES="${UPDATES}mcp-oauth-proxy $OLD_PROXY→$NEW_PROXY, "
+[ "$OLD_NAH" != "$NEW_NAH" ] && UPDATES="${UPDATES}nah $OLD_NAH→$NEW_NAH, "
+UPDATES="${UPDATES%, }"  # Remove trailing comma
+
+git add go.mod go.sum
+git commit -m "chore(deps): update fork dependencies
+
+Updated: $UPDATES
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+echo ""
+echo "✅ Committed fork updates. Push when ready."
+'''
+
+# =============================================================================
+# RELEASE MANAGEMENT
+# =============================================================================
+# Streamlined release creation for forked projects
+#
+# Usage:
+#   mise release:kinm 0.1.10           # Create kinm v0.1.10
+#   mise release:nah 0.1.3             # Create nah v0.1.3
+#   mise release:mcp-oauth-proxy 0.1.4 # Create mcp-oauth-proxy v0.1.4
+
+[tasks."release:kinm"]
+alias = "rk"
+description = "Create a new release for kinm (usage: mise release:kinm VERSION)"
+run = """
+VERSION="{{arg(name='version')}}"
+if [ -z "$VERSION" ]; then
+    echo "Usage: mise release:kinm VERSION"
+    echo "Example: mise release:kinm 0.1.10"
+    exit 1
+fi
+
+cd kinm
+echo "=== Creating kinm v$VERSION ==="
+
+# Ensure we're on main and up to date
+git checkout main
+git pull origin main
+
+# Check for uncommitted changes
+if ! git diff --quiet; then
+    echo "⚠️  Uncommitted changes detected. Commit or stash first."
+    exit 1
+fi
+
+# Create the release
+gh release create "v$VERSION" --generate-notes --title "v$VERSION"
+
+echo ""
+echo "✅ Created kinm v$VERSION"
+echo "   View: https://github.com/jrmatherly/kinm/releases/tag/v$VERSION"
+"""
+
+[tasks."release:nah"]
+alias = "rn"
+description = "Create a new release for nah (usage: mise release:nah VERSION)"
+run = """
+VERSION="{{arg(name='version')}}"
+if [ -z "$VERSION" ]; then
+    echo "Usage: mise release:nah VERSION"
+    echo "Example: mise release:nah 0.1.3"
+    exit 1
+fi
+
+cd nah
+echo "=== Creating nah v$VERSION ==="
+
+git checkout main
+git pull origin main
+
+if ! git diff --quiet; then
+    echo "⚠️  Uncommitted changes detected. Commit or stash first."
+    exit 1
+fi
+
+gh release create "v$VERSION" --generate-notes --title "v$VERSION"
+
+echo ""
+echo "✅ Created nah v$VERSION"
+echo "   View: https://github.com/jrmatherly/nah/releases/tag/v$VERSION"
+"""
+
+[tasks."release:mcp-oauth-proxy"]
+alias = "rm"
+description = "Create a new release for mcp-oauth-proxy (usage: mise release:mcp-oauth-proxy VERSION)"
+run = """
+VERSION="{{arg(name='version')}}"
+if [ -z "$VERSION" ]; then
+    echo "Usage: mise release:mcp-oauth-proxy VERSION"
+    echo "Example: mise release:mcp-oauth-proxy 0.1.4"
+    exit 1
+fi
+
+cd mcp-oauth-proxy
+echo "=== Creating mcp-oauth-proxy v$VERSION ==="
+
+git checkout main
+git pull origin main
+
+if ! git diff --quiet; then
+    echo "⚠️  Uncommitted changes detected. Commit or stash first."
+    exit 1
+fi
+
+gh release create "v$VERSION" --generate-notes --title "v$VERSION"
+
+echo ""
+echo "✅ Created mcp-oauth-proxy v$VERSION"
+echo "   View: https://github.com/jrmatherly/mcp-oauth-proxy/releases/tag/v$VERSION"
+"""
+
+[tasks."release:mcp-catalog"]
+alias = "rc"
+description = "Create a new release for mcp-catalog (usage: mise release:mcp-catalog VERSION)"
+run = """
+VERSION="{{arg(name='version')}}"
+if [ -z "$VERSION" ]; then
+    echo "Usage: mise release:mcp-catalog VERSION"
+    echo "Example: mise release:mcp-catalog 0.1.3"
+    exit 1
+fi
+
+cd mcp-catalog
+echo "=== Creating mcp-catalog v$VERSION ==="
+
+git checkout main
+git pull origin main
+
+if ! git diff --quiet; then
+    echo "⚠️  Uncommitted changes detected. Commit or stash first."
+    exit 1
+fi
+
+gh release create "v$VERSION" --generate-notes --title "v$VERSION"
+
+echo ""
+echo "✅ Created mcp-catalog v$VERSION"
+echo "   View: https://github.com/jrmatherly/mcp-catalog/releases/tag/v$VERSION"
+"""
+
+[tasks."release:obot-entraid"]
+alias = "re"
+description = "Create a new release for obot-entraid (usage: mise release:obot-entraid VERSION)"
+run = """
+VERSION="{{arg(name='version')}}"
+if [ -z "$VERSION" ]; then
+    echo "Usage: mise release:obot-entraid VERSION"
+    echo "Example: mise release:obot-entraid 0.2.39"
+    exit 1
+fi
+
+cd obot-entraid
+echo "=== Creating obot-entraid v$VERSION ==="
+
+git checkout main
+git pull origin main
+
+if ! git diff --quiet; then
+    echo "⚠️  Uncommitted changes detected. Commit or stash first."
+    exit 1
+fi
+
+gh release create "v$VERSION" --generate-notes --title "v$VERSION"
+
+echo ""
+echo "✅ Created obot-entraid v$VERSION"
+echo "   View: https://github.com/jrmatherly/obot-entraid/releases/tag/v$VERSION"
+"""
+
+[tasks.releases]
+description = "Show latest releases for all forked projects"
+run = '''
+echo "=== Latest Releases ==="
+echo ""
+
+for repo in kinm nah mcp-oauth-proxy mcp-catalog obot-entraid; do
+    LATEST=$(gh release list --repo "jrmatherly/$repo" --limit 1 --json tagName,publishedAt --jq '.[0] | "\(.tagName) (\(.publishedAt | split("T")[0]))"' 2>/dev/null || echo "no releases")
+    printf "%-20s %s\n" "$repo:" "$LATEST"
+done
+'''
