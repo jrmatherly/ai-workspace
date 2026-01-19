@@ -122,6 +122,8 @@ echo "  mise release:kinm VERSION (rk)           - Create kinm release"
 echo "  mise release:nah VERSION (rn)            - Create nah release"
 echo "  mise release:mcp-oauth-proxy VERSION (rm)- Create mcp-oauth-proxy release"
 echo "  mise release:mcp-catalog VERSION (rc)    - Create mcp-catalog release"
+echo "  mise release:namegenerator VERSION (rng) - Create namegenerator release"
+echo "  mise release:obot-tools VERSION (rot)   - Create obot-tools release"
 echo "  mise release:obot-entraid VERSION (re)   - Create obot-entraid release"
 echo "  mise releases                            - Show latest releases"
 echo ""
@@ -612,10 +614,12 @@ echo "Fetching latest releases from GitHub..."
 KINM_TAG=$(gh release list --repo jrmatherly/kinm --limit 1 --json tagName -q '.[0].tagName' 2>/dev/null)
 NAH_TAG=$(gh release list --repo jrmatherly/nah --limit 1 --json tagName -q '.[0].tagName' 2>/dev/null)
 PROXY_TAG=$(gh release list --repo jrmatherly/mcp-oauth-proxy --limit 1 --json tagName -q '.[0].tagName' 2>/dev/null)
+NAMEGEN_TAG=$(gh release list --repo jrmatherly/namegenerator --limit 1 --json tagName -q '.[0].tagName' 2>/dev/null)
 
 echo "  kinm: $KINM_TAG"
 echo "  nah: $NAH_TAG"
 echo "  mcp-oauth-proxy: $PROXY_TAG"
+echo "  namegenerator: $NAMEGEN_TAG"
 echo ""
 
 # Update replace directives
@@ -623,6 +627,7 @@ echo "Updating replace directives..."
 [ -n "$KINM_TAG" ] && go mod edit -replace "github.com/obot-platform/kinm=github.com/jrmatherly/kinm@$KINM_TAG"
 [ -n "$NAH_TAG" ] && go mod edit -replace "github.com/obot-platform/nah=github.com/jrmatherly/nah@$NAH_TAG"
 [ -n "$PROXY_TAG" ] && go mod edit -replace "github.com/obot-platform/mcp-oauth-proxy=github.com/jrmatherly/mcp-oauth-proxy@$PROXY_TAG"
+[ -n "$NAMEGEN_TAG" ] && go mod edit -replace "github.com/obot-platform/namegenerator=github.com/jrmatherly/namegenerator@$NAMEGEN_TAG"
 
 echo ""
 echo "Running go mod tidy..."
@@ -651,19 +656,22 @@ cd obot-entraid
 OLD_KINM=$(grep 'jrmatherly/kinm' go.mod | awk '{print $NF}')
 OLD_NAH=$(grep 'jrmatherly/nah' go.mod | awk '{print $NF}')
 OLD_PROXY=$(grep 'jrmatherly/mcp-oauth-proxy' go.mod | awk '{print $NF}')
+OLD_NAMEGEN=$(grep 'jrmatherly/namegenerator' go.mod | awk '{print $NF}')
 
 # Get latest tags from GitHub
 NEW_KINM=$(gh release list --repo jrmatherly/kinm --limit 1 --json tagName -q '.[0].tagName' 2>/dev/null)
 NEW_NAH=$(gh release list --repo jrmatherly/nah --limit 1 --json tagName -q '.[0].tagName' 2>/dev/null)
 NEW_PROXY=$(gh release list --repo jrmatherly/mcp-oauth-proxy --limit 1 --json tagName -q '.[0].tagName' 2>/dev/null)
+NEW_NAMEGEN=$(gh release list --repo jrmatherly/namegenerator --limit 1 --json tagName -q '.[0].tagName' 2>/dev/null)
 
-echo "Current: kinm=$OLD_KINM nah=$OLD_NAH proxy=$OLD_PROXY"
-echo "Latest:  kinm=$NEW_KINM nah=$NEW_NAH proxy=$NEW_PROXY"
+echo "Current: kinm=$OLD_KINM nah=$OLD_NAH proxy=$OLD_PROXY namegen=$OLD_NAMEGEN"
+echo "Latest:  kinm=$NEW_KINM nah=$NEW_NAH proxy=$NEW_PROXY namegen=$NEW_NAMEGEN"
 
 # Update replace directives
 [ -n "$NEW_KINM" ] && go mod edit -replace "github.com/obot-platform/kinm=github.com/jrmatherly/kinm@$NEW_KINM"
 [ -n "$NEW_NAH" ] && go mod edit -replace "github.com/obot-platform/nah=github.com/jrmatherly/nah@$NEW_NAH"
 [ -n "$NEW_PROXY" ] && go mod edit -replace "github.com/obot-platform/mcp-oauth-proxy=github.com/jrmatherly/mcp-oauth-proxy@$NEW_PROXY"
+[ -n "$NEW_NAMEGEN" ] && go mod edit -replace "github.com/obot-platform/namegenerator=github.com/jrmatherly/namegenerator@$NEW_NAMEGEN"
 go mod tidy
 
 # Check if there are changes
@@ -677,6 +685,7 @@ UPDATES=""
 [ "$OLD_KINM" != "$NEW_KINM" ] && UPDATES="${UPDATES}kinm $OLD_KINM->$NEW_KINM, "
 [ "$OLD_NAH" != "$NEW_NAH" ] && UPDATES="${UPDATES}nah $OLD_NAH->$NEW_NAH, "
 [ "$OLD_PROXY" != "$NEW_PROXY" ] && UPDATES="${UPDATES}mcp-oauth-proxy $OLD_PROXY->$NEW_PROXY, "
+[ "$OLD_NAMEGEN" != "$NEW_NAMEGEN" ] && UPDATES="${UPDATES}namegenerator $OLD_NAMEGEN->$NEW_NAMEGEN, "
 UPDATES="${UPDATES%, }"
 
 git add go.mod go.sum
@@ -848,13 +857,71 @@ echo "✅ Created obot-entraid v$VERSION"
 echo "   View: https://github.com/jrmatherly/obot-entraid/releases/tag/v$VERSION"
 """
 
+[tasks."release:namegenerator"]
+alias = "rng"
+description = "Create a new release for namegenerator (usage: mise release:namegenerator VERSION)"
+run = """
+VERSION="{{arg(name='version')}}"
+if [ -z "$VERSION" ]; then
+    echo "Usage: mise release:namegenerator VERSION"
+    echo "Example: mise release:namegenerator 0.1.1"
+    exit 1
+fi
+
+cd namegenerator
+echo "=== Creating namegenerator v$VERSION ==="
+
+git checkout main
+git pull origin main
+
+if ! git diff --quiet; then
+    echo "⚠️  Uncommitted changes detected. Commit or stash first."
+    exit 1
+fi
+
+gh release create "v$VERSION" --generate-notes --title "v$VERSION"
+
+echo ""
+echo "✅ Created namegenerator v$VERSION"
+echo "   View: https://github.com/jrmatherly/namegenerator/releases/tag/v$VERSION"
+"""
+
+[tasks."release:obot-tools"]
+alias = "rot"
+description = "Create a new release for obot-tools (usage: mise release:obot-tools VERSION)"
+run = """
+VERSION="{{arg(name='version')}}"
+if [ -z "$VERSION" ]; then
+    echo "Usage: mise release:obot-tools VERSION"
+    echo "Example: mise release:obot-tools 0.1.1"
+    exit 1
+fi
+
+cd obot-tools
+echo "=== Creating obot-tools v$VERSION ==="
+
+git checkout main
+git pull origin main
+
+if ! git diff --quiet; then
+    echo "⚠️  Uncommitted changes detected. Commit or stash first."
+    exit 1
+fi
+
+gh release create "v$VERSION" --generate-notes --title "v$VERSION"
+
+echo ""
+echo "✅ Created obot-tools v$VERSION"
+echo "   View: https://github.com/jrmatherly/obot-tools/releases/tag/v$VERSION"
+"""
+
 [tasks.releases]
 description = "Show latest releases for all forked projects"
 run = '''
 echo "=== Latest Releases ==="
 echo ""
 
-for repo in kinm nah mcp-oauth-proxy mcp-catalog obot-entraid; do
+for repo in kinm nah mcp-oauth-proxy mcp-catalog namegenerator obot-tools obot-entraid; do
     LATEST=$(gh release list --repo "jrmatherly/$repo" --limit 1 --json tagName,publishedAt --jq '.[0] | "\(.tagName) (\(.publishedAt | split("T")[0]))"' 2>/dev/null || echo "no releases")
     printf "%-20s %s\n" "$repo:" "$LATEST"
 done
