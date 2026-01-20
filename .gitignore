@@ -482,7 +482,8 @@ Pipfile*
 
 # Independent project repositories
 obot-entraid/
-nah/
+nah/*
+!nah/docs/
 kinm/
 mcp-oauth-proxy/
 obot-tools/

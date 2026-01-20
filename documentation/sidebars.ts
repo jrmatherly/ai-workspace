@@ -123,13 +123,18 @@ const sidebars = {
         },
         {
           type: "category",
-          label: "obot-entraid",
-          items: ["projects/obot-entraid/fork-dependency-management"],
-        },
-        {
-          type: "category",
-          label: "obot-tools",
-          items: ["projects/obot-tools/migration-guide-auth-providers"],
+          label: "nah",
+          link: {
+            type: "doc",
+            id: "nah/readme",
+          },
+          items: [
+            "nah/guides/controllers",
+            "nah/guides/apply",
+            "nah/guides/leader-election",
+            "nah/guides/testing",
+            "nah/guides/performance",
+          ],
         },
         {
           type: "category",
