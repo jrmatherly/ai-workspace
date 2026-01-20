@@ -504,3 +504,6 @@ namegenerator/
 .worktrees/
 .security-key
 logs/security/
+
+# Auto Claude project directory
+auto-claude/
