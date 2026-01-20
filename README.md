@@ -6,7 +6,7 @@
 
 **A comprehensive collection of AI/MCP technologies, Kubernetes tools, and authentication systems.**
 
-> 🚀 **Quick Start:** [Documentation Guide](./documentation/docs/reference/documentation-guide.md) • [Project Index](./documentation/docs/reference/project-index.md) • [API Reference](./documentation/docs/reference/api-reference.md)
+> 🚀 **Quick Start:** [Documentation Guide](./documentation/docs/reference/documentation-guide.md) • [Integration Guide](./documentation/docs/guides/cross-project-integration.md) • [Project Index](./documentation/docs/reference/project-index.md) • [API Reference](./documentation/docs/reference/api-reference.md)
 
 ---
 
@@ -132,6 +132,7 @@ make build
 | ---------- | --------- | ---------- |
 | **[QUICK_REFERENCE.md](./QUICK_REFERENCE.md)** | One-page command reference | Active developers |
 | **[developer-onboarding.md](./documentation/docs/reference/developer-onboarding.md)** | Complete onboarding guide | New contributors |
+| **[cross-project-integration.md](./documentation/docs/guides/cross-project-integration.md)** | How projects integrate together | Architects, integrators |
 | **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** | Issue resolution guide | Debugging |
 | **[architecture.md](./documentation/docs/reference/architecture.md)** | Visual architecture diagrams | Architects, visual learners |
 | **[documentation-guide.md](./documentation/docs/reference/documentation-guide.md)** | Navigation and learning paths | Everyone |

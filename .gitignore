@@ -482,13 +482,15 @@ Pipfile*
 
 # Independent project repositories
 obot-entraid/
-nah/*
-!nah/docs/
+nah/
 kinm/
 mcp-oauth-proxy/
 obot-tools/
 mcp-catalog/
 namegenerator/
+
+# Exception: Allow documentation directories for ignored projects
+!documentation/docs/projects/mcp-oauth-proxy/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,terraform,go,python,windows,ansible,virtualenv,node
 

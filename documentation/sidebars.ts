@@ -123,17 +123,14 @@ const sidebars = {
         },
         {
           type: "category",
-          label: "nah",
+          label: "mcp-oauth-proxy",
           link: {
             type: "doc",
-            id: "nah/readme",
+            id: "projects/mcp-oauth-proxy/readme",
           },
           items: [
-            "nah/guides/controllers",
-            "nah/guides/apply",
-            "nah/guides/leader-election",
-            "nah/guides/testing",
-            "nah/guides/performance",
+            "projects/mcp-oauth-proxy/troubleshooting-guide",
+            "projects/mcp-oauth-proxy/debugging-guide",
           ],
         },
         {
