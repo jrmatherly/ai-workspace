@@ -138,16 +138,6 @@ const sidebars = {
         },
         {
           type: "category",
-          label: "obot-entraid",
-          items: ["projects/obot-entraid/fork-dependency-management"],
-        },
-        {
-          type: "category",
-          label: "obot-tools",
-          items: ["projects/obot-tools/migration-guide-auth-providers"],
-        },
-        {
-          type: "category",
           label: "Token Tracking Optimization",
           items: [
             "projects/token-tracking-optimization/TOKEN_TRACKING_OPTIMIZATION_RECOMMENDATIONS",
