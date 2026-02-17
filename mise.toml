@@ -58,7 +58,7 @@ node = "24"
 python = "3.14"
 
 # Go tooling (via aqua for version pinning)
-"aqua:golangci/golangci-lint" = "2.8.0"
+"aqua:golangci/golangci-lint" = "2.10.1"
 
 # Git and CI tools
 "aqua:cli/cli" = "latest"  # GitHub CLI
