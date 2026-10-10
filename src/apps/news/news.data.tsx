@@ -14,7 +14,7 @@ import { PerplexityIcon } from '~/common/components/icons/vendors/PerplexityIcon
 
 import { Brand } from '~/common/app.config';
 import { Link } from '~/common/components/Link';
-import { Release } from '~/common/app.release';
+import { BaseProduct, Release } from '~/common/app.release';
 import { clientUtmSource } from '~/common/util/pwaUtils';
 import { platformAwareKeystrokes } from '~/common/components/KeyStroke';
 
@@ -33,9 +33,6 @@ import coverV114 from '../../../public/images/covers/release-cover-v1.14.0.png';
 import coverV113 from '../../../public/images/covers/release-cover-v1.13.0.png';
 // An image of a capybara sculpted entirely from black cotton candy, set against a minimalist backdrop with splashes of bright, contrasting sparkles. The capybara is calling on a 3D origami old-school pink telephone and the camera is zooming on the telephone. Close up photography, bokeh, white background.
 import coverV112 from '../../../public/images/covers/release-cover-v1.12.0.png';
-
-
-const beamBlogUrl = 'https://big-agi.com/blog/beam-multi-model-ai-reasoning/';
 
 
 interface NewsItem {
@@ -66,7 +63,7 @@ export const DevNewsItem: NewsItem = {
   items: [
     { text: <>You&apos;re running an unsupported <B>developer build</B> of Big-AGI Open {_frontendPkgVersion}</> },
     { text: <>Please report screenshots of breakages and console error messages</> },
-    { text: <ExternalLink href='https://big-agi.com'>Back to the official version</ExternalLink> },
+    { text: <ExternalLink href={BaseProduct.NewsSite}>Latest releases</ExternalLink> },
   ],
 } as const;
 
@@ -138,7 +135,7 @@ export const NewsItems: NewsItem[] = [
       { text: <>Enhanced <B>OpenRouter</B> integration with auto-capabilities and reasoning</> },
       { text: <>Call transcripts, generate persona images, search button in beams</> },
       { text: <>Starred models, errors resilience, 278 fixes</> },
-      { text: <ExternalLink href='https://github.com/enricoros/big-agi/issues/new?template=ai-triage.yml'>AI-Automatic feature development</ExternalLink> },
+      { text: <ExternalLink href={BaseProduct.SupportForm()}>AI-Automatic feature development</ExternalLink> },
     ],
   },
   {
@@ -154,7 +151,7 @@ export const NewsItems: NewsItem[] = [
       { text: <><B>Web Search</B> with citations for supported models</> },
       { text: <><B>UI</B> &amp; Mobile UI overhaul with peeking and side panels</> },
       // { text: <><B>Performance</B>: 10x faster tokenization, lazy modals, fragment system</> },
-      { text: <>And many more <ExternalLink href='https://github.com/enricoros/big-AGI/issues/567#issuecomment-2262187617'>Big-AGI 2 changes</ExternalLink></> },
+      { text: <>And many more <ExternalLink href={BaseProduct.UpstreamIssue('567#issuecomment-2262187617')}>Big-AGI 2 changes</ExternalLink></> },
       { text: <>Built for the future, madly optimized</> },
     ],
   },
@@ -166,7 +163,7 @@ export const NewsItems: NewsItem[] = [
     // versionDate: new Date('2024-05-09T00:00:00Z'),
     versionCoverImage: coverV116,
     items: [
-      { text: <><B href={beamBlogUrl} wow>Beam</B> core and UX improvements based on user feedback</>, issue: 470, icon: ChatBeamIcon },
+      { text: <><B wow>Beam</B> core and UX improvements based on user feedback</>, issue: 470, icon: ChatBeamIcon },
       { text: <>Chat <B>Cost estimation</B> with supported models* 💰</> },
       { text: <>Major <B>Auto-Diagrams</B> enhancements</> },
       { text: <>Save/load chat files with Ctrl+S / O</>, issue: 466 },
@@ -193,7 +190,7 @@ export const NewsItems: NewsItem[] = [
     versionDate: new Date('2024-04-10T08:00:00Z'),
     versionCoverImage: coverV115,
     items: [
-      { text: <><B href={beamBlogUrl} wow>Beam</B>: Find better answers with multi-model AI reasoning</>, issue: 443, icon: ChatBeamIcon },
+      { text: <><B wow>Beam</B>: Find better answers with multi-model AI reasoning</>, issue: 443, icon: ChatBeamIcon },
       // { text: <><B>Explore diverse perspectives</B> and <B>synthesize optimal responses</B></>, noBullet: true },
       { text: <><B issue={436}>Auto-configure</B> models for managed deployments</>, issue: 436 },
       { text: <>Message <B issue={476}>starring ⭐</B>, filtering and attachment</>, issue: 476 },
@@ -215,7 +212,7 @@ export const NewsItems: NewsItem[] = [
       { text: <>Support for new Mistral-Large models</>, icon: MistralIcon },
       { text: <>Support for Google Gemini 1.5 models and various improvements</>, icon: GoogleIcon as any },
       { text: <>Deeper LocalAI integration including support for <B issue={411}>model galleries</B></>, icon: LocalAIIcon },
-      { text: <>Major <B href='https://x.com/enricoros/status/1756553038293303434'>performance optimizations</B>: runs faster, saves power, saves memory</> },
+      { text: <>Major <B>performance optimizations</B>: runs faster, saves power, saves memory</> },
       { text: <>Improvements: auto-size charts, search and folder experience</> },
       { text: <>Perfect chat scaling, with rapid keyboard shortcuts</> },
       { text: <>Also: diagrams auto-resize, quick model visibility toggle, open links externally, docs on the web</> },
@@ -313,8 +310,7 @@ export const NewsItems: NewsItem[] = [
       { text: <><B>Single-Tab</B> mode, enhances data integrity and prevents DB corruption</> },
       { text: <>Updated Ollama (v0.1.17) and OpenRouter models</> },
       { text: <>More: fixed ⌘ shortcuts on Mac</> },
-      { text: <><Link href='https://big-agi.com'>Website</Link>: official downloads</> },
-      { text: <>Easier Vercel deployment, documented <Link href='https://github.com/enricoros/big-AGI/issues/276#issuecomment-1858591483'>network troubleshooting</Link></>, dev: true },
+      { text: <>Easier Vercel deployment, documented <Link href={BaseProduct.UpstreamIssue('276#issuecomment-1858591483')}>network troubleshooting</Link></>, dev: true },
     ],
   },
   {
@@ -396,7 +392,6 @@ export const NewsItems: NewsItem[] = [
     versionCode: '1.2.1',
     // text: '',
     items: [
-      { text: <>New home page: <b><Link href={Brand.URIs.Home + clientUtmSource()} target='_blank'>{Brand.URIs.Home.replace('https://', '')}</Link></b></> },
       { text: 'Support 𝑓unction models' }, // (n)
       { text: <Box sx={{ display: 'flex', alignItems: 'center' }}>Labs: experiments</Box> }, // ⚗️🧬🔬🥼 🥽🧪 <ScienceIcon sx={{ fontSize: 24, opacity: 0.5 }} />
     ],
@@ -414,7 +409,7 @@ function B(props: {
   children: React.ReactNode
 }) {
   const href =
-    props.issue ? `${Brand.URIs.OpenRepo}/issues/${props.issue}`
+    props.issue ? BaseProduct.UpstreamIssue(props.issue)
       : props.code ? `${Brand.URIs.OpenRepo}/blob/main/${props.code}`
         : props.href;
   const boldText = (

@@ -1,3 +1,24 @@
+import type { SiteDocSlug } from '~/common/gen/com.site.docs.slug';
+
+import { BaseProduct } from '~/common/app.release';
+
+
+// slugs are upstream's website docs; a slug without a local file resolves to null and callers hide the link
+const DOCS_SLUG_TO_FILE: Partial<Record<SiteDocSlug, string>> = {
+  'connect-azure': 'config-azure-openai.md',
+  'connect-lmstudio': 'config-local-lmstudio.md',
+  'connect-localai': 'config-local-localai.md',
+  'connect-nvidia-nim': 'config-nvidianim.md',
+  'connect-ollama': 'config-local-ollama.md',
+  'connect-openrouter': 'config-openrouter.md',
+  'feature-voice': 'help-feature-microphone.md',
+  'account-backup': 'help-data-ownership.md',
+  'privacy-data-flow': 'help-data-ownership.md',
+  'self-host': 'installation.md',
+  'self-host-configuration': 'environment-variables.md',
+  'self-host-optional-services': 'config-feature-browse.md',
+};
+
 /**
  * Application Identity (Brand)
  *
@@ -15,20 +36,15 @@ export const Brand = {
     Description: 'Launch the open-source AI workspace for experts. BYO API keys. Compare and tune models, use personas, voice and vision - your data stays local.',
     SiteName: 'Big-AGI | The Expert\'s AI Workspace',
     ThemeColor: '#32383E',
-    TwitterSite: '@enricoros',
   },
   URIs: {
-    Home: 'https://big-agi.com',
-    // App: 'https://get.big-agi.com',
-    CardImage: 'https://big-agi.com/icons/card-dark-1200.png',
-    OpenRepo: 'https://github.com/enricoros/big-agi',
-    OpenProject: 'https://github.com/users/enricoros/projects/4',
-    SupportInvite: 'https://discord.gg/MkH4qj2Jp9',
-    // Twitter: 'https://x.com/enricoros',
-    PrivacyPolicy: 'https://big-agi.com/privacy',
-    TermsOfService: 'https://big-agi.com/terms',
+    Home: BaseProduct.ProductURL,
+    CardImage: '/icons/card-dark-1200.png', // same-origin; _document.tsx prefixes NEXT_PUBLIC_SITE_URL
+    OpenRepo: BaseProduct.OpenSourceRepo,
+    // the hosted privacy page was upstream's; the data-handling guide is the nearest local text
+    PrivacyPolicy: BaseProduct.DocsBaseSite + 'help-data-ownership.md',
   },
   Docs: {
-    Public: (docPage: string) => `https://big-agi.com/docs/${docPage}`,
-  }
+    Public: (docPage: SiteDocSlug): string | null => DOCS_SLUG_TO_FILE[docPage] ? BaseProduct.DocsBaseSite + DOCS_SLUG_TO_FILE[docPage] : null,
+  },
 } as const;

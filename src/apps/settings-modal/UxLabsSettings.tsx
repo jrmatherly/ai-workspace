@@ -10,6 +10,7 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SpeedIcon from '@mui/icons-material/Speed';
 import WidthWideIcon from '@mui/icons-material/WidthWide';
 
+import { BaseProduct } from '~/common/app.release';
 import { FormLabelStart } from '~/common/components/forms/FormLabelStart';
 import { FormSelectControl, FormSelectOption } from '~/common/components/forms/FormSelectControl';
 import { FormSwitchControl } from '~/common/components/forms/FormSwitchControl';
@@ -104,7 +105,7 @@ export function UxLabsSettings() {
 
     {/*
       Other Graduated (removed or backlog):
-        - <Link href='https://github.com/enricoros/big-AGI/issues/359' target='_blank'>Draw App</Link>
+        - <Link href={BaseProduct.UpstreamIssue(359)} target='_blank'>Draw App</Link>
         - Text Tools: dinamically shown where applicable (e.g. Diff)
         - Chat Mode: follow-ups; moved to Chat Advanced UI
     */}
@@ -113,11 +114,11 @@ export function UxLabsSettings() {
       <FormLabelStart title='Graduated' description='Ex-labs' />
       <Typography level='body-xs'>
         Screen Capture · Webcam · Cost Estimation · Enhanced Code Blocks
-        {' · '}<Link href='https://big-agi.com/blog/beam-multi-model-ai-reasoning' target='_blank'>Beam</Link>
-        {' · '}<Link href='https://github.com/enricoros/big-AGI/issues/208' target='_blank'>Split Chats</Link>
-        {' · '}<Link href='https://github.com/enricoros/big-AGI/issues/354' target='_blank'>Call AGI</Link>
-        {' · '}<Link href='https://github.com/enricoros/big-AGI/issues/282' target='_blank'>Persona Creator</Link>
-        {' · '}<Link href='https://github.com/enricoros/big-agi/issues/192' target='_blank'>Auto Diagrams</Link>
+        {' · '}Beam
+        {' · '}<Link href={BaseProduct.UpstreamIssue(208)} target='_blank'>Split Chats</Link>
+        {' · '}<Link href={BaseProduct.UpstreamIssue(354)} target='_blank'>Call AGI</Link>
+        {' · '}<Link href={BaseProduct.UpstreamIssue(282)} target='_blank'>Persona Creator</Link>
+        {' · '}<Link href={BaseProduct.UpstreamIssue(192)} target='_blank'>Auto Diagrams</Link>
         {' · '}Imagine · Chat Search · Text Tools · LLM Overheat
       </Typography>
     </FormControl>

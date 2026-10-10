@@ -10,7 +10,7 @@ import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
 import { useSpeexGlobalEngine } from '~/modules/speex/store-module-speex';
 
-import { BaseProduct } from '~/common/app.release';
+import { Brand } from '~/common/app.config';
 import { PhVoice } from '~/common/components/icons/phosphor/PhVoice';
 import { animationColorRainbow } from '~/common/util/animUtils';
 import { navigateBack } from '~/common/app.routes';
@@ -123,7 +123,7 @@ export function CallWizard(props: { strict?: boolean, conversationId: string | n
         + (recognition.warnings.length ? ' ⚠️ ' + recognition.warnings.join(' · ') : '')
       }
       button={overriddenRecognition ? undefined : <>
-        <Button variant='outlined' component='a' href={BaseProduct.DocsBaseSite + '/feature-voice'} target='_blank' sx={{ ml: 1 }}>
+        <Button variant='outlined' component='a' href={Brand.Docs.Public('feature-voice') ?? undefined} target='_blank' sx={{ ml: 1 }}>
           How to fix
         </Button>
         <Button variant='outlined' onClick={handleOverrideRecognition} sx={{ mx: 1 }}>

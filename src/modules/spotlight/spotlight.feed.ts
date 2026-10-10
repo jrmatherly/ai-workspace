@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Enrico Ros
 // Spotlight Feed: remote news for the Spotlight subsystem (announcements, changelog),
-// served by the big-agi.com App News API and fetched directly from the browser.
+// served by an App News API (opt-in via NEXT_PUBLIC_SPOTLIGHT_FEED_URL) and fetched directly from the browser.
 // The v1 contracts are frozen: fields never change, server evolution is additive-only.
 
 import { useQuery } from '@tanstack/react-query';
@@ -10,7 +10,7 @@ import { frontendSideFetch } from '~/common/util/clientFetchers';
 
 
 // configuration
-const FEED_API_BASE = 'https://big-agi.com/api/app/v1'; // canonical apex host (www redirects here), fixed address for all deployments
+export const FEED_API_BASE = (process.env.NEXT_PUBLIC_SPOTLIGHT_FEED_URL || '').replace(/\/$/, ''); // e.g. 'https://host/api/app/v1'; unset = no fetch, surfaces hide
 const FEED_STALE_TIME = 15 * 60 * 1000; // news doesn't move fast - no reason to refetch more often
 
 
@@ -77,11 +77,11 @@ async function _fetchFeedApi<TSchema extends z.ZodType>(path: string, schema: TS
 
 
 /**
- * Latest changelog date groups from big-agi.com - empty/error means hide the surface.
+ * Latest changelog date groups from the feed - empty/error/unconfigured means hide the surface.
  */
 export function useSpotlightFeedChangelog(enabled: boolean = true) {
   const { data, isLoading, isError } = useQuery({
-    enabled,
+    enabled: enabled && !!FEED_API_BASE,
     queryKey: ['spotlight-feed', 'changelog', 1],
     queryFn: async ({ signal }) => _fetchFeedApi('/changelog', changelogResponseSchema, signal),
     staleTime: FEED_STALE_TIME,
@@ -96,12 +96,12 @@ export function useSpotlightFeedChangelog(enabled: boolean = true) {
 }
 
 /**
- * In-app announcements (feature spotlights) from big-agi.com - empty/error means hide the surface.
+ * In-app announcements (feature spotlights) from the feed - empty/error/unconfigured means hide the surface.
  * `tier` declares this deployment/user: 'open' (default, self-host builds), 'free' or 'pro' (hosted).
  */
 export function useSpotlightFeedAnnouncements(enabled: boolean = true, tier: SpotlightFeedTier) {
   const { data, isLoading, isError } = useQuery({
-    enabled,
+    enabled: enabled && !!FEED_API_BASE,
     queryKey: ['spotlight-feed', 'announcements', 1, tier],
     queryFn: async ({ signal }) => _fetchFeedApi(`/announcements?tier=${tier}`, announcementsResponseSchema, signal),
     staleTime: FEED_STALE_TIME,

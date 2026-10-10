@@ -135,12 +135,6 @@ let nextConfig: NextConfig = {
       { source: '/dev/inspect/:tool(\\w+)', destination: '/dev/inspect/:tool.html' },
     ];
   },
-  async redirects() {
-    return [
-      // /preview: 2025 dark-launch marketing page (prod-only [PROD] commit) - Google indexed it, keep the 301 to preserve searchers
-      { source: '/preview', destination: 'https://big-agi.com/', permanent: true },
-    ];
-  },
 
   // Note: disabled to check whether the project becomes slower with this
   // modularizeImports: {
@@ -190,7 +184,7 @@ if (process.env.POSTHOG_API_KEY && process.env.POSTHOG_ENV_ID) {
     logLevel: 'error', // lowered, too noisy
     sourcemaps: {
       enabled: process.env.NODE_ENV === 'production',
-      project: 'big-agi',
+      project: 'ai-workspace',
       version: process.env.NEXT_PUBLIC_BUILD_HASH,
       deleteAfterUpload: false, // false: leave them in the tree, which would also help debugging of open-source installs
     },

@@ -67,7 +67,7 @@ const vendorSetupComponents: Record<ModelVendorId, React.ComponentType<{ service
 
 
 /**
- * Vendor -> big-agi.com/docs setup page. Written out because some ids differ from their slug
+ * Vendor -> docs setup page slug (see Brand.Docs.Public). Written out because some ids differ from their slug
  * Record<ModelVendorId, ...> is exhaustive so a new vendor cannot be registered without a docs slug (build-checked via SiteDocSlug).
  */
 export const VENDOR_DOCS: Record<ModelVendorId, SiteDocSlug> = {

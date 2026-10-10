@@ -14,9 +14,11 @@ export function ExternalDocsLink(props: {
   highlight?: boolean;
   children: React.ReactNode,
 }) {
+  const href = Brand.Docs.Public(props.docPage);
+  if (!href) return props.children;
   return (
     <ExternalLink
-      href={Brand.Docs.Public(props.docPage)}
+      href={href}
       color={props.color}
       level={props.level}
       highlight={props.highlight}

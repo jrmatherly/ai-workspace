@@ -58,16 +58,17 @@ export const Release = {
 } as const;
 
 
+const REPO = 'https://github.com/jrmatherly/ai-workspace';
+const UPSTREAM_REPO = 'https://github.com/enricoros/big-AGI'; // fork origin: only for links to its historical issue threads
+
 export const BaseProduct = {
   ProductName: 'Big-AGI',
-  ProductURL: 'https://big-agi.com',
-  PrivacyPolicy: 'https://big-agi.com/privacy',
-  TermsOfService: 'https://big-agi.com/terms',
+  ProductURL: REPO,
   // ecosystem
-  DocsBaseSite: 'https://big-agi.com/docs',
-  NewsSite: 'https://big-agi.com/changes',
-  OpenSupportDiscord: 'https://discord.gg/MkH4qj2Jp9',
-  OpenSourceRepo: 'https://github.com/enricoros/big-agi',
+  DocsBaseSite: REPO + '/blob/main/docs/',
+  NewsSite: REPO + '/releases',
+  OpenSourceRepo: REPO,
+  UpstreamIssue: (issue: number | string) => `${UPSTREAM_REPO}/issues/${issue}`,
   ReleaseNotes: '',
-  SupportForm: (_userId?: string) => 'https://github.com/enricoros/big-AGI/issues/new?template=ai-triage.yml',
+  SupportForm: (_userId?: string) => REPO + '/issues/new?template=ai-triage.yml',
 } as const;

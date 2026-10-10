@@ -15,7 +15,7 @@ import { joyKeepPopup } from '~/common/components/CloseablePopup';
 
 import type { DModelsService, DModelsServiceId } from '~/common/stores/llms/llms.service.types';
 import { AppBreadcrumbs } from '~/common/components/AppBreadcrumbs';
-import { BaseProduct } from '~/common/app.release';
+import { Brand } from '~/common/app.config';
 import { ConfirmationModal } from '~/common/components/modals/ConfirmationModal';
 import { GoodModal } from '~/common/components/modals/GoodModal';
 import { PhGift } from '~/common/components/icons/phosphor/PhGift';
@@ -109,7 +109,7 @@ export function ModelsConfiguratorModal(props: {
     if (!activeService?.vId) return null;
     const isCustomOpenAIHost = activeService.vId === 'openai' && !!(activeService.setup as { oaiHost?: string } | undefined)?.oaiHost;
     const docSlug = isCustomOpenAIHost ? 'connect-custom-endpoints' : VENDOR_DOCS[activeService.vId];
-    return !docSlug ? null : BaseProduct.DocsBaseSite + '/' + docSlug;
+    return !docSlug ? null : Brand.Docs.Public(docSlug);
   }, [activeService]);
 
   // menu enablement - boolean selectors (early-exit scans, primitive return: no re-render unless flipping)
@@ -342,7 +342,7 @@ export function ModelsConfiguratorModal(props: {
                   Remove Duplicated Models
                 </MenuItem>
 
-                {/* Vendor Setup Guide (big-agi.com/docs) */}
+                {/* Vendor Setup Guide */}
                 {!!activeServiceDocsUrl && (
                   <MenuItem component='a' href={activeServiceDocsUrl} target='_blank'>
                     {/*<ListItemDecorator><HelpOutlineRoundedIcon /></ListItemDecorator>*/}

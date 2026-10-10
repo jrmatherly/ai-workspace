@@ -159,6 +159,12 @@ export const env = createEnv({
     // Frontend: server to use for PlantUML rendering
     NEXT_PUBLIC_PLANTUML_SERVER_URL: z.url().optional(),
 
+    // Frontend: App News API base for Spotlight announcements/changelog (unset = disabled)
+    NEXT_PUBLIC_SPOTLIGHT_FEED_URL: z.url().optional(),
+
+    // Frontend: public origin of this deployment, for absolute og:image/canonical tags (unset = tags omitted)
+    NEXT_PUBLIC_SITE_URL: z.url().optional(),
+
   },
 
   // matches user expectations - see https://github.com/enricoros/big-AGI/issues/279
@@ -169,6 +175,8 @@ export const env = createEnv({
     NEXT_PUBLIC_GA4_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID,
     NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID,
     NEXT_PUBLIC_PLANTUML_SERVER_URL: process.env.NEXT_PUBLIC_PLANTUML_SERVER_URL,
+    NEXT_PUBLIC_SPOTLIGHT_FEED_URL: process.env.NEXT_PUBLIC_SPOTLIGHT_FEED_URL,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   },
 });
 

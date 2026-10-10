@@ -12,6 +12,10 @@ interface MyDocumentProps extends DocumentProps {
   emotionStyleTags: React.JSX.Element[];
 }
 
+// absolute URLs for og:image and canonical; unset = tags omitted (pages are prerendered, so no request host is available)
+const siteOrigin = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(/\/$/, '');
+const cardImageUrl = siteOrigin + Brand.URIs.CardImage;
+
 export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
   return (
     <Html lang='en'>
@@ -32,35 +36,34 @@ export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
         {/* Opengraph */}
         <meta property='og:title' content={Brand.Title.Common} />
         <meta property='og:description' content={Brand.Meta.Description} />
-        {Brand.URIs.CardImage && <meta property='og:image' content={Brand.URIs.CardImage} />}
-        <meta property='og:url' content={Brand.URIs.Home} />
         <meta property='og:site_name' content={Brand.Meta.SiteName} />
         <meta property='og:type' content='website' />
 
         {/* Twitter / X */}
-        <meta name='twitter:card' content='summary_large_image' />
-        <meta property='twitter:url' content={Brand.URIs.Home} />
         <meta property='twitter:title' content={Brand.Title.Common} />
         <meta property='twitter:description' content={Brand.Meta.Description} />
-        {Brand.URIs.CardImage && <meta property='twitter:image' content={Brand.URIs.CardImage} />}
-        <meta name='twitter:site' content={Brand.Meta.TwitterSite} />
-        <meta name='twitter:creator' content='@enricoros' />
-        <link rel='canonical' href={Brand.URIs.Home} />
+
+        {/* Absolute URLs, only when the deployment origin is configured */}
+        {siteOrigin && <>
+          <meta property='og:image' content={cardImageUrl} />
+          <meta name='twitter:card' content='summary_large_image' />
+          <meta property='og:url' content={siteOrigin} />
+          <meta property='twitter:image' content={cardImageUrl} />
+          <meta property='twitter:url' content={siteOrigin} />
+          <link rel='canonical' href={siteOrigin} />
+        </>}
 
         {/* Author & Structured Data */}
-        <meta name='author' content='Enrico Ros' />
-        <link rel='author' href='https://www.enricoros.com' />
+        <meta name='author' content='Jason Matherly' />
         <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'SoftwareApplication',
           'name': 'Big-AGI',
-          'url': 'https://big-agi.com',
+          'url': siteOrigin || Brand.URIs.Home,
           'applicationCategory': 'ProductivityApplication',
           'operatingSystem': 'All, Web',
           'description': Brand.Meta.Description,
-          'sameAs': ['https://github.com/enricoros/big-agi', 'https://discord.gg/MkH4qj2Jp9',],
-          'author': { '@type': 'Person', 'name': 'Enrico Ros', 'url': 'https://www.enricoros.com' },
-          'publisher': { '@type': 'Organization', 'name': 'Token Fabrics LLC', 'url': 'https://www.tokenfabrics.com' },
+          'author': { '@type': 'Person', 'name': 'Jason Matherly', 'url': 'https://github.com/jrmatherly' },
         }) }} />
 
         {/* Style Sheets (injected and server-side) */}

@@ -4,7 +4,6 @@ import TimeAgo from 'react-timeago';
 
 import { AspectRatio, Box, Button, Card, CardContent, CardOverflow, ColorPaletteProp, Container, Divider, Grid, ListDivider, Sheet, Typography, VariantProp } from '@mui/joy';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
-import ArrowOutwardRoundedIcon from '@mui/icons-material/ArrowOutwardRounded';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LaunchIcon from '@mui/icons-material/Launch';
 
@@ -17,7 +16,6 @@ import { Release } from '~/common/app.release';
 import { animationColorBlues, animationColorRainbow } from '~/common/util/animUtils';
 import { useIsMobile } from '~/common/components/useMatchMedia';
 
-import { BigAgiProNewsCallout, bigAgiProUrl } from './bigAgiPro.data';
 import { DevNewsItem, newsFrontendTimestamp, NewsItems } from './news.data';
 
 
@@ -40,7 +38,7 @@ export const newsRoadmapCallout =
         <Grid xs={12} sm={7}>
           <Button
             fullWidth variant='soft' color='primary' endDecorator={<LaunchIcon />}
-            component={Link} href={Brand.URIs.OpenProject} noLinkStyle target='_blank'
+            component={Link} href={Brand.URIs.OpenRepo + '/issues'} noLinkStyle target='_blank'
           >
             Explore
           </Button>
@@ -222,21 +220,6 @@ export function AppNews() {
           >
             Continue
           </Button>
-          {!Release.IsNodeDevBuild && (
-            <Button
-              variant='solid' color='primary' size='lg'
-              component={Link} href={bigAgiProUrl} target='_blank' noLinkStyle
-              endDecorator={<><ArrowOutwardRoundedIcon /></>}
-              sx={{
-                boxShadow: '0 8px 24px -4px rgb(var(--joy-palette-primary-mainChannel) / 20%)',
-                minWidth: 180,
-                // transform: 'translateY(-1px)',
-              }}
-            >
-              Big-AGI Pro
-              ✨
-            </Button>
-          )}
         </Box>
 
         {/*<Typography level='title-sm' sx={{ mb: 1, placeSelf: 'start', ml: 1 }}>*/}
@@ -245,11 +228,6 @@ export function AppNews() {
 
         <Container disableGutters maxWidth='sm'>
 
-          {/* Inject the callout item here*/}
-          {/*<Box sx={{ mb: 3 }}>*/}
-          {/*  <BigAgiProNewsCallout />*/}
-          {/*</Box>*/}
-
           {/* Development Notices */}
           {Release.TenantSlug === 'open' && Release.IsNodeDevBuild && <NewsCard variant='soft' color='warning' newsItem={DevNewsItem} idx={0} addPadding={false} />}
 
@@ -257,13 +235,6 @@ export function AppNews() {
             // const firstCard = idx === 0;
             const addPadding = false; //!firstCard; // || showExpander;
             return <React.Fragment key={idx}>
-
-              {/* Inject the callout item here*/}
-              {/*{idx === 0 && (*/}
-              {/*  <Box sx={{ mb: 3 }}>*/}
-              {/*    <BigAgiProNewsCallout />*/}
-              {/*  </Box>*/}
-              {/*)}*/}
 
               {/*/!* Inject the Beam item here*!/*/}
               {/*{idx === 2 && (*/}

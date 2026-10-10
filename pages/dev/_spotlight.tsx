@@ -5,11 +5,11 @@ import { Box, Button, Card, CardContent, Chip, Link, ToggleButtonGroup, Typograp
 import { withNextJSPerPageLayout } from '~/common/layout/withLayout';
 
 import type { SpotlightFeedAnnouncement, SpotlightFeedChangelogGroup, SpotlightFeedTier } from '~/modules/spotlight/spotlight.feed';
-import { useSpotlightFeedAnnouncements, useSpotlightFeedChangelog } from '~/modules/spotlight/spotlight.feed';
+import { FEED_API_BASE, useSpotlightFeedAnnouncements, useSpotlightFeedChangelog } from '~/modules/spotlight/spotlight.feed';
 
 
 /**
- * Dev page to exercise the big-agi.com App News API end to end: live fetch,
+ * Dev page to exercise the App News API (NEXT_PUBLIC_SPOTLIGHT_FEED_URL) end to end: live fetch,
  * Zod validation, mini-format rendering (bold, links, lists), remote images,
  * and Vimeo embeds. Not linked from anywhere - visit /dev/spotlight.
  */
@@ -120,7 +120,7 @@ function AppDevSpotlight() {
   // state: which tier we impersonate - exercises the server-side ?tier= filter
   const [tier, setTier] = React.useState<SpotlightFeedTier>('open');
 
-  // external state: live fetches from the big-agi.com App News API
+  // external state: live fetches from the App News API
   const { announcements, isLoading: announcementsLoading, isError: announcementsError } = useSpotlightFeedAnnouncements(true, tier);
   const { changelogGroups, isLoading: changelogLoading, isError: changelogError } = useSpotlightFeedChangelog();
 
@@ -129,8 +129,10 @@ function AppDevSpotlight() {
 
       <Typography level='h3'>Spotlight Feed - end-to-end render test</Typography>
       <Typography level='body-sm'>
-        Live from <Link href='https://big-agi.com/api/app/v1/announcements' target='_blank'>/api/app/v1/announcements</Link> and{' '}
-        <Link href='https://big-agi.com/api/app/v1/changelog' target='_blank'>/api/app/v1/changelog</Link>.
+        {!FEED_API_BASE ? 'NEXT_PUBLIC_SPOTLIGHT_FEED_URL is not set: nothing is fetched.' : <>
+          Live from <Link href={FEED_API_BASE + '/announcements'} target='_blank'>/announcements</Link> and{' '}
+          <Link href={FEED_API_BASE + '/changelog'} target='_blank'>/changelog</Link>.
+        </>}
         Verifies: CORS fetch, Zod contract, mini-format (bold, links, lists), remote images, Vimeo embeds.
       </Typography>
 

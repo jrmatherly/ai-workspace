@@ -4,6 +4,7 @@ import { Chip, IconButton, Typography } from '@mui/joy';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import type { DModelsServiceId } from '~/common/stores/llms/llms.service.types';
+import { BaseProduct } from '~/common/app.release';
 import { AlreadySet } from '~/common/components/AlreadySet';
 import { ExternalDocsLink } from '~/common/components/ExternalDocsLink';
 import { ExternalLink } from '~/common/components/ExternalLink';
@@ -59,7 +60,7 @@ export function AzureServiceSetup(props: { serviceId: DModelsServiceId }) {
           See more for Azure AI Foundry.
           {checkboxExpanded && <>
             {' '}This is because the <ExternalLink href='https://learn.microsoft.com/en-us/azure/ai-studio/what-is-ai-studio'>Azure
-            AI Foundry</ExternalLink> requires a different model definition/enumeration, which <ExternalLink icon='issue' href='https://github.com/enricoros/big-AGI/issues/757'>not supported yet</ExternalLink> (PRs welcome).
+            AI Foundry</ExternalLink> requires a different model definition/enumeration, which <ExternalLink icon='issue' href={BaseProduct.UpstreamIssue(757)}>not supported yet</ExternalLink> (PRs welcome).
           </>}
           <Chip component='span' variant='outlined' sx={{ ml: 1, fontSize: '0.75rem' }} onClick={() => setCheckboxExpanded(on => !on)}>
             Show {checkboxExpanded ? 'less' : 'more'}

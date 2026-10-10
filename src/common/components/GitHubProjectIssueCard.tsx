@@ -4,6 +4,8 @@ import type { SxProps } from '@mui/joy/styles/types';
 import { Box, Card, Link as MuiLink, Typography } from '@mui/joy';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
+import { BaseProduct } from '~/common/app.release';
+
 
 export const GitHubProjectIssueCard = (props: {
   issue: number,
@@ -16,8 +18,8 @@ export const GitHubProjectIssueCard = (props: {
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
       <GitHubIcon />
       <Typography level='body-sm'>
-        <MuiLink overlay href={`https://github.com/enricoros/big-AGI/issues/${props.issue}`} target='_blank'>
-          big-AGI #{props.issue}
+        <MuiLink overlay href={BaseProduct.UpstreamIssue(props.issue)} target='_blank'>
+          upstream #{props.issue}
         </MuiLink>
         {' · '}{props.text}.
       </Typography>
