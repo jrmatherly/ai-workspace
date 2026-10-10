@@ -1,0 +1,12 @@
+{
+  "upstreamUrl": "https://github.com/enricoros/big-AGI.git",
+  "upstreamRemote": "upstream",
+  "upstreamBranch": "main",
+  "seedSha": "99b3bf9c8c28d6629dc14afe3704c6e8fb29d137",
+  "seedDate": "2026-10-07",
+  "lastReviewedSha": "99b3bf9c8c28d6629dc14afe3704c6e8fb29d137",
+  "lastReviewedShaShort": "99b3bf9c8",
+  "lastReviewedDate": "2026-10-07",
+  "note": "seedSha = the upstream commit this repo was copied from (source identical at our first commit except the files --diverged lists). lastReviewedSha = the last upstream commit reviewed; advance it with .claude/skills/upstream-review/scripts/upstream-review.sh --advance <tip-sha>. Neither SHA is an ancestor of our HEAD.",
+  "lastAdvancedAt": "2026-10-10T22:58:11Z"
+}
