@@ -89,6 +89,8 @@ jobs:
           build-args: |
             NEXT_PUBLIC_GA4_MEASUREMENT_ID=${{ secrets.GA4_MEASUREMENT_ID }}
             NEXT_PUBLIC_SITE_URL=${{ vars.SITE_URL }}
+            NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.POSTHOG_KEY }}
+            NEXT_PUBLIC_POSTHOG_HOST=${{ vars.POSTHOG_HOST }}
             NEXT_PUBLIC_SPOTLIGHT_FEED_URL=${{ vars.SPOTLIGHT_FEED_URL }}
             NEXT_PUBLIC_BUILD_HASH=${{ github.sha }}
             NEXT_PUBLIC_BUILD_REF_NAME=${{ github.ref_name }}

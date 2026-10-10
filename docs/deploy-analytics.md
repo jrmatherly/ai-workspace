@@ -39,7 +39,7 @@ unset, the images report nothing. Build from source to choose your own property.
 
 PostHog provides comprehensive product analytics with privacy controls. It helps understand how users interact with big-AGI's features, identify opportunities for improvement, and optimize the user experience.
 
-To enable PostHog, set the `NEXT_PUBLIC_POSTHOG_KEY` environment variable at build time. PostHog is configured with tracking optimization and privacy in mind:
+To enable PostHog, set the `NEXT_PUBLIC_POSTHOG_KEY` environment variable at build time. The instance defaults to PostHog US cloud; set `NEXT_PUBLIC_POSTHOG_HOST` for EU cloud (`https://eu.i.posthog.com`) or a self-hosted PostHog. Error tracking with source maps additionally needs `POSTHOG_API_KEY` and `POSTHOG_ENV_ID` at build time. PostHog is configured with tracking optimization and privacy in mind:
 
 - Uses a proxy endpoint (`/a/ph`) to avoid ad blockers
 - Respects user opt-out preferences via local storage
@@ -80,6 +80,6 @@ In summary: to turn it on: activate the `Analytics` service in the Vercel projec
 |-------------------------------------------------------------------------------------------------------------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Your **Source** builds of big-AGI                                                                                       | None                      | **Google Analytics**: set environment variable at build time · **PostHog**: set environment variable at build time · **Vercel**: enable Vercel Analytics from the dashboard | 
 | Your **Docker** builds of big-AGI                                                                                       | None                      | (**Vercel**: n/a) · **Google Analytics**: set environment variable at `docker build` time · **PostHog**: set environment variable at `docker build` time.                   |
-| [prebuilt Docker packages](https://github.com/jrmatherly/ai-workspace/pkgs/container/ai-workspace) | Google Analytics if the `GA4_MEASUREMENT_ID` secret is set | **Vercel**: n/a · **Google Analytics**: baked at build time from the repository secret, rebuild from source to change or remove · **PostHog**: n/a                                           |
+| [prebuilt Docker packages](https://github.com/jrmatherly/ai-workspace/pkgs/container/ai-workspace) | Google Analytics if the `GA4_MEASUREMENT_ID` secret is set; PostHog if the `POSTHOG_KEY` secret is set | **Vercel**: n/a · **Google Analytics**: baked at build time from the repository secret · **PostHog**: baked from the `POSTHOG_KEY` secret and the `POSTHOG_HOST` variable; rebuild to change or remove |
 
 Note: this information is updated as of August 26, 2026 and can change at any time.

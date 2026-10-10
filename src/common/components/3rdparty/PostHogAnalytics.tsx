@@ -5,6 +5,7 @@ import { isAbortErrorLike } from '~/common/util/abortUtils';
 import { isBenignDomMutationError } from '~/common/util/errorUtils';
 import { isBrowser } from '~/common/util/pwaUtils';
 import { Release } from '~/common/app.release';
+import { POSTHOG_UI_HOST } from '~/server/posthog/posthog.hosts';
 
 
 export const hasPostHogAnalytics = !!process.env.NEXT_PUBLIC_POSTHOG_KEY;
@@ -167,8 +168,8 @@ export function OptionalPostHogAnalytics() {
 
         // initialize
         _posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY || '', {
-          api_host: '/a/ph', // client analytics host - default: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com'
-          ui_host: 'https://us.posthog.com',
+          api_host: '/a/ph', // same-origin proxy; next.config.ts rewrites it to POSTHOG_INGEST_HOST (NEXT_PUBLIC_POSTHOG_HOST)
+          ui_host: POSTHOG_UI_HOST,
           defaults: '2026-01-30',
           capture_exceptions: true, // captures exceptions using Error Tracking
           before_send: (captureResult) => shouldSuppressPostHogCapture(captureResult) ? null : captureResult,

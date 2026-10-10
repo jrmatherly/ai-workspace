@@ -9,6 +9,7 @@ if (typeof window !== 'undefined')
 import { PostHog } from 'posthog-node';
 
 import { Release } from '~/common/app.release';
+import { POSTHOG_INGEST_HOST } from '~/server/posthog/posthog.hosts';
 
 
 export const hasPostHogServer = !!process.env.NEXT_PUBLIC_POSTHOG_KEY;
@@ -23,7 +24,7 @@ function _posthogServerSingleton(): PostHog | null {
   if (!hasPostHogServer) return null;
   if (_posthogServer) return _posthogServer;
   return _posthogServer = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
-    host: 'https://us.i.posthog.com', // server exceptions host
+    host: POSTHOG_INGEST_HOST, // server exceptions host
     // enableExceptionAutocapture: true, // untested, so disabled for now
     // for server-side, we want immediate flushing
     flushAt: 1,

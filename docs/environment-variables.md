@@ -76,6 +76,7 @@ NEXT_PUBLIC_PLANTUML_SERVER_URL=
 NEXT_PUBLIC_SITE_URL=
 NEXT_PUBLIC_SPOTLIGHT_FEED_URL=
 NEXT_PUBLIC_POSTHOG_KEY=
+NEXT_PUBLIC_POSTHOG_HOST=
 ```
 
 ## Backend Variables
@@ -164,6 +165,7 @@ The value of these variables are passed to the frontend (Web UI) - make sure the
 | `NEXT_PUBLIC_SITE_URL` | (optional) Public origin of this deployment, e.g. `https://chat.example.com`. Enables absolute `og:image`, `og:url` and canonical tags; unset omits them. Build-time: pass as a Docker build arg (repository variable `SITE_URL` in the image workflow). |
 | `NEXT_PUBLIC_SPOTLIGHT_FEED_URL` | (optional) Base URL of an App News API for in-app announcements and changelog. Unset disables the feed and hides those surfaces (the upstream project served this from its own site). Build-time: Docker build arg, repository variable `SPOTLIGHT_FEED_URL`. |
 | `NEXT_PUBLIC_POSTHOG_KEY`         | (optional) Key for PostHog analytics. (see [deploy-analytics](deploy-analytics.md))                                                                                                                                                             |
+| `NEXT_PUBLIC_POSTHOG_HOST`        | (optional) PostHog ingest host. Default `https://us.i.posthog.com`; EU cloud `https://eu.i.posthog.com`; or your self-hosted instance. Assets and UI hosts derive from it. Build-time. |
 
 > Important: these variables must be set at build time, which is required by Next.js to pass them to the frontend.
 > This is in contrast to the backend variables, which can be set when starting the local server/container.

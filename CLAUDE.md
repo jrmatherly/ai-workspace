@@ -112,6 +112,9 @@ Local-first: Zustand in memory with `persist` to localStorage, except chats, whi
 ### Testing & Quality
 - Browser floor: `eslint.config.mjs` bans ES2023 `toSorted/toReversed/toSpliced/with` and `new Intl.Segmenter` via `no-restricted-syntax` at `error` level (they crash Chrome <110 / Win7-8 holdouts); other project rules stay at `warn`, and `eslint .` exits 0 on warnings; a separate `compat/compat` pass checks Web APIs against `browserslist`. Use `[...x].sort()` etc.; don't lower `browserslist` to "fix" the banned syntax - that rule doesn't read it, and SWC won't polyfill prototype methods
 
+### Production errors
+- PostHog analytics and error tracking are key-gated (`NEXT_PUBLIC_POSTHOG_KEY`) and host-configurable (`NEXT_PUBLIC_POSTHOG_HOST`, default US cloud; EU cloud or self-hosted). Source-map upload needs `POSTHOG_API_KEY` + `POSTHOG_ENV_ID` at build. Triage runtime errors in the configured PostHog project; the client noise filter (`before_send` / `shouldSuppressPostHogCapture`, matched on `$exception_list`) lives in `src/common/components/3rdparty/PostHogAnalytics.tsx`; `mechanism.handled:false` = an unhandled rejection via autocapture. Suppress only environmental/extension noise, never real bugs
+
 ### Debugging Storage Issues
 - Chats: DevTools -> Application -> IndexedDB -> `keyval-store` -> `keyval` -> key `app-chats`
 - Everything else (`app-models`, `app-ui`, ...): DevTools -> Application -> Local Storage

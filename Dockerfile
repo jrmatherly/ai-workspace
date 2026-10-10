@@ -41,6 +41,8 @@ ENV NEXT_PUBLIC_GA4_MEASUREMENT_ID=${NEXT_PUBLIC_GA4_MEASUREMENT_ID}
 # Optional argument to configure PostHog at build time (see: docs/deploy-analytics.md)
 ARG NEXT_PUBLIC_POSTHOG_KEY
 ENV NEXT_PUBLIC_POSTHOG_KEY=${NEXT_PUBLIC_POSTHOG_KEY}
+ARG NEXT_PUBLIC_POSTHOG_HOST
+ENV NEXT_PUBLIC_POSTHOG_HOST=${NEXT_PUBLIC_POSTHOG_HOST}
 
 # Optional: public origin for absolute og:image/canonical tags, and the Spotlight feed base (see: docs/environment-variables.md)
 ARG NEXT_PUBLIC_SITE_URL

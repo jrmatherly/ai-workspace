@@ -125,9 +125,9 @@ let nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true, // required to support PostHog trailing slash API requests
   async rewrites() {
     return [
-      { source: '/a/ph/static/:path*', destination: 'https://us-assets.i.posthog.com/static/:path*' },
-      { source: '/a/ph/array/:path*', destination: 'https://us-assets.i.posthog.com/array/:path*' },
-      { source: '/a/ph/:path*', destination: 'https://us.i.posthog.com/:path*' },
+      { source: '/a/ph/static/:path*', destination: `${POSTHOG_ASSETS_HOST}/static/:path*` },
+      { source: '/a/ph/array/:path*', destination: `${POSTHOG_ASSETS_HOST}/array/:path*` },
+      { source: '/a/ph/:path*', destination: `${POSTHOG_INGEST_HOST}/:path*` },
       // Dev tools hub: unified index at /dev (static page in /public/dev/index.html)
       { source: '/dev', destination: '/dev/index.html' },
       // Inspect: standalone static dev tools under /public/dev/inspect/*.html (clean URLs, no .html)
@@ -152,6 +152,7 @@ let nextConfig: NextConfig = {
 
 // Validate environment variables at build time, if required. Server env vars will be actually read and used at runtime (cloud/edge).
 import { env as validateEnv } from '~/server/env.server';
+import { POSTHOG_ASSETS_HOST, POSTHOG_INGEST_HOST } from '~/server/posthog/posthog.hosts';
 void validateEnv; // Triggers env validation - throws if required vars are missing
 
 
@@ -180,7 +181,7 @@ if (process.env.POSTHOG_API_KEY && process.env.POSTHOG_ENV_ID) {
   nextConfig = withPostHogConfig(nextConfig, {
     personalApiKey: process.env.POSTHOG_API_KEY,
     envId: process.env.POSTHOG_ENV_ID,
-    host: 'https://us.i.posthog.com', // backtrace upload host
+    host: POSTHOG_INGEST_HOST, // backtrace upload host
     logLevel: 'error', // lowered, too noisy
     sourcemaps: {
       enabled: process.env.NODE_ENV === 'production',

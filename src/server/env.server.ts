@@ -153,6 +153,9 @@ export const env = createEnv({
     // Frontend: Google Analytics GA4 Measurement ID
     NEXT_PUBLIC_GA4_MEASUREMENT_ID: z.string().optional(),
 
+    // Frontend: PostHog ingest host (unset = US cloud; EU cloud or self-hosted instance)
+    NEXT_PUBLIC_POSTHOG_HOST: z.url().optional(),
+
     // Google Drive Picker: download files from Google Drive
     NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID: z.string().optional(),
 
@@ -173,6 +176,7 @@ export const env = createEnv({
   // with Noext.JS >= 13.4.4 we'd only need to destructure client variables
   experimental__runtimeEnv: {
     NEXT_PUBLIC_GA4_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID,
     NEXT_PUBLIC_PLANTUML_SERVER_URL: process.env.NEXT_PUBLIC_PLANTUML_SERVER_URL,
     NEXT_PUBLIC_SPOTLIGHT_FEED_URL: process.env.NEXT_PUBLIC_SPOTLIGHT_FEED_URL,
