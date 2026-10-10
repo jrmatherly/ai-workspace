@@ -19,7 +19,8 @@ Architecture and system documentation is available in the `/kb/` knowledge base,
 - **[CSF.md](systems/client-side-fetch.md)** - Direct browser-to-API communication for LLM requests
 
 #### LLM - Language Model Metadata
-- **[LLM-editorial-control.md](modules/LLM-editorial-pubdate.md)** - Where we have editorial control over per-model metadata vs dynamic discovery; `pubDate` field semantics, propagation chain, resolution rules, per-vendor matrix
+- **[LLM-vendor-integration.md](modules/LLM-vendor-integration.md)** - Adding new LLM providers
+- **[LLM-editorial-pubdate.md](modules/LLM-editorial-pubdate.md)** - Where we have editorial control over per-model metadata vs dynamic discovery; `pubDate` field semantics, propagation chain, resolution rules, per-vendor matrix
 - **[LLM-editorial-auto-picks.md](modules/LLM-editorial-auto-picks.md)** - Per-domain Auto model resolution: 3-layer fallback (pin, editorial pick, ELO/cost heuristic), editorial table shape, tolerant matching, compile-time type-safety chain
 - **[LLM-defs-refresh.md](modules/LLM-defs-refresh.md)** - Per-vendor model-defs versioning + selective client refresh: semantic-hashed manifest buckets (generated committed map, bundled with the client - no server surface), per-service `defsV` stamps, `epoch` force-roll lever; replaces routine "roll AIX" for model updates
 - **[LLM-changelog.md](modules/LLM-changelog.md)** - Per-service model changelog (#1204): entry shape and the frozen change-letter table, what is not compared and why, retention (pins, 30 days, 50 entries), the one refresh session (boot and Update All, stop, stamping), the Updates screen and Preferences alert, the future "recently added" home box
@@ -37,7 +38,6 @@ Architecture and system documentation is available in the `/kb/` knowledge base,
 #### Core Platform Systems
 - **[app-routing.md](systems/app-routing.md)** - Next.js routing, provider stack, and display state hierarchy
 - **[LLM-parameters-system.md](systems/LLM-parameters-system.md)** - Language model parameter flow across the system
-- **[LLM-vendor-integration.md](modules/LLM-vendor-integration.md)** - Adding new LLM providers
 
 ### KB Guidelines
 

@@ -13,7 +13,10 @@ Big-AGI uses Next.js Pages Router with a provider stack that determines what use
 | `/` | Main chat app | Default application |
 | `/call` | Voice interface | Voice-to-voice AI conversations |
 | `/personas` | Persona management | Create and manage AI personas |
-| ... |  |  |
+| `/draw` | Image generation | Text-to-image |
+| `/news` | Release notes | In-app changelog |
+| `/diff`, `/tokens`, `/workspace` | Utilities | Text diff, token counter, workspace files |
+| `/link/chat/[chatLinkId]` | Shared chat viewer | Read-only chat with import |
 
 ## Decision Flow Diagram
 
@@ -32,7 +35,7 @@ flowchart TD
     BootCheck -->|Continue| Router{Router}
 
     Router -->|/| Chat[Chat App]
-    Router -->|/personas,/call,/beam...| OtherApps[Other Apps]
+    Router -->|/personas,/call,/draw...| OtherApps[Other Apps]
     Router -->|/news| NewsApp[News App]
 
     Chat --> ChatStates{Chat States}
@@ -80,14 +83,11 @@ _app.tsx (Root)
 | **ErrorBoundary** | Error handling | Catches and displays errors gracefully |
 | **ProviderBootstrapLogic** | App initialization | • Tiktoken preload<br>• Model auto-config<br>• Storage cleanup<br>• News redirect logic |
 
-For detailed initialization sequence and provider functions, see [app-startup-sequence.md](app-startup-sequence.md), if present.
-
 ## Application Routes
 
 ### Primary Apps
 - `/` → AppChat (default)
 - `/call` → Voice call interface
-- `/beam` → Multi-model reasoning
 - `/draw` → Image generation
 - `/personas` → Personas app
 - `/news` → News/updates
@@ -142,10 +142,10 @@ For detailed initialization sequence and provider functions, see [app-startup-se
 
 Big-AGI uses a local-first architecture:
 - **Zustand** for reactive state management
-- **IndexedDB** for persistent storage via Zustand persist middleware
+- **Zustand persist** to localStorage, except chats, which persist to IndexedDB (`createIDBPersistStorage`)
 - **Version-based migrations** for data structure upgrades
 
 Key stores:
 - `app-chats`: Conversations and messages (IndexedDB)
-- `app-llms`: Model configurations (IndexedDB)
+- `app-models`: Model services and configurations (localStorage)
 - `app-ui`: UI preferences (localStorage)
