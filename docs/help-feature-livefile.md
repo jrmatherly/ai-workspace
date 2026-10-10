@@ -162,6 +162,4 @@ You can significantly boost your productivity and streamline your workflow withi
 by understanding how to utilize LiveFile's features fully.
 
 This Feature is in Beta as there are a few limitations and improvements to be made. 
-Join us in enjoying and enhancing this feature on [big-AGI.com](https://big-agi.com), or
-[GitHub](https://github.com/enricoros/big-AGI) for support and [Discord](https://discord.gg/MkH4qj2Jp9)
-to share the love.
+For support, open an issue on [GitHub](https://github.com/jrmatherly/ai-workspace/issues).

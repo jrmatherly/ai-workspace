@@ -73,6 +73,8 @@ NEXT_PUBLIC_MOTD=
 NEXT_PUBLIC_GA4_MEASUREMENT_ID=
 NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID=
 NEXT_PUBLIC_PLANTUML_SERVER_URL=
+NEXT_PUBLIC_SITE_URL=
+NEXT_PUBLIC_SPOTLIGHT_FEED_URL=
 NEXT_PUBLIC_POSTHOG_KEY=
 ```
 
@@ -159,6 +161,8 @@ The value of these variables are passed to the frontend (Web UI) - make sure the
 | `NEXT_PUBLIC_GA4_MEASUREMENT_ID`  | (optional) The measurement ID for Google Analytics 4. (see [deploy-analytics](deploy-analytics.md))                                                                                                                                             |
 | `NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID` | (optional) Google OAuth Client ID for Drive Picker. Can reuse `AUTH_GOOGLE_ID`. See [Google Drive](config-feature-google-drive.md)                                                                                                          |
 | `NEXT_PUBLIC_PLANTUML_SERVER_URL` | The URL of the PlantUML server, used for rendering UML diagrams. Allows using custom local servers.                                                                                                                                             |
+| `NEXT_PUBLIC_SITE_URL` | (optional) Public origin of this deployment, e.g. `https://chat.example.com`. Enables absolute `og:image`, `og:url` and canonical tags; unset omits them. Build-time: pass as a Docker build arg (repository variable `SITE_URL` in the image workflow). |
+| `NEXT_PUBLIC_SPOTLIGHT_FEED_URL` | (optional) Base URL of an App News API for in-app announcements and changelog. Unset disables the feed and hides those surfaces (the upstream project served this from its own site). Build-time: Docker build arg, repository variable `SPOTLIGHT_FEED_URL`. |
 | `NEXT_PUBLIC_POSTHOG_KEY`         | (optional) Key for PostHog analytics. (see [deploy-analytics](deploy-analytics.md))                                                                                                                                                             |
 
 > Important: these variables must be set at build time, which is required by Next.js to pass them to the frontend.

@@ -5,10 +5,6 @@ eager to explore, a system integrator, or an enterprise looking for a
 white-label solution, this comprehensive guide ensures a smooth setup
 process for your own instance of big-AGI and related products.
 
-**Try big-AGI** - You don't need to install anything if you want to play with big-AGI
-and have your API keys to various model services. You can access our free instance on [big-AGI.com](https://big-agi.com).
-The free instance runs the latest `main` branch from this repository.
-
 ## 🧩 Build-your-own
 
 If you want to change the code, have a deeper configuration,
@@ -24,8 +20,8 @@ add your own models, or run your own instance, follow the steps below.
 
 1. Clone the big-AGI repository:
    ```bash
-   git clone https://github.com/enricoros/big-AGI.git
-   cd big-AGI
+   git clone https://github.com/jrmatherly/ai-workspace.git
+   cd ai-workspace
    ```
 2. Install dependencies:
    ```bash
@@ -68,7 +64,7 @@ Install big-AGI on Vercel with just a few clicks.
 
 Create your GitHub fork, create a Vercel project over that fork, and deploy it. Or press the button below for convenience.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fenricoros%2Fbig-AGI&env=OPENAI_API_KEY&envDescription=Backend%20API%20keys%2C%20optional%20and%20may%20be%20overridden%20by%20the%20UI.&envLink=https%3A%2F%2Fgithub.com%2Fenricoros%2Fbig-AGI%2Fblob%2Fmain%2Fdocs%2Fenvironment-variables.md&project-name=big-AGI)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjrmatherly%2Fai-workspace&env=OPENAI_API_KEY&envDescription=Backend%20API%20keys%2C%20optional%20and%20may%20be%20overridden%20by%20the%20UI.&envLink=https%3A%2F%2Fgithub.com%2Fjrmatherly%2Fai-workspace%2Fblob%2Fmain%2Fdocs%2Fenvironment-variables.md&project-name=ai-workspace)
 
 ### Deploy on Cloudflare
 
@@ -81,7 +77,7 @@ Containerize your big-AGI installation using Docker for portability and scalabil
 Our [Docker Deployment Guide](deploy-docker.md) will walk you through the process,
 or follow the steps below for a quick start.
 
-1. (optional) Build the Docker image - if you do not want to use the [pre-built Docker images](https://github.com/enricoros/big-AGI/pkgs/container/big-agi):
+1. (optional) Build the Docker image - if you do not want to use the [pre-built Docker images](https://github.com/jrmatherly/ai-workspace/pkgs/container/ai-workspace):
    ```bash
    docker build -t big-agi .
    ```
@@ -91,7 +87,7 @@ or follow the steps below for a quick start.
    docker run -d -p 3000:3000 big-agi
 
    # 2B. or use the pre-built image:
-   docker run -d -p 3000:3000 ghcr.io/enricoros/big-agi
+   docker run -d -p 3000:3000 ghcr.io/jrmatherly/ai-workspace
 
    # 2C. or use docker-compose:
    docker-compose up
@@ -106,8 +102,8 @@ Deploy big-AGI on a Kubernetes cluster for enhanced scalability and management. 
 
 1. Clone the big-AGI repository:
    ```bash
-   git clone https://github.com/enricoros/big-AGI.git
-   cd big-AGI
+   git clone https://github.com/jrmatherly/ai-workspace.git
+   cd ai-workspace
    ```
 
 2. Configure the environment variables:
@@ -135,16 +131,6 @@ Deploy big-AGI on a Kubernetes cluster for enhanced scalability and management. 
 
 For more detailed instructions on Kubernetes deployment, including updating and troubleshooting, refer to our [Kubernetes Deployment Guide](deploy-k8s.md).
 
-## Enterprise-Grade Installation
-
-For businesses seeking a fully-managed, scalable solution, consider our managed installations.
-Enjoy all the features of big-AGI without the hassle of infrastructure management. [hello@big-agi.com](mailto:hello@big-agi.com) to learn more.
-
 ## Support
 
-Join our vibrant community of developers, researchers, and AI enthusiasts. Share your projects, get help, and collaborate with others.
-
-- [Discord Community](https://discord.gg/MkH4qj2Jp9)
-- [X (Twitter)](https://x.com/enricoros)
-
-For any questions or inquiries, please don't hesitate to [reach out to our team](mailto:hello@big-agi.com).
+Open an [issue](https://github.com/jrmatherly/ai-workspace/issues).

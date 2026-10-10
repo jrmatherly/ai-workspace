@@ -1,13 +1,9 @@
-## Archived Versions - Changelog
+> Upstream big-AGI changelog up to v2.1.1 (2026-10-07), from [enricoros/big-AGI](https://github.com/enricoros/big-AGI). Changes in this repo are tracked in [GitHub releases](https://github.com/jrmatherly/ai-workspace/releases).
+
+## Archived versions - changelog
 
 This is a high-level changelog. Calls out some of the high level features batched
 by release.
-
-- For the live changelog, see [big-agi.com/changes](https://big-agi.com/changes)
-- For the live roadmap, please see [the GitHub project](https://github.com/users/enricoros/projects/4/views/2)
-
-> NOTE: with the release of 2.0.0 we switching to [big-agi.com/changes](https://big-agi.com/changes) for the
-> continuously updated changelog.
 
 ### What's New in 2 · Oct 31, 2025 · Open
 
@@ -42,7 +38,7 @@ by release.
 
 ### What's New in 1.16.0 · May 9, 2024 · Crystal Clear
 
-- [Beam](https://big-agi.com/blog/beam-multi-model-ai-reasoning) core and UX improvements based on user feedback
+- Beam core and UX improvements based on user feedback
 - Chat cost estimation 💰 (enable it in Labs / hover the token counter)
 - Save/load chat files with Ctrl+S / Ctrl+O on desktop
 - Major enhancements to the Auto-Diagrams tool
@@ -60,7 +56,7 @@ by release.
 
 ### What's New in 1.15.0 · April 1, 2024 · Beam
 
-- ⚠️ [**Beam**: the multi-model AI chat](https://big-agi.com/blog/beam-multi-model-ai-reasoning). find better answers, faster - a game-changer for brainstorming, decision-making, and creativity. [#443](https://github.com/enricoros/big-AGI/issues/443)
+- ⚠️ **Beam**: the multi-model AI chat. find better answers, faster - a game-changer for brainstorming, decision-making, and creativity. [#443](https://github.com/enricoros/big-AGI/issues/443)
 - Managed Deployments **Auto-Configuration**: simplify the UI models setup with backend-set models. [#436](https://github.com/enricoros/big-AGI/issues/436)
 - Message **Starring ⭐**: star important messages within chats, to attach them later. [#476](https://github.com/enricoros/big-AGI/issues/476)
 - Enhanced the default Persona
@@ -73,7 +69,7 @@ by release.
 - New **[Perplexity](https://www.perplexity.ai/)** and **[Groq](https://groq.com/)** integration (thanks @Penagwin). [#407](https://github.com/enricoros/big-AGI/issues/407), [#427](https://github.com/enricoros/big-AGI/issues/427)
 - **[LocalAI](https://localai.io/models/)** deep integration, including support for [model galleries](https://github.com/enricoros/big-AGI/issues/411)
 - **Mistral** Large and Google **Gemini 1.5** support
-- Performance optimizations: runs [much faster](https://x.com/enricoros/status/1756553038293303434?utm_source=localhost:3000&utm_medium=big-agi), saves lots of power, reduces memory usage
+- Performance optimizations: runs much faster, saves lots of power, reduces memory usage
 - Enhanced UX with auto-sizing charts, refined search and folder functionalities, perfected scaling
 - And with more UI improvements, documentation, bug fixes (20 tickets), and developer enhancements
 - [Release notes](https://github.com/enricoros/big-AGI/releases/tag/v1.14.0), and changes [v1.13.1...v1.14.0](https://github.com/enricoros/big-AGI/compare/v1.13.1...v1.14.0) (233 commits, 8,000+ lines changed)
@@ -88,7 +84,7 @@ https://github.com/enricoros/big-AGI/assets/32999/01732528-730e-41dc-adc7-511385
 - Adjustable text size: customize density. [#399](https://github.com/enricoros/big-AGI/issues/399)
 - Dev2 Persona Technology Preview
 - Better looking chats with improved spacing, fonts, and menus
-- More: new video player, [LM Studio tutorial](https://github.com/enricoros/big-AGI/blob/main/docs/config-local-lmstudio.md) (thanks @aj47), [MongoDB support](https://github.com/enricoros/big-AGI/blob/main/docs/deploy-database.md) (thanks @ranfysvalle02), and speedups
+- More: new video player, [LM Studio tutorial](config-local-lmstudio.md) (thanks @aj47), [MongoDB support](deploy-database.md) (thanks @ranfysvalle02), and speedups
 
 ### What's New in 1.12.0 · Jan 26, 2024 · AGI Hotline
 
@@ -142,23 +138,23 @@ https://github.com/enricoros/big-AGI/assets/1590910/a6b8e172-0726-4b03-a5e5-10cf
 - Mac Shortcuts Fix: Improved UX on Mac
 - **Single-Tab Mode**: Data integrity with single window. [#268](https://github.com/enricoros/big-agi/issues/268)
 - **Updated Models**: Latest Ollama (v0.1.17) and OpenRouter models
-- Official Downloads: Easy access to the latest big-AGI on [big-AGI.com](https://big-agi.com)
+- Official Downloads: Easy access to the latest big-AGI on big-AGI.com
 - For developers: [troubleshot networking](https://github.com/enricoros/big-AGI/issues/276#issuecomment-1858591483), fixed Vercel deployment, cleaned up the LLMs/Streaming framework
 
 ### What's New in 1.7.0 · Dec 11, 2023 · Attachment Theory
 
 - **Attachments System Overhaul**: Drag, paste, link, snap, text, images, PDFs and more. [#251](https://github.com/enricoros/big-agi/issues/251)
 - **Desktop Webcam Capture**: Image capture now available as Labs feature. [#253](https://github.com/enricoros/big-agi/issues/253)
-- **Independent Browsing**: Full browsing support with Browserless. [Learn More](https://github.com/enricoros/big-agi/blob/main/docs/config-feature-browse.md)
+- **Independent Browsing**: Full browsing support with Browserless. [Learn More](config-feature-browse.md)
 - **Overheat LLMs**: Push the creativity with higher LLM temperatures. [#256](https://github.com/enricoros/big-agi/issues/256)
 - **Model Options Shortcut**: Quick adjust with `Ctrl+Shift+O`
 - Optimized Voice Input and Performance
 - Latest Ollama models
-- For developers: **Password Protection**: HTTP Basic Auth. [Learn How](https://github.com/enricoros/big-agi/blob/main/docs/deploy-authentication.md)
+- For developers: **Password Protection**: HTTP Basic Auth. [Learn How](deploy-authentication.md)
 
 ### What's New in 1.6.0 - Nov 28, 2023 · Surf's Up
 
-- **Web Browsing**: Download web pages within chats - [browsing guide](https://github.com/enricoros/big-agi/blob/main/docs/config-feature-browse.md)
+- **Web Browsing**: Download web pages within chats - [browsing guide](config-feature-browse.md)
 - **Branching Discussions**: Create new conversations from any message
 - **Keyboard Navigation**: Swift chat navigation with new shortcuts (e.g. ctrl+alt+left/right)
 - **Performance Boost**: Faster rendering for a smoother experience

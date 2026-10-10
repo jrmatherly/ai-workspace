@@ -2,7 +2,7 @@
 
 Information you need to get started, configure, and use big-AGI productively.
 
-👉 **[Changelog](https://big-agi.com/changes)** - See what's new
+👉 **[Releases](https://github.com/jrmatherly/ai-workspace/releases)** - See what's new
 
 ## Getting Started
 
@@ -73,8 +73,7 @@ For deploying a custom big-AGI instance:
 
 ## Community & Support
 
-- Check the [changelog](https://big-agi.com/changes) for the latest updates
-- Visit our [GitHub repository](https://github.com/enricoros/big-AGI) for source code and issue tracking
-- Join our [Discord](https://discord.gg/MkH4qj2Jp9) for discussions and help
+- Check the [releases](https://github.com/jrmatherly/ai-workspace/releases) for the latest updates, and the [upstream changelog](changelog.md) for history up to v2.1.1
+- Visit the [GitHub repository](https://github.com/jrmatherly/ai-workspace) for source code and issue tracking
 
 Let's build something great.

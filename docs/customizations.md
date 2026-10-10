@@ -15,7 +15,7 @@ Application customization _requires manual code modifications or the use of envi
 
 ## Code Alterations
 
-Start by creating a fork of the [big-AGI repository](https://github.com/enricoros/big-AGI) on GitHub for a personal development space.
+Start by creating a fork of the [repository](https://github.com/jrmatherly/ai-workspace) on GitHub for a personal development space.
 Understand the Architecture: big-AGI uses Next.js, React for the front end, and Node.js (Next.js edge functions) for the back end.
 
 ### Add Authentication

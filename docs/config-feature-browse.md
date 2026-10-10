@@ -107,12 +107,10 @@ to prevent unauthorized access to the browsing service.
 
 ## Support
 
-If you encounter any issues or have questions about configuring the browse functionality, join our community on Discord for support and discussions.
-
-[![Official Discord](https://discordapp.com/api/guilds/1098796266906980422/widget.png?style=banner2)](https://discord.gg/MkH4qj2Jp9)
+If you encounter any issues or have questions about configuring the browse functionality, open an [issue](https://github.com/jrmatherly/ai-workspace/issues).
 
 ---
 
 Enjoy the enhanced browsing experience within `big-AGI` and explore the web without ever leaving your chat!
 
-Last updated on Feb 27, 2024 ([edit on GitHub](https://github.com/enricoros/big-AGI/edit/main/docs/config-feature-browse.md))
+Last updated on Feb 27, 2024 ([edit on GitHub](https://github.com/jrmatherly/ai-workspace/edit/main/docs/config-feature-browse.md))

@@ -62,5 +62,4 @@ file with the mapping information between LocalAI model IDs and names/descriptio
 # 🤝 Support
 
 - Hop into the [LocalAI Discord](https://discord.gg/uJAeKSAGDy) for support and questions
-- Hop into the [big-AGI Discord](https://discord.gg/MkH4qj2Jp9) for questions
-- For big-AGI support, please open an issue in our [big-AGI issue tracker](https://bit.ly/agi-request)
+- For big-AGI support, please open an issue in the [issue tracker](https://github.com/jrmatherly/ai-workspace/issues)

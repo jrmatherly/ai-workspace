@@ -1,6 +1,6 @@
 # Frequently Asked Questions
 
-Quick answers to common questions about Big-AGI. For detailed documentation, see our [Website Docs](https://big-agi.com/docs).
+Quick answers to common questions about Big-AGI. For detailed documentation, see the [documentation index](README.md).
 
 ### Connectivity
 
@@ -45,4 +45,4 @@ Each deployment links directly to its source code commit.
 
 ---
 
-Missing something? [Open an issue](https://github.com/enricoros/big-agi/issues/new) or [join our Discord](https://discord.gg/MkH4qj2Jp9).
+Missing something? [Open an issue](https://github.com/jrmatherly/ai-workspace/issues/new).

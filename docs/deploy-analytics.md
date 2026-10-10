@@ -28,11 +28,9 @@ Note that this value is **baked into the client bundle at build time**, not read
 passing `-e NEXT_PUBLIC_GA4_MEASUREMENT_ID=...` to `docker run` has no effect. To point an image at
 your own property - or at none - rebuild from source with the variable set (or unset).
 
-**Official prebuilt images report anonymous usage telemetry** (page views and feature-usage events,
-no prompts and no conversation content) to a Google Analytics property we use to understand which
-features matter and to catch breakage across self-hosted deployments. Images published from
-2026-08-21 onward report to a property dedicated to self-hosted deployments, kept separate from
-big-agi.com's own analytics. Build from source if you prefer to send nothing.
+**Prebuilt images** from this repo's workflow (`.github/workflows/docker-image.yml`) bake
+`NEXT_PUBLIC_GA4_MEASUREMENT_ID` from the repository secret `GA4_MEASUREMENT_ID`. With the secret
+unset, the images report nothing. Build from source to choose your own property.
 
 ### PostHog Analytics
 
@@ -82,7 +80,6 @@ In summary: to turn it on: activate the `Analytics` service in the Vercel projec
 |-------------------------------------------------------------------------------------------------------------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Your **Source** builds of big-AGI                                                                                       | None                      | **Google Analytics**: set environment variable at build time · **PostHog**: set environment variable at build time · **Vercel**: enable Vercel Analytics from the dashboard | 
 | Your **Docker** builds of big-AGI                                                                                       | None                      | (**Vercel**: n/a) · **Google Analytics**: set environment variable at `docker build` time · **PostHog**: set environment variable at `docker build` time.                   |
-| [get.big-agi.com](https://get.big-agi.com) (**Big-AGI 1.x Legacy**)                                                     | Vercel + Google + PostHog | The main website ([privacy policy](https://big-agi.com/privacy)) hosted for free for anyone.                                                                                |
-| [prebuilt Docker packages](https://github.com/enricoros/big-AGI/pkgs/container/big-agi) ('latest', 'stable', 'development' tags) | Google Analytics          | **Vercel**: n/a · **Google Analytics**: set to a property dedicated to self-hosted deployments (separate from big-agi.com), for analytics and improvements; baked at build time, rebuild from source to change or remove · **PostHog**: n/a                                           |
+| [prebuilt Docker packages](https://github.com/jrmatherly/ai-workspace/pkgs/container/ai-workspace) | Google Analytics if the `GA4_MEASUREMENT_ID` secret is set | **Vercel**: n/a · **Google Analytics**: baked at build time from the repository secret, rebuild from source to change or remove · **PostHog**: n/a                                           |
 
 Note: this information is updated as of August 26, 2026 and can change at any time.

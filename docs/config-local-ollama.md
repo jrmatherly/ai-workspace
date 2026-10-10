@@ -1,7 +1,7 @@
 # `Ollama` x `big-AGI` :llama:
 
 This guide helps you connect [Ollama](https://ollama.ai) [models](https://ollama.ai/library) to
-[big-AGI](https://big-agi.com) for a professional AI/AGI operation and a good UI/Conversational
+big-AGI for a professional AI/AGI operation and a good UI/Conversational
 experience. The integration brings the popular big-AGI features to Ollama, including: voice chats,
 editing tools, models switching, personas, and more.
 
@@ -41,7 +41,7 @@ In addition to using the UI, configuration can also be done using
 ### ⚠️ Network Troubleshooting
 
 If you get errors about the server having trouble connecting with Ollama, please see
-[this message](https://github.com/enricoros/big-AGI/issues/276#issuecomment-1858591483) on Issue #276.
+upstream big-AGI issue #276 (comment 1858591483).
 
 And in brief, make sure the Ollama endpoint is accessible from the servers where you run big-AGI (which could
 be localhost or cloud servers).
@@ -95,9 +95,7 @@ Reach out to our community if you need help with this.
 
 ### Community and Support
 
-Join our community to share your experiences, get help, and discuss best practices:
-
-[![Official Discord](https://discordapp.com/api/guilds/1098796266906980422/widget.png?style=banner2)](https://discord.gg/MkH4qj2Jp9)
+For help, open an [issue](https://github.com/jrmatherly/ai-workspace/issues).
 
 
 ---

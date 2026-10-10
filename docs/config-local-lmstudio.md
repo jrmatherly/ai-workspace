@@ -16,7 +16,7 @@ For a visual step-by-step guide, watch our [YouTube tutorial](https://www.youtub
 Clone and set up big-AGI:
 
 ```bash
-git clone https://github.com/enricoros/big-agi.git && cd big-agi
+git clone https://github.com/jrmatherly/ai-workspace.git && cd ai-workspace
 npm install # Or: yarn install
 npm run dev # Or: yarn dev
 # If missing dependencies:
@@ -50,5 +50,5 @@ In addition to using the UI, configuration can also be done using
 
 Advanced configurations and more:
 
-- big-AGI Community: [Discord](https://discord.gg/MkH4qj2Jp9)
+- big-AGI issues: [GitHub](https://github.com/jrmatherly/ai-workspace/issues)
 - LM Studio: [LM Studio home page](https://lmstudio.ai/)

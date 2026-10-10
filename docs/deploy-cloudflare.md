@@ -11,10 +11,10 @@ unlisted: true
 >
 > Workaround: Step 3.4. has been added below, to DELETE the Node.js cloud router - which means that some
 > parts of this application will not work.
->  - [Side effects](https://github.com/enricoros/big-agi/blob/main/src/modules/trade/server/trade.router.ts):
+>  - [Side effects](../src/modules/trade/server/trade.router.ts):
 >     Sharing functionality, import from ChatGPT share, and post to Paste.GG will not work
 >  - Cloud features (sync, auth, payments) will not be available
->  - See [Issue 174](https://github.com/enricoros/big-agi/issues/174).
+>  - See upstream big-AGI issue 174.
 
 This guide provides steps to deploy your Next.js app on Cloudflare Pages.
 It is based on the [official Cloudflare developer documentation](https://developers.cloudflare.com/pages/framework-guides/deploy-a-nextjs-site/),

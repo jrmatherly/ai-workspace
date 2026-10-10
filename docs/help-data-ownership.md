@@ -5,12 +5,7 @@ Your *API keys*, *chat history*, and *settings* live in your
 browser's [local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage), not
 on cloud servers.
 
-You can use Big-AGI in two ways:
-
-1. Run it yourself (open-source)
-2. Use big-agi.com (hosted service)
-
-This guide explains how the open-source version handles your data. You can verify everything in [the source code](https://github.com/enricoros/big-agi).
+This guide explains how the open-source version handles your data. You can verify everything in [the source code](https://github.com/jrmatherly/ai-workspace).
 
 ## Client-Side Storage
 
@@ -30,12 +25,6 @@ You can see your data in your browser's local storage and IndexedDB - try it you
 
 ![Browser local storage showing API keys and chat data](pixels/data_ownership_local_storage.png)
 
-### Sync for Authenticated Users
-
-Users with accounts on big-agi.com who opt into Sync (a Pro feature) have their entity data - such as conversations and personas - replicated to the server for multi-device access.
-Server-side data is isolated per-user using Row Level Security (RLS), ensuring that no other user can access your synced data.
-Sync is entirely optional; without it, all data remains local to your browser.
-
 ### What This Means For You
 
 Storing data in your browser means:
@@ -44,19 +33,6 @@ Storing data in your browser means:
 - Clearing browser data **erases your chats** - make backups
 - Anyone using your browser can see your chats and keys
 - Running your own server needs technical skills
-
-### Device Identifier
-
-When you sign in, Big-AGI keeps a _device identifier_ so your devices can be told apart for optional Sync and listed under your account.
-It is **server-issued** (a random UUID) and stored in a durable, first-party **httpOnly cookie** (`agi.client-token`) - not created by,
-or readable from, page scripts. This identifier:
-
-- Identifies your **client** - one per browser, so a second browser or an installed app on the same machine is a separate device
-- Replaces a former localStorage mechanism, see `src/common/stores/store-client.ts` if available in the source code
-- Is **not** set for signed-out visitors, and is never used for tracking, advertising, analytics, or telemetry
-- Is scoped to your account via Row Level Security, so no other user can see it
-- Is a server-set cookie; it resets only if you clear **cookies/site data**
-
 
 ## How Data Flows
 
@@ -73,14 +49,6 @@ The keys and chats are under your control and pass through your code, and are se
 the upstream AI services on a per-request basis.
 
 ![data_ownership_local.png](pixels/data_ownership_deployed.png)
-
-### Web Version: Using big-agi.com
-
-Your data passes through the hosted Big-AGI edge network to reach AI services. The keys
-and chats pass through Big-AGI's edge network to reach the AI services on a per-request basis,
-and then are send to the upstream AI services.
-
-![data_ownership_hosted.png](pixels/data_ownership_hosted.png)
 
 ### Direct Connection (Browser → AI Service)
 
@@ -123,6 +91,6 @@ Direct Connection is a net win on speed, limits, and privacy whenever the provid
 
 Your API keys and chats stay in your browser. The server only passes requests to AI services.
 
-Use big-agi.com for convenience, or [run it yourself](installation.md) for full control.
+[Run it yourself](installation.md) for full control.
 
-Need help? Join our [Discord](https://discord.gg/MkH4qj2Jp9) or open a [GitHub issue](https://github.com/enricoros/big-agi/issues).
+Need help? Open a [GitHub issue](https://github.com/jrmatherly/ai-workspace/issues).
