@@ -75,7 +75,7 @@ export default defineConfig([{
         // older-browser guard: we deliberately support sub-floor engines (Chrome 109/Win7, old Brave)
         // for a few APIs, so ban the ones that crash there. eslint-plugin-compat can't catch these:
         // they're at/below the browserslist floor (Chrome 110), so it considers them "supported".
-        "no-restricted-syntax": ["warn", {
+        "no-restricted-syntax": ["error", {
             selector: "CallExpression[callee.property.name=/^(toSorted|toReversed|toSpliced)$/]",
             message: "ES2023 array method crashes on Chrome <110 (Win7/8) and old Brave. Use a copy + in-place form instead: [...arr].sort() / [...arr].reverse(), or arr.filter() instead of toSpliced().",
         }, {
