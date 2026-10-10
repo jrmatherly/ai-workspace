@@ -5,7 +5,7 @@ allowed-tools: Bash(git *)
 ---
 
 Search git history using `git log -S` (pickaxe) to find commits that add or remove an exact string.
-This repo has 7000+ commits, so pickaxe searches can take 30-60+ seconds - this is expected.
+This repo has a short history (copied from upstream at one commit, see CLAUDE.md "Upstream"). For history before the copy, run the same search against `upstream/main` after `.claude/skills/upstream-review/scripts/upstream-review.sh` has fetched it.
 
 ## Parameters
 
@@ -43,7 +43,7 @@ git log -S "$0" --oneline <resolved_ancestor>..HEAD
 ```
 
 This finds commits where the count of `$0` in the codebase changes (i.e., it was added or removed).
-This can be slow on 7000+ commits - wait for it.
+On `upstream/main` (8000+ commits) this can take 30-60 seconds.
 
 ### Step 3: Check endpoints
 

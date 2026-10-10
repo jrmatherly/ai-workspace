@@ -22,28 +22,28 @@ eslint src/path/to/file.ts           # lint one file
 npm run build  # compile+lint+types, but stops at the first type-error file; tsc shows all at once
 ```
 
+- `src/modules/llms/server/gen/llms.defs.versions.ts` is generated and committed; regenerate with `node tools/develop/gen-llms-defs/generate-llms-defs.mjs`, never hand-edit (rule: `.claude/rules/generated-files.md`)
+- `next.config.ts` throws "missing build identity" without a git checkout or `NEXT_PUBLIC_BUILD_HASH` (rule: `.claude/rules/build-identity.md`)
+
 For AI protocol development (model listing, live API requests/responses, parameter probing), real vendor API keys are in `.env.api-keys` if present (Anthropic, OpenAI, Gemini, etc., one VENDOR_API_KEY per line). Use them for empirical verification; never commit or echo the values.
 
-### Git/GitHub remotes
+### Git and GitHub
 
-The `gh` command is available to interact with GitHub from the terminal, but **NEVER PUSH TO ANY BRANCH**. The user manages all 'write' git operations.
-- `opensource` -> `enricoros/big-AGI` (public, default branch: `main`, MIT) - community issues/PRs/releases
-- `private` -> `big-agi/big-agi-private` (private, default branch: `dev`) - main dev repo with `dev`->`staging`->`prod` pipeline
+This repo is `jrmatherly/ai-workspace` (remote `origin`, single branch `main`). It is a copy of `enricoros/big-AGI`, not a fork: no shared git history. See "Upstream" below.
+
+The `gh` command is available for GitHub reads (issues, PRs, labels), but **NEVER PUSH TO ANY BRANCH**. The user manages all remote 'write' git operations. Local commits are fine when asked.
 - **Always use `git mv` instead of `mv`** when renaming or moving files - preserves git history tracking
 - **NEVER run `git stash`** - it causes work loss
-- **Commit subjects**: `Area: terse imperative` (e.g. `LLMs: OpenAI: ...`, `Build: ...`), single line, no body unless needed, and no `Co-Authored-By` trailer
+- **Commit subjects**: `Area: terse imperative` (e.g. `LLMs: OpenAI: ...`, `Build: ...`, `Tooling: ...`), single line, no body unless needed, no `Co-Authored-By` trailer. Same scheme as upstream, so adopted upstream commits read consistently in `git log`.
+- Vendor API keys for live protocol work go in `.env.api-keys` (gitignored, one `VENDOR_API_KEY` per line). The file does not exist until you create it; key-gated tests and the `/aix:sync-*` probes skip without it.
 
-**Branch contents:**
-- `main` is the open-source build: local-first, BYO-keys, full AIX and provider coverage
-- `dev` extends `main` with the hosted/cloud layer: auth, Zync sync, Cloud Fabric, Stripe, multi-tenant, admin pages, it's the way to go for users, the best user experience of any multi-model chat application
-- Cloud/auth/sync code stays on `dev`; non-cloud improvements (UX, AIX, model support, bug fixes) can land on either branch
+### Upstream
 
-**Branch workflow:**
-- `dev` is rebased on top of `main` (never merged) - `main` changes flow into `dev` on the next rebase, no manual forward-port needed
-- Never `git merge` between the two branches - breaks the linear topology
-- Backporting `dev` -> `main` is a re-implementation, never a cherry-pick - keep `main`-side edits minimal/additive so the existing `dev` version lands cleanly on rebase; split into small commits when natural
-- Rebasing `dev` onto `main`: work on a scratch branch (never `private/dev` directly); only files `main` changed since the merge-base can conflict - forecast with `git diff --name-only $(git merge-base private/dev opensource/main) opensource/main`
-- Resolve that rebase per-conflict: keep `dev` where it diverges, UNION where `main` only added (never blanket `-X theirs`/`-X ours` - they drop `main`'s additions). Check no `<<<<<<<` markers survive before each `--continue`
+Upstream is `enricoros/big-AGI` `main`. This tree was copied at upstream commit `99b3bf9c` (2026-10-07, v2.1.1 + 278 commits); at our first commit the source was byte-identical to it. Tracking and adopting upstream changes goes through the `upstream-review` skill (`.claude/skills/upstream-review/`):
+- `.claude/skills/upstream-review/scripts/upstream-review.sh --stat` lists un-reviewed upstream commits with a per-file marker: `=` unchanged since the copy (cherry-picks cleanly), `~` we changed it (hand-port), `x` we removed it, `+` new upstream file
+- State is tracked in `.upstream-review/watermark.json` and `.upstream-review/reviews/<date>-review.md`
+- Adopt with `git cherry-pick -x <sha>` for `=` files; never `git merge upstream/main`, and never use a merge-base (there is none)
+- Upstream's hosted line (`dev`, `big-agi-private`, big-agi.com, "Big-AGI Pro") does not exist here. Content gated on it is skipped. The product display name "Big-AGI" is kept in UI copy for now; URLs, repo links, images and the container image point at this repo.
 
 ### Repository Layout
 
@@ -110,14 +110,11 @@ Local-first: Zustand in memory with `persist` to localStorage, except chats, whi
 ## Common Development Tasks
 
 ### Testing & Quality
-- Browser floor: `eslint.config.mjs` hard-bans ES2023 `toSorted/toReversed/toSpliced/with` and `new Intl.Segmenter` via `no-restricted-syntax` (they crash Chrome <110 / Win7-8 holdouts); a separate `compat/compat` pass checks Web APIs against `browserslist`. Use `[...x].sort()` etc.; don't lower `browserslist` to "fix" the banned syntax - that rule doesn't read it, and SWC won't polyfill prototype methods
+- Browser floor: `eslint.config.mjs` bans ES2023 `toSorted/toReversed/toSpliced/with` and `new Intl.Segmenter` via `no-restricted-syntax` at `error` level (they crash Chrome <110 / Win7-8 holdouts); other project rules stay at `warn`, and `eslint .` exits 0 on warnings; a separate `compat/compat` pass checks Web APIs against `browserslist`. Use `[...x].sort()` etc.; don't lower `browserslist` to "fix" the banned syntax - that rule doesn't read it, and SWC won't polyfill prototype methods
 
 ### Debugging Storage Issues
 - Chats: DevTools -> Application -> IndexedDB -> `keyval-store` -> `keyval` -> key `app-chats`
-
-### Production errors (app.big-agi.com)
-- That host is the deployed build - triage runtime errors via the PostHog MCP (filter `url: app.big-agi.com`). Client noise filter (`before_send` / `shouldSuppressPostHogCapture`, matched on `$exception_list`) lives in `src/common/components/3rdparty/PostHogAnalytics.tsx`; `mechanism.handled:false` = an unhandled rejection via autocapture. Suppress only environmental/extension noise, never real bugs
-
+- Everything else (`app-models`, `app-ui`, ...): DevTools -> Application -> Local Storage
 
 ## Server Architecture
 

@@ -2,7 +2,7 @@
 description: Review in-flight changes for coherence, completeness, and quality
 ---
 
-Review the current in-flight changes in the big-agi-private repository (dev branch, continuously rebased ~1800 commits on top of main).
+Review the current in-flight changes in this repository (single `main` line, see CLAUDE.md).
 
 **Step 1: Scope and read**
 
