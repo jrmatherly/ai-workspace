@@ -7,8 +7,8 @@ Docker ensures faster development cycles, easier collaboration, and seamless env
 
 1. **Clone big-AGI**
    ```bash
-   git clone https://github.com/enricoros/big-agi.git
-   cd big-agi
+   git clone https://github.com/jrmatherly/ai-workspace.git
+   cd ai-workspace
    ```
 2. **Build the Docker Image**: Build a local docker image from the provided Dockerfile:
    ```bash
@@ -29,7 +29,7 @@ Docker ensures faster development cycles, easier collaboration, and seamless env
 The build process is transparent, and happens via GitHub Actions, as described in the
 file.
 
-### Official Images: [ghcr.io/enricoros/big-agi](https://github.com/enricoros/big-agi/pkgs/container/big-agi)
+### Official Images: [ghcr.io/jrmatherly/ai-workspace](https://github.com/jrmatherly/ai-workspace/pkgs/container/ai-workspace)
 
 #### Available Tags
 
@@ -40,7 +40,7 @@ file.
 #### Run using *docker* 🚀
 
 ```bash
-docker run -d -p 3000:3000 ghcr.io/enricoros/big-agi:latest
+docker run -d -p 3000:3000 ghcr.io/jrmatherly/ai-workspace:latest
 ```
 
 #### Run using *docker-compose* 🚀

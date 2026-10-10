@@ -23,7 +23,7 @@ spec:
         app: big-agi
     spec:
       containers:
-        - image: ghcr.io/enricoros/big-agi:latest
+        - image: ghcr.io/jrmatherly/ai-workspace:latest
           name: big-agi
           ports:
             - containerPort: 3000

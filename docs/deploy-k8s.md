@@ -8,8 +8,8 @@ in a Kubernetes environment using the kubectl command-line tool.
 ### Step 1: Clone the big-AGI repository
 
 ```bash
-$ git clone https://github.com/enricoros/big-agi
-$ cd ./big-agi/docs/k8s
+$ git clone https://github.com/jrmatherly/ai-workspace
+$ cd ./ai-workspace/docs/k8s
 ```
 
 ### Step 2: Create the namespace
