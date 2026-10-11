@@ -2,7 +2,7 @@
 # PreToolUse(Bash) policy. Exit 2 blocks the call; settings.json sets onFailure=block so errors fail closed.
 #   1. No git push (CLAUDE.md: pushes are the user's call). Override: prefix the push segment itself with ALLOW_GIT_PUSH=1 (visible in the transcript), or set ALLOW_GIT_PUSH=1 (that exact value) in the hook env.
 #      The prefix is checked per segment: in a chained command it goes on the push segment, and `export` does not count.
-#   2. No reading .env* files into the transcript. Sourcing them (`.`/`source`) is allowed so keys reach curl as headers.
+#   2. No reading .env* files into the transcript; .env.example and .env.template are committed templates and pass. Sourcing them (`.`/`source`) is allowed so keys reach curl as headers.
 set -euo pipefail
 command -v jq >/dev/null || { echo "guard-bash: jq is required" >&2; exit 2; }
 
@@ -34,6 +34,7 @@ while IFS= read -r seg; do
   case "$first" in .|source|ls|test|'['|'[['|stat|wc|file|rm|mv|cp|touch|chmod) continue;; esac
   for tok in $seg; do
     tok="${tok%\"}"; tok="${tok#\"}"; tok="${tok%\'}"; tok="${tok#\'}"
+    case "$tok" in *.example|*.template) continue;; esac
     if [[ "$tok" =~ (^|/)\.env($|\.) ]]; then
       echo "Blocked: $first on $tok would print secrets into the transcript (CLAUDE.md). Source the file instead: set -a; . ./.env.api-keys; set +a" >&2
       exit 2
