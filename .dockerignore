@@ -27,8 +27,7 @@ src/server/prisma/generated/
 !eslint.config.mjs
 !tools/develop/gen-llms-defs/
 !tools/develop/browser-assets/
-!middleware_BASIC_AUTH.ts
-!middleware.ts
+!proxy.ts
 !next.config.ts
 !prisma.config.ts
 !package*.json
