@@ -41,7 +41,7 @@ sprintf-js
 
 ## Peer-range warnings
 
-None accepted today. (Updated by the phase that introduces one.)
+`npm ls eslint` reports `invalid` peers for eslint-plugin-import 2.32.0, eslint-plugin-jsx-a11y 6.10.2 and eslint-plugin-react 7.37.5 (each declares at most `eslint ^9`; eslint-config-next 16 pulls them). `npm install` prints three `ERESOLVE overriding peer dependency` warnings and exits 0; `npm run lint` runs clean on the rules Next enables. Accepted until those plugins publish ESLint 10 peers. Never install with `--legacy-peer-deps`.
 
 ## Node floor
 
