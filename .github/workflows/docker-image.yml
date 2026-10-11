@@ -167,13 +167,13 @@ jobs:
             # Development: main branch
             type=raw,value=development,enable=${{ github.ref == 'refs/heads/main' }}
 
-            # Latest: v2.x releases (safe default)
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v2.') }}
+            # Latest: release tags (vYYYY.M.D)
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') }}
 
-            # Stable: v2.x releases (alias)
-            type=raw,value=stable,enable=${{ startsWith(github.ref, 'refs/tags/v2.') }}
+            # Stable: release tags (alias)
+            type=raw,value=stable,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
 
-            # Version tags (v2.0.0, 2.0.0)
+            # Version tags (v2026.10.11, 2026.10.11)
             type=ref,event=tag
             type=semver,pattern={{version}}
 

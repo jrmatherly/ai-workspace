@@ -2,7 +2,7 @@
 # check=skip=CopyIgnoredFile
 
 # Base
-FROM node:24-alpine AS base
+FROM node:26-alpine AS base
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Dependencies

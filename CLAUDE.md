@@ -34,6 +34,7 @@ This repo is `jrmatherly/ai-workspace` (remote `origin`, single branch `main`). 
 The `gh` command is available for GitHub reads (issues, PRs, labels), but **NEVER PUSH TO ANY BRANCH**. The user manages all remote 'write' git operations. Local commits are fine when asked.
 - **Always use `git mv` instead of `mv`** when renaming or moving files - preserves git history tracking
 - **NEVER run `git stash`** - it causes work loss
+- **Versions** are CalVer, `YYYY.M.D[.MICRO]` unpadded (`2026.10.11`, a second release that day `2026.10.11.1`): valid semver, so `npm version` and the image workflow's semver tags work. Release tags are `vYYYY.M.D`. Bump with `npm version <ver> --no-git-tag-version` so `package-lock.json` follows.
 - **Commit subjects**: `Area: terse imperative` (e.g. `LLMs: OpenAI: ...`, `Build: ...`, `Tooling: ...`), single line, no body unless needed, no `Co-Authored-By` trailer. Same scheme as upstream, so adopted upstream commits read consistently in `git log`.
 - Vendor API keys for live protocol work go in `.env.api-keys` (gitignored, one `VENDOR_API_KEY` per line). The file does not exist until you create it; key-gated tests and the live probes in `/sync-api` and `/update-models` skip without it.
 
