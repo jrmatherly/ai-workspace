@@ -1,18 +1,14 @@
 # Requires the CLAUDE_CODE_OAUTH_TOKEN repo secret.
 # Inert until it is set: the action step fails without it.
-name: Claude Code Auto-Triage Issues
+name: 🤖 Claude Issue Triage
 
 on:
   issues:
     types: [ opened ]
 
-# Prevent duplicate/overlapping triage runs for the same issue (cost + noise guard)
-concurrency:
-  group: claude-triage-${{ github.event.issue.number }}
-  cancel-in-progress: true
-
 jobs:
   claude-issue-triage:
+    name: 🏷 Triage issue
     # Optional: Skip for bot users and direct mentions in the body (handled by claude-dm.yml)
     if: |
       github.event.issue.user.type != 'Bot' &&
@@ -29,13 +25,13 @@ jobs:
       id-token: write # required to use OIDC to authenticate to Claude Code API
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7.0.1
+      - name: 📥 Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0 # 1 -> 0: full history helps with git blame, etc.
 
-      - name: Analyze issue and provide help
-        uses: anthropics/claude-code-action@v1
+      - name: 🤖 Analyze and reply
+        uses: anthropics/claude-code-action@1d6de8cb0c237e7c15e9e1bdf973826ebae490cc # v1.0.248
         env:
           CLAUDE_CODE_SUBAGENT_MODEL: claude-opus-5-5 # brains on Fable (--model below), delegated subagents on the latest Opus
         with:

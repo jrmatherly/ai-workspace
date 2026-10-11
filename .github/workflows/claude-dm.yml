@@ -1,6 +1,6 @@
 # Requires the CLAUDE_CODE_OAUTH_TOKEN repo secret.
 # Inert until it is set: the action step fails without it.
-name: Claude Code DM
+name: 🤖 Claude Code DM
 
 on:
   issues:
@@ -14,6 +14,7 @@ on:
 
 jobs:
   claude-dm:
+    name: 🤖 Claude DM
     # Only allow repository owner to trigger DMs with @claude (blocks other users and bots)
     if: |
       github.actor == 'jrmatherly' &&
@@ -26,6 +27,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
+    # Job-level so comments without @claude (skipped by `if`) never enter the queue. No cancel, so a
+    # follow-up @claude never kills a run mid-commit. GitHub keeps one pending run per group: a third
+    # @claude while one runs replaces the pending second one.
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}
+      cancel-in-progress: false
+
     permissions:
       contents: write  # Required for code creation and commits
       issues: write
@@ -34,14 +42,14 @@ jobs:
       id-token: write # required to use OIDC to authenticate to Claude Code API
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7.0.1
+      - name: 📥 Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0 # 1 -> 0: full history helps with git blame, etc.
 
-      - name: Run Claude Code DM Response
+      - name: 🤖 Claude response
         id: claude
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@1d6de8cb0c237e7c15e9e1bdf973826ebae490cc # v1.0.248
         env:
           CLAUDE_CODE_SUBAGENT_MODEL: claude-opus-5-5 # brains on Fable (--model below), delegated subagents on the latest Opus
         with:

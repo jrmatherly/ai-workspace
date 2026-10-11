@@ -17,7 +17,34 @@ updates:
     commit-message:
       prefix: "chore(deps)"
 
-# Disabled npm updates for now - will need precise package pinning, as some packages changed behavior upstream
+  # Minor/patch only, grouped into one PR. Majors of these need a manual migration.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    ignore:
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@mui/joy"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "prisma"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@prisma/client"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+
+# Previous weekly npm config, kept for its pin notes (several predate the versions now in package.json)
 #  - package-ecosystem: npm
 #    directory: /
 #    schedule:
