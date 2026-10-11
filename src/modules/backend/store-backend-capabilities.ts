@@ -1,3 +1,4 @@
+import type { AuthProviderId } from '~/server/auth/auth.config';
 import { create } from 'zustand';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -38,6 +39,12 @@ export interface LegacyServerConf {
   hasVoiceElevenLabs: boolean;
 }
 
+/** One sign-in option. Runtime data from the server, never a NEXT_PUBLIC_* build constant. */
+export interface AuthProviderInfo {
+  id: AuthProviderId;
+  label: string;
+}
+
 /** The capabilities payload of the backend router: the legacy server conf, plus what the client boot gate needs. */
 export interface BackendCapabilities extends LegacyServerConf {
   // hashes - TODO(2026-11): remove, unread since LLM-Defs (per-vendor defsV), kept for pre-LLM-Defs clients
@@ -48,6 +55,8 @@ export interface BackendCapabilities extends LegacyServerConf {
     pkgVersion?: string;
     timestamp?: string;
   };
+  /** Configured identity providers. Empty <=> auth off: the client's single source of truth for "is auth on". */
+  authProviders: AuthProviderInfo[];
 }
 
 interface BackendStore extends BackendCapabilities {
@@ -83,6 +92,7 @@ const useBackendCapabilitiesStore = create<BackendStore>()(
     hasVoiceElevenLabs: false,
     hashLlmReconfig: '',
     build: undefined,
+    authProviders: [],
     _loadedCapabilities: false,
 
     setCapabilities: (capabilities: Partial<BackendCapabilities>) =>

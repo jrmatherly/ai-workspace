@@ -14,12 +14,15 @@ const handler = (req: Request) => fetchRequestHandler({
     if (process.env.NODE_ENV === 'development')
       console.error(`❌ tRPC failed on ${path ?? 'unk-path'}: ${error.message}`);
 
+    // 401/403 are expected outcomes with auth on, not server faults
+    if (error.code === 'UNAUTHORIZED' || error.code === 'FORBIDDEN') return;
+
     await posthogServerSendException(error, undefined, {
       domain: 'trpc-onerror',
       runtime: 'nodejs',
       endpoint: path ?? 'unknown',
       method: req.method,
-      url: req.url,
+      url: req.url.split('?')[0], // tRPC GET inputs ride in the query string and can hold client keys: never report them
       additionalProperties: {
         error_code: error.code,
         error_type: type,

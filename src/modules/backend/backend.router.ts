@@ -5,6 +5,7 @@ import { Release } from '~/common/app.release';
 import { anonymousProcedure, createTRPCRouter, publicProcedure, resolveCaller } from '~/server/trpc/trpc.server';
 import type { AuthCaller } from '~/server/auth/auth.server';
 import { env } from '~/server/env.server';
+import { authProvidersInfo } from '~/server/auth/auth.config';
 import { fetchJsonOrTRPCThrow } from '~/server/trpc/trpc.router.fetchers';
 
 // critical to make sure we `import type` here
@@ -76,6 +77,8 @@ export const backendRouter = createTRPCRouter({
         hashLlmReconfig: generateLlmEnvConfigHash(env),
         // build data
         build: Release.buildInfo('backend'),
+        // auth: provider ids and labels only (the sign-in screen shows them anyway); [] <=> auth off
+        authProviders: authProvidersInfo,
       };
     }),
 

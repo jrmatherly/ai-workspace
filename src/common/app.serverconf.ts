@@ -1,4 +1,4 @@
-import { getBackendCapabilities, type LegacyServerConf } from '~/modules/backend/store-backend-capabilities';
+import { type AuthProviderInfo, getBackendCapabilities, type LegacyServerConf } from '~/modules/backend/store-backend-capabilities';
 
 
 /*
@@ -21,4 +21,9 @@ export function getServerConf(): ServerConf {
 export function hasServerConf(flag: ServerConfFlag): boolean {
   // noinspection PointlessBooleanExpressionJS
   return !!getBackendCapabilities()[flag];
+}
+
+/** Sign-in options the server offers; empty = auth off (see BackendCapabilities.authProviders). */
+export function getAuthProviders(): readonly AuthProviderInfo[] {
+  return getBackendCapabilities().authProviders;
 }
