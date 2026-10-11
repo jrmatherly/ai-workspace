@@ -107,6 +107,10 @@ export function parseAuthConfig(e: AuthEnv): AuthConfig | null {
   // a blank list is no list: open providers then fail the next check instead of locking everyone out
   const listed = emailList(e.AUTH_ALLOWED_EMAILS);
   const allowedEmails = listed.length ? listed : null;
+  // 'family.example' without the '@' would be an address nobody has: reject at load instead of locking everyone out
+  const malformed = listed.filter(rule => !/^(@|[^@\s]+@)[^@\s]+$/.test(rule));
+  if (malformed.length)
+    throw new Error(`Auth misconfigured: AUTH_ALLOWED_EMAILS entries must be an address or @domain, got ${malformed.join(', ')}`);
   if (!allowedEmails && providers.some(p => p.access === 'open'))
     throw new Error('Auth misconfigured: AUTH_ALLOWED_EMAILS is required when Google or GitHub is set');
 

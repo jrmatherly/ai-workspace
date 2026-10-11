@@ -40,6 +40,11 @@ test('open provider without AUTH_ALLOWED_EMAILS throws', () => {
   assert.throws(() => parseAuthConfig({ ...BASE, AUTH_GOOGLE_CLIENT_ID: 'g', AUTH_GOOGLE_CLIENT_SECRET: 'gs', AUTH_ALLOWED_EMAILS: ' , ' }), /AUTH_ALLOWED_EMAILS/, 'blank list is no list');
 });
 
+test('allowlist entries are an address or an @domain, anything else throws at load', () => {
+  for (const bad of ['family.example', 'me@', '@', 'a@b@c', 'me @example.com'])
+    assert.throws(() => parseAuthConfig({ ...BASE, ...OIDC, AUTH_ALLOWED_EMAILS: `ok@example.com, ${bad}` }), /AUTH_ALLOWED_EMAILS/, bad);
+});
+
 test('microsoft needs a concrete tenant', () => {
   const MS = { AUTH_MICROSOFT_CLIENT_ID: 'm', AUTH_MICROSOFT_CLIENT_SECRET: 'ms' };
   assert.throws(() => parseAuthConfig({ ...BASE, ...MS }), /AUTH_MICROSOFT_TENANT_ID/);
