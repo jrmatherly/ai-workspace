@@ -23,7 +23,7 @@ npm run build  # compile+types (Next 16 no longer lints in build), stops at the 
 ```
 
 - `src/modules/llms/server/gen/llms.defs.versions.ts` is generated and committed; regenerate with `node tools/develop/gen-llms-defs/generate-llms-defs.mjs`, never hand-edit (rule: `.claude/rules/generated-files.md`)
-- `next.config.ts` throws "missing build identity" without a git checkout or `NEXT_PUBLIC_BUILD_HASH` (rule: `.claude/rules/build-identity.md`)
+- `next.config.ts` throws "missing build identity" without a git checkout or `NEXT_PUBLIC_BUILD_HASH`; `npm run tscheck` loads it too, through `next typegen` (rule: `.claude/rules/build-identity.md`)
 
 For AI protocol development (model listing, live API requests/responses, parameter probing), real vendor API keys are in `.env.api-keys` if present (Anthropic, OpenAI, Gemini, etc., one VENDOR_API_KEY per line). Use them for empirical verification; never commit or echo the values.
 
@@ -120,7 +120,7 @@ Local-first: Zustand in memory with `persist` to localStorage, except chats, whi
 
 ### Testing & Quality
 
-- Browser floor: `eslint.config.mjs` bans ES2023 `toSorted/toReversed/toSpliced/with` and `new Intl.Segmenter` via `no-restricted-syntax` at `error` level (they crash Chrome <110 / Win7-8 holdouts); other project rules stay at `warn`, and `eslint .` exits 0 on warnings; a separate `compat/compat` pass checks Web APIs against `browserslist`. Use `[...x].sort()` etc.; don't lower `browserslist` to "fix" the banned syntax - that rule doesn't read it, and SWC won't polyfill prototype methods
+- Browser floor: `eslint.config.mjs` bans ES2023 `toSorted/toReversed/toSpliced/with` and `new Intl.Segmenter` via `no-restricted-syntax` at `error` level (they crash Chrome <110 / Win7-8 holdouts; Next 16 states Chrome 111+, which we have not measured against 110); other project rules stay at `warn`, and `eslint .` exits 0 on warnings; a separate `compat/compat` pass checks Web APIs against `browserslist`. Use `[...x].sort()` etc.; don't lower `browserslist` to "fix" the banned syntax - that rule doesn't read it, and SWC won't polyfill prototype methods
 - `npm audit` is not expected to be empty: `docs/security-advisories.md` lists the accepted entries and the baseline command. A new entry needs a decision there, not a silent `npm audit fix`
 
 ### Production errors
