@@ -51,7 +51,7 @@ Configuration requires your API keys. *AI Workspace does not charge for model us
 
 ![AI Workspace runtime architecture: browser, Node.js server and third-party services, with the chat path from the composer through the AIX client and the tRPC route to the AI vendors](docs/pixels/ai-workspace-runtime.svg)
 
-The browser holds your keys and chats; one Node.js tRPC route at `/api/trpc` fronts every AI vendor through the AIX layer, and the browser can also call vendors directly where CORS allows. Subsystem docs live in [kb/](kb/KB.md).
+The browser holds your keys and chats; one Node.js tRPC route at `/api/trpc` fronts every AI vendor through the AIX layer, and the browser can also call vendors directly where CORS allows. An [animated trace of the chat path](docs/pixels/ai-workspace-runtime-trace.webp) shows the same diagram in motion. Subsystem docs live in [kb/](kb/KB.md).
 
 ---
 
