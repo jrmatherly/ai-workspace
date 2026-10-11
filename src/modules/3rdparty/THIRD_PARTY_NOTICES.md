@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-This project includes third-party software components that are subject to separate license terms. These components are located in the `src/modules/3rdparty/` directory. Below is a list of the third-party components and their respective licensing information.
+This project includes third-party software components that are subject to separate license terms. The components and their licenses are listed below.
 
 ---
 
@@ -26,8 +26,7 @@ The original code includes:
 
 ### Purpose
 
-- To reduce dependency on an external library
-- To initially migrate to Zod4 without waiting for this library to be updated
+- Fewer runtime dependencies
 
 ### Source Files
 
@@ -48,6 +47,8 @@ Users are advised to review the license terms of the original repository.
 
 **License:** [Apache-2.0](https://github.com/mozilla/pdf.js/blob/master/LICENSE), Copyright 2024 Mozilla Foundation. The full license text is in the file header.
 
+The copy must match the installed `pdfjs-dist` version (5.4.54 today); `src/common/util/pdfUtils.test.ts` checks it. After a bump, copy `node_modules/pdfjs-dist/build/pdf.worker.min.mjs` to `public/workers/`.
+
 ---
 
 ## prismjs line-numbers plugin
@@ -57,3 +58,33 @@ Users are advised to review the license terms of the original repository.
 **Original Repository:** [PrismJS/prism](https://github.com/PrismJS/prism)
 
 **License:** [MIT](https://github.com/PrismJS/prism/blob/master/LICENSE), Copyright (c) 2012 Lea Verou
+
+---
+
+## Prism default theme
+
+**Location:** `src/common/styles/CodePrism.css` (the Prism default theme, `themes/prism.css`)
+
+**Original Repository:** [PrismJS/prism](https://github.com/PrismJS/prism)
+
+**License:** [MIT](https://github.com/PrismJS/prism/blob/master/LICENSE), Copyright (c) 2012 Lea Verou
+
+---
+
+## github-markdown-css
+
+**Location:** `src/common/styles/GithubMarkdown.css` (forked to switch light/dark by `[data-joy-color-scheme]` instead of a media query)
+
+**Original Repository:** [sindresorhus/github-markdown-css](https://github.com/sindresorhus/github-markdown-css)
+
+**License:** [MIT](https://github.com/sindresorhus/github-markdown-css/blob/main/license), Copyright (c) Sindre Sorhus
+
+---
+
+## nprogress
+
+**Location:** `src/common/styles/NProgress.css` (customized copy of the nprogress stylesheet; `nprogress` is also an npm dependency)
+
+**Original Repository:** [rstacruz/nprogress](https://github.com/rstacruz/nprogress)
+
+**License:** [MIT](https://github.com/rstacruz/nprogress/blob/master/License.md), Copyright (c) 2013-2014 Rico Sta. Cruz
