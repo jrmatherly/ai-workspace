@@ -77,10 +77,10 @@ ensure_upstream() {
 # Print one line per file the commit touches: marker, +adds, -dels, path. Three git calls per commit:
 # diff-tree --raw gives the pre-image blob, --numstat the counts, cat-file --batch-check our HEAD and seed blobs.
 stat_commit() {
-  local commit="$1" meta path pre head seed add del i n=0
+  local commit="$1" meta path pre head seed add del i j n=0
   local paths pres heads seeds adds dels; paths=(); pres=(); heads=(); seeds=(); adds=(); dels=()
   while IFS= read -r -d '' meta && IFS= read -r -d '' path; do
-    set -- $meta; pre="$3"
+    read -r _ _ pre _ <<<"$meta"
     paths[n]="$path"; pres[n]="$pre"; n=$((n+1))
   done < <(g diff-tree --no-commit-id --no-renames -r -z --raw "$commit")
   [ "$n" -gt 0 ] || return 0
@@ -88,7 +88,7 @@ stat_commit() {
   while IFS=$'\t' read -r -d '' add del path; do adds[i]="$add"; dels[i]="$del"; i=$((i+1)); done < <(g diff-tree --no-commit-id --no-renames -r -z --numstat "$commit")
   i=0
   while read -r head _ && read -r seed _; do heads[i]="$head"; seeds[i]="$seed"; i=$((i+1)); done < <(
-    for ((i=0; i<n; i++)); do printf 'HEAD:%s\n%s:%s\n' "${paths[i]}" "$SEED" "${paths[i]}"; done |
+    for ((j=0; j<n; j++)); do printf 'HEAD:%s\n%s:%s\n' "${paths[j]}" "$SEED" "${paths[j]}"; done |
     g cat-file --batch-check='%(objectname) %(objecttype)' | sed 's/^.* missing$/- missing/')
   for ((i=0; i<n; i++)); do
     pre="${pres[i]}"; head="${heads[i]}"; seed="${seeds[i]}"
