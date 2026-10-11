@@ -16,7 +16,7 @@ import { blocksRenderHTMLIFrameCss } from '~/modules/blocks/code/code-renderers/
 import { BuildInfoCard } from '../../../../apps/news/AppNews';
 
 import { BaseProduct } from '~/common/app.release';
-import { BigAgiSquircleIcon } from '~/common/components/icons/big-agi/BigAgiSquircleIcon';
+import { AppLogoIcon } from '~/common/components/icons/logo/AppLogoIcon';
 import { FeatureBadge } from '~/common/components/FeatureBadge';
 import { GoodModal } from '~/common/components/modals/GoodModal';
 import { PhSquaresFour } from '~/common/components/icons/phosphor/PhSquaresFour';
@@ -307,7 +307,7 @@ export function DesktopNav(props: { component: React.ElementType, currentApp?: N
             onPointerDown={logoButtonTogglesPane ? optimaToggleDrawer : undefined}
             className={navItemClasses.typeMenu}
           >
-            {logoButtonTogglesPane ? (isDrawerPeeking ? <PushPinOutlinedIcon sx={{ fontSize: 'xl', transform: 'rotate(45deg)' }} /> : <MenuIcon />) : <BigAgiSquircleIcon inverted sx={{ color: 'white' }} />}
+            {logoButtonTogglesPane ? (isDrawerPeeking ? <PushPinOutlinedIcon sx={{ fontSize: 'xl', transform: 'rotate(45deg)' }} /> : <MenuIcon />) : <AppLogoIcon />}
           </DesktopNavIcon>
         </Tooltip>
       </InvertedBarCornerItem>
