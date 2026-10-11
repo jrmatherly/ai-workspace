@@ -38,10 +38,8 @@ How to set up AI models and features in AI Workspace.
   - **[OpenRouter](config-openrouter.md)** guide
   - **OpenAI-compatible endpoints**: Any provider with an OpenAI-compatible API works out of the box - models, pricing, and capabilities are auto-detected
 
-
 - **Local AI Integrations**:
   - [LocalAI](config-local-localai.md), [LM Studio](config-local-lmstudio.md), [Ollama](config-local-ollama.md)
-
 
 - **Enhanced AI Features**:
   - **[Web Browsing](config-feature-browse.md)**: Enable web page download through third-party services or your own cloud
@@ -60,7 +58,6 @@ For deploying a custom AI Workspace instance:
   - Set up your own AI Workspace instance
   - Source build or pre-built options
   - Local, cloud, or on-premises deployment
-
 
 - **Advanced Setup**:
   - **[Source Code Customization](customizations.md)**: Modify the source code

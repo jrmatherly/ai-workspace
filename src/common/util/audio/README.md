@@ -2,7 +2,7 @@
 
 As of 2026-03-09 on `main` branch.
 
-```
+```text
 speakText(text, voice, signal)                    ← TTS, NB grant in caller
 │
 └─ _speakRawText_withHandle(rawText, engine)

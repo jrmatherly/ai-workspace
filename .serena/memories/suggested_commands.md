@@ -2,6 +2,7 @@
 
 - `npm run tscheck` - both tsc projects. Note `pretscheck` runs `npm install` first (~21s total).
 - `npm run lint` - eslint whole repo (~17s). Single file: `eslint src/path/file.ts`.
+- `npm run lint:md` - markdownlint over tracked .md (rules in `.markdownlint-cli2.jsonc`); `npm run lint:md -- --fix` repairs.
 - `npm test` - tsx node:test; 3 offline tests, 22 key-gated skips (<1s).
 - `npm run build` - slow; only for bundle/runtime suspicion. Dev servers (3000-3003) are the user's; never start/stop them.
 - `node tools/develop/gen-llms-defs/generate-llms-defs.mjs [--check]` - regenerate/verify the committed model-defs hash map.

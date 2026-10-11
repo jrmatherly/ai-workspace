@@ -32,13 +32,13 @@ Welcome to the advanced tips and tricks guide for AI Workspace. This document wi
 - Scroll between messages:
   - **Ctrl + Up/Down** to scroll between **messages** and/or **Beams**.
   
-## Worth the Effort:
+## Worth the Effort
 
 - [LiveFile](help-feature-livefile.md) works on **Chrome**: Pair and synchronize your documents and code blocks with files on your local system: refresh, save, update them.
 
-## Best User Hacks:
+## Best User Hacks
 
-- 
+-
 
 ---
 

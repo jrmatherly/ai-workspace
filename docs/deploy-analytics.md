@@ -15,7 +15,7 @@ and this guide is for its customization.
 ### Google Analytics 4
 
 - Why: user engagement and retention, performance insights, personalization, content optimization
-- What: https://support.google.com/analytics/answer/11593727
+- What: <https://support.google.com/analytics/answer/11593727>
 
 Google Analytics 4 (GA4) is a powerful tool for understanding user behavior and engagement.
 This can help optimize AI Workspace, understanding which features are needed/users and which aren't.
@@ -75,10 +75,10 @@ In summary: to turn it on: activate the `Analytics` service in the Vercel projec
 
 ## Configurations
 
-| Scope                                                                                                                   | Default                   | Description / Instructions                                                                                                                                                  |
-|-------------------------------------------------------------------------------------------------------------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Your **Source** builds of AI Workspace                                                                                       | None                      | **Google Analytics**: set environment variable at build time · **PostHog**: set environment variable at build time · **Vercel**: enable Vercel Analytics from the dashboard | 
-| Your **Docker** builds of AI Workspace                                                                                       | None                      | (**Vercel**: n/a) · **Google Analytics**: set environment variable at `docker build` time · **PostHog**: set environment variable at `docker build` time.                   |
+| Scope | Default | Description / Instructions |
+| ------------------------------------------------------------------------------------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Your **Source** builds of AI Workspace | None | **Google Analytics**: set environment variable at build time · **PostHog**: set environment variable at build time · **Vercel**: enable Vercel Analytics from the dashboard |
+| Your **Docker** builds of AI Workspace | None | (**Vercel**: n/a) · **Google Analytics**: set environment variable at `docker build` time · **PostHog**: set environment variable at `docker build` time. |
 | [prebuilt Docker packages](https://github.com/jrmatherly/ai-workspace/pkgs/container/ai-workspace) | Google Analytics if the `GA4_MEASUREMENT_ID` secret is set; PostHog if the `POSTHOG_KEY` secret is set | **Vercel**: n/a · **Google Analytics**: baked at build time from the repository secret · **PostHog**: baked from the `POSTHOG_KEY` secret and the `POSTHOG_HOST` variable; rebuild to change or remove |
 
 Note: this information is updated as of August 26, 2026 and can change at any time.

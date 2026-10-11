@@ -5,7 +5,7 @@ to open frontier models (Nemotron 3, GPT-OSS, DeepSeek V4, GLM, Llama, and more)
 NVIDIA's own infrastructure at `integrate.api.nvidia.com`. This document details the process of
 integrating NVIDIA NIM with AI Workspace.
 
-### 1. NVIDIA Account Setup and API Key Generation
+## 1. NVIDIA Account Setup and API Key Generation
 
 1. Sign in at [build.nvidia.com](https://build.nvidia.com) (a free NVIDIA account; phone
    verification may be required).
@@ -16,7 +16,7 @@ integrating NVIDIA NIM with AI Workspace.
    - The key has the format `nvapi-...` and a user-chosen expiration date. Copy and store it
      securely.
 
-### 2. Integrating NVIDIA NIM with AI Workspace
+## 2. Integrating NVIDIA NIM with AI Workspace
 
 1. Launch AI Workspace, and navigate to the AI **Models** settings.
 2. Add a Vendor, and select **NVIDIA NIM**.
@@ -28,7 +28,7 @@ In addition to using the UI, configuration can also be done using
 [environment variables](environment-variables.md) (`NVIDIANIM_API_KEY`, and optionally
 `NVIDIANIM_API_HOST`).
 
-### Notes on the free service
+## Notes on the free service
 
 - **Rate limits**: NVIDIA does not publish a rate; in practice the free tier allows roughly
   40 requests per minute per account, varying with load. The limit applies to requests, not
@@ -41,7 +41,7 @@ In addition to using the UI, configuration can also be done using
   production use and allow NVIDIA to use prompts and outputs to improve its services. Review
   the [API trial terms](https://build.nvidia.com/terms) before use.
 
-### Self-hosted NIM and DGX Spark
+## Self-hosted NIM and DGX Spark
 
 The same AI Workspace service can point at a self-hosted NVIDIA endpoint (a NIM container, vLLM, or
 similar OpenAI-compatible server), which uses the identical protocol and model naming:

@@ -7,14 +7,17 @@ This document analyzes all AIX function callers and their patterns for message r
 ### Three-Tier Call Hierarchy
 
 **Core AIX Functions** (Direct tRPC API callers):
+
 - `aixChatGenerateContent_DMessage_FromConversation` - 9 callers (conversation streaming)
 - `aixChatGenerateContent_DMessage_orThrow` - 6 callers (direct request/response)
 - `aixChatGenerateText_Simple` - 12 callers (text-only utilities)
 
 **Utility Layer** (Hooks & Functions):
+
 - Conversation management, persona processing, content generation utilities
 
 **UI Layer** (React Components):
+
 - User-facing interfaces with rich error states and fallback mechanisms
 
 ## Core Function Callers Analysis
@@ -22,7 +25,7 @@ This document analyzes all AIX function callers and their patterns for message r
 ### Conversation-Based Callers (`_FromConversation`)
 
 | **Caller** | **Context** | **Message Removal** | **Placeholder** | **Error Handling** |
-|------------|-------------|-------------------|----------------|-------------------|
+| ------------ | ------------- | ------------------- | ---------------- | ------------------- |
 | **Chat Persona** | `'conversation'` | `messageWasInterruptedAtStart()` → `removeMessage()` | None | Error fragments |
 | **XE Chat Generate** | `'conversation'` | `messageWasInterruptedAtStart()` → `removeMessage()` | `'...'` placeholder | Error fragments via messageEditor |
 | **Beam Scatter** | `'beam-scatter'` | `messageWasInterruptedAtStart()` → empty message | `SCATTER_PLACEHOLDER` | Ray status update |
@@ -36,7 +39,7 @@ This document analyzes all AIX function callers and their patterns for message r
 ### Direct Request Callers (`aixChatGenerateContent_DMessage`)
 
 | **Caller** | **Context** | **Message Removal** | **Error Handling** |
-|------------|-------------|-------------------|-------------------|
+| ------------ | ------------- | ------------------- | ------------------- |
 | **Auto Follow-ups** | `'chat-followup-*'` | `fragmentDelete()` on failure | `fragmentReplace()` with error |
 | **Gen CR Diffs** | `'aifn-gen-cr-diffs'` | None | State-based handling |
 | **Code Fixup** | `'fixup-code'` | None | Throw errors |
@@ -45,7 +48,7 @@ This document analyzes all AIX function callers and their patterns for message r
 ### Text-Only Utilities (`aixChatGenerateText_Simple`)
 
 | **Utility** | **Purpose** | **Error Strategy** | **Called By** |
-|-------------|-------------|-------------------|---------------|
+| ------------- | ------------- | ------------------- | --------------- |
 | **conversationTitle** | Auto-generate chat titles | Try/catch with fallback | UI components |
 | **conversationSummary** | Generate summaries | Try/catch with fallback | Chat drawer |
 | **useStreamChatText** | Generic text streaming | Error state management | FlattenerModal |
@@ -58,36 +61,43 @@ This document analyzes all AIX function callers and their patterns for message r
 ## Message Removal Patterns
 
 ### 1. Complete Message Removal
+
 - **Chat Persona**: `messageWasInterruptedAtStart()` → `messageEditor.removeMessage()`
 - **ScratchChat**: `outcome === 'aborted' && !fragments?.length` → array removal
 - **Trigger**: Message aborted before any content generated
 
 ### 2. Fragment-Level Management
+
 - **Beam Gather**: Clear fragments array but keep message structure
 - **Auto Follow-ups**: Delete specific placeholder fragments on failure
 - **Purpose**: Maintain message structure while removing failed content
 
 ### 3. Empty Message Replacement
+
 - **Beam Scatter**: Replace with `createDMessageEmpty()` but preserve ray structure
 - **Purpose**: Keep UI structure intact while indicating failure
 
 ### 4. No Removal Strategy
+
 - **Text-only functions**: Use fallback values, error states, or null returns
 - **Simple callers**: Propagate errors upstream for handling
 
 ## Error Handling by Layer
 
 ### UI Layer (Components)
+
 - **Pattern**: Rich error states with user-facing messages
 - **Examples**: DiagramsModal, FlattenerModal
 - **Features**: Retry mechanisms, fallback UI, loading states
 
 ### Utility Layer (Hooks/Functions)
+
 - **Pattern**: Graceful degradation with fallbacks
 - **Examples**: conversationTitle, conversationSummary
 - **Features**: Silent failures, default values, try/catch blocks
 
 ### Core Layer (Direct API)
+
 - **Pattern**: Minimal handling, error propagation
 - **Examples**: Code Fixup, Attachment Prompts
 - **Features**: Assumes upstream error handling
@@ -95,6 +105,7 @@ This document analyzes all AIX function callers and their patterns for message r
 ## Key Implementation Details
 
 ### Message Removal Detection
+
 ```typescript
 // Core detection logic
 function messageWasInterruptedAtStart(message: Pick<DMessage, 'generator' | 'fragments'>): boolean {
@@ -103,11 +114,13 @@ function messageWasInterruptedAtStart(message: Pick<DMessage, 'generator' | 'fra
 ```
 
 ### Placeholder Management
+
 - **Initialization**: `createPlaceholderVoidFragment(placeholderText)`
 - **Replacement**: During streaming updates or on completion
 - **Cleanup**: Delete on error to avoid stale content
 
 ### Context Patterns
+
 - **Production**: `'conversation'`, `'beam-scatter'`, `'scratch-chat'`
 - **Features**: `'chat-followup-*'`, `'fixup-code'`, `'ai-diagram'`
 - **Development**: `'_DEV_'`
@@ -115,16 +128,19 @@ function messageWasInterruptedAtStart(message: Pick<DMessage, 'generator' | 'fra
 ## Best Practices
 
 ### Message Removal
+
 - Use `messageWasInterruptedAtStart()` for consistent detection
 - Only remove messages with no content that were client-aborted
 - Consider UI context when choosing removal vs. clearing strategy
 
 ### Error Handling
+
 - **Fragment-level**: Use `messageEditor.fragmentReplace()` with error fragments
 - **Message-level**: Use `messageEditor.removeMessage()` or array removal
 - **Status-level**: Update component state for UI feedback
 
 ### Placeholder Management
+
 - Initialize with descriptive placeholders using `createPlaceholderVoidFragment()`
 - Replace during streaming updates
 - Clean up on error to prevent stale content

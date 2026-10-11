@@ -65,7 +65,7 @@ A message carries a rollup (`generator.metrics`, today's shape upgraded) plus op
 ## Incremental path
 
 | Step | Scope | Migration |
-|---|---|---|
+| --- | --- | --- |
 | 0 (shipped 2026-09-03) | one cache shape with write; `tools.webSearch`; `$xPrice` from the served tier; per-class cost fields; parser fixes on Responses, Anthropic delta, Gemini tool tokens, Bedrock cache, xAI ticks; OpenAI service-tier parameter | none: the defs buckets roll and clients re-list |
 | 1 | hoist tiers to one `tiers: [{ over, ...overlay }]`; unit-named fee containers (`per1KCalls`); fix the two unknown-as-free ingests; Anthropic `write1h` + parse the TTL split from `message_start`; per-tool counts (shipped as flat `nWebFetch`, `nCodeExec` beside `nWebSearch`; step 2 folds them into `n`) | store-llms v7 (per-class `upTo` to overlay), defs sweep on ~20 tiered entries, OpenRouter mapping |
 | 2 | usage record v2: `u`/`n`/`chk` maps and the class registry; reasoning as a leaf; modality classes where reported; calculator and tooltip iterate the registry; multipliers move from the parameter registry into the card (`x`), parsers emit the served tier as a tag | wire: particle carries `u` and the tier tag; at rest: read-time upgrade of v1 fields, no bulk migration |

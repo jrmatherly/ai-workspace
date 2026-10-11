@@ -16,6 +16,7 @@ chatPrice: {
 ```
 
 Rules:
+
 - One cache shape for every vendor. `write` absent means writes bill as plain input (Gemini implicit, DeepSeek, OpenAI before GPT-5.6). The former `cType` tag ('ant-bp' | 'oai-ac') is gone from the client types. The wire still carries it, derived by the server ('ant-bp' when writes are priced, else 'oai-ac') so clients built before this change keep working; current clients drop it on ingest. A persisted copy is inert and is replaced on the next re-list.
 - Tiers: `[{ upTo: 272000, price }, { upTo: null, price }]` on any token class. The tier is chosen on the request's total input (uncached + cache read + cache write) and applies to every class of the request, output included. That is how OpenAI (>272K), Anthropic legacy 1M-beta and Gemini Pro (>200K) all bill.
 - Per-call fees are flat: not tiered, not scaled by service-tier multipliers. The tokens a tool injects bill as input on top.
@@ -28,7 +29,7 @@ Not modeled: Anthropic 1h cache writes (2x; the adapter only sends 5m breakpoint
 Every parser fills the same particle (`AixWire_Particles.CGSelectMetrics`):
 
 | Field | Meaning | OpenAI Responses | Anthropic | Gemini | xAI (Responses) |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | `TIn` | uncached input | `input_tokens` minus cached minus written | `input_tokens` (already exclusive) | `promptTokenCount + toolUsePromptTokenCount` minus cached | as OpenAI |
 | `TCacheRead` | cache hits | `input_tokens_details.cached_tokens` | `cache_read_input_tokens` | `cachedContentTokenCount` | `cached_tokens` |
 | `TCacheWrite` | cache writes | `input_tokens_details.cache_write_tokens` | `cache_creation_input_tokens` | never | never |
@@ -47,7 +48,7 @@ Continuation turns (Anthropic `pause_turn`) each start a fresh transmitter and t
 
 Once, at finalization (`_finalizeLlmMetricsWithCosts` in `aix.client.ts`), stored on the message as `DMetricsChatGenerate_Md`. Nothing recomputes history.
 
-```
+```text
 pricing  = llmChatPricing_adjusted(llm, $xPrice)   // $xPrice (served tier) replaces the parameter multiplier
 tier     = TIn + TCacheRead + TCacheWrite
 $cIn     = TIn * input[tier]

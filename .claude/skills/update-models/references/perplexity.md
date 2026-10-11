@@ -3,13 +3,14 @@
 Model file: `src/modules/llms/server/openai/models/perplexity.models.ts`.
 
 **Primary Sources:** (append `.md` to any docs URL for raw markdown - the HTML is MDX-heavy)
-- Served model ids + full request schema (authoritative): https://docs.perplexity.ai/api-reference/sonar-post.md - the `model` enum is the served list
-- Per-model context length + prices: https://docs.perplexity.ai/docs/sonar/models/{sonar,sonar-pro,sonar-reasoning-pro,sonar-deep-research}
-- Pricing (single source of truth `PRICING` object in the page - read `PRICING.sonar.models[]`; the other tables on that page are Agent API/Gateway): https://docs.perplexity.ai/getting-started/pricing
-- Changelog: https://docs.perplexity.ai/changelog/changelog
-- Media/attachments (image + file input support): https://docs.perplexity.ai/guides/image-guide
 
-Note: https://docs.perplexity.ai/getting-started/models is now marketing-only (no ids, no context windows).
+- Served model ids + full request schema (authoritative): <https://docs.perplexity.ai/api-reference/sonar-post.md> - the `model` enum is the served list
+- Per-model context length + prices: <https://docs.perplexity.ai/docs/sonar/models/{sonar,sonar-pro,sonar-reasoning-pro,sonar-deep-research}>
+- Pricing (single source of truth `PRICING` object in the page - read `PRICING.sonar.models[]`; the other tables on that page are Agent API/Gateway): <https://docs.perplexity.ai/getting-started/pricing>
+- Changelog: <https://docs.perplexity.ai/changelog/changelog>
+- Media/attachments (image + file input support): <https://docs.perplexity.ai/guides/image-guide>
+
+Note: <https://docs.perplexity.ai/getting-started/models> is now marketing-only (no ids, no context windows).
 
 **Fallbacks if blocked:** Search "perplexity api latest pricing", "perplexity latest models", or search GitHub for latest model prices and context windows
 

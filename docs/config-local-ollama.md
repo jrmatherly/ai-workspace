@@ -5,7 +5,7 @@ AI Workspace for a professional AI/AGI operation and a good UI/Conversational
 experience. The integration brings the popular AI Workspace features to Ollama, including: voice chats,
 editing tools, models switching, personas, and more.
 
-_Last updated Dec 16, 2023_
+*Last updated Dec 16, 2023.*
 
 ![config-local-ollama-0-example.png](pixels/config-ollama-0-example.png)
 
@@ -27,13 +27,13 @@ In addition to using the UI, configuration can also be done using
 
 **Visual Configuration Guide**:
 
-* After adding the `Ollama` model vendor, entering the IP address of an Ollama server, and refreshing models:<br/>
+- After adding the `Ollama` model vendor, entering the IP address of an Ollama server, and refreshing models:<br/>
   <img src="pixels/config-ollama-1-models.png" alt="config-local-ollama-1-models.png" width="320">
 
-* The `Ollama` admin panel, with the `Pull` button highlighted, after pulling the "Yi" model:<br/>
+- The `Ollama` admin panel, with the `Pull` button highlighted, after pulling the "Yi" model:<br/>
   <img src="pixels/config-ollama-2-admin-pull.png" alt="config-local-ollama-2-admin-pull.png" width="320">
 
-* You can now switch model/persona dynamically and text/voice chat with the models:<br/>
+- You can now switch model/persona dynamically and text/voice chat with the models:<br/>
   <img src="pixels/config-ollama-3-chat.png" alt="config-local-ollama-3-chat.png" width="320">
 
 <br/>
@@ -96,7 +96,6 @@ Reach out to our community if you need help with this.
 ### Community and Support
 
 For help, open an [issue](https://github.com/jrmatherly/ai-workspace/issues).
-
 
 ---
 

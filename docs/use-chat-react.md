@@ -11,14 +11,14 @@ that combines reasoning with actions to provide informed answers.
 
 Within AI Workspace, users can invoke ReAct to ask complex questions that require multiple steps to answer.
 
-| Mode  | Activation                        | Information Sources                                  | Reasoning Visibility               | When to Use                                      |
-|-------|-----------------------------------|------------------------------------------------------|------------------------------------|--------------------------------------------------|
-| Chat  | Just type and send                | **Pre-trained knowledge only**                       | Only shows final response          | Quick answers, general knowledge queries         |
+| Mode | Activation | Information Sources | Reasoning Visibility | When to Use |
+| ------- | ----------------------------------- | ------------------------------------------------------ | ------------------------------------ | -------------------------------------------------- |
+| Chat | Just type and send | **Pre-trained knowledge only** | Only shows final response | Quick answers, general knowledge queries |
 | ReAct | Type "/react" before the question | **Web loads, Web searches, Wikipedia, calculations** | Shows step-by-step thought process | Complex, multi-step, or research-based questions |
 
 Example of ReAct in action, taking a question about current events, googling results, opening a page, and summarizing the information:
 
-https://github.com/user-attachments/assets/c3480428-9ab8-4257-a869-2541bf44a062
+<https://github.com/user-attachments/assets/c3480428-9ab8-4257-a869-2541bf44a062>
 
 The following tools are implemented in AI Workspace:
 
@@ -36,9 +36,9 @@ The following tools are implemented in AI Workspace:
 - An ephemeral space will show the AI's thought process and actions, showing all the steps taken.
 - The final answer will appear in the main chat.
 
-3. **Available Actions**: Web searches, Wikipedia lookups, calculations, and optionally web browsing.
+1. **Available Actions**: Web searches, Wikipedia lookups, calculations, and optionally web browsing.
 
-## Good to know:
+## Good to know
 
 - **ReAct operates in isolation** from the main chat history.
 - It **will take longer than standard responses** due to multiple steps.

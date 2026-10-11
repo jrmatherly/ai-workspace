@@ -8,14 +8,14 @@ in a Kubernetes environment using the kubectl command-line tool.
 ### Step 1: Clone the AI Workspace repository
 
 ```bash
-$ git clone https://github.com/jrmatherly/ai-workspace
-$ cd ./ai-workspace/docs/k8s
+git clone https://github.com/jrmatherly/ai-workspace
+cd ./ai-workspace/docs/k8s
 ```
 
 ### Step 2: Create the namespace
 
 ```bash
-$ kubectl create namespace ns-ai-workspace
+kubectl create namespace ns-ai-workspace
 ```
 
 ### Step 3: Fill in the key information into env-secret.yaml
@@ -28,13 +28,13 @@ We provide an empty `env-secret.yaml` file as a template.
 You can fill in the necessary information using a text editor.
 
 ```bash
-$ nano env-secret.yaml
+nano env-secret.yaml
 ```
 
 ### Step 4: Deploying Kubernetes Resources
 
 ```bash
-$ kubectl apply -f ai-workspace-deployment.yaml -f env-secret.yaml
+kubectl apply -f ai-workspace-deployment.yaml -f env-secret.yaml
 ```
 
 ### Step 5: Verifying the Resource Statuses
@@ -68,13 +68,15 @@ Now you can access the service at `http://localhost:3000`, and you should see th
 To update AI Workspace to the latest version:
 
 1. Pull the latest changes from the repository:
+
    ```bash
-   $ git pull origin main
+   git pull origin main
    ```
 
 2. Apply the updated deployment:
+
    ```bash
-   $ kubectl apply -f ai-workspace-deployment.yaml
+   kubectl apply -f ai-workspace-deployment.yaml
    ```
 
 This will trigger a rolling update of the deployment with the latest image.

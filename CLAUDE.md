@@ -2,7 +2,6 @@
 
 Guidance to Claude Code when working with code in this repository.
 
-
 ## Architecture Overview
 
 **Stack**: Next.js 15 (Pages Router for pages, App Router for API routes only), React 18, Emotion (CSS-in-JS), Zustand, tRPC + TanStack React Query, Edge runtime for AI and Node.js for data ops. UI is Material-UI **Joy**, not Material: import from `@mui/joy`; `next.config.ts` webpack-aliases `@mui/material` -> `@mui/joy` so stray/transitive Material imports still resolve to Joy (webpack only - turbopack skips that hook).
@@ -17,6 +16,7 @@ Dev servers may be already running on ports 3000, 3001, 3002, or 3003 (not alway
 # Validate - safe while a dev server runs, and far quicker than `next build` for the same checks
 npm run tscheck && npm run lint      # types (all projects), then a typed ESLint pass
 eslint src/path/to/file.ts           # lint one file
+npm run lint:md                     # markdown, rules in .markdownlint-cli2.jsonc; append -- --fix to repair
 
 # Full build - slow, only when suspecting runtime/bundle issues
 npm run build  # compile+lint+types, but stops at the first type-error file; tsc shows all at once
@@ -32,6 +32,7 @@ For AI protocol development (model listing, live API requests/responses, paramet
 This repo is `jrmatherly/ai-workspace` (remote `origin`, single branch `main`). It is a copy of the upstream repository, not a fork: no shared git history. See "Upstream" below.
 
 The `gh` command is available for GitHub reads (issues, PRs, labels), but **NEVER PUSH TO ANY BRANCH**. The user manages all remote 'write' git operations. Local commits are fine when asked.
+
 - **Always use `git mv` instead of `mv`** when renaming or moving files - preserves git history tracking
 - **NEVER run `git stash`** - it causes work loss
 - **Versions** are CalVer, `YYYY.M.D[.MICRO]` unpadded (`2026.10.11`, a second release that day `2026.10.11.1`): valid semver, so `npm version` and the image workflow's semver tags work. Release tags are `vYYYY.M.D`. Bump with `npm version <ver> --no-git-tag-version` so `package-lock.json` follows.
@@ -41,6 +42,7 @@ The `gh` command is available for GitHub reads (issues, PRs, labels), but **NEVE
 ### Upstream
 
 Upstream is `enricoros/big-AGI` `main`. This tree was copied at upstream commit `99b3bf9c` (2026-10-07, v2.1.1 + 278 commits); at our first commit the source was byte-identical to it. Tracking and adopting upstream changes goes through the `upstream-review` skill (`.claude/skills/upstream-review/`):
+
 - `.claude/skills/upstream-review/scripts/upstream-review.sh --stat` lists un-reviewed upstream commits with a per-file marker: `=` unchanged since the copy (cherry-picks cleanly), `~` we changed it (hand-port), `x` we removed it, `+` new upstream file
 - State is tracked in `.upstream-review/watermark.json` and `.upstream-review/reviews/<date>-review.md`
 - Adopt with `git cherry-pick -x <sha>` for `=` files; never `git merge upstream/main`, and never use a merge-base (there is none)
@@ -75,7 +77,7 @@ You are started from the root of the repository (i.e. where the git folder is or
 Local-first: Zustand in memory with `persist` to localStorage, except chats, which go to IndexedDB (`keyval-store` -> `keyval` -> key `app-chats`) via `createIDBPersistStorage()`. Binary blobs live in their own Dexie database (`src/modules/dblobs/`). Version-based migrations handle structure changes, partialize/merge control what persists, and rehydration repairs and upgrades data on load. `/src/common/stores/` holds the cross-app stores; apps and modules keep their own beside their code, by the `store-*.ts` convention.
 
 1. **Global stores** - Zustand + `persist`; `chat/store-chats` is the only one on IndexedDB, the rest on localStorage
-  - **Zustand pattern**: Always wrap multi-property selectors with `useShallow` from `zustand/react/shallow` to prevent re-renders on reference changes
+   - **Zustand pattern**: Always wrap multi-property selectors with `useShallow` from `zustand/react/shallow` to prevent re-renders on reference changes
 2. **Per-instance stores** - vanilla Zustand, no React integration, suffixed `_vanilla` (beam scatter/gather, per-chat overlay, attachment drafts)
 3. **Module stores** - feature-scoped configuration and state, named `store-module-*`
 
@@ -87,37 +89,45 @@ Local-first: Zustand in memory with `persist` to localStorage, except chats, whi
 ### Development Patterns
 
 #### TypeScript & Code Quality
+
 - Use latest TypeScript 6.0+ features, and forward-looking patterns that minimize future refactors (discriminated unions, `satisfies`, `as const`, type inference)
 - Type guards and exhaustiveChecks for robustness
 - No unnecessary TS casts: prefer narrowing/inference; only `as` when the compiler genuinely can't know the type
 - Runtime validation with Zod schemas for API inputs/outputs (usually server-side, with the client importing as types the inferred types)
 
 #### Module Integration
+
 - Modules register with central registries (e.g., `vendors.registry.ts`)
 
 #### UI & Icons
+
 - Prefer `@mui/icons-material` icons/variants already imported elsewhere in the app over new ones (keeps the bundle lean); new icons only when depicting genuinely novel functionality
 
 #### API Patterns
+
 - No auth on `main`: `trpc.server.ts` installs no middleware, and every procedure alias in it resolves to bare `t.procedure` (the cloud layer lives on `dev`)
 
 #### Security Considerations
+
 - Server-side keys come from env vars only; client-held keys are user-supplied
 
 #### Writing Style
+
 - **Never use emdashes (—).** Use normal dashes (-) instead, in all generated text, code comments, and documentation.
 - Register: sharp, terse, precise - in all prose (docs, UI copy, comments, commits, replies). No inflation, no sales tone, no clever headings (plain nouns). Cut sentences that carry no information.
-
 
 ## Common Development Tasks
 
 ### Testing & Quality
+
 - Browser floor: `eslint.config.mjs` bans ES2023 `toSorted/toReversed/toSpliced/with` and `new Intl.Segmenter` via `no-restricted-syntax` at `error` level (they crash Chrome <110 / Win7-8 holdouts); other project rules stay at `warn`, and `eslint .` exits 0 on warnings; a separate `compat/compat` pass checks Web APIs against `browserslist`. Use `[...x].sort()` etc.; don't lower `browserslist` to "fix" the banned syntax - that rule doesn't read it, and SWC won't polyfill prototype methods
 
 ### Production errors
+
 - PostHog analytics and error tracking are key-gated (`NEXT_PUBLIC_POSTHOG_KEY`) and host-configurable (`NEXT_PUBLIC_POSTHOG_HOST`, default US cloud; EU cloud or self-hosted). Source-map upload needs `POSTHOG_API_KEY` + `POSTHOG_ENV_ID` at build. Triage runtime errors in the configured PostHog project; the client noise filter (`before_send` / `shouldSuppressPostHogCapture`, matched on `$exception_list`) lives in `src/common/components/3rdparty/PostHogAnalytics.tsx`; `mechanism.handled:false` = an unhandled rejection via autocapture. Suppress only environmental/extension noise, never real bugs
 
 ### Debugging Storage Issues
+
 - Chats: DevTools -> Application -> IndexedDB -> `keyval-store` -> `keyval` -> key `app-chats`
 - Everything else (`app-models`, `app-ui`, ...): DevTools -> Application -> Local Storage
 

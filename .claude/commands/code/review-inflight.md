@@ -5,28 +5,28 @@ allowed-tools: Bash(git diff:*) Bash(git status:*) Bash(npm run tscheck) Bash(np
 
 Review the current in-flight changes in this repository (single `main` line, see CLAUDE.md).
 
-**Step 1: Scope and read**
+### Step 1: Scope and read
 
 `git diff --stat` + `git status` for breadth. Then full `git diff` (if empty: `git diff --cached`, then `git diff HEAD~1`).
 For every file in the diff, read surrounding context in the actual source file - the diff alone hides bugs in adjacent untouched code.
 
-**Step 2: Reverse-engineer the intent**
+### Step 2: Reverse-engineer the intent
 
 From the diff, determine the **what**, **how**, and **why**. Present this concisely so the author can confirm or correct,
 but don't stop here, continue to the full review in the same response.
 
-**Step 3: Validate**
+### Step 3: Validate
 
 Run `npm run tscheck && npm run lint`. Report any errors with the review.
 If the diff removes/renames identifiers, grep the codebase for stale references to the OLD names. This catches broken guards, stale imports, and incomplete migrations.
 
-**Step 4: Deep review**
+### Step 4: Deep review
 
 Evaluate every file in the diff.
 Leave no rocks unturned - correctness, coherence, completeness, excess, generalization, maintenance burden,
 codebase consistency, etc.
 
-**Step 5: Prioritized next steps**
+### Step 5: Prioritized next steps
 
 Think about what happens when the next developer touches this code.
 Rank findings by severity (bug > correctness > cleanup > cosmetic). Be specific about what to change and where.

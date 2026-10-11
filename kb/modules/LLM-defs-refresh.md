@@ -9,7 +9,7 @@ Anthropic-backed services re-list on users' next boot.
 ## The pieces
 
 | File | Role |
-|---|---|
+| --- | --- |
 | `src/modules/llms/server/llms.defs.manifest.ts` | Hand-edited manifest: which files carry each vendor's definitions. `satisfies Record<ModelVendorId, ...>` makes vendor add/remove a compile error until the manifest (and the generated map) are updated. |
 | `tools/develop/gen-llms-defs/generate-llms-defs.mjs` | The generator: semantic-hashes the claimed files, enforces integrity, writes the map. Run manually or let the npm pre-scripts do it. `--check` recomputes without writing. |
 | `src/modules/llms/server/gen/llms.defs.versions.ts` | Generated, committed map: one 12-hex version per bucket. A dirty file after a dev/build run is the signal to commit it. |

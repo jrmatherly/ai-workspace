@@ -4,7 +4,7 @@
 that provides access to a wide range of AI models from multiple providers through a single API.
 This document details the process of integrating OpenRouter with AI Workspace.
 
-### 1. OpenRouter Account Setup and API Key Generation
+## 1. OpenRouter Account Setup and API Key Generation
 
 1. Register for an OpenRouter account at [openrouter.ai](https://openrouter.ai) by clicking on Sign In > Continue with Google.
 2. Top up your account (minimum $5) by navigating to [openrouter.ai/account](https://openrouter.ai/account) > Add Credits > Pay with Stripe.
@@ -12,7 +12,7 @@ This document details the process of integrating OpenRouter with AI Workspace.
    - **Remember to copy and securely store your API key** - the key will not be displayed again and will be in the format `sk-or-v1-...`.
    - Keep the key confidential as it can be used to expend your credits.
 
-### 2. Integrating OpenRouter with AI Workspace
+## 2. Integrating OpenRouter with AI Workspace
 
 1. Launch AI Workspace, and navigate to the AI **Models** settings.
 2. Add a Vendor, and select **OpenRouter**.
@@ -24,7 +24,7 @@ This document details the process of integrating OpenRouter with AI Workspace.
 In addition to using the UI, configuration can also be done using
 [environment variables](environment-variables.md).
 
-### Pricing
+## Pricing
 
 OpenRouter independently manages its service and pricing and is not affiliated with AI Workspace.
 For more detailed information, please visit [this page](https://openrouter.ai/docs#models).

@@ -1,0 +1,28 @@
+{
+  // markdownlint-cli2 (https://github.com/DavidAnson/markdownlint-cli2). Run: npm run lint:md (add --fix to repair).
+  "globs": ["**/*.md"],
+  "gitignore": true,
+  "ignores": [
+    "node_modules/**",
+    // verbatim vendor API docs captured by tools/data/llms sync; not ours to reformat
+    "src/modules/aix/server/dispatch/wiretypes/_upstream/**"
+  ],
+  "noProgress": true,
+  "config": {
+    "default": true,
+    // prose is written one sentence per line or in long paragraphs; wrapping adds nothing and churns upstream-identical docs
+    "line-length": false,
+    // commands and skills open with front matter, kb fragments are inlined under CLAUDE.md, the README opens with a hero block
+    "first-line-heading": false,
+    // changelog-style docs repeat section names under different parents
+    "no-duplicate-heading": { "siblings_only": true },
+    // HTML the README hero and doc tables rely on; anything else goes through Markdown
+    "no-inline-html": { "allowed_elements": ["br", "details", "summary", "img", "div", "h1", "b", "ins"] },
+    "ul-style": { "style": "dash" },
+    // compact tables: the fixer repairs them, and rows never need realigning when a cell grows
+    "table-column-style": { "style": "compact" },
+    "emphasis-style": { "style": "asterisk" },
+    "strong-style": { "style": "asterisk" },
+    "code-fence-style": { "style": "backtick" }
+  }
+}

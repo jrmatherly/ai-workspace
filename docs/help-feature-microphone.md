@@ -129,13 +129,13 @@ modern mobile and desktop browsers.
 
 **Note on Browser Support:**
 
-| Browser        | Support Level   | Notes                                                                  |
-|----------------|-----------------|------------------------------------------------------------------------|
-| Google Chrome  | ✅ Recommended   | Fully supported on desktop and Android. Preferred for best experience. |
-| Safari         | ✅ Supported     | Requires macOS/iOS 14 or later.                                        |
-| Microsoft Edge | ✅ Supported     | Fully supported on desktop.                                            |
-| Firefox        | ❌ Not Supported | SpeechRecognition API not available.                                   |
+| Browser | Support Level | Notes |
+| ---------------- | ----------------- | ------------------------------------------------------------------------ |
+| Google Chrome | ✅ Recommended | Fully supported on desktop and Android. Preferred for best experience. |
+| Safari | ✅ Supported | Requires macOS/iOS 14 or later. |
+| Microsoft Edge | ✅ Supported | Fully supported on desktop. |
+| Firefox | ❌ Not Supported | SpeechRecognition API not available. |
 
 **Recommendation:**
-For the best experience with speech recognition features, we strongly recommend using Google Chrome. 
+For the best experience with speech recognition features, we strongly recommend using Google Chrome.
 Ensure your browser is up to date to benefit from the latest features and security updates.

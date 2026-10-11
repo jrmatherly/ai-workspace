@@ -4,11 +4,12 @@ Model file: `src/modules/llms/server/openai/models/openai.models.ts`.
 
 **Primary Sources:** docs moved from `platform.openai.com/docs/*` (301s) to `developers.openai.com/api/docs/*`.
 Appending `.md` to any docs URL returns clean markdown that plain `curl` fetches (no 403, no browser needed):
-- Pricing: https://developers.openai.com/api/docs/pricing.md - standard/batch/flex/fast tables, all rows inline. The flagship table is NOT the full list: Codex/ChatGPT(`*-chat-latest`)/Cyber/Search rows sit in a separate "Specialized models" table, audio in its own
-- Models index: https://developers.openai.com/api/docs/models.md; per-model https://developers.openai.com/api/docs/models/<id>.md (context window, max output, cutoff, endpoints, supported features/tools, price)
-- Deprecations: https://developers.openai.com/api/docs/deprecations.md - shutdown dates + official replacements. Split matters: "Upcoming deprecations" = still callable, "Past deprecations" = already dead (yet often still on /v1/models)
-- Changelog: https://developers.openai.com/api/docs/changelog.md - price cuts and new API features, newest first
-- Doc index: https://developers.openai.com/llms.txt
+
+- Pricing: <https://developers.openai.com/api/docs/pricing.md> - standard/batch/flex/fast tables, all rows inline. The flagship table is NOT the full list: Codex/ChatGPT(`*-chat-latest`)/Cyber/Search rows sit in a separate "Specialized models" table, audio in its own
+- Models index: <https://developers.openai.com/api/docs/models.md>; per-model `https://developers.openai.com/api/docs/models/<id>.md` (context window, max output, cutoff, endpoints, supported features/tools, price)
+- Deprecations: <https://developers.openai.com/api/docs/deprecations.md> - shutdown dates + official replacements. Split matters: "Upcoming deprecations" = still callable, "Past deprecations" = already dead (yet often still on /v1/models)
+- Changelog: <https://developers.openai.com/api/docs/changelog.md> - price cuts and new API features, newest first
+- Doc index: <https://developers.openai.com/llms.txt>
 
 **Fallbacks if blocked:** third-party aggregators via search, or Chrome DevTools MCP on the official docs.
 
@@ -18,6 +19,7 @@ call returns 404 "has been deprecated" for dead ids; `v1/responses` says only "M
 same dead ids (equivalent verdict, weaker message). Probe before concluding a model is alive OR dead.
 
 **Before removing a model def, all three must hold** (removal = delete the entry + add it to `openAIModelsShutdownDenyList`, which filters native api.openai.com listings only - compatible hosts/proxies that still serve the id keep it):
+
 1. OpenAI direct generation is dead (404 deprecated) - and the error is not a permission/entitlement error,
    which means the model EXISTS and some keys still have access (keep the def).
 2. The docs name that exact id: bare aliases can outlive their deny-listed snapshot (gpt-4o-search-preview

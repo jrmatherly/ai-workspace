@@ -11,10 +11,11 @@ unlisted: true
 >
 > Workaround: Step 3.4. has been added below, to DELETE the Node.js cloud router - which means that some
 > parts of this application will not work.
->  - [Side effects](../src/modules/trade/server/trade.router.ts):
+>
+> - [Side effects](../src/modules/trade/server/trade.router.ts):
 >     Sharing functionality, import from ChatGPT share, and post to Paste.GG will not work
->  - Cloud features (sync, auth, payments) will not be available
->  - See upstream issue 174.
+> - Cloud features (sync, auth, payments) will not be available
+> - See upstream issue 174.
 
 This guide provides steps to deploy your Next.js app on Cloudflare Pages.
 It is based on the [official Cloudflare developer documentation](https://developers.cloudflare.com/pages/framework-guides/deploy-a-nextjs-site/),
@@ -50,7 +51,7 @@ to the Cloudflare Network. Once complete, proceed to the project you created.
 
 1. Navigate to the [Settings > Functions](https://dash.cloudflare.com/?to=/:account/pages/view/:pages-project/settings/functions) page of your newly created project
 2. Scroll to `Compatibility flags` and enter "`nodejs_compat`" for both **Production** and **Preview** environments.
-   It should look like this: ![](pixels/config-deploy-cloudflare-compat2.png)
+   It should look like this: ![Cloudflare compatibility flags](pixels/config-deploy-cloudflare-compat2.png)
 3. Re-deploy your project for the new flags to take effect
 
 ## Step 6: (Optional) Custom Domain Configuration

@@ -19,18 +19,24 @@ add your own models, or run your own instance, follow the steps below.
 **Steps:**
 
 1. Clone the AI Workspace repository:
+
    ```bash
    git clone https://github.com/jrmatherly/ai-workspace.git
    cd ai-workspace
    ```
+
 2. Install dependencies:
+
    ```bash
    npm install
    ```
+
 3. Run the development server:
+
    ```bash
    npm run dev
    ```
+
    Your AI Workspace instance is now running at `http://localhost:3000`.
 
 ### Local Production build
@@ -38,15 +44,19 @@ add your own models, or run your own instance, follow the steps below.
 The production build is optimized for performance and follows
 the same steps 1 and 2 as for [local development](#local-development).
 
-3. Build the production version:
+1. Build the production version:
+
    ```bash
    # .. repeat the steps above up to `npm install`, then:
    npm run build
    ```
-4. Start the production server (`npx` may be optional):
+
+2. Start the production server (`npx` may be optional):
+
    ```bash
    npx next start --port 3000
    ```
+
    Your AI Workspace production instance is on `http://localhost:3000`.
 
 ### Advanced Customization
@@ -78,10 +88,13 @@ Our [Docker Deployment Guide](deploy-docker.md) will walk you through the proces
 or follow the steps below for a quick start.
 
 1. (optional) Build the Docker image - if you do not want to use the [pre-built Docker images](https://github.com/jrmatherly/ai-workspace/pkgs/container/ai-workspace):
+
    ```bash
    docker build -t ai-workspace .
    ```
+
 2. Run the Docker container with either:
+
    ```bash
    # 2A. if you built the image yourself:
    docker run -d -p 3000:3000 ai-workspace
@@ -92,6 +105,7 @@ or follow the steps below for a quick start.
    # 2C. or use docker-compose:
    docker-compose up
    ```
+
    Access your AI Workspace instance at `http://localhost:3000`.
 
 If you deploy AI Workspace behind a reverse proxy, you may want to check out the [Reverse Proxy Configuration Guide](deploy-reverse-proxy.md).
@@ -101,32 +115,38 @@ If you deploy AI Workspace behind a reverse proxy, you may want to check out the
 Deploy AI Workspace on a Kubernetes cluster for enhanced scalability and management. Follow these steps for a Kubernetes deployment:
 
 1. Clone the AI Workspace repository:
+
    ```bash
    git clone https://github.com/jrmatherly/ai-workspace.git
    cd ai-workspace
    ```
 
 2. Configure the environment variables:
+
    ```bash
    cp docs/k8s/env-secret.yaml env-secret.yaml
    vim env-secret.yaml  # Edit the file to set your environment variables
    ```
 
 3. Apply the Kubernetes configurations:
+
    ```bash
    kubectl create namespace ns-ai-workspace
    kubectl apply -f docs/k8s/ai-workspace-deployment.yaml -f env-secret.yaml
    ```
 
 4. Verify the deployment:
+
    ```bash
    kubectl -n ns-ai-workspace get svc,pod,deployment
    ```
 
 5. Access the AI Workspace application:
+
    ```bash
    kubectl -n ns-ai-workspace port-forward service/svc-ai-workspace 3000:3000
    ```
+
    Your AI Workspace instance is now accessible at `http://localhost:3000`.
 
 For more detailed instructions on Kubernetes deployment, including updating and troubleshooting, refer to our [Kubernetes Deployment Guide](deploy-k8s.md).

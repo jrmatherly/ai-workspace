@@ -3,11 +3,13 @@
 Model file: `src/modules/llms/server/openai/models/mistral.models.ts`.
 
 **Primary Sources:**
-- Models: https://docs.mistral.ai/models/overview - also has the deprecated/retired table (deprecation + retirement dates + replacement)
-- Pricing: per-model cards at https://docs.mistral.ai/models/model-cards/<slug> (price, context, release date, deprecation) - the https://mistral.ai/pricing#api-pricing table is client-rendered and not in the HTML. Slugs are doc names, not API ids (`mistral-medium-3-5-26-04`, `mistral-small-4-0-26-03`, `codestral-25-08`); guessing them 404s, so harvest with `curl -sL https://docs.mistral.ai/models/overview | grep -o 'model-cards/[a-z0-9._-]*' | sort -u`
-- Changelog: https://docs.mistral.ai/resources/changelogs
+
+- Models: <https://docs.mistral.ai/models/overview> - also has the deprecated/retired table (deprecation + retirement dates + replacement)
+- Pricing: per-model cards at `https://docs.mistral.ai/models/model-cards/<slug>` (price, context, release date, deprecation) - the <https://mistral.ai/pricing#api-pricing> table is client-rendered and not in the HTML. Slugs are doc names, not API ids (`mistral-medium-3-5-26-04`, `mistral-small-4-0-26-03`, `codestral-25-08`); guessing them 404s, so harvest with `curl -sL https://docs.mistral.ai/models/overview | grep -o 'model-cards/[a-z0-9._-]*' | sort -u`
+- Changelog: <https://docs.mistral.ai/resources/changelogs>
 
 **Fallbacks if blocked:**
+
 - Search "mistral [model-name] latest pricing",  "mistral api latest pricing", "mistral latest models", or search GitHub for latest model prices and context windows
 - Cross-reference: pricepertoken.com, artificialanalysis.ai
 - Check Mistral API list models response

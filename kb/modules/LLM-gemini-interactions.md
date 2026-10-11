@@ -1,6 +1,7 @@
 # Gemini Interactions API
 
 The Interactions API powers Gemini's managed-agent runs. Currently wired:
+
 - **Deep Research** (`deep-research-*-preview-*`) — research/synthesis agent. Requires `background=true`; rejects top-level `system_instruction` (we prepend to input). Configurable via `agent_config` (`thinking_summaries`, `visualization`).
 - **Antigravity Agent** (`antigravity-preview-09-2026`, released 2026-09-17; replaces `antigravity-preview-05-2026`, shutdown 2026-10-05) — general-purpose agent (Gemini 3.8 Flash by default) inside a Google-hosted Linux sandbox with code_execution / google_search / url_context / filesystem tools. We send `background:false` (see the note below); accepts native `system_instruction`; `environment` is auto-reused across turns via the history walk (see "Session reuse" below). [Docs](https://ai.google.dev/gemini-api/docs/antigravity-agent). 09-2026 renamed the file tools and moved their params to PascalCase; the `isAntigravity` gates match both ids.
   - `background=true` is no longer rejected (Sep 2026): both agent ids return `200 in_progress` when `environment` is also sent (without it: `400 Missing required field 'environment'`). We keep sending `background:false` - it works and is what the non-resumable parser path assumes.
@@ -14,7 +15,7 @@ Per-agent flags live in `gemini.interactionsCreate.ts` (`isDeepResearch` / `isAn
 Google replaced the legacy flat `outputs[]` response with a typed `steps[]` timeline (default flip 2026-05-26; legacy removed 2026-06-08). We always rode Google's default (no revision header was ever sent), so the flip silently broke the legacy parser. The migration (`gemini.interactions.wiretypes.ts` + `gemini.interactions.parser.ts` + the dispatch header) maps:
 
 | Legacy | Steps schema |
-|---|---|
+| --- | --- |
 | `outputs[]` (flat: text/thought/image/tool) | `steps[]` (typed `Step` timeline; text/image/audio nested in `model_output.content[]`; thoughts + tool calls/results are their own steps) |
 | `interaction.start` | `interaction.created` |
 | `interaction.status_update` | `interaction.status_update` (kept) or `interaction.in_progress` / `interaction.requires_action` (migration-guide variants - we tolerate all three) |
@@ -31,6 +32,7 @@ Google replaced the legacy flat `outputs[]` response with a typed `steps[]` time
 **Deep Research - VERIFIED empirically (2026-06-02, steps schema):** a live `deep-research-preview-04-2026` stream emits `interaction.created` -> `interaction.status_update` (status `in_progress`) -> `step.start {type:'thought'}` -> repeated `step.delta {type:'thought_summary', content:{type:'text', text}}` (the research-plan / synthesis narration, routed to `appendReasoningText`) interleaved with `step.delta {type:'thought_signature', signature:''}` (empty signature, skipped). Final report text arrives as `model_output` step content, then `interaction.completed`. DR's event set is a strict subset of Antigravity's, so the zero-warning Antigravity replay covers DR's `model_output` + completion paths too.
 
 **Antigravity tool surfacing - VERIFIED empirically (2026-09-22, `09-2026`):** sandbox tools (function/code_execution/google_search/url_context call+result) are typed STEPS, each complete on its `step.start`; no tool `step.delta` was observed (only `text` and `thought_summary`). Two live probe runs (all six file tools; bash + search + curl + file write) replayed through `createGeminiInteractionsParserSSE` with **zero parser warnings**. Confirmed wire shapes:
+
 - The real status event is `interaction.status_update` (NOT the migration-guide's `interaction.in_progress`); the run still ends with a `done` `[DONE]` terminator after `interaction.completed`. We handle all variants defensively.
 - `function_call` step.start carries `{id, name, arguments}` with args inline: PascalCase params plus model-written `toolAction` / `toolSummary` strings. `_summarizeFunctionArgs` picks the target param for the chip (`write_to_file /tmp/notes.txt`, `find_by_name *.txt`). 05-2026 sent empty args and streamed them via `arguments_delta`; the parser still accumulates that path (`state.argsAccum`, finalized at `step.stop`).
 - `code_execution_call` step.start carries `{id, arguments: {language, code}}` (chip `$ uname -a`).
@@ -52,35 +54,35 @@ This doc is the source of truth for protocol shape, failure modes, and the recov
 
 ## Endpoints
 
-| Verb   | Path                                      | Purpose                                                           |
-|--------|-------------------------------------------|-------------------------------------------------------------------|
-| POST   | `/v1beta/interactions`                    | Start a run. We always send `stream:true, background:true, store:true` |
-| GET    | `/v1beta/interactions/{id}?stream=true`   | Reattach via SSE replay (full event sequence from start)          |
-| GET    | `/v1beta/interactions/{id}`               | Fetch the resource as JSON (one-shot)                             |
-| POST   | `/v1beta/interactions/{id}/cancel`        | Stop a background run                                             |
-| DELETE | `/v1beta/interactions/{id}`               | Remove the stored record (does NOT cancel an in-flight run)       |
+| Verb | Path | Purpose |
+| -------- | ------------------------------------------- | ------------------------------------------------------------------- |
+| POST | `/v1beta/interactions` | Start a run. We always send `stream:true, background:true, store:true` |
+| GET | `/v1beta/interactions/{id}?stream=true` | Reattach via SSE replay (full event sequence from start) |
+| GET | `/v1beta/interactions/{id}` | Fetch the resource as JSON (one-shot) |
+| POST | `/v1beta/interactions/{id}/cancel` | Stop a background run |
+| DELETE | `/v1beta/interactions/{id}` | Remove the stored record (does NOT cancel an in-flight run) |
 
 Retention: 1 day free, 55 days paid.
 
 ## Status taxonomy
 
-| Status            | Meaning                                       | Handling                                              |
-|-------------------|-----------------------------------------------|-------------------------------------------------------|
-| `in_progress`     | Live run **or** zombie (see C)                | Surface diagnostics; offer Resume/Recover/Stop        |
-| `queued`          | Waiting for capacity before processing (spec 2026-10) | Non-terminal; handled exactly like `in_progress`      |
-| `completed`       | Done with content in `steps[]`                | Emit fragments, `tokenStopReason='ok'`                |
-| `failed`          | Server-side failure                           | Terminating issue                                     |
-| `cancelled`       | We or another client cancelled                | Close as `cg-issue`                                   |
-| `budget_exceeded` | Hit spend/compute cap (new steps-schema status) | Note + `tokenStopReason='out-of-tokens'`            |
-| `incomplete`      | Stopped early (token limit) — partial outputs | Note + `tokenStopReason='out-of-tokens'`              |
-| `requires_action` | Not expected for Deep Research                | Fail loudly so we notice                              |
+| Status | Meaning | Handling |
+| ------------------- | ----------------------------------------------- | ------------------------------------------------------- |
+| `in_progress` | Live run **or** zombie (see C) | Surface diagnostics; offer Resume/Recover/Stop |
+| `queued` | Waiting for capacity before processing (spec 2026-10) | Non-terminal; handled exactly like `in_progress` |
+| `completed` | Done with content in `steps[]` | Emit fragments, `tokenStopReason='ok'` |
+| `failed` | Server-side failure | Terminating issue |
+| `cancelled` | We or another client cancelled | Close as `cg-issue` |
+| `budget_exceeded` | Hit spend/compute cap (new steps-schema status) | Note + `tokenStopReason='out-of-tokens'` |
+| `incomplete` | Stopped early (token limit) — partial outputs | Note + `tokenStopReason='out-of-tokens'` |
+| `requires_action` | Not expected for Deep Research | Fail loudly so we notice |
 
 ## Two retrieval paths
 
-| Path                  | Endpoint                          | Parser                                    | Use case                          |
-|-----------------------|-----------------------------------|-------------------------------------------|-----------------------------------|
-| SSE replay            | `GET ?stream=true`                | `createGeminiInteractionsParserSSE`       | Canonical resume; live deltas     |
-| JSON GET (recovery)   | `GET` (no `stream`)               | `createGeminiInteractionsParserNS`        | Recover when SSE is broken        |
+| Path | Endpoint | Parser | Use case |
+| ----------------------- | ----------------------------------- | ------------------------------------------- | ----------------------------------- |
+| SSE replay | `GET ?stream=true` | `createGeminiInteractionsParserSSE` | Canonical resume; live deltas |
+| JSON GET (recovery) | `GET` (no `stream`) | `createGeminiInteractionsParserNS` | Recover when SSE is broken |
 
 Both replay from the start — `ContentReassembler` REPLACES content on reattach, so partial replay (`last_event_id`) is intentionally NOT used. The NS parser walks `steps[]` (skipping `user_input`; descending into `model_output.content[]` for text/images/audio, plus `thought` steps) and emits the same particles the SSE parser would, in one batch.
 
@@ -107,10 +109,12 @@ Network blip; resource is fine. **Resume (SSE replay)** picks up cleanly.
 The live POST stream's `interaction.completed` is a deliberately reduced payload that **OMITS `usage`** (Google: "empty outputs to reduce payload size"). `usage` is backfilled onto the stored resource seconds after completion, so any later GET / SSE-replay of the same id carries the full token block. **Verified empirically** on the SAME interaction: the live capture's completed event had keys `{id, status, created, updated, object, agent}` and **no `usage`**; a re-fetch (JSON GET *and* `?stream=true`) of that id returned the full `usage`. Net effect before the fix: a perfectly successful Deep Research run landed with **zero token/cost metrics** (and the runtime was being dropped too - see point 1).
 
 Two-part fix:
+
 1. **Runtime always emitted.** `_emitUsageMetrics` used to `return` early when `usage` was absent, which discarded the locally-measured `dtAll`/`dtStart` along with the (absent) tokens. Timing is status-independent, so it is now emitted unconditionally and **hoisted to one call before each terminal `switch`** (SSE `_handleInteractionCompleted` + NS). Token counts are still added only when `usage` is present.
 2. **Token backfill transform** — `gemini.interactions.transform-usageBackfill.ts`, a 1:1 `particleTransform` wired **ONLY on the POST dispatch** (not resume/recover, which read the stored resource directly and already carry `usage`). It captures the interaction id from the `set-upstream-handle` particle and, on the terminal `set-metrics` particle that still lacks tokens, fires ONE GET of the stored interaction, maps `usage` → token metrics (shared `geminiInteractionsUsageToTokenMetrics`), and merges them into the live timing (`updateMetrics` key-merges, so the real `dtAll` is preserved). `vTOutInner` is derived from the live `dtInner` + fetched output; cost then computes at finalize (DR models carry a `gemini25Pro` pricing baseline). Antigravity self-excludes (it never emits an upstream handle).
 
 Notes:
+
 - **No field mask.** `GET interactions/{id}` rejects every `?fields=` / `X-Goog-FieldMask` subset with `400`; only `?fields=*` works (= full ~1.3MB). The backfill pulls the whole resource and keeps only `usage`.
 - **CORS-open (verified 2026-06-26).** The GET reflects any Origin and allowlists `x-goog-api-key` / `x-goog-api-client` / `content-type` (and the CSF `?key=` form), so the transform runs on the browser/CSF path too — it is deliberately **NOT** `csfUnsafe`. Only `api-revision` stays preflight-rejected (consistent with the no-revision-header note above). Any fetch failure is caught by the executor's transform safety net → runtime-only metrics.
 - **No real duration upstream.** The resource's `created`/`updated` are stamped identically at finalization (no run-duration field), so local `dtAll` (parser wall-clock) is the only runtime signal.
@@ -120,11 +124,11 @@ Notes:
 
 `BlockOpUpstreamResume` renders up to three buttons:
 
-| Button   | Action                            | Shown when                                              |
-|----------|-----------------------------------|---------------------------------------------------------|
-| Resume   | SSE replay                        | `onResume` provided                                     |
-| Recover  | JSON GET (one-shot)               | `upstreamHandle.uht` ∈ `_NS_RECOVER_UHTS`               |
-| Stop     | Cancel + delete upstream resource | `onDelete` provided                                     |
+| Button | Action | Shown when |
+| ---------- | ----------------------------------- | --------------------------------------------------------- |
+| Resume | SSE replay | `onResume` provided |
+| Recover | JSON GET (one-shot) | `upstreamHandle.uht` ∈ `_NS_RECOVER_UHTS` |
+| Stop | Cancel + delete upstream resource | `onDelete` provided |
 
 The Recover gate is an inline `uht === 'vnd.gem.interactions'` check in `BlockOpUpstreamResume.tsx` — extend when another vendor needs the same fallback. Stop is intentionally NOT gated by Resume/Recover busy state — it's the escape hatch for hung resumes.
 
@@ -139,7 +143,7 @@ Antigravity runs on the same Interactions API path but with materially different
 ### Request contracts (differ from DR)
 
 | Field | DR | Antigravity |
-|---|---|---|
+| --- | --- | --- |
 | `background` | MUST be `true` ('Agents are required to use background=true') | MUST NOT be `true` ('Agent does not support using background=True'); adapter sends `false` |
 | `system_instruction` | rejected at top level (prepend to first user turn) | natively accepted |
 | `agent_config` | `{ type: 'deep-research', ... }` | NOT used |
@@ -155,7 +159,7 @@ With `background=false` the resource is bound to the connection. Probed empirica
 Antigravity surfaces sandbox tools as typed tool STEPS (`step.start` carries the call/result step object; `step.delta` may stream incremental args/results). Surfaced by `_emitAntigravityToolOp` (in `gemini.interactions.parser.ts`) as nested op-state placeholders under the run chip. Shapes as observed on `09-2026` (see "Antigravity tool surfacing" above):
 
 | Step type pair | Use | Payload shape | Chip rendering |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `function_call` / `function_result` | filesystem (`write_to_file`, `replace_file_content`, `view_file`, `list_dir`, `find_by_name`, `grep_search`) | call: `{ id, name, arguments: {TargetFile\|AbsolutePath\|DirectoryPath\|Pattern\|Query, ..., toolAction, toolSummary} }`; result: `{ call_id, name, result: string, is_error }` | `list_dir /tmp/p` -> done + result text in oTexts |
 | `code_execution_call` / `code_execution_result` | bash / python in the sandbox | call: `{ id, arguments: { language, code } }`; result: `{ call_id, result: string ([STDOUT]/[STDERR]), is_error, exit_code }` | `$ <first line>` + full code in iTexts -> done + stdout/stderr in oTexts |
 | `google_search_call` / `google_search_result` | web search | call: `{ id, arguments: { queries: string[] }, search_type }`; result: `{ call_id, result: [{ search_suggestions: <html> }, ...] }` | `search: <first query>` -> done (no oTexts: search_suggestions are HTML widgets, not useful as detail) |
@@ -164,6 +168,7 @@ Antigravity surfaces sandbox tools as typed tool STEPS (`step.start` carries the
 `thought_summary` fires on its own (no `agent_config` toggle needed). Routed to `appendReasoningText`.
 
 Run chip lifecycle:
+
 - `interaction.status_update(in_progress)` -> `sendOperationState('code-exec', 'Antigravity Agent running...', { opId: interaction.id })`
 - per-tool deltas -> `sendOperationState(..., { opId: tool.id, parentOpId: interaction.id })` (active on call, done on result)
 - `interaction.completed` -> root chip merges to `Antigravity Agent complete` / `failed` / `cancelled` / `incomplete` / `budget exceeded` / `needs action` (text picked by status; motif preserved)
@@ -177,14 +182,14 @@ Two `09-2026` probe runs on 2026-09-22 (all six file tools; `mixed`) replayed wi
 The Gemini Interactions API session/sandbox persists across runs by passing the prior run's `environment_id` in the next request's `environment` field. Today the only consumer is Antigravity; the mechanism is generic across the Interactions API (one `uct` per vendor protocol, not per agent). Wiring mirrors Anthropic's container reuse (same `DMessageGenerator.upstreamContainer` slot, extended discriminator).
 
 | Stage | File:fn | What |
-|---|---|---|
-| 1. Schema | `chat.message.ts` `DMessageGenerator.upstreamContainer` | Discriminator extended: `{ uct: 'vnd.gem.interactions', envId, expiresAt: string | null }` alongside the existing `vnd.ant.container` variant |
+| --- | --- | --- |
+| 1. Schema | `chat.message.ts` `DMessageGenerator.upstreamContainer` | Discriminator extended: `{ uct: 'vnd.gem.interactions', envId, expiresAt: string \| null }` alongside the existing `vnd.ant.container` variant |
 | 2. Wire | `aix.wiretypes.ts` `svs` particle | New `vendor: 'gemini-envid'` variant carrying `state.environment.{id,expiresAt}` |
 | 3. Parser | `gemini.interactions.parser.ts` `interaction.created` case | Emits `pt.sendSetVendorState({...})` when `event.interaction.environment_id` is present |
 | 4. Reassembler | `ContentReassembler.ts` `onSetVendorState` | Promotes the svs to `S.generator.upstreamContainer` (message-scoped) |
 | 5. Walk | `aix.client.ts` `findRecentUpstreamContainer(history, uct)` | Generic helper. Newest-first, stops at first match per `uct`. Applies a 15s expiry buffer when `expiresAt` is a string; accepts unconditionally when `null` (Interactions API case). Replaces the previously-inline Anthropic loop |
 | 6. Decorate | `aix.client.ts` `aixDecorateModelFromGlobals` | Sets `model.vndGeminiEnvironmentId` from `clientOptions.gemEnvironmentId` |
-| 7. Adapter | `gemini.interactionsCreate.ts` | `environment: model.vndGeminiEnvironmentId || 'remote'` |
+| 7. Adapter | `gemini.interactionsCreate.ts` | `environment: model.vndGeminiEnvironmentId \|\| 'remote'` |
 
 **Mutating handle, NOT a snapshot:** `upstreamContainer` stores *who to rejoin*, not *what state was at that point*. Going back to an earlier turn and re-running reuses the same upstream sandbox, with whatever files/state intervening turns left behind. There is no per-turn checkpoint upstream; if a clean sandbox is desired the user starts a new chat (which has no prior `upstreamContainer` in history, so the walk returns null and the adapter falls back to `"remote"`).
 
@@ -197,7 +202,7 @@ The Gemini Interactions API session/sandbox persists across runs by passing the 
 The `environment` request field accepts THREE shapes per the docs ([Antigravity Environments](https://ai.google.dev/gemini-api/docs/managed-agents/environments)):
 
 | Shape | Example | Status |
-|---|---|---|
+| --- | --- | --- |
 | `"remote"` literal | `environment: "remote"` | ✅ wired (fresh sandbox) |
 | Env id string | `environment: "<uuid>"` | ✅ wired (reuse via history walk + 7d TTL) |
 | Config object | `environment: { type: "remote", sources?, network? }` | ❌ NOT wired |
@@ -231,12 +236,12 @@ Captures land in `./captures/` (gitignored). Move a capture file out of `capture
 
 ## Code map
 
-| File                                                                                 | Role                                                  |
-|--------------------------------------------------------------------------------------|-------------------------------------------------------|
-| `aix/server/dispatch/wiretypes/gemini.interactions.wiretypes.ts`                     | Zod schemas (RequestBody, Interaction, StreamEvent)   |
-| `aix/server/dispatch/chatGenerate/adapters/gemini.interactionsCreate.ts`             | POST body (input + agent_config)                      |
-| `aix/server/dispatch/chatGenerate/parsers/gemini.interactions.parser.ts`             | SSE parser + NS parser; `geminiInteractionsUsageToTokenMetrics` (shared usage→tokens) |
+| File | Role |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `aix/server/dispatch/wiretypes/gemini.interactions.wiretypes.ts` | Zod schemas (RequestBody, Interaction, StreamEvent) |
+| `aix/server/dispatch/chatGenerate/adapters/gemini.interactionsCreate.ts` | POST body (input + agent_config) |
+| `aix/server/dispatch/chatGenerate/parsers/gemini.interactions.parser.ts` | SSE parser + NS parser; `geminiInteractionsUsageToTokenMetrics` (shared usage→tokens) |
 | `aix/server/dispatch/chatGenerate/parsers/gemini.interactions.transform-usageBackfill.ts` | Token-usage backfill transform (POST only; see Failure mode E) |
-| `aix/server/dispatch/chatGenerate/chatGenerate.dispatch.ts` (`gemini` case)          | POST + resume dispatch (SSE vs JSON); wires the backfill transform on POST |
-| `apps/chat/components/message/BlockOpUpstreamResume.tsx`                             | Resume / Recover / Stop UI                            |
-| `apps/chat/components/ChatMessageList.tsx` (`handleMessageUpstreamResume`)           | Wires click handler to `aixReattachContent_DMessage_orThrow` |
+| `aix/server/dispatch/chatGenerate/chatGenerate.dispatch.ts` (`gemini` case) | POST + resume dispatch (SSE vs JSON); wires the backfill transform on POST |
+| `apps/chat/components/message/BlockOpUpstreamResume.tsx` | Resume / Recover / Stop UI |
+| `apps/chat/components/ChatMessageList.tsx` (`handleMessageUpstreamResume`) | Wires click handler to `aixReattachContent_DMessage_orThrow` |

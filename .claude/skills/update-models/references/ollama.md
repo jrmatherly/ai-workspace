@@ -3,6 +3,7 @@
 Model file: `src/modules/llms/server/ollama/ollama.models.ts`.
 
 **Automated Workflow:**
+
 ```bash
 # 1. Fetch the HTML to a cross-platform temp path (sorted by newest for stable ordering)
 curl -s "https://ollama.com/library?sort=newest" -o "$(node -p "require('os').tmpdir()")/ollama-newest.html"
@@ -15,14 +16,16 @@ rm "$(node -p "require('os').tmpdir()")/ollama-newest.html"
 ```
 
 The parser outputs 5 pipe-delimited fields: `modelName|pulls|capabilities|sizes|cloud`
+
 - `deepseek-r1|91500000|tools,thinking|1.5b,7b,8b,14b,32b,70b,671b|`
 - `kimi-k3|39000|vision,tools,thinking||cloud` - cloud-only, so no sizes
 
 **Primary Sources:**
-- Model Library: https://ollama.com/library?sort=newest
+
+- Model Library: <https://ollama.com/library?sort=newest>
 - Parser script: `.claude/skills/update-models/scripts/parse-ollama-models.js` (`--help` prints its usage)
 
-**Fallbacks if blocked:** Check https://github.com/ollama/ollama, search "ollama featured models", "ollama latest models", or search GitHub for latest model info
+**Fallbacks if blocked:** Check <https://github.com/ollama/ollama>, search "ollama featured models", "ollama latest models", or search GitHub for latest model info
 
 **What the file is:** a full mirror of the library index minus embedding models, in page order (newest first). The parser applies no pull threshold and no top-N cut: every line it prints belongs in the file, and every file entry should be a printed line.
 
@@ -33,10 +36,12 @@ The parser outputs 5 pipe-delimited fields: `modelName|pulls|capabilities|sizes|
 **Sanity check the parse before editing:** 200+ lines, non-zero pulls, capabilities present. All-zero pulls or empty capabilities means the page markup changed - fix the regexes in the parser (it warns on this), never write a stripped list into the file.
 
 **Field mapping:**
+
 - `tools` -> `hasTools: true`, `vision` -> `hasVision: true`, `embedding` -> `isEmbeddings: true` (note the 's'; the parser drops embedding models, so this should not come up)
 - `thinking` and `audio` -> `tags`, followed by the size chips (`1.5b`, `7b`, `32b`, ...) in page order
 
 **Vendor-specific rules:**
+
 - Sort them in the EXACT same order as the source (newest first, for stable ordering)
 - Set today's date (YYYYMMDD format) for newly added models only (this is the `added` field, not `pubDate`)
 - Set OLLAMA_PREV_UPDATE to the previous OLLAMA_LAST_UPDATE, then OLLAMA_LAST_UPDATE to today (PREV drives the `isNew` badge)

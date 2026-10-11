@@ -4,12 +4,12 @@ This document outlines how to develop applications derived from AI Workspace.
 
 ## Manual Customization
 
-Application customization _requires manual code modifications or the use of environment variables_. Currently, **there is no admin panel to "managed" deployment customization** for enterprise use cases.
+Application customization *requires manual code modifications or the use of environment variables*. Currently, **there is no admin panel to "managed" deployment customization** for enterprise use cases.
 
-| Required Code Alteration                                                              | Not Required                                                                                                              |
-|---------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
+| Required Code Alteration | Not Required |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | - Persona changes<br>- UI theme customization<br>- Feature additions or modifications | - Setting API keys in [environment variables](environment-variables.md)<br>- Toggling features with environment variables |
-| Apply these to the source code before building the application                        | Set these post-build on local machines or cloud deployment, before application launch                                     |
+| Apply these to the source code before building the application | Set these post-build on local machines or cloud deployment, before application launch |
 
 <br/>
 
@@ -83,9 +83,11 @@ For deeper debugging during development:
 
 1. **Debug Page**: Access the `/dev/debug` page for an overview of the application's environment, configuration, API status, and environment variables available to the client.
 2. **Conditional Breakpoints**: To automatically pause execution in your browser's developer tools when critical errors (`error`, `critical`, `DEV` levels) are logged to the console, set the following environment variable in your local `.env.local` file and restart your development server:
+
    ```bash
    NEXT_PUBLIC_DEBUG_BREAKS=true
    ```
+
    This allows you to inspect the application state at the exact moment an important error occurs. This feature only works in development mode (`npm run dev`) and requires the environment variable to be explicitly set to `true`.
 
 <br/>
@@ -94,10 +96,10 @@ For deeper debugging during development:
 
 After deployment, share your project with the community. We will link to your project to help others discover and learn from your work.
 
-| Project                                                                                                                                                        | Features                                                                                                  | GitHub                                                                              |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
-| 🚀 CoolAGI: Where AI meets Imagination<br/>![CoolAGI Logo](https://github.com/nextgen-user/freegpt4plus/assets/150797204/9b0e1232-4791-4d61-b949-16f9eb284c22) | Code Interpreter, Vision, Mind maps, Web Searches, Advanced Data Analytics, Large Data Handling and more! | [nextgen-user/CoolAGI](https://github.com/nextgen-user/CoolAGI)                     |
-| HL-GPT                                                                                                                                                         | Fully remodeled UI                                                                                        | [harlanlewis/nextjs-chatgpt-app](https://github.com/harlanlewis/nextjs-chatgpt-app) |
+| Project | Features | GitHub |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| 🚀 CoolAGI: Where AI meets Imagination<br/>![CoolAGI Logo](https://github.com/nextgen-user/freegpt4plus/assets/150797204/9b0e1232-4791-4d61-b949-16f9eb284c22) | Code Interpreter, Vision, Mind maps, Web Searches, Advanced Data Analytics, Large Data Handling and more! | [nextgen-user/CoolAGI](https://github.com/nextgen-user/CoolAGI) |
+| HL-GPT | Fully remodeled UI | [harlanlewis/nextjs-chatgpt-app](https://github.com/harlanlewis/nextjs-chatgpt-app) |
 
 For public projects, update your README.md with your modifications and submit a pull request to add your project to our list, aiding in its discovery.
 

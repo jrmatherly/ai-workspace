@@ -16,7 +16,7 @@ The concept: long working sessions are depth-first. The user starts with an obje
 
 ## Step 1 - census (deterministic, run exactly this)
 
-```
+```bash
 bash ${CLAUDE_SKILL_DIR}/census.sh ${CLAUDE_SESSION_ID} $ARGUMENTS
 ```
 
@@ -53,7 +53,7 @@ Read the `SPINE` file completely (use offset/limit chunks if it is large). It is
 
 Your final message must be EXACTLY this raw markdown and nothing else - no preamble, no closing remarks, no code fence around it:
 
-```
+```markdown
 ## <invented 4-8 word thread title> - <USER_PROMPTS> prompts, <SPAN>
 <the tree>
 _pruned: kept <nodes-shown-as-open> of <K> candidate opens_

@@ -1,0 +1,38 @@
+name: 📝 Markdown
+
+# markdownlint over every tracked .md (rules: .markdownlint-cli2.jsonc). Separate from CI because
+# CI skips documentation-only changes, which is exactly when this check matters.
+
+on:
+  push:
+    branches: [ main ]
+    paths: &md-paths
+      - '**.md'
+      - '.markdownlint-cli2.jsonc'
+      - '.github/workflows/markdown.yml'
+  pull_request:
+    paths: *md-paths
+
+concurrency:
+  group: markdown-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: 📝 markdownlint
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: 🟢 Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 📝 Lint Markdown
+        run: npm run lint:md

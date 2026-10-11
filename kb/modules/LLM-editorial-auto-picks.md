@@ -4,7 +4,6 @@ When a model domain (e.g. `primaryChat`, `codeApply`) needs a model and the user
 
 For the separate editorial axis covering per-model metadata (`pubDate`, pricing, benchmarks), see [LLM-editorial-pubdate.md](LLM-editorial-pubdate.md).
 
-
 ## Resolution layers
 
 `llmsAssignmentsAutoModelId()` in `src/common/stores/llms/store-llms-domains_slice.ts` resolves a domain's model through three layers, tried in order:
@@ -29,7 +28,6 @@ When no editorial entry matches, the system falls back to one of two strategies 
 - `topVendorLowestCost` - picks the cheapest (non-free) model from the top vendor, preferring models with ELO ratings. Used by `fastUtil`.
 
 Both strategies group visible LLMs by vendor, rank vendors by their top ELO, then select within the winning vendor.
-
 
 ## Editorial table
 
@@ -67,7 +65,6 @@ export const EditorialDefaults = {
 1. Exact match on `llm.initialParameters.llmRef`
 2. Prefix match on `llmRef` (handles vendor-appended date suffixes like `-20250514`)
 3. Dot/dash-equivalent match on `llmRef` (OpenRouter lists `anthropic/claude-fable-5.1`; the typed pick is `anthropic/claude-fable-5-1`)
-
 
 ## Type-safety chain
 
@@ -121,11 +118,10 @@ All other registered vendors (Alibaba, ArceeAI, Azure, ChutesAI, FastAPI, Firewo
 
 MiniMax and Perplexity use `ModelDescriptionSchema[]` arrays keyed by `id` instead of `idPrefix`, but the same const-tracking mechanism applies.
 
-
 ## File locations
 
 | File | Role |
-|---|---|
+| --- | --- |
 | `src/common/stores/llms/model.domains.editorial.ts` | Editorial table + picker function |
 | `src/common/stores/llms/store-llms-domains_slice.ts` | 3-layer resolver (`llmsAssignmentsAutoModelId`) |
 | `src/common/stores/llms/model.domains.types.ts` | `DModelDomainId` union |

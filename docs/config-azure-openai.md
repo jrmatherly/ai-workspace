@@ -14,7 +14,7 @@ If you have an `API Endpoint` and `API Key`, you can configure AI Workspace as f
 1. Launch the AI Workspace application
 2. Go to the **Models** settings
 3. Add a Vendor and select **Azure OpenAI**
-    - Enter the Endpoint (e.g., 'https://your-resource-name.openai.azure.com')
+    - Enter the Endpoint (e.g., `https://your-resource-name.openai.azure.com`)
     - Enter the API Key (e.g., 'fd5...........................ba')
 
 The deployed models are now available in the application. If you don't have a configured
@@ -39,17 +39,20 @@ This enables Azure OpenAI for all users without requiring individual API keys. F
 Azure OpenAI supports both traditional deployment-based API and the next-generation v1 API:
 
 ### Next-Generation v1 API (Default)
+
 - **Enabled by default** for GPT-5-like models (GPT-5, GPT-6, o3, o4, etc.)
 - Uses direct `/openai/v1/responses` endpoint without deployment IDs
 - Optimized for advanced reasoning models and new features
 - Can be disabled by setting `AZURE_OPENAI_DISABLE_V1=true`
 
 ### Traditional Deployment-Based API
+
 - Uses `/openai/deployments/{deployment-name}/...` endpoints
 - Required for older models and when v1 API is disabled
 - Needs deployment ID for all API calls
 
 ### Known Limitations
+
 - **Web Search Tool**: Azure OpenAI does not support the `web_search_preview` tool that's available in OpenAI's API
 - Models with web search capabilities will have this feature automatically disabled on Azure
 
@@ -84,9 +87,9 @@ For more information, see [Azure: Create and deploy OpenAI](https://learn.micros
 After creating the resource, you can access the API Keys and Endpoints:
 
 1. Click on **Go to resource** (or navigate to your Azure OpenAI resource)
-2. In the left sidebar, under **Resource Management**, click on **Keys and Endpoint** 
+2. In the left sidebar, under **Resource Management**, click on **Keys and Endpoint**
 3. Copy the required information:
-   - **Endpoint**: e.g., 'https://your-resource-name.openai.azure.com/'
+   - **Endpoint**: e.g., `https://your-resource-name.openai.azure.com/`
    - **Key**: Copy either KEY 1 or KEY 2 (both work identically)
 
 ### Step 3: Deploy Models
@@ -94,7 +97,7 @@ After creating the resource, you can access the API Keys and Endpoints:
 By default, Azure OpenAI resource instances don't have models available. You need to deploy the models you want to use.
 
 1. In your Azure OpenAI resource, click on **Model deployments** in the left sidebar
-2. Click on **Create new deployment** 
+2. Click on **Create new deployment**
 3. Fill in the deployment details:
    - **Select a model**: Choose from available models
    - **Model version**: Select the latest version or a specific one

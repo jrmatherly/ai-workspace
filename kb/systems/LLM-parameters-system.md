@@ -9,15 +9,18 @@ The LLM parameters system operates across five layers that transform parameters 
 ## Parameter Flow Architecture
 
 ### Layer 1: Parameter Registry
+
 **File**: `src/common/stores/llms/llms.parameters.ts`
 
 The `DModelParameterRegistry` defines all available parameters with their constraints and metadata. Each parameter includes type information, validation rules, and default behavior.
 
 **Default Value System**: The registry supports multiple default mechanisms:
+
 - `nullable` - Parameters that can be explicitly null to skip API transmission
 - `initialValue` - Parameter's base default (e.g., `llmVndOaiRestoreMarkdown: true`)
 
 ### Layer 2: Model Specifications
+
 **File**: `src/modules/llms/server/llm.server.types.ts`
 
 Models declare which parameters they support through `parameterSpecs` arrays. Each spec can override registry defaults:
@@ -36,22 +39,27 @@ parameterSpecs: [
 The system provides two UI configurators with different scopes:
 
 #### Full Model Configuration Dialog
+
 **File**: `src/modules/llms/models-modal/LLMParametersEditor.tsx`
 Shows all non-hidden parameters from model's `parameterSpecs`. Used in the models modal for complete configuration.
 
 #### ChatPanel Quick Controls
+
 **File**: `src/apps/chat/components/layout-panel/ChatPanelModelParameters.tsx`
 Shows only parameters that are:
+
 - In model's `parameterSpecs`
 - Listed in `_interestingParameters` array
 - Not marked as `hidden`
 
 **Value Resolution**: Both UIs use `getAllModelParameterValues()` to merge:
+
 1. **Fallback values** - Implicit parameters get their `LLMImplicitParametersRuntimeFallback` values
 2. **Initial values** - Model's `initialParameters` (populated during model creation)
 3. **User values** - User's `userParameters` (highest priority)
 
 ### Layer 4: AIX Translation
+
 **File**: `src/modules/aix/client/aix.client.ts`
 
 The AIX client transforms DLLM parameters to wire protocol format. This layer handles parameter precedence rules and name transformations.
@@ -59,6 +67,7 @@ The AIX client transforms DLLM parameters to wire protocol format. This layer ha
 **Client Options**: The system supports parameter overrides through `llmOptionsOverride` and complete replacement via `llmUserParametersReplacement`.
 
 ### Layer 5: Vendor Adaptation
+
 **Files**: `src/modules/aix/server/dispatch/chatGenerate/adapters/*.ts`
 
 Server-side adapters translate AIX parameters to vendor APIs. Each vendor may interpret parameters differently:
@@ -93,6 +102,7 @@ When a model is loaded:
 ## Type Safety Mechanisms
 
 The system maintains type safety through:
+
 - `DModelParameterId` union from registry keys
 - `DModelParameterValue<T>` conditional types for values
 - `DModelParameterSpecAny` interfaces for specifications
@@ -101,12 +111,14 @@ The system maintains type safety through:
 ## Model Variant Pattern
 
 Some vendors use model variants to enable features, for instance:
+
 - **Anthropic**: Creates separate `idVariant: 'thinking'` entries forcing value of hidden parameters
 - **Google/OpenAI**: Parameters directly on base models
 
 ## Migration and Compatibility
 
 The architecture supports parameter evolution:
+
 - **Precedence Rules**: Newer parameters take priority during AIX translation
 - **Graceful Degradation**: Unknown parameters log warnings but don't break functionality
 

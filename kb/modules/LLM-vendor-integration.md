@@ -12,16 +12,19 @@ For any provider with an **OpenAI-compatible API** (which is nearly all new prov
 **Surface area**: 1-2 files, no UI changes, no registry changes.
 
 A dynamic backend provides:
+
 - Hostname-based auto-detection when the user adds the provider's API URL
 - Automatic model list parsing with vendor-specific metadata (pricing, context windows, capabilities)
 - Zero UI code - uses the existing "Custom OpenAI-compatible" service setup
 
 **Files touched**:
+
 - `src/modules/llms/server/openai/models/{vendor}.models.ts` (required) - model definitions + hostname heuristic
 - `src/modules/llms/server/openai/wiretypes/{vendor}.wiretypes.ts` (optional) - Zod schemas for vendor-specific wire format
 - `src/modules/llms/server/listModels.dispatch.ts` - add heuristic to the detection chain (2 lines)
 
 **What the model file must export**:
+
 ```typescript
 // 1. Hostname heuristic - returns true when the user's API URL matches this vendor
 export function vendorHeuristic(hostname: string): boolean {
@@ -53,6 +56,7 @@ user demand to warrant a dedicated setup flow.
 **Surface area**: 5+ files across 3 directories.
 
 **Files touched**:
+
 - `src/modules/llms/vendors/{vendor}/{vendor}.vendor.ts` - IModelVendor implementation
 - `src/modules/llms/vendors/{vendor}/{VendorName}ServiceSetup.tsx` - React UI setup component
 - `src/modules/llms/vendors/vendors.registry.ts` - registry entry + ModelVendorId union
@@ -86,7 +90,7 @@ are correctly handled everywhere, especially for provider-based switches.
 ## Decision Criteria
 
 | Question | Dynamic | Registered |
-|----------|---------|------------|
+| ---------- | --------- | ------------ |
 | OpenAI-compatible API? | Yes - use dynamic | Only if not OAI-compatible |
 | Needs custom auth UI? | No - uses generic fields | Yes - custom setup form |
 | Unique protocol? | No | Yes (Anthropic, Gemini, Ollama) |
@@ -112,6 +116,7 @@ When vendors or community members request integration via GitHub issues:
 ### How Dynamic Detection Works
 
 In `listModels.dispatch.ts`, the `case 'openai':` handler:
+
 1. Fetches `/v1/models` from the user-provided API host
 2. Runs the hostname through a chain of heuristics (in order)
 3. First matching heuristic's converter is used to parse models

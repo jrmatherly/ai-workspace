@@ -19,7 +19,7 @@ Needs `OPENROUTER_API_KEY` (env or repo-root `.env.api-keys`). Writes `out/<ts>-
 Fused score = mean z-score across refs per signal; verdict CLEAR only when top-2 gap >= 0.5σ AND the leader has >= 4/5 signals populated (a winner with data gaps is a data problem, not a finding).
 
 | signal | axis | what it measures |
-|---|---|---|
+| --- | --- | --- |
 | z.tok | infrastructure | `prompt_tokens` vector over 5 corpora (en/zh/code/unicode/rare) + completion recount on exact echo. Same tokenizer + template = near-zero L1; unfakeable by RLHF |
 | z.cos | lexical surface | char-trigram cosine on behavior probes, z-scored (the ref-vs-ref baseline line calibrates the generic-assistant ceiling) |
 | z.style | formatting DNA | 17-dim vector: headers, bold-label pattern, bullet dialect, em-dash, CJK punctuation, opener/closer habits, verbosity |
@@ -27,6 +27,7 @@ Fused score = mean z-score across refs per signal; verdict CLEAR only when top-2
 | z.meta | protocol | native_finish_reason vocabulary (end_turn=Anthropic, STOP=Google, completed=OpenAI/xAI), reasoning exposure |
 
 Unscored, for the assistant's read:
+
 - **reveal probes** - identity claims, cutoff, prefill continuation, system-prompt dump. Cloaked models lie; *shared wrong claims* (target and one family hallucinating the same cutoff/events) are strong evidence.
 - **special_tokens** - which chat-template tokens vanish from the model's view when a third-party host runs the real template (probe covers ChatML, Llama, Gemma, Mistral, GLM sets). First-party endpoints usually escape; the swallow shows on open-weights hosts.
 - **tok/s** - median completion speed, size-class hint only (flash vs pro); host- and load-dependent, never a family signal.
@@ -52,7 +53,7 @@ caller sampling ignored). The instrument as written assumes one model and will s
 target for these tells before trusting any single-model verdict:
 
 - **Two voices for one prompt, never mixed within an answer.** Repeat a bare prompt 4-8 times and tally the
-  dialect (`*   ` vs `- `, `| :--- |` vs `|---|`, opener phrasing). A model at temperature 0 drifts in wording;
+  dialect (`*` vs `-`, `| :--- |` vs `|---|`, opener phrasing). A model at temperature 0 drifts in wording;
   it does not switch house style. Which prompt class flips is the tier policy: textbook explanations went to
   the cheap tier, everything with a fact, a pick, a refusal or an added instruction escalated.
 - **Prompt-keyed consistency with request-level randomness.** The same first message returns the same

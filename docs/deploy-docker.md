@@ -6,19 +6,25 @@ Docker ensures faster development cycles, easier collaboration, and seamless env
 ## Build and run your container 🔧
 
 1. **Clone AI Workspace**
+
    ```bash
    git clone https://github.com/jrmatherly/ai-workspace.git
    cd ai-workspace
    ```
+
 2. **Build the Docker Image**: Build a local docker image from the provided Dockerfile:
+
    ```bash
    docker build -t ai-workspace .
    ```
+
 3. **Run the Docker Container**: start a Docker container from the newly built image,
    and expose its http port 3000 to your `localhost:3000` using:
+
    ```bash
    docker run -d -p 3000:3000 ai-workspace
    ```
+
 4. Browse to [http://localhost:3000](http://localhost:3000)
 
 <br/>
@@ -60,10 +66,10 @@ Coming from the upstream big-AGI compose file (service `big-agi`): run `docker-c
 To make local services running on your host machine accessible to a Docker container, such as a
 [Browseless](./config-feature-browse.md) service or a local API, you can follow this simplified guide:
 
-| Operating System  | Steps to Make Local Services Visible to Docker                                                                                                                                                                                                                                                                                                                                               |
-|:------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Windows and macOS | Use the special DNS name `host.docker.internal` to refer to the host machine from within the Docker container. No additional network configuration is required. Access local services using `host.docker.internal:<PORT>`.                                                                                                                                                                   |
-| Linux             | Two options: *A*. Use <ins>--network="host"</ins> (`docker run --network="host" -d ai-workspace`) when running the Docker container to merge the container within the host network stack; however, this reduces container isolation. Alternatively: *B*. Connect to local services <ins>using the host's IP address</ins> directly, as host.docker.internal is not available by default on Linux. |
+| Operating System | Steps to Make Local Services Visible to Docker |
+| :------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Windows and macOS | Use the special DNS name `host.docker.internal` to refer to the host machine from within the Docker container. No additional network configuration is required. Access local services using `host.docker.internal:<PORT>`. |
+| Linux | Two options: *A*. Use <ins>--network="host"</ins> (`docker run --network="host" -d ai-workspace`) when running the Docker container to merge the container within the host network stack; however, this reduces container isolation. Alternatively: *B*. Connect to local services <ins>using the host's IP address</ins> directly, as host.docker.internal is not available by default on Linux. |
 
 <br/>
 

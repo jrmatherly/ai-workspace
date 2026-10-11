@@ -7,7 +7,6 @@ forward-looking "Sandbox / execution environment" direction.
 Status (2026-06): the shipped changes below live on branch `AB-anthropic-code-exec` (uncommitted at
 time of writing). The forward design section is direction + open questions, not decided architecture.
 
-
 ## Three ways code execution turns on - all one container
 
 The explicit `code_execution_20260120` tool (with its `bash_code_execution` + `text_editor_code_execution`
@@ -26,7 +25,6 @@ Dynamic web tools (`web_search_20260209` / `web_fetch_20260209`) are a fourth, *
 auto-run code execution internally for dynamic filtering. AI Workspace never AUTO-adds the standalone tool for
 them - see #1087 below.
 
-
 ## The #1087 history (the single-environment lesson)
 
 Issue [enricoros/big-AGI#1087](https://github.com/enricoros/big-AGI/issues/1087), reporter @Slava-256
@@ -37,6 +35,7 @@ hunting on disk for inlined files. Root cause: upstream was auto-enabling the st
 dynamic filtering was on.
 
 Fixed 2026-04-28 in three commits:
+
 - `e5de61d6827` - stop enabling code execution just because dynamic web is on (removed `hasDynamicWebTools`).
 - `ed4edd7c0b8` - stop re-enabling it from leftover container continuity (removed `vndAntContainerId`).
 - `6f6375eaba2` - re-enable the safe Search+Max -> dynamic-filtering auto-opt-in, now that the tool is no
@@ -47,7 +46,6 @@ Net result: `enableCodeExecution = vndAntSkills || PTC`. The architectural decis
 than re-attach across turns - chosen because, in the code at the time, re-attaching forced the
 `code_execution` tool on. Slava's stated constraint: *"if enabling persistency requires enabling
 code_execution_20260120, then I would prefer the default to be not persistent."*
-
 
 ## Empirically verified behavior (live API probes, Opus 4.8)
 
@@ -80,7 +78,6 @@ the top-level `code_execution` is programmatic tool calling). Haiku 4.5 is degra
 90s per-cell wall-clock limit. NOT adopted: the dynamic web tools auto-inject `_20260120`, and a version
 mismatch on the same tool name is the hard 400 above.
 
-
 ## Beta headers
 
 `enableCodeExecution` drives: `code-execution-2025-08-25` + `files-api-2025-04-14`; Skills add
@@ -91,7 +88,6 @@ because of that internal code execution; `allowed_callers: ["direct"]` disables 
 Cost: code execution is FREE when used with web search/fetch; otherwise metered ($0.05/hr/container after
 1,550 free org-hours/month, 5-minute minimum; attached files bill even if code never runs). Containers are
 server-retained ~30 days.
-
 
 ## Shipped changes (branch `AB-anthropic-code-exec`)
 
@@ -131,7 +127,6 @@ any response that carries a `container`; `ContentReassembler.onSetVendorState` p
 **State lives per-DMessage** (on the generator), which gives free branch/rewind fidelity: rewinding to an
 older message recovers the container state as it was then. This is a feature to preserve.
 
-
 ## Cross-vendor: code execution across providers
 
 Each provider exposes its own server-side code-execution capability as a separate `llmVnd*` parameter.
@@ -140,7 +135,7 @@ All four now share the **"Code Sandbox"** user-facing label (they are the same c
 avoiding orphaning existing users' saved settings):
 
 | Vendor | Param id (kept) | Label (uniform) | Backing |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Anthropic | `llmVndAntCodeSandbox` | Code Sandbox | `code_execution_20260120` container (`vndAntContainerId` reuse) |
 | Gemini | `llmVndGeminiCodeExecution` | Code Sandbox | Gemini server-side code execution |
 | xAI | `llmVndXaiCodeExecution` | Code Sandbox | xAI server-side code execution |
@@ -151,7 +146,6 @@ infrastructure, with no shared abstraction. Only the label is unified; the under
 their vendor terms (Anthropic's tool stays `code_execution_20260120`, OpenAI's id stays `CodeInterpreter`).
 The "Sandbox" umbrella and its locus qualifiers (Cloud/VPS/Browser/Local Sandbox) are the forward UI +
 conceptual layer; in the forward design all four are the `vendor-container` locus of the unified Sandbox.
-
 
 ## Forward direction: Sandbox / execution environments (FUTURE, partly open)
 
@@ -176,6 +170,7 @@ Direction agreed in design discussion; the architecture forks below are still op
   not by hiding them.
 
 ### Open questions (interview not concluded)
+
 1. State home/scope: DMessage-only vs hoist-to-execution-model vs hybrid (and ZYNC-synced for cross-device).
 2. Targeting: env-handle on one Sandbox tool vs distinct tool per environment vs list-then-target.
 3. Lifecycle/errors: handle+status+structured-errors vs recreate-on-miss vs lease+TTL.

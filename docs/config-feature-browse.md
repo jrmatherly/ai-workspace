@@ -16,13 +16,13 @@ It does not yet support the following functionality:
 
 First of all, you need to procure a Puppteer web browsing service endpoint. AI Workspace supports services like:
 
-| Service                                                                              | Working | Type        | Location       | Special Features                            |
-|--------------------------------------------------------------------------------------|---------|-------------|----------------|---------------------------------------------|
-| [BrightData Scraping Browser](https://brightdata.com/products/scraping-browser)      | Yes     | Proprietary | Cloud          | Advanced scraping tools, global IP pool     |
-| [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/) | ?       | Proprietary | Cloud          | Integrated CDN, optimized browser rendering |
-| ⬇️ [Browserless 2.0](#-browserless-20)                                               | Okay    | OpenSource  | Local (Docker) | Parallelism, debug viewer, advanced APIs    |
-| ⬇️ [Your Chrome Browser (ALPHA)](#-your-own-chrome-browser)                          | Alpha   | Proprietary | Local (Chrome) | Personal, experimental use (ALPHA!)         |
-| other Puppeteer-based WSS Services                                                   | ?       | Varied      | Cloud/Local    | Service-specific features                   |
+| Service | Working | Type | Location | Special Features |
+| -------------------------------------------------------------------------------------- | --------- | ------------- | ---------------- | --------------------------------------------- |
+| [BrightData Scraping Browser](https://brightdata.com/products/scraping-browser) | Yes | Proprietary | Cloud | Advanced scraping tools, global IP pool |
+| [Cloudflare Browser Rendering](https://developers.cloudflare.com/browser-rendering/) | ? | Proprietary | Cloud | Integrated CDN, optimized browser rendering |
+| ⬇️ [Browserless 2.0](#-browserless-20) | Okay | OpenSource | Local (Docker) | Parallelism, debug viewer, advanced APIs |
+| ⬇️ [Your Chrome Browser (ALPHA)](#-your-own-chrome-browser) | Alpha | Proprietary | Local (Chrome) | Personal, experimental use (ALPHA!) |
+| other Puppeteer-based WSS Services | ? | Varied | Cloud/Local | Service-specific features |
 
 ## Configuration
 
@@ -57,7 +57,7 @@ and configure some options.
 
 The chat agent won't be able to access the web sites if the browserless container does not have direct Internet access. You can resolve the issue by defining internet proxy for the running container. You can then use the evironment file in the a `docker-compose.yaml
 
-```
+```yaml
  browserless:
     image: browserless/chrome:latest
     env_file:
@@ -70,18 +70,17 @@ The chat agent won't be able to access the web sites if the browserless containe
 
 You can then add the proxy lines to your `.env` file.
 
-```
+```text
 https_proxy=http://PROXY-IP:PROXY-PORT
 http_proxy=http://PROXY-IP:PROXY-PORT
 ```
 
 This is how you can define it in a one liner docker
-`docker run --env https_proxy=http://PROXY-IP:PROXY-PORT --env http_proxy=http://PROXY-IP:PROXY-PORT -p 9222:3000 browserless/chrome:latest `
+`docker run --env https_proxy=http://PROXY-IP:PROXY-PORT --env http_proxy=http://PROXY-IP:PROXY-PORT -p 9222:3000 browserless/chrome:latest`
 
 Note: if you are using `docker-compose`, please see the
 [docker/docker-compose-browserless.yaml](docker/docker-compose-browserless.yaml) file for an example
 on how to run AI Workspace and Browserless simultaneously in a single application.
-
 
 ### 🌐 Your own Chrome browser
 
@@ -91,7 +90,7 @@ a WebSocket endpoint.
 - close all the Chrome instances (on Windows, check the Task Manager if still running)
 - start Chrome with the following command line options (on Windows, you can edit the shortcut properties):
   - `--remote-debugging-port=9222`
-- go to http://localhost:9222/json/version and copy the `webSocketDebuggerUrl` value
+- go to <http://localhost:9222/json/version> and copy the `webSocketDebuggerUrl` value
   - it should be something like: `ws://localhost:9222/...`
 - paste the value into the Endpoint configuration (see point 2 in the configuration)
 

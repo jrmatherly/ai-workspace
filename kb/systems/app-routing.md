@@ -9,7 +9,7 @@ AI Workspace uses Next.js Pages Router with a provider stack that determines wha
 ## Quick Reference: Route Configurations
 
 | Route | Purpose | Key Features |
-|-------|---------|--------------|
+| ------- | --------- | -------------- |
 | `/` | Main chat app | Default application |
 | `/call` | Voice interface | Voice-to-voice AI conversations |
 | `/personas` | Persona management | Create and manage AI personas |
@@ -57,7 +57,7 @@ flowchart TD
 
 ## Display State Hierarchy
 
-```
+```text
 _app.tsx (Root)
 ├── ProviderTheming ← Always Applied
 ├── ErrorBoundary ← Always Applied
@@ -78,7 +78,7 @@ _app.tsx (Root)
 ## Provider Stack
 
 | Provider | Purpose | Key Functions |
-|----------|---------|---------------|
+| ---------- | --------- | --------------- |
 | **ProviderTheming** | UI theme management | Theme switching, CSS variables |
 | **ErrorBoundary** | Error handling | Catches and displays errors gracefully |
 | **ProviderBootstrapLogic** | App initialization | • Tiktoken preload<br>• Model auto-config<br>• Storage cleanup<br>• News redirect logic |
@@ -86,6 +86,7 @@ _app.tsx (Root)
 ## Application Routes
 
 ### Primary Apps
+
 - `/` → AppChat (default)
 - `/call` → Voice call interface
 - `/draw` → Image generation
@@ -96,24 +97,28 @@ _app.tsx (Root)
 
 #### Chat App Zero States
 
-**CMLZeroModels**
+##### CMLZeroModels
+
 - **Location**: `/src/apps/chat/components/messages-list/CMLZeroModels.tsx`
 - **Triggered**: No LLM sources configured
 - **Shows**: Welcome screen with "Setup Models" button
 
-**CMLZeroConversation**
+##### CMLZeroConversation
+
 - **Location**: `/src/apps/chat/components/messages-list/CMLZeroConversation.tsx`
 - **Triggered**: No conversation selected
 - **Shows**: "Select/create conversation" prompt
 
-**PersonaGrid**
+##### PersonaGrid
+
 - **App**: Chat (when conversation is empty)
 - **Triggered**: Conversation exists but has no messages
 - **Shows**: Persona selector interface
 
 #### Feature-Specific Zero States
 
-**Beam Tutorial**
+##### Beam Tutorial
+
 - **Feature**: Beam (multi-model reasoning)
 - **Component**: `ExplainerCarousel`
 - **Triggered**: First-time Beam usage
@@ -122,18 +127,21 @@ _app.tsx (Root)
 ## Common Scenarios
 
 ### New User First Visit
+
 1. Navigates to `/` → Provider stack loads
 2. Bootstrap runs → No news redirect (first visit)
 3. Chat loads → **CMLZeroModels** (no models configured)
 4. User clicks "Setup Models" → Configuration flow
 
 ### Returning User with Saved State
+
 1. Navigates to `/` → Provider stack loads
 2. IndexedDB restores state → Previous conversation loaded
 3. Chat loads → **Active chat interface** (bypasses all zero states)
 4. All messages and context preserved from last session
 
 ### Shared Chat Viewer
+
 1. Navigates to `/link/chat/[id]` → Full provider stack
 2. Views read-only chat → May see "Import" option
 3. If importing → Checks for duplicates, creates new local conversation
@@ -141,11 +149,13 @@ _app.tsx (Root)
 ## Storage System
 
 AI Workspace uses a local-first architecture:
+
 - **Zustand** for reactive state management
 - **Zustand persist** to localStorage, except chats, which persist to IndexedDB (`createIDBPersistStorage`)
 - **Version-based migrations** for data structure upgrades
 
 Key stores:
+
 - `app-chats`: Conversations and messages (IndexedDB)
 - `app-models`: Model services and configurations (localStorage)
 - `app-ui`: UI preferences (localStorage)

@@ -2,7 +2,7 @@
 
 Quick answers to common questions about AI Workspace. For detailed documentation, see the [documentation index](README.md).
 
-### Connectivity
+## Connectivity
 
 <details open>
 <summary><b>What is "Direct Connection" and should I enable it?</b></summary>
@@ -20,14 +20,15 @@ Direct Connection lets the browser call the AI provider's API directly, skipping
 
 1. **Server-side keys** - if the deployment stores API keys in server environment variables, the browser has no credential to send directly.
 2. **Provider does not allow CORS** - browsers cannot call APIs that block cross-origin requests. Most major providers permit it; AI Workspace sets any required headers.
+
 </details>
 
-### Versions
+## Versions
 
 <details open>
 <summary><b>How do I check my AI Workspace version?</b></summary>
 
-You can see the version in the _News_ section of the app, as per the image below.
+You can see the version in the *News* section of the app, as per the image below.
 
 ![Version location in AI Workspace](https://github.com/user-attachments/assets/cd295094-0114-420f-a5b9-0d762e59b506)
 </details>

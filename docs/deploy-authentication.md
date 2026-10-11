@@ -9,7 +9,7 @@ in one of the following ways:
 
 <br/>
 
-### HTTP Authentication
+## HTTP Authentication
 
 [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication) is a simple method
 to secure your application.
@@ -22,6 +22,7 @@ To enable it in AI Workspace, you **must manually build the application**:
   - Build: usual simple build procedure (e.g. [Deploy manually](installation.md#Local-Production-build) or [Deploying with Docker](deploy-docker.md))
 
 - Configure the following [environment variables](environment-variables.md) before launching AI Workspace:
+
 ```dotenv
 HTTP_BASIC_AUTH_USERNAME=<your username>
 HTTP_BASIC_AUTH_PASSWORD=<your password>
@@ -31,7 +32,7 @@ HTTP_BASIC_AUTH_PASSWORD=<your password>
 
 <br/>
 
-### Cloud Deployments Authentication
+## Cloud Deployments Authentication
 
 > This approach allows you to enable authentication without rebuilding the application by using the features
 > provided by your cloud platform to manage user accounts and access.

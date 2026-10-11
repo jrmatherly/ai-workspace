@@ -20,24 +20,24 @@ Built with tRPC, it manages the lifecycle of AI-generated content from request t
 
 ## AIX Providers support
 
-| Service    | Chat       | Function Calling | Multi-Modal Input | Cont. (1) | Streaming | Idiosyncratic | 
-|------------|------------|------------------|-------------------|-----------|-----------|---------------|
-| Alibaba    | ✅          | ✅                |                   | ✅         | Yes + 📦  |               |
-| Anthropic  | ✅          | ✅ + Parallel     | Img: ✅            | ✅         | Yes + 📦  |               |
-| Azure      | ✅          | ✅                |                   | ✅         | Yes + 📦  |               |
-| Deepseek   | ✅          | ❌ (rejected)     |                   | ✅         | Yes + 📦  |               |
-| Gemini     | ✅          | ✅ + Parallel     | Img: ✅            | ✅         | Yes + 📦  | Code ex.: ✅   |
-| Groq       | ✅          | ✅ + Parallel     |                   | ✅         | Yes + 📦  |               |
-| LM Studio  | ✅          | ❌ (not working)  |                   | ❌         | Yes  + 📦 |               |
-| Local AI   | ✅          | ✅                |                   | ❌         | Yes  + 📦 |               |
-| Mistral    | ✅          | ✅                |                   | ✅         | Yes  + 📦 |               |
-| OpenAI     | ✅          | ✅ + Parallel     | Img: ✅            | ✅         | Yes + 📦  |               |
-| OpenRouter | ✅          | ❌ (inconsistent) |                   | ✅         | Yes + 📦  |               |
-| Perplexity | ✅          | ❌ (rejected)     |                   | ✅         | Yes + 📦  |               |
-| TogetherAI | ✅          | ✅                |                   | ✅         | Yes + 📦  |               |
-| xAI        |            |                  |                   |           |           |               |
-| Z.ai       | ✅          | ✅                | Img: ✅            | ✅         | Yes + 📦  | Thinking mode |
-| Ollama (2) | ❌ (broken) | ?                |                   |           |           |               |
+| Service | Chat | Function Calling | Multi-Modal Input | Cont. (1) | Streaming | Idiosyncratic |
+| ------------ | ------------ | ------------------ | ------------------- | ----------- | ----------- | --------------- |
+| Alibaba | ✅ | ✅ | | ✅ | Yes + 📦 | |
+| Anthropic | ✅ | ✅ + Parallel | Img: ✅ | ✅ | Yes + 📦 | |
+| Azure | ✅ | ✅ | | ✅ | Yes + 📦 | |
+| Deepseek | ✅ | ❌ (rejected) | | ✅ | Yes + 📦 | |
+| Gemini | ✅ | ✅ + Parallel | Img: ✅ | ✅ | Yes + 📦 | Code ex.: ✅ |
+| Groq | ✅ | ✅ + Parallel | | ✅ | Yes + 📦 | |
+| LM Studio | ✅ | ❌ (not working) | | ❌ | Yes  + 📦 | |
+| Local AI | ✅ | ✅ | | ❌ | Yes  + 📦 | |
+| Mistral | ✅ | ✅ | | ✅ | Yes  + 📦 | |
+| OpenAI | ✅ | ✅ + Parallel | Img: ✅ | ✅ | Yes + 📦 | |
+| OpenRouter | ✅ | ❌ (inconsistent) | | ✅ | Yes + 📦 | |
+| Perplexity | ✅ | ❌ (rejected) | | ✅ | Yes + 📦 | |
+| TogetherAI | ✅ | ✅ | | ✅ | Yes + 📦 | |
+| xAI | | | | | | |
+| Z.ai | ✅ | ✅ | Img: ✅ | ✅ | Yes + 📦 | Thinking mode |
+| Ollama (2) | ❌ (broken) | ? | | | | |
 
 Notes:
 
@@ -54,17 +54,17 @@ The subsystem comprises three main components:
 - Renders AI-generated content in real-time
 - Reconstructs streamed data
 
-2. **Server (e.g. Next.js Backend)**
+1. **Server (e.g. Next.js Backend)**
 
 - Acts as an intermediary between client and AI providers
 - Handles request preparation, dispatching, and response processing
 - Streams responses back to the client
 
-3. **Upstream AI Providers**
+1. **Upstream AI Providers**
 
 - Generate AI content based on requests
 
-### ChatGenerate workflow:
+### ChatGenerate workflow
 
 1. Request Initialization: AIX Client prepares and sends request (systemInstruction, messages=AixWire_Parts[], etc.) to AIX Server
 2. Dispatch Preparation: AIX Server prepares for upstream communication
@@ -83,7 +83,7 @@ AIX is organized into the following files and folders:
 - `aix.client.ts`: Main client-side entry point for AIX operations.
 - `aix.client.chatGenerateRequest.ts`: Handles conversion of chat messages to AIX-compatible format (AixWire_Content, AixWire_Parts, etc.).
 
-2. Server-Side (`/server/`):
+1. Server-Side (`/server/`):
 
 - API (`/server/api/`) - Client to Server communication:
   - `aix.router.ts`: Defines the tRPC router for AIX operations.
@@ -182,6 +182,7 @@ sequenceDiagram
 ---
 
 ### 2025-03-14 Update
+
 AIX is used in production in AI Workspace and is stable and performant.
 The code is tightly coupled with the tRPC framework and the rest of our codebase,
 so it is not recommended to use it outside of our ecosystem.

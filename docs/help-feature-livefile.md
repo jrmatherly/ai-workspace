@@ -31,7 +31,7 @@ With LiveFile, you can:
 - **Performance:**
   - Can handle **dozens of files efficiently**.
 - **Limitations:**
-  - **File Size Limit**: 
+  - **File Size Limit**:
     - Supports text files up to **10 MB**.
   - **Pairing Persistence:**
     - LiveFile connections **do not persist across sessions**.
@@ -67,27 +67,27 @@ You can manually pair them with a local file.
 #### Pairing Attachments
 
 1. **Select the Attachment:**
-  - Click on the attachment in the chat to view it in the previewer.
+   - Click on the attachment in the chat to view it in the previewer.
 
 2. **Initiate Pairing:**
-  - Click on **"Pair File"** (🔗).
-  - If you have open LiveFiles, they will be listed for easy selection.
-  - Alternatively, you can select a new file from your local system.
+   - Click on **"Pair File"** (🔗).
+   - If you have open LiveFiles, they will be listed for easy selection.
+   - Alternatively, you can select a new file from your local system.
 
 3. **Grant Permissions**
-  - When prompted, allow AI Workspace to access the file.
+   - When prompted, allow AI Workspace to access the file.
 
 #### Pairing Code Blocks
 
 1. **Access Code Block Options:**
-  - Click on the code block to reveal the header with options.
+   - Click on the code block to reveal the header with options.
 
 2. **Initiate Pairing:**
-  - Click the **"Pair File"** button (🔗).
-  - Select from your open LiveFiles or choose a new file.
+   - Click the **"Pair File"** button (🔗).
+   - Select from your open LiveFiles or choose a new file.
 
 3. **Confirm Pairing:**
-  - Grant permission when prompted.
+   - Grant permission when prompted.
 
 ---
 
@@ -140,14 +140,14 @@ You can manually pair them with a local file.
 
 ## Technical Details
 
-LiveFile uses the [File System Access API](https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API) to 
-interact with your local files securely. It leverages the [browser-fs-access](https://github.com/GoogleChromeLabs/browser-fs-access) library, 
+LiveFile uses the [File System Access API](https://developer.mozilla.org/en-US/docs/Web/API/File_System_Access_API) to
+interact with your local files securely. It leverages the [browser-fs-access](https://github.com/GoogleChromeLabs/browser-fs-access) library,
 an open-source project by Google Chrome Labs, which provides an easy interface to the File System Access API with fallbacks for broader browser support.
 
 - **Security:**
   - Access to files requires explicit user permission.
 
-- **Performance:** 
+- **Performance:**
   - Designed to handle dozens of files efficiently (tested on hundreds).
   - Works with the AI Workspace attachment system to recursively add directories.
 
@@ -161,5 +161,5 @@ an open-source project by Google Chrome Labs, which provides an easy interface t
 You can significantly boost your productivity and streamline your workflow within AI Workspace
 by understanding how to utilize LiveFile's features fully.
 
-This Feature is in Beta as there are a few limitations and improvements to be made. 
+This Feature is in Beta as there are a few limitations and improvements to be made.
 For support, open an issue on [GitHub](https://github.com/jrmatherly/ai-workspace/issues).

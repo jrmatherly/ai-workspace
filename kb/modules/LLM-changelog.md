@@ -18,7 +18,7 @@ failed listing leaves the models untouched). Model refs are the DLLM id minus th
 renders the words, and unknown letters (from a newer build) render as "changed".
 
 | Letter | Word | Compares |
-|---|---|---|
+| --- | --- | --- |
 | `l` | name | label |
 | `c` | context | context window |
 | `o` | output limit | max output tokens |

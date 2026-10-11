@@ -1,6 +1,6 @@
 # Changelog
 
-AI Workspace started from the big-AGI 2.1.1 codebase on 2026-10-10; earlier history is upstream's and is not carried here. Releases are tracked on GitHub Releases: https://github.com/jrmatherly/ai-workspace/releases
+AI Workspace started from the big-AGI 2.1.1 codebase on 2026-10-10; earlier history is upstream's and is not carried here. Releases are tracked on GitHub Releases: <https://github.com/jrmatherly/ai-workspace/releases>
 
 ## 2026.10.11
 

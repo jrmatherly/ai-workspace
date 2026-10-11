@@ -18,7 +18,7 @@ If `$vendor` is empty or not in the table below, list the table and ask which ve
 Paths are relative to `src/modules/aix/server/dispatch/`.
 
 | `$vendor` | Wire types | Request adapter | Response parser |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | anthropic | `wiretypes/anthropic.wiretypes.ts` | `chatGenerate/adapters/anthropic.messageCreate.ts` | `chatGenerate/parsers/anthropic.parser.ts` |
 | gemini | `wiretypes/gemini.wiretypes.ts` | `chatGenerate/adapters/gemini.generateContent.ts` | `chatGenerate/parsers/gemini.parser.ts` |
 | openai | `wiretypes/openai.wiretypes.ts` | `chatGenerate/adapters/openai.responsesCreate.ts`, `chatGenerate/adapters/openai.chatCompletions.ts` | `chatGenerate/parsers/openai.responses.parser.ts`, `chatGenerate/parsers/openai.parser.ts` |

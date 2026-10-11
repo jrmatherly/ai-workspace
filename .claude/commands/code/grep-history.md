@@ -14,7 +14,7 @@ This repo has a short history (copied from upstream at one commit, see CLAUDE.md
 
 ## Example
 
-```
+```text
 /code:grep-history NEXT_PUBLIC_POSTHOG_HOST "first commit"
 ```
 
@@ -59,6 +59,7 @@ git grep -l "$0" <resolved_ancestor> 2>/dev/null || echo "(not found at ancestor
 ### Step 4: Report
 
 Present results concisely:
+
 - Number of commits found (or "none")
 - List of matching commits (hash + subject line)
 - Whether the string exists at HEAD and/or at the ancestor

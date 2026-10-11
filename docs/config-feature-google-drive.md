@@ -23,8 +23,8 @@ In [Google Cloud Console](https://console.cloud.google.com/):
 1. Go to **APIs & Services > Credentials**
 2. Create **OAuth client ID** (Web application)
 3. Add JavaScript origins:
-  - `http://localhost:3000` (dev)
-  - `https://your-domain.com` (prod)
+   - `http://localhost:3000` (dev)
+   - `https://your-domain.com` (prod)
 
 ### 4. Set Environment Variable
 
@@ -38,13 +38,13 @@ NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID=your-client-id.apps.googleusercontent.com
 
 ## Supported Files
 
-| Type            | Export Format       |
-|-----------------|---------------------|
-| Regular files   | Downloaded directly |
-| Google Docs     | Markdown (.md)      |
-| Google Sheets   | CSV (.csv)          |
-| Google Slides   | PDF (.pdf)          |
-| Google Drawings | SVG (.svg)          |
+| Type | Export Format |
+| ----------------- | --------------------- |
+| Regular files | Downloaded directly |
+| Google Docs | Markdown (.md) |
+| Google Sheets | CSV (.csv) |
+| Google Slides | PDF (.pdf) |
+| Google Drawings | SVG (.svg) |
 
 ## Troubleshooting
 

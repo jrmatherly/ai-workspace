@@ -22,7 +22,7 @@ logging in `trpc.router.fetchers.ts`, the sweep reports errors itself) and runs
 `npx -y tsx tools/develop/llm-parameter-sweep/sweep.ts "$@"`. Relative `--config` paths resolve from the repo root.
 
 | flag | effect |
-|---|---|
+| --- | --- |
 | `--config`, `-c <path>` | config file (see below) |
 | `--dialect`, `-d <name>` | single-vendor mode with `--key`; with a config, runs only vendors of that dialect |
 | `--key <key>` | API key for single-vendor mode |
@@ -99,7 +99,7 @@ without re-calling the tool).
 ## Outcomes
 
 | outcome | console | meaning |
-|---|---|---|
+| --- | --- | --- |
 | pass | ✅ (dim ✓ for a `null` value) | HTTP 200, no dialect issue, stop reason ok or tool invocations; for probes, the expected call with valid args |
 | fail | ❌ | HTTP error other than 429/503, request build exception, parser dialect issue, other stop reason, preflight failure, or a probe check failed |
 | blocked | ❓ | HTTP 429 or 503: rate limit or overload, says nothing about the parameter |

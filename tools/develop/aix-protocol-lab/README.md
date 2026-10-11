@@ -10,7 +10,7 @@ to all AIX chat-generation grammars.
 
 No parallel implementation. Capture, replay and oracle all execute:
 
-```
+```text
 createChatGenerateDispatch          real adapters build the request; real parser + demuxer selected
   -> executeChatGenerateWithContinuation   continuation (pause_turn) + operation retry + executor
     -> ChatGenerateTransmitter      real particle serialization
@@ -62,7 +62,7 @@ checks report on top). Replays of a capture are deterministic and diffed automat
 ## Flavors
 
 | flavor | grammar | default model | notes |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | anthropic-messages | typed SSE, explicit block lifecycle | claude-sonnet-4-6 | `codeExec` unlocks via a PTC tool (`allowed_callers: ['code_execution']`) - there is no direct switch |
 | openai-responses | typed events, sequence_number + addressed items | gpt-5.2 | `--oracle` supported; no hosted fetch tool |
 | metaai-responses | same grammar on api.meta.ai, `data: [DONE]` terminator, interleaved items | muse-spark-1.3 | reasoning + hosted `web_search`; no code exec / fetch; `--model muse-image-1.0 --no-stream` for image output |
@@ -139,7 +139,7 @@ turn boundary, as on 5.x.
 Fourth session (`interleave` scenario: distinct parallel FC + dynamic filtering + circulation, 2026-06-23):
 
 - `interleave` = 2 DISTINCT client tools (capybara, convert_temperature) called in parallel (3 calls)
-  + server search/fetch, each vendor's richest concurrent config. All grammars clean.
+  - server search/fetch, each vendor's richest concurrent config. All grammars clean.
 - **Anthropic** (dynamic filtering, `vndAntWebDynamic`): model emitted 3 parallel client FCs AND wrote
   two `code_execution` blocks whose code calls `await web_search(...)`/`await web_fetch(...)` internally
   - the dynamic-filtering path. Turn paused at `ok-tool_invocations` for client tools, so the code-exec
@@ -215,8 +215,10 @@ converter and adapter with a follow-up user message (build only), and aligns the
 turn-2 body against the vendor's canonical turn-1 content block by block: exact, changed (fields named),
 dropped, added. Loads the client graph, so it runs with the stub preload:
 
-    node --require ./tools/develop/aix-protocol-lab/stub-preload.cjs --import tsx tools/develop/aix-protocol-lab/lab.ts chain anthropic-messages search --model claude-opus-5-5 --live
-    node --require ./tools/develop/aix-protocol-lab/stub-preload.cjs --import tsx tools/develop/aix-protocol-lab/lab.ts chain --from captures/<run>.s.json --live
+```bash
+node --require ./tools/develop/aix-protocol-lab/stub-preload.cjs --import tsx tools/develop/aix-protocol-lab/lab.ts chain anthropic-messages search --model claude-opus-5-5 --live
+node --require ./tools/develop/aix-protocol-lab/stub-preload.cjs --import tsx tools/develop/aix-protocol-lab/lab.ts chain --from captures/<run>.s.json --live
+```
 
 Canonical turn per flavor: Anthropic from the SSE deltas (or the NS body), OpenAI Responses from the
 `response.output_item.done` items (the terminal event re-encrypts every reasoning item, so those bytes never

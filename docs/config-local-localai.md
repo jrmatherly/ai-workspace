@@ -15,13 +15,13 @@ We are deepening the integration between the two products. As of the time of wri
 - ✖️ [Constrained grammars](https://localai.io/features/constrained_grammars/) (JSON output)
 - ✖️ Voice cloning 🆕
 
-_Last updated Feb 21, 2024_
+*Last updated Feb 21, 2024.*
 
 ## Guide
 
 ### LocalAI installation and configuration
 
-Follow the guide at: https://localai.io/basics/getting_started/
+Follow the guide at: <https://localai.io/basics/getting_started/>
 
 - verify it works by browsing to [http://localhost:8080/v1/models](http://localhost:8080/v1/models)
   (or the IP:Port of the machine, if running remotely) and seeing listed the model(s) you downloaded
@@ -52,14 +52,14 @@ If the running LocalAI instance is configured with a [Model Gallery](https://loc
 
 ## Troubleshooting
 
-##### Unknown Context Window Size
+### Unknown Context Window Size
 
 At the time of writing, LocalAI does not publish the model `context window size`.
 Every model is assumed to be capable of chatting, and with a context window of 4096 tokens.
 Please update the [src/modules/llms/server/models.mappings.ts](../src/modules/llms/server/models.mappings.ts)
 file with the mapping information between LocalAI model IDs and names/descriptions/tokens, etc.
 
-# 🤝 Support
+## 🤝 Support
 
 - Hop into the [LocalAI Discord](https://discord.gg/uJAeKSAGDy) for support and questions
 - For AI Workspace support, please open an issue in the [issue tracker](https://github.com/jrmatherly/ai-workspace/issues)

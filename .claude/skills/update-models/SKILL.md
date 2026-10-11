@@ -17,7 +17,7 @@ To compare parameterSpecs against sweep data instead, run `/verify-parameters <d
 ## Vendors
 
 | `$vendor` | Model file |
-|---|---|
+| --- | --- |
 | alibaba | `src/modules/llms/server/openai/models/alibaba.models.ts` |
 | anthropic | `src/modules/llms/server/anthropic/anthropic.models.ts` |
 | deepseek | `src/modules/llms/server/openai/models/deepseek.models.ts` |

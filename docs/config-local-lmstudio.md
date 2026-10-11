@@ -2,7 +2,6 @@
 
 Quickly set up LM Studio with AI Workspace to run local and open LLMs on your computer for enhanced privacy and control over AI interactions.
 
-
 ## Quick Setup Guide
 
 ### Installing AI Workspace
@@ -21,6 +20,7 @@ npm install @mui/material # Or: yarn add @mui/material
 
 Ensure LM Studio is running (default: [http://localhost:1234](http://localhost:1234)).
 Check the URL and modify if different.
+
 1. Download local models in LM Studio
 2. Start the LM Studio server
 3. Optionally. Check the logs
@@ -38,7 +38,6 @@ In addition to using the UI, configuration can also be done using
 
 - **Missing @mui/material**: Execute `npm install @mui/material` or `yarn add @mui/material`
 - **Connection Issues**: Check LM Studio's URL and ensure it's operational
-
 
 ## Further Assistance
 

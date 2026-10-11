@@ -6,7 +6,7 @@
 
 - OpenRouter implements the Open Responses spec (openresponses.org): OpenAI Responses plus vendor-prefixed items (`openrouter:web_search`, `openrouter:shell`, `openrouter:image_generation`) and reasoning items that may carry raw `content`. OpenRouter adds `format` and `signature` on reasoning items beyond the spec.
 - Stateless only: `store: true` and a non-null `previous_response_id` 400 (`invalid_prompt`). No resume or delete handles; force `enableResumability` off for the dialect. `/responses/compact` 404s.
-- Wire: standard SSE, `: ` comment lines (same demuxer), `response.created | in_progress | output_item.added | content_part.* | output_text.delta | function_call_arguments.* | output_item.done | completed | incomplete`, then `data: [DONE]`. Usage always on the terminal event (`input_tokens_details.cached_tokens`, `cache_write_tokens`, `output_tokens_details.reasoning_tokens`, `cost` number, `cost_details`, `is_byok`). The docs' `response.done` and `content_part.delta` examples are stale.
+- Wire: standard SSE, `:` comment lines (same demuxer), `response.created | in_progress | output_item.added | content_part.* | output_text.delta | function_call_arguments.* | output_item.done | completed | incomplete`, then `data: [DONE]`. Usage always on the terminal event (`input_tokens_details.cached_tokens`, `cache_write_tokens`, `output_tokens_details.reasoning_tokens`, `cost` number, `cost_details`, `is_byok`). The docs' `response.done` and `content_part.delta` examples are stale.
 - Item ids are synthetic (`rs_tmp_*`, `msg_tmp_*`, `fc_tmp_*`, `ig_tmp_*`), opaque, per response.
 - Errors before the stream are JSON with numeric `code` and `metadata.raw` (upstream cause), the same shape `_forwardOpenRouterDataError` unwraps today, also with `stream: true`. Schema failures are opaque: `{ code: 'invalid_prompt', message: 'Invalid Responses API request' }`, sometimes with validator detail in `metadata.raw`. Streamed failures: `response.failed` plus a top-level `error_type` (documented, not triggered).
 - Unknown top-level params are forwarded and 400 upstream (`foo_bar` reached OpenAI). `provider.require_parameters: true` filters endpoints instead ("No endpoints found that can handle the requested parameters").
@@ -18,7 +18,7 @@
 Status: ok = same shape works; remap = works with a different shape; port = our code must change; loss = no equivalent.
 
 | Chat Completions customization | Responses equivalent | Status |
-|---|---|---|
+| --- | --- | --- |
 | Sticky `session_id` (adapter) | Same field. 3/3 same provider with it, 1/3 without (DeepSeek, 15 endpoints) | ok |
 | `provider.require_parameters` (dispatch) | Same | ok |
 | App attribution headers, CSF | Same; preflight 204 `*` for our header set | ok |
@@ -42,7 +42,7 @@ Status: ok = same shape works; remap = works with a different shape; port = our 
 | `plugins: [{ id: 'web' }]` | Accepted, deprecated by OpenRouter. `tools: [{ type: 'openrouter:web_search', engine?, max_results? }]` works on Claude and DeepSeek: one `openrouter:web_search` item (`action`, `id`, `status`) then `url_citation` annotations via `response.output_text.annotation.added` (start/end indices were 0). Bare `{ type: 'web_search' }` also works on Claude; on GPT it stays native (`web_search_call` items) | remap |
 | `include: ['web_search_call.action.sources']` | Only five include values exist (`file_search_call.results`, `message.input_image.image_url`, `computer_call_output.output.image_url`, `reasoning.encrypted_content`, `code_interpreter_call.outputs`); this one 400s. Send it to OpenAI models only | OpenAI-only |
 | Hosted `code_interpreter` | GPT executes (`code_interpreter_call` item). Claude accepts the tool and fabricates the output. `openrouter:shell` executes for everyone (item `openrouter:shell`) | remap |
-| `modalities: ['image']` + `image_config` | Same; upstream `responseModalities` + `imageConfig`. Output: `image_generation_call` item, `result` is a data URL (`data:image/png;base64,...`), `output_format: null`; events `image_generation_call.in_progress | generating | completed`. Our parser expects bare base64 plus `output_format` | port, small |
+| `modalities: ['image']` + `image_config` | Same; upstream `responseModalities` + `imageConfig`. Output: `image_generation_call` item, `result` is a data URL (`data:image/png;base64,...`), `output_format: null`; events `image_generation_call.in_progress \| generating \| completed`. Our parser expects bare base64 plus`output_format` | port, small |
 | `video_url` part | `{ type: 'input_video', video_url: '<url>' }` (OpenRouter extension). The Chat Completions part shape 400s | remap |
 | `modalities: ['audio']` output | 400 on Responses in every shape. Chat Completions streams audio today (`openai/gpt-audio`, `gpt-audio-mini`, two Lyria ids) | loss |
 | Image, PDF, audio input | `input_image` data URL, `input_file` (`file_data`, Claude, Gemini, GPT), `input_audio` (Gemini) all work | ok |
@@ -62,7 +62,7 @@ Also verified: `configuration_update` input item (Fable 5.1), `parallel_tool_cal
 Item: `{ type: 'reasoning', id, status, format, summary[], content[]?, encrypted_content?, signature? }`.
 
 | Vendor | `format` | Carrier | Stream event |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | OpenAI | `openai-responses-v1` | `encrypted_content` (wrapped: `<blob>.<base64 { endpoint_slug }>`), summary only with `reasoning.summary` | `reasoning_summary_text.delta` |
 | xAI | `xai-responses-v1` | `encrypted_content` + summary | `reasoning_summary_text.delta` |
 | Anthropic | `anthropic-claude-v1` | `content[].reasoning_text` + `signature` | `reasoning_text.delta` |

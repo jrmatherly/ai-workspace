@@ -16,7 +16,7 @@ This repo is a copy of `enricoros/big-AGI` taken at upstream commit `99b3bf9c` (
 ## Tooling
 
 | Piece | Path |
-|---|---|
+| --- | --- |
 | Driver | `${CLAUDE_SKILL_DIR}/scripts/upstream-review.sh` |
 | Watermark (tracked) | `.upstream-review/watermark.json` (`seedSha` fixed, `lastReviewedSha` advances) |
 | Decision logs (tracked) | `.upstream-review/reviews/<YYYY-MM-DD>-review.md` |
@@ -35,7 +35,7 @@ The first run adds the `upstream` remote and seeds `upstream/main` from `private
 Markers in `--stat`, our HEAD vs the commit's parent (pre-image) for each file it touches:
 
 | | Meaning | Adoption path |
-|---|---|---|
+| --- | --- | --- |
 | `=` | ours equals the pre-image | `git cherry-pick -x <sha>` applies cleanly |
 | `<` | ours equals the seed, not the pre-image | an older upstream commit touched it first; pick in order |
 | `~` | ours differs from both | we changed it; resolve the 3-way or hand-port |
@@ -71,7 +71,7 @@ For a large window (more than about 20 commits), dispatch one reviewer subagent 
 When you hand-port a `~` hunk, translate upstream's spelling to ours before it lands. After porting, grep the diff for the left column; any hit is a miss.
 
 | Upstream | Ours |
-|---|---|
+| --- | --- |
 | IndexedDB name `'Big-AGI'` (`dblobs.db.ts`, `BackupRestore.tsx`, `public/dev/inspect/*`) | `'AI-Workspace'` |
 | backup `application: 'Big-AGI'` | `application: 'AI-Workspace'` |
 | backup schema `vnd.agi.flash-backup` | `vnd.ai-workspace.flash-backup` |

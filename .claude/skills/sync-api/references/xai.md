@@ -2,6 +2,7 @@
 # xAI
 
 Files:
+
 - xAI wire types: `src/modules/aix/server/dispatch/wiretypes/xai.wiretypes.ts` (xAI-specific request schema, tools)
 - Request adapter: `src/modules/aix/server/dispatch/chatGenerate/adapters/xai.responsesCreate.ts` (AIX → xAI Responses API)
 - Response parser: `src/modules/aix/server/dispatch/chatGenerate/parsers/openai.responses.parser.ts` (shared with OpenAI Responses)
@@ -9,28 +10,31 @@ Files:
 - OpenAI shared types: `src/modules/aix/server/dispatch/wiretypes/openai.wiretypes.ts` (InputItem/OutputItem schemas reused by xAI)
 
 IMPORTANT context:
+
 - We use ONLY the xAI Responses API (`POST /v1/responses`). We do NOT use the Chat Completions API (`/v1/chat/completions`) for xAI anymore.
 - xAI's Responses API is similar to OpenAI's but has key differences - this sync should find what changed since our last sync.
 - Response streaming/parsing reuses the OpenAI Responses parser since the format is compatible.
 - We do NOT implement: Files API, Collections Search, Remote MCP tools, Voice Agent API, Image/Video generation, Batch API, or Deferred Completions.
 
 **Primary Sources (guide pages work well with WebFetch despite being JS-rendered):**
-- Responses API Guide (Text): https://docs.x.ai/developers/model-capabilities/text/generate-text
-- Stateful Responses (`previous_response_id`, migration from Chat Completions): https://docs.x.ai/developers/model-capabilities/text/comparison
-- Tools Overview: https://docs.x.ai/developers/tools/overview
-- Search Tools: web_search https://docs.x.ai/developers/tools/web-search, x_search https://docs.x.ai/developers/tools/x-search
-- Code Execution Tool: https://docs.x.ai/developers/tools/code-execution
-- Function Calling: https://docs.x.ai/developers/tools/function-calling
-- Streaming: https://docs.x.ai/developers/model-capabilities/text/streaming
-- Reasoning: https://docs.x.ai/developers/model-capabilities/text/reasoning
-- Structured Outputs: https://docs.x.ai/developers/model-capabilities/text/structured-outputs
-- Models & Pricing: https://docs.x.ai/developers/models
-- Release Notes: https://docs.x.ai/developers/release-notes
-- API Reference (Responses): https://docs.x.ai/developers/rest-api-reference/inference/responses
-- Doc index (append `.md` to any page for markdown): https://docs.x.ai/llms.txt
+
+- Responses API Guide (Text): <https://docs.x.ai/developers/model-capabilities/text/generate-text>
+- Stateful Responses (`previous_response_id`, migration from Chat Completions): <https://docs.x.ai/developers/model-capabilities/text/comparison>
+- Tools Overview: <https://docs.x.ai/developers/tools/overview>
+- Search Tools: web_search <https://docs.x.ai/developers/tools/web-search>, x_search <https://docs.x.ai/developers/tools/x-search>
+- Code Execution Tool: <https://docs.x.ai/developers/tools/code-execution>
+- Function Calling: <https://docs.x.ai/developers/tools/function-calling>
+- Streaming: <https://docs.x.ai/developers/model-capabilities/text/streaming>
+- Reasoning: <https://docs.x.ai/developers/model-capabilities/text/reasoning>
+- Structured Outputs: <https://docs.x.ai/developers/model-capabilities/text/structured-outputs>
+- Models & Pricing: <https://docs.x.ai/developers/models>
+- Release Notes: <https://docs.x.ai/developers/release-notes>
+- API Reference (Responses): <https://docs.x.ai/developers/rest-api-reference/inference/responses>
+- Doc index (append `.md` to any page for markdown): <https://docs.x.ai/llms.txt>
 
 **Alternative Sources if primary blocked:**
-- xAI Python SDK: https://github.com/xai-org/xai-sdk-python
+
+- xAI Python SDK: <https://github.com/xai-org/xai-sdk-python>
 - Web Search for "xai grok api changelog 2026" or "xai responses api new features"
 
 **Live endpoint (extra signal):** If `.env.api-keys` has `XAI_API_KEY`, fire a real streaming Responses request and inspect the raw SSE - ground-truth for xAI-specific output items, event types, and usage fields that docs lag: `POST https://api.x.ai/v1/responses` (`"stream":true`).
