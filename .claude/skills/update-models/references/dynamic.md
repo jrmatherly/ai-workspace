@@ -1,10 +1,8 @@
----
-description: Update/validate dynamic vendor model parsers (OpenRouter, TogetherAI, Azure, Baseten, Novita, ChutesAI, FireworksAI, LM Studio, LocalAI, FastAPI)
----
+# Dynamic vendors (API-fetched parsers)
 
 Validate that the dynamic (API-fetched) vendor model parsers are up to date and not silently broken.
 
-These vendors do NOT have hardcoded model lists - they fetch models from APIs at runtime. But their parsers, filters, heuristic detection, and capability mapping can break if upstream APIs change. This skill covers all dynamic vendors NOT covered by the other `llms:update-models-{vendor}` skills.
+These vendors do NOT have hardcoded model lists - they fetch models from APIs at runtime. But their parsers, filters, heuristic detection, and capability mapping can break if upstream APIs change. This reference covers all dynamic vendors NOT covered by the other vendor references.
 
 ## Vendors to Validate
 
@@ -86,9 +84,9 @@ For each vendor (prioritize High > Medium > Low):
 
 4. **Fix issues found** - update parsers, filters, deny lists as needed.
 
-5. Run `tsc --noEmit` after changes.
+5. Run the shared validate-and-record step after changes.
 
-**Live endpoint (extra signal):** If `.env.api-keys` has a key for one of these vendors (e.g. `FIREWORKSAI_API_KEY`, `TOGETHERAI_API_KEY`), hit its live models endpoint (authenticating with the key; path varies - e.g. Together `/v1/models`, Fireworks `/inference/v1/models`) to get the real, current response shape - the fastest way to catch parser drift, new capability fields, or changed field names. Never commit or echo the key.
+**Live endpoint (extra signal):** If `.env.api-keys` has a key for one of these vendors (e.g. `FIREWORKSAI_API_KEY`, `TOGETHERAI_API_KEY`), hit its live models endpoint (authenticating with the key; path varies - e.g. Together `/v1/models`, Fireworks `/inference/v1/models`) to get the real, current response shape - the fastest way to catch parser drift, new capability fields, or changed field names.
 
 **Important:**
 - Do NOT convert dynamic vendors to hardcoded lists - the dynamic approach is intentional

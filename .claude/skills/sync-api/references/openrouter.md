@@ -1,9 +1,7 @@
----
-description: Sync OpenRouter API implementation with latest upstream documentation
-argument-hint: specific feature to check
----
 
-Review the OpenRouter implementation:
+# OpenRouter
+
+Files:
 - Models list: `src/modules/llms/server/openai/wiretypes/openrouter.wiretypes.ts` (list API response schema)
 - Chat wire types: `src/modules/aix/server/dispatch/wiretypes/openai.wiretypes.ts` (OpenAI-compatible)
 - Request adapter: `src/modules/aix/server/dispatch/chatGenerate/adapters/openai.chatCompletions.ts` ('openrouter' dialect)
@@ -12,7 +10,7 @@ Review the OpenRouter implementation:
 
 GOAL: Ensure complete support for OpenRouter's API including advanced features like reasoning/thinking tokens, tool use, search integration, and multi-modal capabilities. OpenRouter is OpenAI-compatible but has important extensions and differences.
 
-Use Task tool with subagent_type=Explore and thoroughness="very thorough" to discover:
+Use the Agent tool (Explore agent, very thorough) to discover:
 1. Map API structure - all endpoints, parameters, capabilities from https://openrouter.ai/docs
 2. **Advanced features** - How to use: reasoning/thinking tokens (o1, DeepSeek R1), tool use/function calling, search integration, multi-modal (vision/audio)
 3. Changelog location - How does OpenRouter communicate API updates and breaking changes?
@@ -33,11 +31,8 @@ Then check the latest API information. Try these sources (be creative if blocked
 - GitHub: https://github.com/OpenRouterTeam (SDKs, examples, issues for recent changes)
 - Web Search: "openrouter api changelog" or "openrouter reasoning tokens" or "openrouter tool use"
 
-**If blocked:** Ask user to provide documentation.
+**Live endpoint (extra signal):** The models list is public - `curl https://openrouter.ai/api/v1/models` - ground-truth for per-model capabilities/metadata. If `.env.api-keys` has `OPENROUTER_API_KEY`, also fire a real streaming `POST https://openrouter.ai/api/v1/chat/completions` (`"stream":true`) to inspect reasoning/tool/usage fields and OpenRouter-specific extensions.
 
-**Live endpoint (extra signal):** The models list is public - `curl https://openrouter.ai/api/v1/models` - ground-truth for per-model capabilities/metadata. If `.env.api-keys` has `OPENROUTER_API_KEY`, also fire a real streaming `POST https://openrouter.ai/api/v1/chat/completions` (`"stream":true`) to inspect reasoning/tool/usage fields and OpenRouter-specific extensions. Never commit or echo the key.
-
-$ARGUMENTS
 Focus on discrepancies and gaps:
 - **Request/Response structure**: New fields, changed requirements, streaming event types
 - **Feature support**: Thinking tokens format, tool calling protocol, search parameters
@@ -47,5 +42,3 @@ Focus on discrepancies and gaps:
 
 Report differences in wire types, adapter logic, parser handling, or dialect-specific quirks.
 Prioritize new capabilities that improve user experience (reasoning visibility, better tool use, etc.).
-
-When making changes, add comments with date: `// [OpenRouter, 2026-MM-DD]: explanation`

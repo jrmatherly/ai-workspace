@@ -63,7 +63,7 @@ For a large window (more than about 20 commits), dispatch one reviewer subagent 
 - Upstream commits that touch `.github/` are SKIP by default. We carry no workflows; the archived ones are in `private/OLD-.github/` for reference.
 - Brand and hosting surfaces are re-pointed at this repo (`src/common/app.release.ts`, `app.config.ts`, `pages/_document.tsx`, README, `docs/`, `docker-compose.yaml`, `.github/`, `spotlight.feed.ts`). Upstream commits touching them show `~` and are ADAPT: take the behavior, keep our URLs.
 - Upstream references to the `dev` branch, `private/dev`, `big-agi-private`, or `kb/product/` describe their hosted line, which we do not have. Content gated on it is SKIP.
-- Model-definition commits (`LLMs: <vendor>: ...`) are the highest-value, lowest-risk class. Prefer ADOPT over re-running `/llms:update-models-*`.
+- Model-definition commits (`LLMs: <vendor>: ...`) are the highest-value, lowest-risk class. Prefer ADOPT over re-running `/update-models <vendor>`.
 - A watermark advance without a decision log is a lost review. Seed the watermark below any backlog you intend to review, never at today's tip.
 
 ## Decision log template

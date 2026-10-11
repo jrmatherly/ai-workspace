@@ -35,7 +35,7 @@ The `gh` command is available for GitHub reads (issues, PRs, labels), but **NEVE
 - **Always use `git mv` instead of `mv`** when renaming or moving files - preserves git history tracking
 - **NEVER run `git stash`** - it causes work loss
 - **Commit subjects**: `Area: terse imperative` (e.g. `LLMs: OpenAI: ...`, `Build: ...`, `Tooling: ...`), single line, no body unless needed, no `Co-Authored-By` trailer. Same scheme as upstream, so adopted upstream commits read consistently in `git log`.
-- Vendor API keys for live protocol work go in `.env.api-keys` (gitignored, one `VENDOR_API_KEY` per line). The file does not exist until you create it; key-gated tests and the `/aix:sync-*` probes skip without it.
+- Vendor API keys for live protocol work go in `.env.api-keys` (gitignored, one `VENDOR_API_KEY` per line). The file does not exist until you create it; key-gated tests and the live probes in `/sync-api` and `/update-models` skip without it.
 
 ### Upstream
 

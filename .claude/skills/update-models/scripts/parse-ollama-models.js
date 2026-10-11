@@ -3,8 +3,9 @@
  * Parse Ollama models from HTML (sorted by newest for stable ordering)
  *
  * Usage:
- *   1. Fetch HTML: curl -s "https://ollama.com/library?sort=newest" -o /tmp/ollama-newest.html
- *   2. Parse: node .claude/scripts/parse-ollama-models.js
+ *   1. Fetch HTML: curl -s "https://ollama.com/library?sort=newest" -o "$(node -p "require('os').tmpdir()")/ollama-newest.html"
+ *   2. Parse: node .claude/skills/update-models/scripts/parse-ollama-models.js [html-path]
+ *      (html-path defaults to <os.tmpdir()>/ollama-newest.html; --help prints this header)
  *
  * Outputs: pipe-delimited format: modelName|pulls|capabilities|sizes|cloud
  * Example: deepseek-r1|66200000|tools,thinking|1.5b,7b,8b,14b,32b,70b,671b|
@@ -31,12 +32,18 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
+if (process.argv.includes('--help') || process.argv.includes('-h')) {
+  const header = fs.readFileSync(__filename, 'utf8').match(/\/\*\*([\s\S]*?)\*\//)[1];
+  console.log(header.split('\n').map(l => l.replace(/^ \* ?/, '')).join('\n').trim());
+  process.exit(0);
+}
+
 const htmlPath = process.argv[2] || path.join(os.tmpdir(), 'ollama-newest.html');
 
 if (!fs.existsSync(htmlPath)) {
   console.error(`Error: HTML file not found at ${htmlPath}`);
   console.error('Please fetch it first with:');
-  console.error('  curl -s "https://ollama.com/library?sort=newest" -o /tmp/ollama-newest.html');
+  console.error(`  curl -s "https://ollama.com/library?sort=newest" -o "${htmlPath}"`);
   process.exit(1);
 }
 

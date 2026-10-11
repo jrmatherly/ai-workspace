@@ -1,13 +1,8 @@
----
-description: Update Anthropic model definitions with latest pricing and capabilities
----
+# Anthropic
 
-Update `src/modules/llms/server/anthropic/anthropic.models.ts` with latest model definitions.
+Model file: `src/modules/llms/server/anthropic/anthropic.models.ts`.
 
-Reference files (for context only, do not modify):
-- `src/modules/llms/server/llm.server.types.ts`
-- `src/modules/llms/server/models.mappings.ts`
-- `src/common/stores/llms/llms.parameters.ts`
+Also read for context only (do not modify): `src/common/stores/llms/llms.parameters.ts`.
 
 **Workflow: Start with recent changes, then verify the full model list.**
 
@@ -42,15 +37,11 @@ pages you might discover this way:
 https://github.com/anthropics/anthropic-sdk-typescript, or web-search
 for "anthropic models latest pricing" / "anthropic latest models".
 
-**Live endpoint (extra signal):** If `.env.api-keys` has `ANTHROPIC_API_KEY`, scan the served model list as ground-truth for what's new/available and cross-check the docs above: `curl https://api.anthropic.com/v1/models -H "x-api-key: $ANTHROPIC_API_KEY" -H 'anthropic-version: 2023-06-01'`. Never commit or echo the key.
+**Live endpoint (extra signal):** If `.env.api-keys` has `ANTHROPIC_API_KEY`, scan the served model list as ground-truth for what's new/available and cross-check the docs above: `curl https://api.anthropic.com/v1/models -H "x-api-key: $ANTHROPIC_API_KEY" -H 'anthropic-version: 2023-06-01'`.
 
-**Important:**
-- Review the full model list for additions, removals, and price changes
+**Vendor-specific rules:**
 - For new models: check which `parameterSpecs` are needed (thinking mode,
   effort levels, 1M context, skills, web tools) by reading the linked
   feature docs and comparing with existing model entries
 - When thinking/effort semantics change between generations
   (e.g. adaptive vs manual thinking), document in comments
-- Minimize whitespace/comment changes, focus on content
-- Preserve comments to make diffs easy to review
-- Flag broken links or unexpected content

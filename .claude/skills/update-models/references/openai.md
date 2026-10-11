@@ -1,10 +1,6 @@
----
-description: Update OpenAI model definitions with latest pricing and capabilities
----
+# OpenAI
 
-Update `src/modules/llms/server/openai/models/openai.models.ts` with latest model definitions.
-
-Reference `src/modules/llms/server/llm.server.types.ts` and `src/modules/llms/server/models.mappings.ts` for context only. Focus on the model file, do not descend into other code.
+Model file: `src/modules/llms/server/openai/models/openai.models.ts`.
 
 **Primary Sources:** docs moved from `platform.openai.com/docs/*` (301s) to `developers.openai.com/api/docs/*`.
 Appending `.md` to any docs URL returns clean markdown that plain `curl` fetches (no 403, no browser needed):
@@ -31,10 +27,4 @@ same dead ids (equivalent verdict, weaker message). Probe before concluding a mo
    deny-listed) so `llmOrtOaiLookup` keeps native interfaces/params - same pattern as gemini.models.ts
    phantom models.
 
-**Live endpoint (extra signal):** If `.env.api-keys` has `OPENAI_API_KEY`, scan the served model list for what's new and cross-check the docs above: `curl https://api.openai.com/v1/models -H "Authorization: Bearer $OPENAI_API_KEY"`. Never commit or echo the key.
-
-**Important:**
-- Review the full model list for additions, removals, and price changes
-- Minimize whitespace/comment changes, focus on content
-- Preserve comments to make diffs easy to review
-- Flag broken links or unexpected content
+**Live endpoint (extra signal):** If `.env.api-keys` has `OPENAI_API_KEY`, scan the served model list for what's new and cross-check the docs above: `curl https://api.openai.com/v1/models -H "Authorization: Bearer $OPENAI_API_KEY"`.

@@ -1,10 +1,6 @@
----
-description: Update Ollama model definitions with latest featured models
----
+# Ollama
 
-Update `src/modules/llms/server/ollama/ollama.models.ts` with latest model definitions.
-
-Reference `src/modules/llms/server/llm.server.types.ts` and `src/modules/llms/server/models.mappings.ts` for context only. Focus on the model file, do not descend into other code.
+Model file: `src/modules/llms/server/ollama/ollama.models.ts`.
 
 **Automated Workflow:**
 ```bash
@@ -12,7 +8,10 @@ Reference `src/modules/llms/server/llm.server.types.ts` and `src/modules/llms/se
 curl -s "https://ollama.com/library?sort=newest" -o "$(node -p "require('os').tmpdir()")/ollama-newest.html"
 
 # 2. Parse it with the script (auto-finds the file in os.tmpdir())
-node .claude/scripts/parse-ollama-models.js 2>&1
+node .claude/skills/update-models/scripts/parse-ollama-models.js 2>&1
+
+# 3. Delete the temp file once the parse looks sane
+rm "$(node -p "require('os').tmpdir()")/ollama-newest.html"
 ```
 
 The parser outputs 5 pipe-delimited fields: `modelName|pulls|capabilities|sizes|cloud`
@@ -21,11 +20,11 @@ The parser outputs 5 pipe-delimited fields: `modelName|pulls|capabilities|sizes|
 
 **Primary Sources:**
 - Model Library: https://ollama.com/library?sort=newest
-- Parser script: `.claude/scripts/parse-ollama-models.js`
+- Parser script: `.claude/skills/update-models/scripts/parse-ollama-models.js` (`--help` prints its usage)
 
 **Fallbacks if blocked:** Check https://github.com/ollama/ollama, search "ollama featured models", "ollama latest models", or search GitHub for latest model info
 
-**What the file is:** a full mirror of the library index minus embedding models, in page order (newest first). ~222 entries as of 2026-08-17. The parser applies no pull threshold and no top-N cut: every line it prints belongs in the file, and every file entry should be a printed line.
+**What the file is:** a full mirror of the library index minus embedding models, in page order (newest first). The parser applies no pull threshold and no top-N cut: every line it prints belongs in the file, and every file entry should be a printed line.
 
 **Cloud models:** cloud-only entries ARE carried (`kimi-k3`, `glm-5.2`, `minimax-m3`, ...). The 5th field is informational only - the file has no cloud marker. Empty sizes on a cloud line is expected, not a parse failure.
 
@@ -37,11 +36,9 @@ The parser outputs 5 pipe-delimited fields: `modelName|pulls|capabilities|sizes|
 - `tools` -> `hasTools: true`, `vision` -> `hasVision: true`, `embedding` -> `isEmbeddings: true` (note the 's'; the parser drops embedding models, so this should not come up)
 - `thinking` and `audio` -> `tags`, followed by the size chips (`1.5b`, `7b`, `32b`, ...) in page order
 
-**Important:**
+**Vendor-specific rules:**
 - Sort them in the EXACT same order as the source (newest first, for stable ordering)
-- Set today's date (YYYYMMDD format) for newly added models only
+- Set today's date (YYYYMMDD format) for newly added models only (this is the `added` field, not `pubDate`)
 - Set OLLAMA_PREV_UPDATE to the previous OLLAMA_LAST_UPDATE, then OLLAMA_LAST_UPDATE to today (PREV drives the `isNew` badge)
 - Do NOT change dates of existing models
-- Review the full model list for additions, removals, and changes
-- Minimize whitespace/comment changes, focus on content
-- Preserve comments and newlines to make diffs easy to review
+- Preserve newlines as well as comments

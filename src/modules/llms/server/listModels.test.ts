@@ -148,11 +148,11 @@ async function expectOk(access: AixAPI_Access, minModels: number, label: string)
 
   // Fail on any [DEV] validator output: stale/unknown model defs, invalid
   // parameterSpecs, parser failures, etc. The remediation is usually one of
-  // the `llms:update-models-<vendor>` skills.
+  // the `/update-models <vendor>` skill.
   if (devMessages.length) {
     const shown = devMessages.slice(0, 20).join('\n  ');
     const rest = devMessages.length > 20 ? `\n  ... +${devMessages.length - 20} more` : '';
-    throw new Error(`${label}: ${devMessages.length} [DEV] validator warning(s) (run the vendor's llms:update-models-* skill to refresh):\n  ${shown}${rest}`);
+    throw new Error(`${label}: ${devMessages.length} [DEV] validator warning(s) (run /update-models <vendor> to refresh):\n  ${shown}${rest}`);
   }
   return models;
 }

@@ -1,12 +1,8 @@
----
-description: Update NVIDIA NIM model definitions from a live catalog harvest
----
+# NVIDIA NIM
 
-Update `src/modules/llms/server/openai/models/nvidianim.models.ts` with the latest model definitions for NVIDIA's hosted endpoint (integrate.api.nvidia.com / build.nvidia.com).
+Model file: `src/modules/llms/server/openai/models/nvidianim.models.ts`, for NVIDIA's hosted endpoint (integrate.api.nvidia.com / build.nvidia.com).
 
-Reference `src/modules/llms/server/llm.server.types.ts` and `src/modules/llms/server/models.mappings.ts` for context only. Focus on the model file, do not descend into other code.
-
-**Primary source - run the harvest tool** (requires `NVIDIANIM_API_KEY` in `.env.api-keys` for the probe phase; never commit or echo the key):
+**Primary source - run the harvest tool** (requires `NVIDIANIM_API_KEY` in `.env.api-keys` for the probe phase; load it in the same Bash call):
 
 ```bash
 npx tsx tools/develop/nvidianim-catalog-sync/harvest.ts
@@ -31,4 +27,4 @@ This merges 4 sources (see the tool's README): live `/v1/models` ids, build.nvid
 - Reasoning params: gpt-oss models use `_PS_OaiEffort`; other thinking models use `_PS_Thinking` (wired to `chat_template_kwargs` in the adapter)
 - Preserve comments and table order (flagships first, hidden tail last); minimize whitespace churn
 
-**Verify:** `tsc --noEmit --pretty && npm run lint`, then `NVIDIANIM_API_KEY=... npm test` (the nvidianim tests do a live listing; a `[DEV]` stale warning fails the test - that is the drift alarm).
+**Verify:** after the shared validate step, with the key exported from `.env.api-keys`, run `npm test` (`set -a; . ./.env.api-keys; set +a; npm test` in one Bash call). The nvidianim tests do a live listing; a `[DEV]` stale warning fails the test - that is the drift alarm.

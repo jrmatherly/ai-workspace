@@ -72,7 +72,7 @@ Three categories:
 | Gemini | Hybrid | `gemini/gemini.models.ts` | `_knownGeminiModels` | 33 | 33/33 HIGH |
 | OpenAI | Hybrid | `openai/models/openai.models.ts` | `_knownOpenAIChatModels` | 96 | 95/96 HIGH/MED (`osb-120b` skipped, speculative) |
 | xAI | Hybrid | `openai/models/xai.models.ts` | `_knownXAIChatModels` | 13 | 13/13 HIGH (pilot) |
-| Meta AI | Hybrid | `openai/models/metaai.models.ts` | `_knownMetaAIModels` | 6 | 6/6 HIGH (announcement posts; the API's `created` is a constant 0 and there is no changelog - see `/llms:update-models-metaai`) |
+| Meta AI | Hybrid | `openai/models/metaai.models.ts` | `_knownMetaAIModels` | 6 | 6/6 HIGH (announcement posts; the API's `created` is a constant 0 and there is no changelog - see `/update-models metaai`) |
 | Mistral | Hybrid | `openai/models/mistral.models.ts` | `_knownMistralModelDetails` | 41 | 41/41 (40 HIGH, 1 MED for legacy `mistral-medium`) |
 | Moonshot (Kimi) | Hybrid | `openai/models/moonshot.models.ts` | `_knownMoonshotModels` | 13 | 13/13 (10 HIGH, 3 MED for v1 base models) |
 | Perplexity | Editorial | `openai/models/perplexity.models.ts` | `_knownPerplexityChatModels` | 4 | 4/4 HIGH |

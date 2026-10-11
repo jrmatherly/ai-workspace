@@ -6,7 +6,7 @@ Vendor `metaai` ("Meta AI"; the product is the Meta Model API at dev.meta.ai) se
 
 - `GET /v1/models` lists 7 ids with `created: 0` on all and no type/modality field. Chat: `muse-spark-1.3|1.2|1.1` plus `-contributor` twins of 1.3 and 1.2. Image output: `muse-image-1.0`. ASR only: `muse-voice-transcribe-1.0` (404 `model_not_found` on `/v1/responses`, filtered by prefix).
 - Spark: 1,048,576 context, text/image/video/PDF/audio in (1.3 audio degraded), text out. Standard $1.25 in / $4.25 out / $0.15 cached per 1M; Contributor $0.10 / $0.20 / $0.002 and Meta trains on prompts and completions (hidden by default; documented 100 RPM / 3M TPM vs 3,000 / 4M per team on Standard - the wire header reported 150 RPM on the Contributor ids). Web search +$2.50 per 1K queries. Muse Image $0.01 per image, aspect ratio only.
-- Release dates are editorial (Spark 1.1 2026-07-09, Muse Image 2026-07-07, 1.2 2026-08-05, 1.3 2026-09-02); `/llms:update-models-metaai` holds the source list.
+- Release dates are editorial (Spark 1.1 2026-07-09, Muse Image 2026-07-07, 1.2 2026-08-05, 1.3 2026-09-02); `.claude/skills/update-models/references/metaai.md` holds the source list.
 
 ## Request contract
 
@@ -43,4 +43,4 @@ Vendor `metaai` ("Meta AI"; the product is the Meta Model API at dev.meta.ai) se
 - `tool_search` + `namespace` tools, `context_management` / compaction items, `frequency_penalty` / `presence_penalty`, `prompt_cache_retention`, `background`, `POST /v1/responses/input_tokens` (its count includes ~157 injected scaffolding tokens and is not comparable to `usage.input_tokens`).
 - `input_video`, `input_file` (PDF), `input_audio` parts: AIX has no native parts for them yet, so those attachments degrade to text.
 
-Maintenance: `/llms:update-models-metaai` (catalog, prices), `tools/develop/aix-protocol-lab` flavor `metaai-responses` (protocol), `tools/develop/llm-parameter-sweep` dialect `metaai` + `/llms:verify-parameters metaai` (parameter acceptance).
+Maintenance: `/update-models metaai` (catalog, prices), `tools/develop/aix-protocol-lab` flavor `metaai-responses` (protocol), `tools/develop/llm-parameter-sweep` dialect `metaai` + `/verify-parameters metaai` (parameter acceptance).

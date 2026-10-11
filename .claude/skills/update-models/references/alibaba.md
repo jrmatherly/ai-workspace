@@ -1,10 +1,6 @@
----
-description: Update Alibaba model definitions with latest pricing and capabilities
----
+# Alibaba (Qwen, DashScope)
 
-Update `src/modules/llms/server/openai/models/alibaba.models.ts` with latest model definitions.
-
-Reference `src/modules/llms/server/llm.server.types.ts` and `src/modules/llms/server/models.mappings.ts` for context only. Focus on the model file, do not descend into other code.
+Model file: `src/modules/llms/server/openai/models/alibaba.models.ts`.
 
 **Primary Sources:**
 - Models list: https://www.alibabacloud.com/help/en/model-studio/models
@@ -20,10 +16,4 @@ Reference `src/modules/llms/server/llm.server.types.ts` and `src/modules/llms/se
 **Fallbacks if blocked:**
 - Search "alibaba model studio latest pricing", "alibaba latest models", "qwen models pricing", or search GitHub for latest model prices and context windows
 
-**Live endpoint (extra signal):** The DashScope key in `.env.api-keys` is `ALIBABA_API_KEY`. Scan the OpenAI-compatible model list as ground-truth for what's new/available and cross-check the docs above: `curl https://dashscope-intl.aliyuncs.com/compatible-mode/v1/models -H "Authorization: Bearer $ALIBABA_API_KEY"`. Never commit or echo the key. The list carries only id/created/owned_by, but two caps are cheaply probed on `/chat/completions`: `max_tokens: 999999` returns `Range of max_tokens should be [1, N]` (N differs with `enable_thinking` on/off), and an oversized prompt returns `Range of input length should be [1, N]`. Free-tier quota can be exhausted per model, which masks probes. Treat N as the accepted *parameter* range, not the real output cap - it is permissive (qwen3.7-flash accepts 131072 while the model page and OpenRouter both cap it at 65536); prefer the docs/OpenRouter value when they agree against the probe.
-
-**Important:**
-- Review the full model list for additions, removals, and price changes
-- Minimize whitespace/comment changes, focus on content
-- Preserve comments to make diffs easy to review
-- Flag broken links or unexpected content
+**Live endpoint (extra signal):** The DashScope key in `.env.api-keys` is `ALIBABA_API_KEY`. Scan the OpenAI-compatible model list as ground-truth for what's new/available and cross-check the docs above: `curl https://dashscope-intl.aliyuncs.com/compatible-mode/v1/models -H "Authorization: Bearer $ALIBABA_API_KEY"`. The list carries only id/created/owned_by, but two caps are cheaply probed on `/chat/completions`: `max_tokens: 999999` returns `Range of max_tokens should be [1, N]` (N differs with `enable_thinking` on/off), and an oversized prompt returns `Range of input length should be [1, N]`. Free-tier quota can be exhausted per model, which masks probes. Treat N as the accepted *parameter* range, not the real output cap - it is permissive (qwen3.7-flash accepts 131072 while the model page and OpenRouter both cap it at 65536); prefer the docs/OpenRouter value when they agree against the probe.

@@ -1,10 +1,8 @@
----
-description: Update Meta AI (Muse) model definitions with latest pricing and capabilities
----
+# Meta AI (Muse)
 
-Update `src/modules/llms/server/openai/models/metaai.models.ts` with latest model definitions.
+Model file: `src/modules/llms/server/openai/models/metaai.models.ts`.
 
-Reference `src/modules/llms/server/llm.server.types.ts` and `src/modules/llms/server/models.mappings.ts` for context only. Focus on the model file, do not descend into other code. The vendor's protocol facts live in `kb/modules/LLM-metaai-responses.md`; the adapter deviations are the `metaai` row of `_RSP_DIALECT_QUIRKS` in `src/modules/aix/server/dispatch/chatGenerate/adapters/openai.responsesCreate.ts`.
+The vendor's protocol facts live in `kb/modules/LLM-metaai-responses.md`; the adapter deviations are the `metaai` row of `_RSP_DIALECT_QUIRKS` in `src/modules/aix/server/dispatch/chatGenerate/adapters/openai.responsesCreate.ts`.
 
 **Primary Sources:** dev.meta.ai/docs. Appending `.md` to any docs URL returns raw markdown that plain `curl` fetches (no auth, no browser needed).
 - Doc index: https://dev.meta.ai/docs/llms.txt (92 pages; one `curl` loop mirrors the whole set when a deep read is needed)
@@ -25,7 +23,7 @@ Reference `src/modules/llms/server/llm.server.types.ts` and `src/modules/llms/se
 - `maxCompletionTokens` is undocumented: 131072 is Meta's advertised figure (quickstart / coding-agents configs); the server accepts `max_output_tokens` up to 1M, so do not derive it from probes.
 - Docs print keys as `LLM|...` while served keys are `LLM_...`: `validateSetup` accepts both, do not tighten.
 
-**Live endpoint (extra signal):** If `.env.api-keys` has `METAAI_API_KEY`, scan the served list for new ids: `curl https://api.meta.ai/v1/models -H "Authorization: Bearer $METAAI_API_KEY"`. Never commit or echo the key.
+**Live endpoint (extra signal):** If `.env.api-keys` has `METAAI_API_KEY`, scan the served list for new ids: `curl https://api.meta.ai/v1/models -H "Authorization: Bearer $METAAI_API_KEY"`.
 
 **Probing tips:**
 - Effort domain: `POST /v1/responses` with `{"model":"<id>","input":"pong","max_output_tokens":64,"reasoning":{"effort":"<v>"}}`. A bad value 400s with `unknown variant X, expected one of ...` (the full server enum); a value the model rejects 400s with `does not support "<v>" with this model`. As of 2026-09-02 the enum is `none|minimal|low|medium|high|xhigh`, `none` is rejected on every Spark, `max` is not served yet (Meta announced it for 1.3 - re-probe). Omitted effort runs as `high`.
@@ -33,10 +31,5 @@ Reference `src/modules/llms/server/llm.server.types.ts` and `src/modules/llms/se
 - `tool_choice` accepts only `auto`; `truncation` only `disabled`; logprobs are unreachable while reasoning is on.
 - Temperature 2.0 is accepted but degenerate (rambling `incomplete` replies, occasional HTTP 500) - the sweep records 0..1.5; do not read a 500 there as an outage.
 - End-to-end ablations through the real pipeline (tools, search, reasoning, image output): `npx tsx tools/develop/aix-protocol-lab/lab.ts capture metaai-responses <hello|reason|fc|search|interleave> [--model <id>] [--no-stream]`
-- Parameter acceptance sweep: `tools/develop/llm-parameter-sweep/sweep.sh --dialect metaai --key $METAAI_API_KEY --model-filter muse-spark` writes `llm-metaai-parameters-sweep.json`; then `/llms:verify-parameters metaai` diffs it against the definitions.
-
-**Important:**
-- Review the full model list for additions, removals, and price changes
-- Minimize whitespace/comment changes, focus on content
-- Preserve comments to make diffs easy to review
-- Flag broken links or unexpected content
+- Parameter acceptance sweep: `tools/develop/llm-parameter-sweep/sweep.sh --dialect metaai --key "$METAAI_API_KEY" --model-filter muse-spark` (load the key in the same Bash call) writes `llm-metaai-parameters-sweep.json`; then `/verify-parameters metaai` diffs it against the definitions.
+  - `sweep.ts` reads the key only from `--key` or a config file (no env-var fallback; `--help` lists the options). `--key "$METAAI_API_KEY"` keeps the value out of the transcript but puts it on the process argv for the run. To avoid argv entirely, put the key in the gitignored `tools/develop/llm-parameter-sweep/sweep-config.json` (copy `sweep-config.template.json`), which `sweep.sh` auto-detects.

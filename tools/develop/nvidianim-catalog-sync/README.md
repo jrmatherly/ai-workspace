@@ -2,7 +2,7 @@
 
 Refreshes the curated NVIDIA model table (`_knownNvidiaNIMModels` in
 `src/modules/llms/server/openai/models/nvidianim.models.ts`) by merging four sources into one
-facts table per hosted model. See the `llms:update-models-nvidia` command for the full workflow.
+facts table per hosted model. See the `update-models` skill (`/update-models nvidia`, `.claude/skills/update-models/references/nvidia.md`) for the full workflow.
 
 ## Run
 
