@@ -7,7 +7,7 @@ allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/upstream-review.sh *) Bash(git s
 
 # Upstream review
 
-This repo is a copy of `enricoros/big-AGI` taken at upstream commit `99b3bf9c` (2026-10-07, v2.1.1 + 278). It shares no git history with upstream, but at our first commit the source tree was identical to that commit except the files `--diverged` lists (`.github/`, `package.json`, `.gitignore`, `.serena/`, and since then the re-branded surfaces). So:
+This repo is a copy of `enricoros/big-AGI` taken at upstream commit `99b3bf9c` (2026-10-07, v2.1.1 + 278). It shares no git history with upstream, but at our first commit the source tree was identical to that commit except the files `--diverged` lists (run it; the footprint is now about 250 files after the rebrand, the rename of persisted names, the logo and the CalVer switch). So:
 
 - `git merge` and `git merge-base` are useless. Every range is `<watermark>..upstream/main`.
 - `git cherry-pick -x <sha>` works once `upstream/main` is fetched: the 3-way merge uses the commit's own parent as the base. A file applies cleanly when our copy equals that parent's copy (the pre-image), and conflicts otherwise.
@@ -39,7 +39,7 @@ Markers in `--stat`, our HEAD vs the commit's parent (pre-image) for each file i
 | `=` | ours equals the pre-image | `git cherry-pick -x <sha>` applies cleanly |
 | `<` | ours equals the seed, not the pre-image | an older upstream commit touched it first; pick in order |
 | `~` | ours differs from both | we changed it; resolve the 3-way or hand-port |
-| `x` | we removed it | skip unless we want the file back |
+| `x` | we removed it | check "Deleted or moved paths" below: some content moved and takes the port there; the rest is SKIP |
 | `+` | new upstream file | cherry-pick creates it |
 | `bin` | binary | inspect by hand |
 
@@ -60,11 +60,51 @@ For a large window (more than about 20 commits), dispatch one reviewer subagent 
 ## Rules for this repo
 
 - Keep `-x` on every cherry-pick so the log line "cherry picked from commit" carries provenance. Upstream `#NNNN` issue numbers autolink to the wrong repo on GitHub; rewrite them to `enricoros/big-AGI#NNNN` in the picked commit message (`git commit --amend`) and in the decision log.
-- Upstream commits that touch `.github/` are SKIP by default. We carry no workflows; the archived ones are in `private/OLD-.github/` for reference.
-- Brand and hosting surfaces are re-pointed at this repo (`src/common/app.release.ts`, `app.config.ts`, `pages/_document.tsx`, README, `docs/`, `docker-compose.yaml`, `.github/`, `spotlight.feed.ts`). Upstream commits touching them show `~` and are ADAPT: take the behavior, keep our URLs.
+- Upstream commits that touch `.github/` are SKIP by default. Our workflows (`ci.yml`, `docker-image.yml`, Claude triage) are our own, SHA-pinned, and are not upstream's; the archived upstream ones are in `private/OLD-.github/` for reference.
+- Brand and hosting surfaces are re-pointed at this repo (`src/common/app.release.ts`, `app.config.ts`, `pages/_document.tsx`, README, `docs/`, `docker-compose.yaml`, `spotlight.feed.ts`, `public/icons/`, `public/manifest.json`). Upstream commits touching them show `~` and are ADAPT: take the behavior, keep our URLs, names and logo.
 - Upstream references to the `dev` branch, `private/dev`, `big-agi-private`, or `kb/product/` describe their hosted line, which we do not have. Content gated on it is SKIP.
 - Model-definition commits (`LLMs: <vendor>: ...`) are the highest-value, lowest-risk class. Prefer ADOPT over re-running `/update-models <vendor>`.
 - A watermark advance without a decision log is a lost review. Seed the watermark below any backlog you intend to review, never at today's tip.
+
+## Name translations when porting
+
+When you hand-port a `~` hunk, translate upstream's spelling to ours before it lands. After porting, grep the diff for the left column; any hit is a miss.
+
+| Upstream | Ours |
+|---|---|
+| IndexedDB name `'Big-AGI'` (`dblobs.db.ts`, `BackupRestore.tsx`, `public/dev/inspect/*`) | `'AI-Workspace'` |
+| backup `application: 'Big-AGI'` | `application: 'AI-Workspace'` |
+| backup schema `vnd.agi.flash-backup` | `vnd.ai-workspace.flash-backup` |
+| lock and channel `big-agi-instance`, `big-agi-tabs`, global `__bigAgiInstanceLock` | `ai-workspace-instance`, `ai-workspace-tabs`, `__aiWorkspaceInstanceLock` |
+| export suffix `.agi.json` (written); the drop handler also accepts it | `.aiw.json` |
+| store keys `agi-logger-log`, `agi-scratch-clip`, `agi-client-workspace`, `agi-live-file`, `agi-chunk-reload-at`, `agi-inspect-probe` | the same with `aiw-` |
+| drag marker `x-app/agi` | `x-app/aiw` |
+| env `BIG_AGI_BUILD` | `AI_WORKSPACE_BUILD` |
+| PostHog keys `agi_domain`, `agi_runtime` | `aiw_domain`, `aiw_runtime` |
+| `Big_AGI_App` (`pages/_app.tsx`) | `AiWorkspaceApp` |
+| `BigAgiSquircleIcon`, `BigAgiCircleIcon`, `BigAgiCircleInnerIcon` in `src/common/components/icons/big-agi/` | `AppLogoIcon` with `logo.registry.ts` in `src/common/components/icons/logo/` |
+| test env `BIGAGI_TEST_*` | `AIWORKSPACE_TEST_*` |
+| mime hint `application/big-agi` | `application/vnd.ai-workspace` |
+| product name "Big-AGI" or "big-AGI" in UI copy, build banners, docs | "AI Workspace" (keep "big-AGI" where it names upstream) |
+
+Keep upstream spelling, do not rename in a port: `agi-*` CSS classes and `--AGI-*` vars, `data-agi-*` attributes, `vnd.agi.*` fragment types, `agiUuid` helpers, `aifn/agi*` directories, `AGI_DIST_DIR`, `__AGI_CONFIG_PASS`.
+
+## Deleted or moved paths
+
+An `x` marker means we removed the path, not always that the change is irrelevant.
+
+- `.claude/commands/{aix,llms,code,rel}/*` and `.claude/scripts/parse-ollama-models.js`: the content lives in `.claude/skills/{sync-api,update-models,verify-parameters}/`; port the change into the matching reference or script.
+- `src/common/components/icons/big-agi/*`: port into `src/common/components/icons/logo/` only if the change is behavioral (sizing, props); glyph edits are SKIP, the mark is ours.
+- `docs/k8s/big-agi-deployment.yaml`: port into `docs/k8s/ai-workspace-deployment.yaml`.
+- SKIP outright: `tools/video/**`, `tools/.gitignore`, the `~/extensions` alias, electron excludes, `public/manifest.json` `file_handlers`, `src/apps/news/bigAgiPro.data.tsx`, README marketing sections, `.github/**`.
+- Ours, absent upstream at the seed: `.env.example`, `tools/develop/llm-parameter-sweep/README.md`, `src/common/components/icons/logo/`. If upstream adds a same-named file, treat it as ADAPT and merge by hand.
+
+## Version and changelog
+
+- Never take upstream's `package.json` `version`. Ours is CalVer `YYYY.M.D[.MICRO]`; upstream stays semver 2.x. A cherry-pick that touches it conflicts; keep ours.
+- `Release.Monotonics.NewsVersion` in `src/common/app.release.ts` is ours (211 at the time of writing; upstream was 210 at the seed). `store-logic-sherpa.ts` compares it with each user's `lastSeenNewsVersion`, so copying upstream's number shows or hides the news page wrongly. Bump ours by one only when adopted news content should re-surface.
+- Other `Monotonics` (`Aix`) are cache-bust counters tied to code behavior: port with the commit that needs them, never lower them.
+- `docs/changelog.md` and `src/apps/news/*` are ours. Do not port upstream's entries; add one in our style when an adopted commit changes user-visible behavior. Record adopted SHAs in the decision log.
 
 ## Decision log template
 
