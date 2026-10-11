@@ -20,5 +20,10 @@
     "../src/**/*.test.ts",
     // ambient augmentations (next.page.d.ts): nothing imports them, so without this the shared src/ files they describe fail here but pass at the root
     "../src/**/*.d.ts"
+  ],
+  // must stay: an inheriting config without its own "exclude" takes the root one, which lists "tools" and
+  // would empty this program (one .d.ts left) while tsc still exits 0
+  "exclude": [
+    "../node_modules"
   ]
 }
