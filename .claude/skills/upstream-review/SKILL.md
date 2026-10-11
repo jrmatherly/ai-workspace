@@ -89,7 +89,7 @@ When you hand-port a `~` hunk, translate upstream's spelling to ours before it l
 | tRPC routes `app/api/edge/[trpc]/route.ts` (Edge runtime) and `app/api/cloud/[trpc]/route.ts` (Node) | one `app/api/trpc/[trpc]/route.ts` on Node (since 2026-10-11) |
 | `trpc.router-edge.ts` / `AppRouterEdge`, `trpc.router-cloud.ts` / `AppRouterCloud`, `trpc.next-edge.ts` | `trpc.router.ts` / `AppRouter`; the Edge adapter is gone |
 | clients `apiAsyncNode`, `apiStreamNode` (Node router) | `apiAsync`, `apiStream` (same router) |
-| `edgeProcedure`, `authedProcedure`, `premiumProcedure` | bare `t.procedure` (already true on upstream `main`) |
+| `edgeProcedure`, `authedProcedure`, `premiumProcedure`, `publicProcedure` | keep the name: here `publicProcedure` and its aliases are member-gated (fail-closed), so an upstream procedure lands gated. Only a procedure that must stay open (probe, share-link read) moves to `anonymousProcedure` and into `ANONYMOUS_PROCEDURES` |
 | `VERCEL_WORKAROUND_EDGE_1MB_PAYLOAD_LIMIT` in `trpc.client.ts` | removed; the stream link always sets `maxItems: 1` |
 
 Keep upstream spelling, do not rename in a port: `agi-*` CSS classes and `--AGI-*` vars, `data-agi-*` attributes, `vnd.agi.*` fragment types, `agiUuid` helpers, `aifn/agi*` directories, `AGI_DIST_DIR`, `__AGI_CONFIG_PASS`.

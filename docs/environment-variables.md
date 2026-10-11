@@ -62,9 +62,22 @@ GOOGLE_CSE_ID=
 # Text-To-Speech: ElevenLabs
 ELEVENLABS_API_KEY=
 
-# Backend HTTP Basic Authentication (see `deploy-authentication.md` for turning on authentication)
-HTTP_BASIC_AUTH_USERNAME=
-HTTP_BASIC_AUTH_PASSWORD=
+# Authentication (see `deploy-authentication.md`; off unless one provider is fully set)
+AUTH_SECRET=
+AUTH_URL=
+AUTH_OIDC_ISSUER=
+AUTH_OIDC_NAME=
+AUTH_OIDC_CLIENT_ID=
+AUTH_OIDC_CLIENT_SECRET=
+AUTH_GOOGLE_CLIENT_ID=
+AUTH_GOOGLE_CLIENT_SECRET=
+AUTH_GITHUB_CLIENT_ID=
+AUTH_GITHUB_CLIENT_SECRET=
+AUTH_MICROSOFT_CLIENT_ID=
+AUTH_MICROSOFT_CLIENT_SECRET=
+AUTH_MICROSOFT_TENANT_ID=
+AUTH_ALLOWED_EMAILS=
+AUTH_ADMIN_EMAILS=
 
 # AIX
 AIX_STRICT_PARSING=
@@ -92,7 +105,7 @@ cloud deployment), or pass them to Docker (--env-file or -e) when starting the c
 
 ### Database
 
-To enable Chat Link Sharing, connect the backend to a Postgres database: set both `POSTGRES_PRISMA_URL` and `POSTGRES_URL_NON_POOLING`.
+To enable Chat Link Sharing, connect the backend to a Postgres database: set both `POSTGRES_PRISMA_URL` and `POSTGRES_URL_NON_POOLING`. Required when authentication is on.
 
 For Database configuration see [deploy-database.md](deploy-database.md).
 
@@ -158,9 +171,22 @@ Enable the app to Talk, Draw, and Google things up.
 | `GOOGLE_CSE_ID` | Google Custom/Programmable Search Engine ID - [Link to PSE](https://programmablesearchengine.google.com/) |
 | **Browse** | |
 | `PUPPETEER_WSS_ENDPOINT` | Puppeteer WebSocket endpoint - used for browsing (pade downloadeing), etc. |
-| **Backend** | |
-| `HTTP_BASIC_AUTH_USERNAME` | See the [Authentication](deploy-authentication.md) guide. Username for HTTP Basic Authentication. |
-| `HTTP_BASIC_AUTH_PASSWORD` | Password for HTTP Basic Authentication. |
+| **Authentication** | See the [Authentication](deploy-authentication.md) guide. Off unless one provider is fully set; then Postgres is required |
+| `AUTH_SECRET` | Signs session cookies, 32+ characters (`openssl rand -base64 32`) |
+| `AUTH_URL` | Public https origin of the app, e.g. `https://ai.example.com` |
+| `AUTH_OIDC_ISSUER` | OIDC issuer URL (Pocket ID, Authentik, Keycloak, ...); discovery is `<issuer>/.well-known/openid-configuration` |
+| `AUTH_OIDC_NAME` | Sign-in button label for the OIDC provider, default `Pocket ID` |
+| `AUTH_OIDC_CLIENT_ID` | OIDC client id |
+| `AUTH_OIDC_CLIENT_SECRET` | OIDC client secret |
+| `AUTH_GOOGLE_CLIENT_ID` | Google OAuth client id; requires `AUTH_ALLOWED_EMAILS` |
+| `AUTH_GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
+| `AUTH_GITHUB_CLIENT_ID` | GitHub OAuth app client id; requires `AUTH_ALLOWED_EMAILS` |
+| `AUTH_GITHUB_CLIENT_SECRET` | GitHub OAuth app client secret |
+| `AUTH_MICROSOFT_CLIENT_ID` | Microsoft Entra ID application id |
+| `AUTH_MICROSOFT_CLIENT_SECRET` | Microsoft Entra ID client secret |
+| `AUTH_MICROSOFT_TENANT_ID` | One concrete tenant id; `common`, `organizations` and `consumers` are rejected |
+| `AUTH_ALLOWED_EMAILS` | Who may sign in: comma list of addresses and `@domains` |
+| `AUTH_ADMIN_EMAILS` | Who has the admin role: comma list of addresses |
 | **AIX** | |
 | `AIX_STRICT_PARSING` | Set to `true` to throw on unknown API values in production too. Unset: strict in development, warn-only in production |
 | **Build** | |

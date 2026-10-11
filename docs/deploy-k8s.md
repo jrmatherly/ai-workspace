@@ -65,6 +65,42 @@ Forwarding from [::1]:3000 -> 3000
 
 Now you can access the service at `http://localhost:3000`, and you should see the AI Workspace homepage.
 
+### Step 7 (optional): Authentication
+
+See [Authentication](deploy-authentication.md). In `env-secret.yaml`, set `AUTH_SECRET`, `AUTH_URL` (the public
+https host users open, the gateway host behind a gateway), one provider's variables, `AUTH_ALLOWED_EMAILS`,
+`AUTH_ADMIN_EMAILS`, and both Postgres URLs. The readiness and liveness probes stay on
+`/api/trpc/backend.listCapabilities`, which answers without a session.
+
+Run the database migrations once per release, before the rollout, as a Job from the `migrate` image target
+(`docker build --target migrate -t <registry>/ai-workspace-migrate:<tag> .`). CI does not publish the `migrate`
+image; build and push it with that command:
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ai-workspace-migrate
+  namespace: ns-ai-workspace
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: <registry>/ai-workspace-migrate:<tag>
+          envFrom:
+            - secretRef:
+                name: env
+```
+
+On a database created with `prisma db push`, run `npx prisma migrate resolve --applied 0_init` once first
+([Database](deploy-database.md)).
+
+If an Envoy Gateway OIDC SecurityPolicy fronts the app, remove it once app authentication is on; in the interim,
+set `denyRedirect` for `/api/*` so a lapsed gateway session returns 401 instead of a redirect.
+
 ## Updating AI Workspace
 
 To update AI Workspace to the latest version:

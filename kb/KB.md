@@ -44,6 +44,7 @@ Architecture and system documentation is available in the `/kb/` knowledge base,
 
 - **[app-routing.md](systems/app-routing.md)** - Next.js routing, provider stack, and display state hierarchy
 - **[LLM-parameters-system.md](systems/LLM-parameters-system.md)** - Language model parameter flow across the system
+- **[auth.md](systems/auth.md)** - Authentication: caller model, fail-closed procedure aliases, the anonymous allowlist, server-key resolution, provider trust, client gate
 
 ### KB Guidelines
 
