@@ -21,7 +21,7 @@ Set both. Chat Link Sharing turns on only when both are set (`hasDB` in `src/mod
 
 Connection behavior since Prisma 7 (the `pg` driver, not the Rust engine, opens the socket):
 
-- Certificates are verified. `pg` 8.x treats `sslmode=require` as `verify-full` and prints a SECURITY WARNING on every connect with such a URL (the warning says `pg` 9 will adopt libpq semantics). A private CA: trust it with `NODE_EXTRA_CA_CERTS=/path/to/ca.pem`. A truly self-signed server certificate fails with Prisma `P1011` ("Error opening a TLS connection: self-signed certificate"); append `uselibpqcompat=true` to the URL to get libpq's `sslmode` meanings back, which stops verifying for `require`.
+- Certificates are verified. `pg` 8.x treats `sslmode=require` as `verify-full` and prints a SECURITY WARNING on every connect with such a URL (the warning says `pg` 9 will adopt libpq semantics). A certificate Node does not trust fails with Prisma `P1011` ("Error opening a TLS connection: self-signed certificate"). Trust it with `NODE_EXTRA_CA_CERTS=/path/to/cert.pem`: the private CA's certificate, or the server's own self-signed certificate (tested on `postgres:18`, whose certificate names `localhost`); the certificate's name must match the host in the URL. Last resort: `uselibpqcompat=true` in the URL restores libpq's `sslmode` meanings, so `require` encrypts without verifying the server. Anyone on the network path can then impersonate the database; use it only on a network you already trust.
 - `connect_timeout` in the URL is ignored. The connect timeout is 15 seconds, set in code (`connectionTimeoutMillis`).
 - `pgbouncer=true` is accepted and ignored; PgBouncer 1.26.0 or later in transaction mode works (tested with scram-sha-256).
 
