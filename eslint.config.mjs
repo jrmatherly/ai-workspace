@@ -1,8 +1,7 @@
 import { defineConfig } from "eslint/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import nextVitals from "eslint-config-next/core-web-vitals";
 import pluginCompat from "eslint-plugin-compat";
 // typed linting - rides eslint-config-next's own @typescript-eslint packages
 import tsParser from "@typescript-eslint/parser";
@@ -10,11 +9,6 @@ import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
 
 export default defineConfig([{
     /* Ours to declare: `lint` calls eslint directly (`next lint` supplied these, and is removed in
@@ -48,8 +42,9 @@ export default defineConfig([{
         // disable prefer-const for now
         "prefer-const": "off",
     },
-}, {
-    extends: compat.extends("next/core-web-vitals"),
+}, ...nextVitals, {
+    // eslint-config-next 16 registers its plugins only under this glob; the house rules below name them
+    files: ["**/*.{js,jsx,mjs,ts,tsx,mts,cts}"],
     rules: {
         // intentional empty catches (fire-and-forget cleanup) are house style
         "no-empty": ["error", { allowEmptyCatch: true }],
@@ -66,6 +61,18 @@ export default defineConfig([{
         "no-constant-binary-expression": "warn",// fixed with above
         "no-control-regex": "warn",             // NUL-byte sanitizer regex (annottated)
         "prefer-rest-params": "warn",           // do not use `arguments` in TS
+
+        // 2026-10 adoption backlog: eslint-plugin-react-hooks 7 (via eslint-config-next 16) enables the React
+        // Compiler rules as errors; measured counts at adoption, separate cleanup. Promote each as it hits zero.
+        "react-hooks/refs": "warn",                        // 117
+        "react-hooks/set-state-in-effect": "warn",         // 43
+        "react-hooks/purity": "warn",                      // 7
+        "react-hooks/static-components": "warn",           // 4
+        "react-hooks/preserve-manual-memoization": "warn", // 4
+        "react-hooks/immutability": "warn",                // 3
+        "react-hooks/use-memo": "warn",                    // 2
+        "react-hooks/incompatible-library": "warn",        // 1
+        "react-hooks/globals": "warn",                     // 1
 
         // AI Workspace hook
         "react-hooks/exhaustive-deps": ["warn", {
