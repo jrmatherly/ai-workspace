@@ -63,13 +63,12 @@ The code that activates Vercel Analytics is located in the `pages/_app.tsx` file
 const MyApp = ({ Component, emotionCache, pageProps }: MyAppProps) => <>
   ...
   {Is.Deployment.VercelFromFrontend && <VercelAnalytics debug={false} />}
-  {Is.Deployment.VercelFromFrontend && <VercelSpeedInsights debug={false} sampleRate={1 / 2} />}
   ...
 </>;
 ```
 
-When AI Workspace is served on Vercel hosts, the `process.env.NEXT_PUBLIC_VERCEL_URL` environment variable is trueish, and
-analytics will be sent by default to the Vercel Analytics service which is deployed by Vercel IF configured from the
+When AI Workspace is built on Vercel, `next.config.ts` sets `NEXT_PUBLIC_DEPLOYMENT_TYPE` to `vercel-<VERCEL_ENV>`, so
+`Is.Deployment.VercelFromFrontend` (`src/common/util/pwaUtils.ts`) is true, and analytics will be sent by default to the Vercel Analytics service which is deployed by Vercel IF configured from the
 Vercel project dashboard.
 
 In summary: to turn it on: activate the `Analytics` service in the Vercel project dashboard.

@@ -37,7 +37,7 @@ export const synthesizeElevenLabs: SynthesizeBackendFn<SpeexWire_Access_ElevenLa
   }
 
   // build request - narrow to elevenlabs dialect for type safety
-  const voiceId = voice.ttsVoiceId /*|| env.ELEVENLABS_VOICE_ID*/ || SPEEX_DEFAULTS.ELEVENLABS_VOICE;
+  const voiceId = voice.ttsVoiceId || SPEEX_DEFAULTS.ELEVENLABS_VOICE;
   const model = modelPickOrAuto(voice.ttsModel, SPEEX_MODELS.elevenlabs) ?? _selectModel(priority);
 
   // skip inputs with nothing to voice: v3 rejects them (400 'Input at position 0 has empty text' after removing emojis and [audio tags]), older models bill for silence
@@ -142,11 +142,11 @@ function _parseTTSResponseHeaders(headers: Headers): Pick<Extract<SpeexSpeechPar
 }
 
 function _elevenlabsAccess(access: SpeexWire_Access_ElevenLabs, apiPath: string): { headers: HeadersInit; url: string } {
-  const apiKey = (access.apiKey /*|| env.ELEVENLABS_API_KEY */ || '').trim();
+  const apiKey = (access.apiKey || '').trim();
   if (!apiKey)
     throw new Error('Missing ElevenLabs API key');
 
-  let host = (access.apiHost /*|| env.ELEVENLABS_API_HOST*/ || 'api.elevenlabs.io').trim();
+  let host = (access.apiHost || 'api.elevenlabs.io').trim();
   if (!host.startsWith('http'))
     host = `https://${host}`;
   if (host.endsWith('/') && apiPath.startsWith('/'))

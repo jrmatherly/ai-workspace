@@ -50,7 +50,7 @@
 //   openai-compatible   openai (host)   (no env fallback)       custom host (Chutes, Fireworks, MiniMax, ...)
 //   openai-compatible   openrouter      OPENROUTER_API_KEY      openrouter.ai  (listing is PUBLIC)
 //   openai-compatible   perplexity      PERPLEXITY_API_KEY      api.perplexity.ai (no listing API; hardcoded)
-//   openai-compatible   sakanaai        SAKANAAI_API_KEY        api.sakana.ai (ids only; caps/pricing curated)
+//   openai-compatible   sakanaai        SAKANA_API_KEY          api.sakana.ai (ids only; caps/pricing curated)
 //   openai-compatible   togetherai      TOGETHERAI_API_KEY      api.together.xyz
 //   openai-compatible   xai             XAI_API_KEY             api.x.ai
 //   openai-compatible   zai             ZAI_API_KEY (test-only; api.z.ai (curated list; API optional)
@@ -369,9 +369,9 @@ describe('listModels enumeration', () => {
     ok(models.some(m => /sonar/i.test(m.id)), 'perplexity: sonar family present');
   });
 
-  test('openai-compat/sakanaai: live listing', { skip: skipIfMissing('SAKANAAI_API_KEY') }, async () => {
+  test('openai-compat/sakanaai: live listing', { skip: skipIfMissing('SAKANA_API_KEY') }, async () => {
     await expectOk(
-      { dialect: 'sakanaai', ...openAIShape({ oaiKey: E.SAKANAAI_API_KEY || '' }) } as AixAPI_Access,
+      { dialect: 'sakanaai', ...openAIShape({ oaiKey: E.SAKANA_API_KEY || '' }) } as AixAPI_Access,
       1, 'sakanaai/live',
     );
   });

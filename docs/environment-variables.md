@@ -16,9 +16,6 @@ The following is an example `.env` for copy-paste convenience:
 POSTGRES_PRISMA_URL=
 POSTGRES_URL_NON_POOLING=
 
-# Database (MongoDB)
-MDB_URI=
-
 # LLMs
 OPENAI_API_KEY=
 OPENAI_API_HOST=
@@ -34,6 +31,7 @@ BEDROCK_ACCESS_KEY_ID=
 BEDROCK_SECRET_ACCESS_KEY=
 BEDROCK_SESSION_TOKEN=
 BEDROCK_REGION=
+CEREBRAS_API_KEY=
 DEEPSEEK_API_KEY=
 GEMINI_API_KEY=
 GROQ_API_KEY=
@@ -42,12 +40,15 @@ LOCALAI_API_KEY=
 METAAI_API_KEY=
 METAAI_API_HOST=
 MISTRAL_API_KEY=
+MODULAR_API_KEY=
 MOONSHOT_API_KEY=
 NVIDIANIM_API_KEY=
 NVIDIANIM_API_HOST=
 OLLAMA_API_HOST=
 OPENROUTER_API_KEY=
 PERPLEXITY_API_KEY=
+SAKANA_API_KEY=
+SAKANA_API_HOST=
 TOGETHERAI_API_KEY=
 XAI_API_KEY=
 
@@ -60,15 +61,20 @@ GOOGLE_CSE_ID=
 
 # Text-To-Speech: ElevenLabs
 ELEVENLABS_API_KEY=
-ELEVENLABS_API_HOST=
-ELEVENLABS_VOICE_ID=
 
 # Backend HTTP Basic Authentication (see `deploy-authentication.md` for turning on authentication)
 HTTP_BASIC_AUTH_USERNAME=
 HTTP_BASIC_AUTH_PASSWORD=
 
+# AIX
+AIX_STRICT_PARSING=
 
-# Frontend variables 
+# Build
+AI_WORKSPACE_BUILD=
+
+
+# Frontend variables
+NEXT_PUBLIC_DEPLOYMENT_TYPE=
 NEXT_PUBLIC_MOTD=
 NEXT_PUBLIC_GA4_MEASUREMENT_ID=
 NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID=
@@ -86,7 +92,7 @@ cloud deployment), or pass them to Docker (--env-file or -e) when starting the c
 
 ### Database
 
-To enable Chat Link Sharing, you need to connect the backend to a database. We currently support Postgres and MongoDB.
+To enable Chat Link Sharing, connect the backend to a Postgres database: set both `POSTGRES_PRISMA_URL` and `POSTGRES_URL_NON_POOLING`.
 
 For Database configuration see [deploy-database.md](deploy-database.md).
 
@@ -114,22 +120,29 @@ requiring the user to enter an API key
 | `BEDROCK_SECRET_ACCESS_KEY` | AWS IAM Secret Access Key for Bedrock                                                                          | Optional, but if set `BEDROCK_ACCESS_KEY_ID` must also be set      |
 | `BEDROCK_SESSION_TOKEN`     | AWS Session Token for temporary/STS credentials                                                                | Optional                                                          |
 | `BEDROCK_REGION`            | AWS region for Bedrock (e.g., `us-east-1`, `us-west-2`, `eu-west-1`)                                          | Optional, defaults to `us-east-1`                                 |
+| `CEREBRAS_API_KEY`          | The API key for Cerebras (api.cerebras.ai)                                                                     | Optional, see note below                                          |
 | `DEEPSEEK_API_KEY`          | The API key for Deepseek AI                                                                                    | Optional                                                          |
 | `GEMINI_API_KEY`            | The API key for Google AI's Gemini                                                                             | Optional                                                          |
 | `GROQ_API_KEY`              | The API key for Groq Cloud                                                                                     | Optional                                                          |
 | `LOCALAI_API_HOST`          | Sets the URL of the LocalAI server, or defaults to http://127.0.0.1:8080                                       | Optional                                                          |
 | `LOCALAI_API_KEY`           | The (Optional) API key for LocalAI                                                                             | Optional                                                          |
-| `METAAI_API_KEY`            | The API key for Meta AI (dev.meta.ai)                                                                          | Optional                                                          |
+| `METAAI_API_KEY`            | The API key for Meta AI (dev.meta.ai)                                                                          | Optional, see note below                                          |
 | `METAAI_API_HOST`           | Changes the Meta AI host, defaults to https://api.meta.ai                                                      | Optional                                                          |
 | `MISTRAL_API_KEY`           | The API key for Mistral                                                                                        | Optional                                                          |
+| `MODULAR_API_KEY`           | The API key for Modular Cloud (api.modular.com). Not sent to a custom host                                     | Optional, see note below                                          |
 | `MOONSHOT_API_KEY`          | The API key for Moonshot AI                                                                                    | Optional                                                          |
 | `NVIDIANIM_API_KEY`         | The API key ('nvapi-...') for NVIDIA NIM (build.nvidia.com)                                                    | Optional                                                          |
 | `NVIDIANIM_API_HOST`        | Changes the NVIDIA NIM host, e.g. to a self-hosted NIM/vLLM endpoint                                           | Optional                                                          |
 | `OLLAMA_API_HOST`           | Changes the backend host for the Ollama vendor. See [config-local-ollama.md](config-local-ollama.md)           |                                                                   |
 | `OPENROUTER_API_KEY`        | The API key for OpenRouter                                                                                     | Optional                                                          |
 | `PERPLEXITY_API_KEY`        | The API key for Perplexity                                                                                     | Optional                                                          |
+| `SAKANA_API_KEY`            | The API key for Sakana AI. Sent only to the default host or `SAKANA_API_HOST`                                  | Optional, see note below                                          |
+| `SAKANA_API_HOST`           | Changes the Sakana AI host, defaults to https://api.sakana.ai                                                  | Optional                                                          |
 | `TOGETHERAI_API_KEY`        | The API key for Together AI                                                                                    | Optional                                                          |
 | `XAI_API_KEY`               | The API key for xAI                                                                                            | Optional                                                          |
+
+Note: Cerebras, Meta AI, Modular and Sakana AI have no server capability flag. Their keys are used server-side when the
+service has no key of its own, but the UI does not mark these vendors as configured by the server.
 
 ### Features
 
@@ -138,9 +151,7 @@ Enable the app to Talk, Draw, and Google things up.
 | Variable                   | Description                                                                                                             |
 |:---------------------------|:------------------------------------------------------------------------------------------------------------------------|
 | **Text-To-Speech**         | ElevenLabs, Inworld, OpenAI TTS, LocalAI, and browser Web Speech API are supported                                      |
-| `ELEVENLABS_API_KEY`       | ElevenLabs API Key - used for calls, etc.                                                                               |
-| `ELEVENLABS_API_HOST`      | Custom host for ElevenLabs                                                                                              |
-| `ELEVENLABS_VOICE_ID`      | Default voice ID for ElevenLabs                                                                                         |
+| `ELEVENLABS_API_KEY`       | Only sets the `hasVoiceElevenLabs` server capability flag. Speech synthesis uses the ElevenLabs key entered in the UI   |
 |                            | *Note: OpenAI TTS and LocalAI TTS reuse credentials from your configured LLM services (no separate env vars needed)*   |
 | **Google Custom Search**   | [Google Programmable Search Engine](https://programmablesearchengine.google.com/about/)  produces links to pages        |
 | `GOOGLE_CLOUD_API_KEY`     | Google Cloud API Key, used with the '/react' command - [Link to GCP](https://console.cloud.google.com/apis/credentials) |
@@ -150,6 +161,10 @@ Enable the app to Talk, Draw, and Google things up.
 | **Backend**                |                                                                                                                         |
 | `HTTP_BASIC_AUTH_USERNAME` | See the [Authentication](deploy-authentication.md) guide. Username for HTTP Basic Authentication.                       |
 | `HTTP_BASIC_AUTH_PASSWORD` | Password for HTTP Basic Authentication.                                                                                 |
+| **AIX**                    |                                                                                                                         |
+| `AIX_STRICT_PARSING`       | Set to `true` to throw on unknown API values in production too. Unset: strict in development, warn-only in production  |
+| **Build**                  |                                                                                                                         |
+| `AI_WORKSPACE_BUILD`       | Build output type, read at build time: `standalone` (Next.js standalone server) or `static` (static HTML export), both written to `dist/`. Unset: default Next.js build |
 
 ### Frontend Variables
 
@@ -157,10 +172,11 @@ The value of these variables are passed to the frontend (Web UI) - make sure the
 
 | Variable                          | Description                                                                                                                                                                                                                                     |
 |:----------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `NEXT_PUBLIC_DEPLOYMENT_TYPE`     | (optional) Deployment marker in the build info. Unset: `vercel-<VERCEL_ENV>` on Vercel, else `local`; the Docker image sets `docker`. A value starting with `vercel` turns on Vercel Analytics and Vercel-specific error copy |
 | `NEXT_PUBLIC_DEBUG_BREAKS`        | (optional, development) When set to 'true', enables automatic debugger breaks on DEV/error/critical logs in development builds                                                                                                                  |
 | `NEXT_PUBLIC_MOTD`                | Message of the Day - displays a dismissible banner at the top of the app (see [customizations](customizations.md) for the template variables). Example: 🔔 Welcome to our deployment! Version {{app_build_pkgver}} built on {{app_build_time}}. |
 | `NEXT_PUBLIC_GA4_MEASUREMENT_ID`  | (optional) The measurement ID for Google Analytics 4. (see [deploy-analytics](deploy-analytics.md))                                                                                                                                             |
-| `NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID` | (optional) Google OAuth Client ID for Drive Picker. Can reuse `AUTH_GOOGLE_ID`. See [Google Drive](config-feature-google-drive.md)                                                                                                          |
+| `NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID` | (optional) Google OAuth Client ID for Drive Picker. See [Google Drive](config-feature-google-drive.md)                                                                                                          |
 | `NEXT_PUBLIC_PLANTUML_SERVER_URL` | The URL of the PlantUML server, used for rendering UML diagrams. Allows using custom local servers.                                                                                                                                             |
 | `NEXT_PUBLIC_SITE_URL` | (optional) Public origin of this deployment, e.g. `https://chat.example.com`. Enables absolute `og:image`, `og:url` and canonical tags; unset omits them. Build-time: pass as a Docker build arg (repository variable `SITE_URL` in the image workflow). |
 | `NEXT_PUBLIC_SPOTLIGHT_FEED_URL` | (optional) Base URL of an App News API for in-app announcements and changelog. Unset disables the feed and hides those surfaces (the upstream project served this from its own site). Build-time: Docker build arg, repository variable `SPOTLIGHT_FEED_URL`. |
@@ -169,6 +185,19 @@ The value of these variables are passed to the frontend (Web UI) - make sure the
 
 > Important: these variables must be set at build time, which is required by Next.js to pass them to the frontend.
 > This is in contrast to the backend variables, which can be set when starting the local server/container.
+
+### Development and Build Variables
+
+Read by `next.config.ts` at build or dev-server start, or by server code during development. Not needed in production.
+
+| Variable                  | Description                                                                                                        |
+|:--------------------------|:-------------------------------------------------------------------------------------------------------------------|
+| `NO_LINT_BUILD`           | Any value skips the ESLint pass during `next build` (for CI that already ran `npm run lint`)                       |
+| `NO_STRICT_MODE`          | Any value turns off React Strict Mode                                                                              |
+| `AGI_DIST_DIR`            | Overrides the Next.js output directory, so parallel builds do not race over `.next/`                               |
+| `ANALYZE_BUNDLE`          | Any value wraps the build with `@next/bundle-analyzer` and opens the report                                        |
+| `SUPPRESS_FETCHER_LOGS`   | Any value stops the server from logging upstream fetch errors to the console                                       |
+| `LLMS_CEREBRAS_SKIP_LIVE` | `1` makes Cerebras model listing use the built-in model list without trying the live catalog (Edge always skips it) |
 
 ---
 

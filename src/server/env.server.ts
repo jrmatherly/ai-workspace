@@ -28,8 +28,6 @@ export const env = createEnv({
     // Backend Postgres, for optional storage via Prisma
     POSTGRES_PRISMA_URL: z.string().optional(),
     POSTGRES_URL_NON_POOLING: z.string().optional(),
-    // Backend MongoDB, for a more complete developer data platform.
-    MDB_URI: z.string().optional(),
 
 
     // LLM: OpenAI
@@ -121,10 +119,8 @@ export const env = createEnv({
     GOOGLE_CSE_ID: z.string().optional(),
 
 
-    // Text-To-Speech: ElevenLabs - speech.ts
+    // Text-To-Speech: ElevenLabs - only sets the hasVoiceElevenLabs capability flag; synthesis uses the key entered in the UI
     ELEVENLABS_API_KEY: z.string().optional(),
-    ELEVENLABS_API_HOST: z.url().optional(),
-    ELEVENLABS_VOICE_ID: z.string().optional(),
 
 
     // Backend: HTTP Basic Authentication
