@@ -99,7 +99,7 @@ generate_structure() {
       dir_parts=""
       
       # Use a safer method to split the path
-      IFS='/' dir_parts=($dirpath)
+      IFS='/' read -r -a dir_parts <<< "$dirpath"
       
       # Process each directory level
       for ((i=0; i<${#dir_parts[@]}; i++)); do
