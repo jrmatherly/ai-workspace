@@ -21,58 +21,15 @@ You need to think broader, decide faster, and build with confidence, then you ne
 
 Beam runs several models on the same prompt and fuses the answers.
 
-![LLM Vendors](https://img.shields.io/badge/20+_LLM_Services-500+_Models-black?style=for-the-badge&logo=anthropic&logoColor=white&labelColor=purple)&nbsp;
+![LLM Vendors](https://img.shields.io/badge/24_LLM_Services-300+_Models-black?style=for-the-badge&logo=anthropic&logoColor=white&labelColor=purple)&nbsp;
 ![Feature Beam](https://img.shields.io/badge/AI--Validation-BEAM-000?style=for-the-badge&labelColor=purple)&nbsp;
 ![Feature Inspector](https://img.shields.io/badge/Expert_Mode-AI_Inspector-000?style=for-the-badge&labelColor=purple)
 
 ### What makes AI Workspace different:
 
-**Intelligence**: with Beam & Merge for multi-model de-hallucination, native search, and bleeding-edge AI models like Opus 5, GPT 5.6, Gemini 3.7, Kimi K3 or Grok 4.6 -
-**Control**: with personas, data ownership, requests inspection, unlimited usage with API keys, and *no vendor lock-in* -
-and **Speed**: with a local-first, over-powered, zero-latency, madly optimized web app.
-
-<table>
-<tr>
-<td align="center" width="25%">
-<b>🧠 Intelligence</b><br/>
-<img src="https://img.shields.io/badge/Multi--Model-Trust-4285F4?style=for-the-badge" alt="Multi-Model"/>
-</td>
-<td align="center" width="25%">
-<b>✨ Experience</b><br/>
-<img src="https://img.shields.io/badge/Clean-UX-34A853?style=for-the-badge" alt="Clean UX"/>
-</td>
-<td align="center" width="25%">
-<b>⚡ Performance</b><br/>
-<img src="https://img.shields.io/badge/Zero-Latency-EA4335?style=for-the-badge" alt="Zero Latency"/>
-</td>
-<td align="center" width="25%">
-<b>🔒 Control</b><br/>
-<img src="https://img.shields.io/badge/No-Lock--in-FBBC04?style=for-the-badge" alt="No Lock-in"/>
-</td>
-</tr>
-<tr>
-<td align="center" valign="top">
-Beam & Merge<br/>
-No context junk<br/>
-Purest AI outputs
-</td>
-<td align="center" valign="top">
-Flow-state interface<br/>
-Highly customizable<br/>
-Best-in-class UX
-</td>
-<td align="center" valign="top">
-Local-first<br/>
-Highly parallel<br/>
-Madly optimized
-</td>
-<td align="center" valign="top">
-No vendor lock-in<br/>
-Your API keys<br/>
-AI Inspector
-</td>
-</tr>
-</table>
+**Intelligence**: Beam and Merge run several models on one prompt and fuse the answers; native search; current models from Anthropic, OpenAI, Google, Moonshot, xAI and 19 other vendors.
+**Control**: personas, chats stored in your browser, request inspection, your own API keys, no vendor lock-in.
+**Speed**: local-first web app, no server round-trip for your data.
 
 
 ## Get Started
@@ -100,10 +57,10 @@ Changelog: [docs/changelog.md](docs/changelog.md). Releases: [GitHub releases](h
 ## 👉 Supported Models & Integrations
 
 Delightful UX with latest models exclusive features like Beam for **multi-model AI validation**.
-> ![LLM Vendors](https://img.shields.io/badge/20_LLM_Services-500+_Models-black?style=for-the-badge&logo=openai&logoColor=white&labelColor=purple)&nbsp;
+> ![LLM Vendors](https://img.shields.io/badge/24_LLM_Services-300+_Models-black?style=for-the-badge&logo=openai&logoColor=white&labelColor=purple)&nbsp;
 > ![Feature Beam](https://img.shields.io/badge/AI--Validation-BEAM-000?style=for-the-badge&logo=anthropic&labelColor=purple)
 
-| ![Advanced AI](https://img.shields.io/badge/Advanced%20AI-32383e?style=for-the-badge&logo=ai&logoColor=white) | ![500+ AI Models](https://img.shields.io/badge/500%2B%20AI%20Models-32383e?style=for-the-badge&logo=ai&logoColor=white) | ![Flow-state UX](https://img.shields.io/badge/Flow--state%20UX-32383e?style=for-the-badge&logo=flow&logoColor=white) | ![Privacy First](https://img.shields.io/badge/Privacy%20First-32383e?style=for-the-badge&logo=privacy&logoColor=white) | ![Advanced Tools](https://img.shields.io/badge/Fun%20To%20Use-f22a85?style=for-the-badge&logo=tools&logoColor=white) |  
+| ![Advanced AI](https://img.shields.io/badge/Advanced%20AI-32383e?style=for-the-badge&logo=ai&logoColor=white) | ![300+ AI Models](https://img.shields.io/badge/300%2B%20AI%20Models-32383e?style=for-the-badge&logo=ai&logoColor=white) | ![Flow-state UX](https://img.shields.io/badge/Flow--state%20UX-32383e?style=for-the-badge&logo=flow&logoColor=white) | ![Privacy First](https://img.shields.io/badge/Privacy%20First-32383e?style=for-the-badge&logo=privacy&logoColor=white) | ![Advanced Tools](https://img.shields.io/badge/Fun%20To%20Use-f22a85?style=for-the-badge&logo=tools&logoColor=white) |  
 |---------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------| 
 | **Chat**<br/>**Call**<br/>**Beam**<br/>**Draw**, ...                                                          | Local & Cloud<br/>Open & Closed<br/>Cheap & Heavy<br/>Google, Mistral, ...                                              | Attachments<br/>Diagrams<br/>Multi-Chat<br/>Mobile-first UI                                                          | Stored Locally<br/>Easy self-Host<br/>Local actions<br/>Data = Gold                                                    | AI Personas<br/>Voice Modes<br/>Screen Capture<br/>Camera + OCR                                                      |
 
