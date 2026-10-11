@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { PanelGroup } from 'react-resizable-panels';
-
 import { GlobalDragOverlay } from '~/common/components/dnd-dt/GlobalDragOverlay';
 import { Is } from '~/common/util/pwaUtils';
 import { checkVisibleNav, navItems } from '~/common/app.nav';
@@ -25,17 +23,14 @@ import { PageWrapper } from './PageWrapper';
 import { optimaActions, optimaOpenModels, optimaOpenPreferences, optimaToggleDrawer, optimaTogglePanel } from './useOptima';
 
 
-// this undoes the PanelGroup styling on mobile, as it's not needed
-// NOTE: there may be benefits with the PanelGroup layout, namely that
-// it's already 100% x 100% and doesn't scroll, so there would be no
-// chance of overflow, and outer limits are set here
-const undoPanelGroupSx: React.CSSProperties = {
-  display: 'block',
-  marginLeft: undefined,
-  marginRight: undefined,
-  width: undefined,
-  height: undefined,
-  overflow: undefined,
+// desktop: the former PanelGroup root, 100% x 100% flex row with no scroll (overflow stays inside the panes);
+// mobile: a plain block, the drawer and panel overlay the page
+const rootLayoutDesktopSx: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
+  height: '100%',
+  overflow: 'hidden',
 };
 
 
@@ -91,7 +86,7 @@ export function OptimaLayout(props: { suspendAutoModelsSetup?: boolean, children
     {translationWarning}
     {pwaDesktopModeWarning}
 
-    <PanelGroup direction='horizontal' id='root-layout' style={isMobile ? undoPanelGroupSx : undefined}>
+    <div id='root-layout' style={isMobile ? undefined : rootLayoutDesktopSx}>
 
 
       {/* Desktop: 4 horizontal sections: Nav | Drawer | Page | Panel */}
@@ -116,7 +111,7 @@ export function OptimaLayout(props: { suspendAutoModelsSetup?: boolean, children
       {isMobile && <MobilePanel key='optima-panel' component='aside' currentApp={currentApp} />}
 
 
-    </PanelGroup>
+    </div>
 
     {/* Global Window Overlay */}
     {Is.Desktop && <GlobalDragOverlay />}

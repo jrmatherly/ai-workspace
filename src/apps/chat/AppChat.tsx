@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
+import { Group, Panel, Separator } from 'react-resizable-panels';
 
 import type { SxProps } from '@mui/joy/styles/types';
 import { Box, useTheme } from '@mui/joy';
@@ -626,9 +626,16 @@ export function AppChat() {
     {liveSvgModeActive ? (
       <LiveSvgAnimator isMobile={isMobile} />
     ) : (
-    <PanelGroup
-      direction={(isMobile || isTallScreen) ? 'vertical' : 'horizontal'}
+    <Group
+      orientation={(isMobile || isTallScreen) ? 'vertical' : 'horizontal'}
       id='app-chat-panels'
+      onLayoutChanged={(layout, meta) => {
+        // v4 has no onCollapse: a user drag that leaves a pane at 0% removes it (two panes only; more would
+        // assert in the framework). Mount, hidden-tab and constraint recomputes report isUserInteraction=false.
+        if (!meta.isUserInteraction || chatPanes.length !== 2) return;
+        const collapsedIdx = chatPanes.findIndex((pane) => layout[`chat-pane-${pane.paneId}`] === 0);
+        if (collapsedIdx >= 0) removePane(collapsedIdx);
+      }}
     >
 
       {chatPanes.map((pane, idx) => {
@@ -645,21 +652,15 @@ export function AppChat() {
 
           <Panel
             id={_keyAndId}
-            order={idx}
             collapsible={chatPanes.length === 2}
-            defaultSize={(_panesCount === 3 && idx === 1) ? 34 : Math.round(100 / _panesCount)}
+            // v4: a bare number is pixels, a unit-less string is percent
+            defaultSize={(_panesCount === 3 && idx === 1) ? '34%' : `${Math.round(100 / _panesCount)}%`}
             // minSize={20 /* IMPORTANT: this forces a reflow even on a simple on hover */}
             onClick={(event) => {
               // Alt + Click: undocumented feature to clear focus
               if (event.altKey && chatPanes.length > 1)
                 return setFocusedPaneIndex(-1);
               setFocusedPaneIndex(idx);
-            }}
-            onCollapse={() => {
-              // NOTE: despite the delay to try to let the dragging settle, there seems to be an issue with the Pane locking the screen
-              // setTimeout(() => removePane(idx), 50);
-              // more than 2 will result in an assertion from the framework
-              if (chatPanes.length === 2) removePane(idx);
             }}
             style={{
               // for anchoring the scroll button in place
@@ -749,15 +750,15 @@ export function AppChat() {
 
           {/* Panel Separators & Resizers */}
           {idx < _panesCount - 1 && (
-            <PanelResizeHandle id={_sepId}>
+            <Separator id={_sepId}>
               <PanelResizeInset />
-            </PanelResizeHandle>
+            </Separator>
           )}
 
         </ErrorBoundary></WorkspaceIdProvider>;
       })}
 
-    </PanelGroup>
+    </Group>
     )}
 
     {/* Composer with auto-hide */}
