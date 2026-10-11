@@ -26,7 +26,7 @@ This necessitates a code change (file renaming) before build initiation, detaile
 
 All tRPC calls run on one Node.js Vercel Function at `/api/trpc`, and AI streams can run for minutes.
 With Fluid compute (the default for new projects) every plan gets 300 seconds by default; Hobby caps
-there, Pro and Enterprise allow 800 (and a per-function 1800 in beta). Without Fluid, Hobby caps at 60.
+there, Pro and Enterprise allow 800 (and a per-function 1800 in beta). Projects with Fluid compute off have lower caps.
 To pin a value, uncomment the `maxDuration` export in `app/api/trpc/[trpc]/route.ts`, or set the
 project default under Vercel Project > Settings > Functions.
 

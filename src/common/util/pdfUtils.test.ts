@@ -54,9 +54,14 @@ test('non-embedded CJK font extracts text through the served CMaps', async () =>
 
 test('JPX image decodes through the served OpenJPEG wasm', async () => {
   const warnings: string[] = [];
-  await withWarnings(warnings, async () => {
+  const decoded = await withWarnings(warnings, async () => {
+    const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
     const page = await (await openFixture('jpx_smaskindata.pdf')).getPage(1);
-    await page.getOperatorList();
+    // images decode after the operator list resolves: wait for each paintImageXObject operand to settle
+    const ops = await page.getOperatorList();
+    const imageIds = ops.fnArray.flatMap((fn, i) => fn === pdfjs.OPS.paintImageXObject ? [ops.argsArray[i][0] as string] : []);
+    return Promise.all(imageIds.map(id => new Promise<unknown>(resolve => page.objs.get(id, resolve))));
   });
-  assert.deepEqual(warnings.filter(w => /Unable to decode image|wasmUrl/.test(w)), []);
+  assert.equal(decoded.length, 4, 'fixture carries four JPX images');
+  assert.deepEqual(warnings.filter(w => /Unable to decode image|wasm/.test(w)), []);
 });

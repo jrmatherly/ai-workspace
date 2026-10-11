@@ -48,8 +48,8 @@ Users are advised to review the license terms of the original repository.
 **License:** [Apache-2.0](https://github.com/mozilla/pdf.js/blob/master/LICENSE), Copyright Mozilla Foundation, for the worker and the pdf.js glue. The asset directories carry their own license files, copied with them:
 
 - `cmaps/`: Adobe CMap resources, BSD-style, Copyright 1990-2009 Adobe Systems Incorporated (`cmaps/LICENSE`)
-- `standard_fonts/`: Foxit Type 1 fonts, BSD-3-Clause, Copyright 2014 PDFium Authors (`LICENSE_FOXIT`); Liberation fonts, SIL Open Font License 1.1 with the Liberation agreement (`LICENSE_LIBERATION`)
-- `wasm/`: OpenJPEG, BSD-2-Clause (`LICENSE_OPENJPEG`); the PDFium JBIG2 decoder, BSD-3-Clause, Copyright 2014 The PDFium Authors (`LICENSE_JBIG2`); qcms, MIT, Copyright Mozilla Corporation and Marti Maria (`LICENSE_QCMS`); QuickJS, MIT (`quickjs-eval.*`); the pdf.js wrappers, Apache-2.0 (`LICENSE_PDFJS_*`)
+- `standard_fonts/`: Foxit Type 1 fonts, BSD-3-Clause, Copyright 2014 PDFium Authors (`LICENSE_FOXIT`); Liberation fonts, GPL-2.0 with the font-embedding exception, Copyright 2007-2011 Red Hat (`LICENSE_LIBERATION`)
+- `wasm/`: OpenJPEG, BSD-2-Clause (`LICENSE_OPENJPEG`) with pdf.js's wrapper under BSD-2-Clause (`LICENSE_PDFJS_OPENJPEG`); the PDFium JBIG2 decoder, BSD-3-Clause, Copyright 2014 The PDFium Authors (`LICENSE_JBIG2`) with pdf.js's wrapper under Apache-2.0 (`LICENSE_PDFJS_JBIG2`); qcms, MIT, Copyright Mozilla Corporation and Marti Maria (`LICENSE_QCMS`) with pdf.js's wrapper under MIT (`LICENSE_PDFJS_QCMS`); `quickjs-eval.*` is pdf.js's QuickJS build for PDF scripting, shipped without a license file in pdfjs-dist (QuickJS itself is MIT)
 - `iccs/`: the CGATS001 compatibility ICC profile, CC0 1.0 (`iccs/LICENSE`)
 
 Test fixtures in `src/common/util/pdfUtils.test-fixtures/`: `jpx_smaskindata.pdf` is from the pdf.js test corpus (`test/pdfs/`, Apache-2.0); `cjk-nonembedded.pdf` was written for this repo.
