@@ -120,7 +120,7 @@ Local-first: Zustand in memory with `persist` to localStorage, except chats, whi
 
 ### Testing & Quality
 
-- Browser floor: `eslint.config.mjs` bans ES2023 `toSorted/toReversed/toSpliced/with` and `new Intl.Segmenter` via `no-restricted-syntax` at `error` level (they crash Chrome <110 / Win7-8 holdouts; Next 16 states Chrome 111+, which we have not measured against 110); other project rules stay at `warn`, and `eslint .` exits 0 on warnings; a separate `compat/compat` pass checks Web APIs against `browserslist`. Use `[...x].sort()` etc.; don't lower `browserslist` to "fix" the banned syntax - that rule doesn't read it, and SWC won't polyfill prototype methods
+- Browser floor: `browserslist.production` is Chrome 125 / Edge 125 / Firefox 128 / Safari 18 / iOS 18 / Samsung 27 (set 2026-10-11; pdfjs-dist 6 needs `AbortSignal.any()`, `:dir()`, `light-dark()` and CSS nesting natively). `compat/compat` checks Web APIs against it at lint time; project rules stay at `warn`, and `eslint .` exits 0 on warnings. SWC does not polyfill prototype methods, so an API below the floor needs a feature check in code, not a lower `browserslist`
 - `npm audit` is not expected to be empty: `docs/security-advisories.md` lists the accepted entries and the baseline command. A new entry needs a decision there, not a silent `npm audit fix`
 
 ### Production errors

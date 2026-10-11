@@ -65,7 +65,7 @@
     "nanoid": "^6.0.2",
     "next": "16.4.0",
     "nprogress": "^0.2.0",
-    "pdfjs-dist": "5.4.624",
+    "pdfjs-dist": "6.4.299",
     "posthog-js": "1.438.7",
     "posthog-node": "5.55.2",
     "prismjs": "^1.30.0",
@@ -134,13 +134,13 @@
   },
   "browserslist": {
     "production": [
-      "chrome >= 110",
-      "edge >= 110",
-      "firefox >= 115",
-      "safari >= 16.4",
-      "ios_saf >= 16.4",
-      "and_chr >= 110",
-      "samsung >= 21",
+      "chrome >= 125",
+      "edge >= 125",
+      "firefox >= 128",
+      "safari >= 18",
+      "ios_saf >= 18",
+      "and_chr >= 125",
+      "samsung >= 27",
       "not dead"
     ],
     "development": [

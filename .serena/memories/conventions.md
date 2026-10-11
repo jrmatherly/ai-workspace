@@ -5,7 +5,7 @@
 - Messages are typed fragments (`DMessage` -> `DMessageFragment[]`, `chat.fragments.ts`), never strings.
 - TS: discriminated unions, `satisfies`, `as const`, exhaustive checks; no unnecessary `as`. Zod schemas server-side; client imports inferred types.
 - Modules register in central registries (`vendors.registry.ts` etc.); a missing entry is a compile error, which is the intended gate.
-- Browser floor: use `[...x].sort()` not `toSorted`; no `Intl.Segmenter`; don't lower `browserslist` to silence it.
+- Browser floor: browserslist Chrome 125 / Safari 18 / Firefox 128 (2026-10-11). `compat/compat` flags Web APIs above it; feature-check in code rather than lowering `browserslist`.
 - Prose (docs, comments, UI copy, commits): terse, no em dashes (use `-`), no marketing tone, plain-noun headings.
 - Commit subjects: `LLMs: OpenAI: ...`, `AIX: ...`, `Beam: ...`, `Build: ...` (same scheme as upstream; keeps upstream cherry-picks consistent).
 - `kb/` is the agent-facing architecture KB (`kb/KB.md` indexes it); `docs/` is user-facing. Keep both current when moving things; remove stale KB text when found.

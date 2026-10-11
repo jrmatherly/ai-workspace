@@ -113,7 +113,6 @@ export function textEscapeHtml(text: string): string {
 export function textIsSingleEmoji(text: string): boolean {
   // Prefer grapheme segmentation when available (correctly counts ZWJ emoji sequences as one)
   if (typeof Intl !== 'undefined' && Intl.Segmenter) {
-    // eslint-disable-next-line no-restricted-syntax -- guarded above by the Intl.Segmenter feature check
     const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
     return Array.from(segmenter.segment(text)).length === 1;
   }

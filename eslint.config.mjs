@@ -86,19 +86,6 @@ export default defineConfig([{
         "react-hooks/exhaustive-deps": ["warn", {
             additionalHooks: "(useMemoShallowStable)",
         }],
-        // older-browser guard: we deliberately support sub-floor engines (Chrome 109/Win7, old Brave)
-        // for a few APIs, so ban the ones that crash there. eslint-plugin-compat can't catch these:
-        // they're at/below the browserslist floor (Chrome 110), so it considers them "supported".
-        "no-restricted-syntax": ["error", {
-            selector: "CallExpression[callee.property.name=/^(toSorted|toReversed|toSpliced)$/]",
-            message: "ES2023 array method crashes on Chrome <110 (Win7/8) and old Brave. Use a copy + in-place form instead: [...arr].sort() / [...arr].reverse(), or arr.filter() instead of toSpliced().",
-        }, {
-            selector: "CallExpression[callee.property.name='with'][arguments.length=2]",
-            message: "Array.prototype.with() crashes on Chrome <110 (Win7/8) and old Brave. Use arr.map((v, i) => i === idx ? value : v), or a copy + index assignment.",
-        }, {
-            selector: "NewExpression[callee.object.name='Intl'][callee.property.name='Segmenter']",
-            message: "Intl.Segmenter is absent on older engines and throws. Call textIsSingleEmoji() (which feature-detects + falls back), or guard with `if (Intl.Segmenter)` and provide a fallback.",
-        }],
     },
 }, {
     // browser API compatibility guard (reads `browserslist` from package.json) - catches
@@ -106,7 +93,7 @@ export default defineConfig([{
     ...pluginCompat.configs["flat/recommended"],
     settings: {
         // feature-detected in-code (fallback/guard present), so they don't break older browsers
-        polyfills: ["requestIdleCallback", "Intl.Segmenter", "ClipboardItem", "navigator.wakeLock"],
+        polyfills: ["requestIdleCallback", "ClipboardItem", "navigator.wakeLock"],
     },
 }, {
     // Node-side code (tools/ scripts, the src tests that run under tsx): the browserslist floor
