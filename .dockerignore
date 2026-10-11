@@ -8,6 +8,10 @@
 # gitignored dev artifacts under the allowed dirs: the DevTools workspace file carries the dev machine path, sw.js is branch-line output
 public/.well-known/
 public/sw.js*
+# pdf.js worker and assets: prebuild copies them from node_modules inside the image
+public/workers/pdf.worker.min.mjs
+public/pdfjs/
+src/**/*.test-fixtures/
 # never imported by the build: vendor API spec snapshots and the one test file
 src/modules/aix/server/dispatch/wiretypes/_upstream/
 src/**/*.test.ts
@@ -21,6 +25,7 @@ src/server/prisma/generated/
 
 !eslint.config.mjs
 !tools/develop/gen-llms-defs/
+!tools/develop/pdfjs-assets/
 !middleware_BASIC_AUTH.ts
 !middleware.ts
 !next.config.ts

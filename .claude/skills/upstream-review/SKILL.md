@@ -119,7 +119,7 @@ An `x` marker means we removed the path, not always that the change is irrelevan
 - A ported feature commit that adds a dependency gets it at the current release (`npm install <pkg>`), not upstream's pin. Resolve the `package.json` conflict by keeping our versions and adding only the new entry.
 - We sit ahead of upstream on: Prisma 7.10 (prisma-client generator, pg adapter, prisma.config.ts), Next 16.4 + React 19 (webpack via --webpack, flat eslint-config-next, one tRPC router on Node), `/node` 26, `dexie-react-hooks` 4, `puppeteer-core` 25 (ESM-only, Node floor 22.13), `katex` 0.19 via `overrides`, ESLint 10 (JS files on the TS parser, react version pinned), TypeScript 7 via the `@typescript/native` alias (the 6.0 API stays as `typescript`), `react-resizable-panels` 4, `@mui/icons-material` 7.3, `pdfjs-dist` 6.4 with a browser floor of Chrome 125 / Safari 18 (upstream stays on Chrome 110 / Safari 16.4 and 5.4.54). Upstream hunks written against the older APIs are ADAPT, translated with the table in "Name translations when porting".
 - When upstream later makes the same major move, their migration commits are ALREADY-HAVE for the mechanics and ADAPT only for behavior they add on top.
-- `pdfjs-dist` bumps must carry `public/workers/pdf.worker.min.mjs` from the same version; `src/common/util/pdfUtils.test.ts` fails otherwise.
+- `pdfjs-dist` bumps need no file copy: `tools/develop/pdfjs-assets` copies the worker and assets into gitignored `public/` on prebuild, predev and pretest, and `src/common/util/pdfUtils.test.ts` checks them. Upstream commits the worker by hand; a hunk touching `public/workers/` is SKIP.
 
 ## Rename tables
 

@@ -3,6 +3,19 @@ import { canvasToDataURLAndMimeType } from './canvasUtils';
 // configuration
 const SKIP_LOADING_IN_DEV = false;
 
+/**
+ * Where pdf.js fetches its on-demand assets, copied from pdfjs-dist by tools/develop/pdfjs-assets. Unset, each
+ * fetch throws: predefined CMaps (non-embedded CJK fonts extract no text), the standard 14 fonts (rendered
+ * with a substitute), the wasm decoders (JPX images decode to nothing) and the CMYK ICC profile (no color
+ * management). pdf.js only lets the worker fetch when the first three are all set.
+ */
+export const PDFJS_ASSET_OPTIONS = {
+  cMapUrl: '/pdfjs/cmaps/',
+  standardFontDataUrl: '/pdfjs/standard_fonts/',
+  wasmUrl: '/pdfjs/wasm/',
+  iccUrl: '/pdfjs/iccs/',
+} as const;
+
 
 /**
  * Result of PDF text extraction with quality metadata
@@ -35,7 +48,7 @@ export async function pdfToText(pdfBuffer: ArrayBuffer, onProgress: (progress: n
     console.log('[DEV] pdfToText: pdfjs-dist loading skipped');
     return { text: '', pageCount: 0, avgCharsPerPage: 0 };
   }
-  const pdf = await getDocument({ data: pdfBuffer }).promise;
+  const pdf = await getDocument({ data: pdfBuffer, ...PDFJS_ASSET_OPTIONS }).promise;
   const textPages: string[] = []; // Initialize an array to hold text from all pages
   onProgress(0);
 
@@ -113,7 +126,7 @@ export async function pdfToImageDataURLs(pdfBuffer: ArrayBuffer, imageMimeType: 
     console.log('[DEV] pdfToImageDataURLs: pdfjs-dist loading skipped');
     return [];
   }
-  const pdf = await getDocument({ data: pdfBuffer }).promise;
+  const pdf = await getDocument({ data: pdfBuffer, ...PDFJS_ASSET_OPTIONS }).promise;
   const images: PdfPageImage[] = [];
 
   for (let i = 1; i <= pdf.numPages; i++) {

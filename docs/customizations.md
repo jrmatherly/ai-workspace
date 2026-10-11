@@ -24,18 +24,14 @@ This necessitates a code change (file renaming) before build initiation, detaile
 
 ### Increase Vercel Functions Timeout
 
-For long-running operations, Vercel allows paid deployments to increase the timeout on Functions.
-The app's route handlers are Node.js Vercel Functions, so the Node function `maxDuration` limits apply.
+All tRPC calls run on one Node.js Vercel Function at `/api/trpc`, and AI streams can run for minutes.
+With Fluid compute (the default for new projects) every plan gets 300 seconds by default; Hobby caps
+there, Pro and Enterprise allow 800 (and a per-function 1800 in beta). Without Fluid, Hobby caps at 60.
+To pin a value, uncomment the `maxDuration` export in `app/api/trpc/[trpc]/route.ts`, or set the
+project default under Vercel Project > Settings > Functions.
 
-All tRPC calls run on one Node.js function at `/api/trpc`. AI streaming, browsing (fetching web pages)
-and sharing can all exceed 10 seconds, especially with long generations or large pages.
-
-From the Vercel Project > Settings > General > Build & Development Settings,
-you can for instance set the build command to:
-
-```bash
-next build --webpack
-```
+Keep the Vercel build command at `npm run build`: the `prebuild` hook copies the pdf.js worker and
+assets into `public/` and regenerates the model-definition map, and a bare `next build` skips both.
 
 ### Change the Personas (v1.x only)
 

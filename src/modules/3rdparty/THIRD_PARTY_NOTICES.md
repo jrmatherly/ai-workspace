@@ -39,15 +39,20 @@ Users are advised to review the license terms of the original repository.
 
 ---
 
-## pdf.js worker
+## pdf.js worker and assets
 
-**Location:** `public/workers/pdf.worker.min.mjs` (the prebuilt worker from the `pdfjs-dist` package, served as a static file)
+**Location:** `public/workers/pdf.worker.min.mjs` and `public/pdfjs/{cmaps,standard_fonts,wasm,iccs}`, copied from the installed `pdfjs-dist` by `tools/develop/pdfjs-assets/copy-pdfjs-assets.mjs` (prebuild, predev, pretest) and gitignored. The browser fetches them by URL; `src/common/util/pdfUtils.ts` sets the URLs and `src/common/util/pdfUtils.test.ts` checks the worker version and that CMaps and the wasm decoders serve.
 
 **Original Repository:** [mozilla/pdf.js](https://github.com/mozilla/pdf.js)
 
-**License:** [Apache-2.0](https://github.com/mozilla/pdf.js/blob/master/LICENSE), Copyright 2024 Mozilla Foundation. The full license text is in the file header.
+**License:** [Apache-2.0](https://github.com/mozilla/pdf.js/blob/master/LICENSE), Copyright Mozilla Foundation, for the worker and the pdf.js glue. The asset directories carry their own license files, copied with them:
 
-The copy must match the installed `pdfjs-dist` version (6.4.299 today); `src/common/util/pdfUtils.test.ts` checks it. After a bump, copy `node_modules/pdfjs-dist/build/pdf.worker.min.mjs` to `public/workers/`.
+- `cmaps/`: Adobe CMap resources, BSD-style, Copyright 1990-2009 Adobe Systems Incorporated (`cmaps/LICENSE`)
+- `standard_fonts/`: Foxit Type 1 fonts, BSD-3-Clause, Copyright 2014 PDFium Authors (`LICENSE_FOXIT`); Liberation fonts, SIL Open Font License 1.1 with the Liberation agreement (`LICENSE_LIBERATION`)
+- `wasm/`: OpenJPEG, BSD-2-Clause (`LICENSE_OPENJPEG`); the PDFium JBIG2 decoder, BSD-3-Clause, Copyright 2014 The PDFium Authors (`LICENSE_JBIG2`); qcms, MIT, Copyright Mozilla Corporation and Marti Maria (`LICENSE_QCMS`); QuickJS, MIT (`quickjs-eval.*`); the pdf.js wrappers, Apache-2.0 (`LICENSE_PDFJS_*`)
+- `iccs/`: the CGATS001 compatibility ICC profile, CC0 1.0 (`iccs/LICENSE`)
+
+Test fixtures in `src/common/util/pdfUtils.test-fixtures/`: `jpx_smaskindata.pdf` is from the pdf.js test corpus (`test/pdfs/`, Apache-2.0); `cjk-nonembedded.pdf` was written for this repo.
 
 ---
 
