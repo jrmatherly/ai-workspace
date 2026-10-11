@@ -1,6 +1,6 @@
 import * as z from 'zod/v4';
 
-import { LinkStorageDataType, LinkStorageVisibility } from '@prisma/client';
+import { LinkStorageDataType, LinkStorageVisibility } from '~/server/prisma/generated/enums';
 
 import { prismaDb } from '~/server/prisma/prismaDb';
 import { publicProcedure } from '~/server/trpc/trpc.server';

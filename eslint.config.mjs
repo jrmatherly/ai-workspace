@@ -24,6 +24,7 @@ export default defineConfig([{
       ".next*/**", "out/**", "dist/**", // build output (minified bundles trip compat/ on every modern API)
       "public/**",                      // served verbatim, outside the bundler + type program
       ".claude/**",                     // agent tooling, own runtime
+      "src/server/prisma/generated/**", // prisma generate output (postinstall), not ours to lint
     ],
 }, {
 //     // eslint's own base layer (no-dupe-keys, no-cond-assign, no-fallthrough, ...) - next/core-web-vitals

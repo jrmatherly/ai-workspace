@@ -9,12 +9,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 FROM base AS deps
 WORKDIR /app
 
-# Dependency files
-COPY package*.json ./
+# Dependency files (the Prisma schema and config feed the postinstall `prisma generate`)
+COPY package*.json prisma.config.ts ./
 COPY src/server/prisma ./src/server/prisma
-
-# link ssl3 for latest Alpine
-RUN sh -c '[ ! -e /lib/libssl.so.3 ] && ln -s /usr/lib/libssl.so.3 /lib/libssl.so.3 || echo "Link already exists"'
 
 # Install dependencies, including dev (release builds should use npm ci)
 ENV NODE_ENV=development
