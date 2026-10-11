@@ -14,7 +14,7 @@ on:
     branches:
       - main
     tags:
-      - 'v2.*'        # Stable releases (v2.0.0, v2.1.0, etc.)
+      - 'v20*'        # Release tags, CalVer (v2026.10.11)
     # GitHub does not evaluate path filters on tag pushes, so release tags always build
     paths-ignore:
       - '**.md'
