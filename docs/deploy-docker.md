@@ -41,7 +41,7 @@ file.
 
 - **`:latest`** / **`:stable`** - Latest stable release (recommended)
 - **`:development`** - Main branch (bleeding edge)
-- **`:v2.0.0`** - Specific versions
+- **`:v2026.10.11`** / **`:2026.10.11`** - Specific releases (CalVer)
 
 #### Run using *docker* 🚀
 
