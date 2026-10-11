@@ -1,2 +1,0 @@
-private/OLD-.git/fsmonitor--daemon.ipc
-[Errno 102] Operation not supported on socket: '/Users/jason/dev/ai-workspace/private/OLD-.git/fsmonitor--daemon.ipc'

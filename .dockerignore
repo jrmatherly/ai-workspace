@@ -5,12 +5,19 @@
 !public/
 !src/
 
+# gitignored dev artifacts under the allowed dirs: the DevTools workspace file carries the dev machine path, sw.js is branch-line output
+public/.well-known/
+public/sw.js*
+# never imported by the build: vendor API spec snapshots and the one test file
+src/modules/aix/server/dispatch/wiretypes/_upstream/
+src/**/*.test.ts
+
 # build identity: just the sha-bearing git metadata (KBs), never the object store - see next.config.ts
 !.git/HEAD
 !.git/refs/
 !.git/packed-refs
 
-!*.mjs
+!eslint.config.mjs
 !tools/develop/gen-llms-defs/
 !middleware_BASIC_AUTH.ts
 !middleware.ts
@@ -19,4 +26,3 @@
 !tsconfig.json
 
 !LICENSE
-!README.md
