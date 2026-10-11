@@ -15,7 +15,7 @@ $ cd ./ai-workspace/docs/k8s
 ### Step 2: Create the namespace
 
 ```bash
-$ kubectl create namespace ns-big-agi
+$ kubectl create namespace ns-ai-workspace
 ```
 
 ### Step 3: Fill in the key information into env-secret.yaml
@@ -34,21 +34,21 @@ $ nano env-secret.yaml
 ### Step 4: Deploying Kubernetes Resources
 
 ```bash
-$ kubectl apply -f big-agi-deployment.yaml -f env-secret.yaml
+$ kubectl apply -f ai-workspace-deployment.yaml -f env-secret.yaml
 ```
 
 ### Step 5: Verifying the Resource Statuses
 
 ```bash
-$ kubectl -n ns-big-agi get svc,pod,deployment
+$ kubectl -n ns-ai-workspace get svc,pod,deployment
 NAME                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-service/svc-big-agi   ClusterIP   10.0.198.118   <none>        3000/TCP   63m
+service/svc-ai-workspace   ClusterIP   10.0.198.118   <none>        3000/TCP   63m
 
 NAME                                     READY   STATUS    RESTARTS   AGE
-pod/deployment-big-agi-xxxxxxxx-yyyyy    1/1     Running   0          39m
+pod/deployment-ai-workspace-xxxxxxxx-yyyyy    1/1     Running   0          39m
 
 NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/deployment-big-agi   1/1     1            1           63m
+deployment.apps/deployment-ai-workspace   1/1     1            1           63m
 ```
 
 ### Step 6: Testing the Service
@@ -56,7 +56,7 @@ deployment.apps/deployment-big-agi   1/1     1            1           63m
 You can test the service by port-forwarding the service to your local machine:
 
 ```bash
-$ kubectl -n ns-big-agi port-forward service/svc-big-agi 3000
+$ kubectl -n ns-ai-workspace port-forward service/svc-ai-workspace 3000
 Forwarding from 127.0.0.1:3000 -> 3000
 Forwarding from [::1]:3000 -> 3000
 ```
@@ -74,7 +74,7 @@ To update AI Workspace to the latest version:
 
 2. Apply the updated deployment:
    ```bash
-   $ kubectl apply -f big-agi-deployment.yaml
+   $ kubectl apply -f ai-workspace-deployment.yaml
    ```
 
 This will trigger a rolling update of the deployment with the latest image.

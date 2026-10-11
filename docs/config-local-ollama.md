@@ -41,7 +41,7 @@ In addition to using the UI, configuration can also be done using
 ### ⚠️ Network Troubleshooting
 
 If you get errors about the server having trouble connecting with Ollama, please see
-upstream big-AGI issue #276 (comment 1858591483).
+upstream issue #276 (comment 1858591483).
 
 And in brief, make sure the Ollama endpoint is accessible from the servers where you run AI Workspace (which could
 be localhost or cloud servers).

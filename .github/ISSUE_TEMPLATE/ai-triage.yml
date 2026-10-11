@@ -1,5 +1,5 @@
 name: 🔥 Make AI Fix This
-description: Bug, question, or feedback - AI analyzes and changes ai-workspace appropriately
+description: Bug, question, or feedback - AI analyzes and changes AI Workspace appropriately
 assignees: [ jrmatherly ]
 body:
   - type: markdown
@@ -39,7 +39,7 @@ body:
   - type: dropdown
     attributes:
       label: Impact on your workflow
-      description: How does this affect your use of ai-workspace?
+      description: How does this affect your use of AI Workspace?
       options:
         - Blocking - Can't use ai-workspace
         - High - Major feature broken

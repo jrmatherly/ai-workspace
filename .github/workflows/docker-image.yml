@@ -85,8 +85,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           labels: |
-            org.opencontainers.image.title=ai-workspace
-            org.opencontainers.image.description=ai-workspace (derived from big-AGI)
+            org.opencontainers.image.title=AI Workspace
+            org.opencontainers.image.description=AI Workspace: self-hosted, local-first multi-model AI chat
             org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
             org.opencontainers.image.url=https://github.com/jrmatherly/ai-workspace
 
@@ -183,8 +183,8 @@ jobs:
           # shellcheck disable=SC2046 # word splitting is intended: one -t per tag, one arg per digest
           docker buildx imagetools create \
             $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            --annotation='index:org.opencontainers.image.title=ai-workspace' \
-            --annotation='index:org.opencontainers.image.description=ai-workspace (derived from big-AGI)' \
+            --annotation='index:org.opencontainers.image.title=AI Workspace' \
+            --annotation='index:org.opencontainers.image.description=AI Workspace: self-hosted, local-first multi-model AI chat' \
             --annotation='index:org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}' \
             --annotation='index:org.opencontainers.image.url=https://github.com/jrmatherly/ai-workspace' \
             $(printf '${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LC }}@sha256:%s ' *)

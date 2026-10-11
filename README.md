@@ -14,7 +14,7 @@ Derived from [enricoros/big-AGI](https://github.com/enricoros/big-AGI) at commit
 
 # AI Workspace 🧠
 
-**AI Workspace** is a self-hosted copy of big-AGI: ___the multi-model AI workspace for experts___.
+**AI Workspace** is a self-hosted, local-first, multi-model AI workspace for experts.
 
 Built for experts: Engineers architecting systems. Founders making decisions. Researchers validating hypotheses.
 You need to think broader, decide faster, and build with confidence, then you need AI Workspace.
@@ -99,20 +99,14 @@ Configuration requires your API keys. *AI Workspace does not charge for model us
 
 ## Design principles
 
-Inherited from big-AGI and kept here: **local-first** (chats stay in your browser), multi-model by default (Beam runs several models side by side with a human in the loop), no vendor lock-in (one AIX protocol layer in front of every provider), and a UI tuned for speed.
+**Local-first** (chats stay in your browser), multi-model by default (Beam runs several models side by side with a human in the loop), no vendor lock-in (one AIX protocol layer in front of every provider), and a UI tuned for speed.
 
 
 ---
 
 ## Release Notes
 
-- Open 2.1.1: **Weights Dust** **Opus 5**, **GPT-5.6**, **Gemini 3.7**, **Kimi K3**, multi-vendor Transcription, Cerebras/NVIDIA NIM/Sakana/Cohere
-- Open 2.0.5: **Roberto** **Opus 4.7 1M**, **GPT-5.5**, **DeepSeek V4**, Anthropic Containers/Skills, resumable Deep Research, MiniMax & Arcee AI
-- Open 2.0.4: **Hyper Params** **Opus 4.6**, **GPT-5.4**, **Gemini 3.1 Pro**, AWS Bedrock, parameter accuracy, Anthropic continuation/Fast mode
-- Open 2.0.3: **Red Carpet** **Kimi K2.5**, **Gemini 3 Flash**, **GPT 5.2**, Google Drive, Inworld, Novita.ai, Speech/UX improvements
-- Open 2.0.2: **Speex** multi-vendor speech synthesis, **Opus 4.5**, **Gemini 3 Pro**, **Nano Banana Pro**, **Grok 4.1**, **GPT-5.1**, **Kimi K2** + 280 fixes
-
-Upstream release history up to v2.1.1: [docs/changelog.md](docs/changelog.md). Releases of this repo: [GitHub releases](https://github.com/jrmatherly/ai-workspace/releases).
+Changelog: [docs/changelog.md](docs/changelog.md). Releases: [GitHub releases](https://github.com/jrmatherly/ai-workspace/releases).
 
 ## 👉 Supported Models & Integrations
 
@@ -124,7 +118,7 @@ Delightful UX with latest models exclusive features like Beam for **multi-model 
 |---------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------| 
 | **Chat**<br/>**Call**<br/>**Beam**<br/>**Draw**, ...                                                          | Local & Cloud<br/>Open & Closed<br/>Cheap & Heavy<br/>Google, Mistral, ...                                              | Attachments<br/>Diagrams<br/>Multi-Chat<br/>Mobile-first UI                                                          | Stored Locally<br/>Easy self-Host<br/>Local actions<br/>Data = Gold                                                    | AI Personas<br/>Voice Modes<br/>Screen Capture<br/>Camera + OCR                                                      |
 
-![AI Workspace screenshot](docs/pixels/big-AGI-compo-20240201_small.png)
+![AI Workspace screenshot](docs/pixels/ai-workspace-compo-20240201_small.png)
 
 ### AI Models & Vendors
 

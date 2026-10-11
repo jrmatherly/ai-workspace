@@ -14,7 +14,7 @@ unlisted: true
 >  - [Side effects](../src/modules/trade/server/trade.router.ts):
 >     Sharing functionality, import from ChatGPT share, and post to Paste.GG will not work
 >  - Cloud features (sync, auth, payments) will not be available
->  - See upstream big-AGI issue 174.
+>  - See upstream issue 174.
 
 This guide provides steps to deploy your Next.js app on Cloudflare Pages.
 It is based on the [official Cloudflare developer documentation](https://developers.cloudflare.com/pages/framework-guides/deploy-a-nextjs-site/),

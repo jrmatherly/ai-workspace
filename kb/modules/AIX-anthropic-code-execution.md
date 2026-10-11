@@ -33,7 +33,7 @@ Issue [enricoros/big-AGI#1087](https://github.com/enricoros/big-AGI/issues/1087)
 (filed 2026-04-25, closed 2026-05-08): with `code_execution` enabled alongside the dynamic web tools, the
 model tried to call the web tools from generated scripts, which fail because web tools default to
 `allowed_callers: ["direct"]` - producing failed scripts, runaway loops, and (with attachments) bash
-hunting on disk for inlined files. Root cause: big-AGI was auto-enabling the standalone tool whenever
+hunting on disk for inlined files. Root cause: upstream was auto-enabling the standalone tool whenever
 dynamic filtering was on.
 
 Fixed 2026-04-28 in three commits:

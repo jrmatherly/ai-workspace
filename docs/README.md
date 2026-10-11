@@ -73,7 +73,7 @@ For deploying a custom AI Workspace instance:
 
 ## Community & Support
 
-- Check the [releases](https://github.com/jrmatherly/ai-workspace/releases) for the latest updates, and the [upstream changelog](changelog.md) for history up to v2.1.1
+- Check the [releases](https://github.com/jrmatherly/ai-workspace/releases) for the latest updates, and the [changelog](changelog.md)
 - Visit the [GitHub repository](https://github.com/jrmatherly/ai-workspace) for source code and issue tracking
 
 Let's build something great.

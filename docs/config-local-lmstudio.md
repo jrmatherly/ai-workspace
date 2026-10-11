@@ -2,12 +2,6 @@
 
 Quickly set up LM Studio with AI Workspace to run local and open LLMs on your computer for enhanced privacy and control over AI interactions.
 
-## Video Tutorial
-
-For a visual step-by-step guide, watch our [YouTube tutorial](https://www.youtube.com/watch?v=MqXzxVokMDk).
-
-[![Running big-AGI locally with LM Studio YouTube Tutorial](http://img.youtube.com/vi/MqXzxVokMDk/0.jpg)](http://www.youtube.com/watch?v=MqXzxVokMDk "Running big-AGI locally with LM Studio")
-
 
 ## Quick Setup Guide
 

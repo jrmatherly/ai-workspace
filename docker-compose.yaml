@@ -3,7 +3,7 @@
 # For more examples, such running AI Workspace alongside a web browsing service, see the `docs/docker` folder.
 
 services:
-  big-agi:
+  ai-workspace:
     image: ghcr.io/jrmatherly/ai-workspace:latest
     ports:
       - "3000:3000"

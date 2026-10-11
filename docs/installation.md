@@ -79,12 +79,12 @@ or follow the steps below for a quick start.
 
 1. (optional) Build the Docker image - if you do not want to use the [pre-built Docker images](https://github.com/jrmatherly/ai-workspace/pkgs/container/ai-workspace):
    ```bash
-   docker build -t big-agi .
+   docker build -t ai-workspace .
    ```
 2. Run the Docker container with either:
    ```bash
    # 2A. if you built the image yourself:
-   docker run -d -p 3000:3000 big-agi
+   docker run -d -p 3000:3000 ai-workspace
 
    # 2B. or use the pre-built image:
    docker run -d -p 3000:3000 ghcr.io/jrmatherly/ai-workspace
@@ -114,18 +114,18 @@ Deploy AI Workspace on a Kubernetes cluster for enhanced scalability and managem
 
 3. Apply the Kubernetes configurations:
    ```bash
-   kubectl create namespace ns-big-agi
-   kubectl apply -f docs/k8s/big-agi-deployment.yaml -f env-secret.yaml
+   kubectl create namespace ns-ai-workspace
+   kubectl apply -f docs/k8s/ai-workspace-deployment.yaml -f env-secret.yaml
    ```
 
 4. Verify the deployment:
    ```bash
-   kubectl -n ns-big-agi get svc,pod,deployment
+   kubectl -n ns-ai-workspace get svc,pod,deployment
    ```
 
 5. Access the AI Workspace application:
    ```bash
-   kubectl -n ns-big-agi port-forward service/svc-big-agi 3000:3000
+   kubectl -n ns-ai-workspace port-forward service/svc-ai-workspace 3000:3000
    ```
    Your AI Workspace instance is now accessible at `http://localhost:3000`.
 

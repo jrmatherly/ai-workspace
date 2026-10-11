@@ -29,7 +29,7 @@ For AI protocol development (model listing, live API requests/responses, paramet
 
 ### Git and GitHub
 
-This repo is `jrmatherly/ai-workspace` (remote `origin`, single branch `main`). It is a copy of `enricoros/big-AGI`, not a fork: no shared git history. See "Upstream" below.
+This repo is `jrmatherly/ai-workspace` (remote `origin`, single branch `main`). It is a copy of the upstream repository, not a fork: no shared git history. See "Upstream" below.
 
 The `gh` command is available for GitHub reads (issues, PRs, labels), but **NEVER PUSH TO ANY BRANCH**. The user manages all remote 'write' git operations. Local commits are fine when asked.
 - **Always use `git mv` instead of `mv`** when renaming or moving files - preserves git history tracking
