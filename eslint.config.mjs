@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import pluginCompat from "eslint-plugin-compat";
-// typed linting - rides eslint-config-next's own @typescript-eslint packages
+// typed linting - explicit devDependencies since ESLint 10, same range as eslint-config-next 16 (one copy, or ESLint throws "Cannot redefine plugin")
 import tsParser from "@typescript-eslint/parser";
 import tsPlugin from "@typescript-eslint/eslint-plugin";
 
@@ -43,8 +43,14 @@ export default defineConfig([{
         "prefer-const": "off",
     },
 }, ...nextVitals, {
+    // ESLint 10: Next's bundled Babel parser lacks ScopeManager.addGlobals and crashes on .js/.mjs; the TS parser reads them fine
+    files: ["**/*.{js,jsx,mjs,cjs}"],
+    languageOptions: { parser: tsParser },
+}, {
     // eslint-config-next 16 registers its plugins only under this glob; the house rules below name them
     files: ["**/*.{js,jsx,mjs,ts,tsx,mts,cts}"],
+    // eslint-plugin-react 7.37 crashes on ESLint 10 when version is "detect" (eslint-config-next's default)
+    settings: { react: { version: "19.3" } },
     rules: {
         // intentional empty catches (fire-and-forget cleanup) are house style
         "no-empty": ["error", { allowEmptyCatch: true }],
