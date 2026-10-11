@@ -115,7 +115,7 @@ function _parseFrame(buffer: Uint8Array, offset: number, td: TextDecoder): { fra
 
 // --- Base64 decoder ---
 
-/** Decode base64 string to UTF-8 string (Edge Runtime compatible) */
+/** Decode base64 string to UTF-8 string (no Buffer, so it also runs in the browser under CSF) */
 function _base64Decode(base64: string, td: TextDecoder): string {
   const binaryString = atob(base64);
   const bytes = new Uint8Array(binaryString.length);

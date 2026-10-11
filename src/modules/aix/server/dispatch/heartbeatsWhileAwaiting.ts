@@ -31,7 +31,7 @@ export async function* heartbeatsWhileAwaiting<TOut>(operationPromise: Promise<T
 
     // race ❤|operation
     /**
-     * Note: Vercel Edge Runtime infrastructure may log stack traces pointing here when ReadableStream fails
+     * Note: Vercel's runtime may log stack traces pointing here when ReadableStream fails
      * This is normal - the runtime error-logs where the operation was pending when the stream closed, independently from our error handling.
      */
     const winner = await Promise.race([

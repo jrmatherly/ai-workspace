@@ -74,7 +74,7 @@ function _isInlineableImageMimeType(mimeType: string): boolean {
  *
  * Intercepts hosted-resource particles ({ p: 'hres', kind: 'vnd.ant.file' }) emitted by
  * the Anthropic parser, fetches the file metadata + content via native fetch (works in
- * Edge Runtime AND browser/CSF), and replaces them with either:
+ * server AND browser/CSF), and replaces them with either:
  *  - a TEXT particle ({ t: ... }) with fenced content, for textual MIME types
  *  - an INLINE IMAGE particle ({ p: 'ii', ... }) with base64 bytes, for image/* MIME types
  *

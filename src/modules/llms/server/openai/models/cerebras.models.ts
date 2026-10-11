@@ -156,23 +156,14 @@ function _cerebrasModelSortFn(a: ModelDescriptionSchema, b: ModelDescriptionSche
 }
 
 
-// Next.js Edge Runtime detection (Vercel sets this global to a string in the edge runtime; undefined
-// in Node and the browser). Ambient `typeof` is safe even when the global doesn't exist at runtime.
-declare global {
-  // noinspection ES6ConvertVarToLetConst
-  var EdgeRuntime: string | undefined;
-}
-
 /**
- * Explicit gate for the live catalog fetch - per-runtime status of Cerebras' Cloudflare bot-management:
- * - Vercel Edge runtime: always 403'd (verified) - detected via the EdgeRuntime global, skip the doomed call.
+ * Explicit gate for the live catalog fetch, which Cerebras fronts with Cloudflare bot-management:
  * - Node (incl. a VPS/origin deployment) and browsers: clear Cloudflare fine (verified) - live fetch allowed.
- * - other/future runtimes (e.g. workerd): unverified - live fetch attempted, editorial DB on failure; set
- *   LLMS_CEREBRAS_SKIP_LIVE=1 in the server env to force the editorial DB without attempting.
+ * - other runtimes (e.g. workerd; Vercel's retired Edge runtime was always 403'd): unverified - live fetch
+ *   attempted, editorial DB on failure; set LLMS_CEREBRAS_SKIP_LIVE=1 in the server env to skip the attempt.
  * NOTE: raw process.env read (not env.server) because this file is also bundled client-side (CSF).
  */
 function _cerebrasSkipLiveCatalog(): boolean {
-  if (typeof EdgeRuntime === 'string') return true;
   return typeof process !== 'undefined' && process.env?.LLMS_CEREBRAS_SKIP_LIVE === '1';
 }
 
@@ -204,7 +195,7 @@ export async function cerebrasFetchModelDescriptions(access: OpenAIAccessSchema,
     return _cerebrasModelsToModelDescriptions(wireModels);
   } catch (error) {
     if (signal?.aborted) throw error; // never mask a user cancellation
-    // network/Cloudflare hiccup outside the edge runtime: degrade to the editorial DB rather than failing
+    // network/Cloudflare hiccup: degrade to the editorial DB rather than failing
     console.warn('[Cerebras] live catalog fetch failed, using editorial models:', (error as Error)?.message || error);
     return _cerebrasEditorialModelDescriptions();
   }

@@ -70,7 +70,7 @@ Example: `NEXT_PUBLIC_MOTD=🚀 New features available in {{app_build_pkgver}}! 
 
 Test your application thoroughly using local development (refer to README.md for local build instructions). Deploy using your preferred hosting service. AI Workspace supports deployment on platforms like Vercel, Docker, or any Node.js-compatible service.
 
-- [deploy-cloudflare.md](deploy-cloudflare.md): for Cloudflare Pages deployment (limited support)
+- [deploy-cloudflare.md](deploy-cloudflare.md): Cloudflare Pages is not supported (the tRPC router needs Node.js)
 - [deploy-docker.md](deploy-docker.md): for Docker deployment instructions and examples
 - [deploy-k8s.md](deploy-k8s.md): for Kubernetes deployment instructions and examples
 

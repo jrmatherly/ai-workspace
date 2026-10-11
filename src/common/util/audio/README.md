@@ -12,7 +12,7 @@ speakText(inputText, voiceSelector, options?, signal?, chunkedCallbacks?)   ← 
      ├─ [RPC: elevenlabs/gemini/inworld/openai/localai]
      │    │
      │    ├─ speexSynthesize_RPC()                ← protocols/rpc/rpc.client.ts
-     │    │    ├─ tRPC speex.synthesize           ← streaming mutation, Edge router
+     │    │    ├─ tRPC speex.synthesize           ← streaming mutation, /api/trpc (Node)
      │    │    ├─ or speexRpcCoreSynthesize       ← CSF, when _shouldUseCSF(engine)
      │    │    └─ particles: start, audio (chunk or whole buffer), done
      │    │

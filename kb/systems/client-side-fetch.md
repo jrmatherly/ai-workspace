@@ -7,8 +7,8 @@ Client-Side Fetch (CSF), surfaced to users as **"Direct Connection"**, enables d
 Wins when Direct Connection is on:
 
 - **No 4.5MB upload limit** (Vercel body-size cap does not apply to direct browser-to-API requests).
-- **No 300s function timeout** (Vercel serverless/edge timeout does not apply; call duration is bound only by the AI service).
-- **More privacy**: connection metadata (IP, timestamp, edge region, Vercel telemetry) is not observable by the AI Workspace edge server.
+- **No 300s function timeout** (the Vercel function timeout does not apply; call duration is bound only by the AI service).
+- **More privacy**: connection metadata (IP, timestamp, edge region, Vercel telemetry) is not observable by the AI Workspace server.
 
 Costs:
 

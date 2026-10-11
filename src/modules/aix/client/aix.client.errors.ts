@@ -55,7 +55,7 @@ export function aixClassifyStreamingError(error: any, isUserAbort: boolean, hasF
   if (error instanceof TypeError && error.message === 'network error')
     return { errorType: 'net-disconnected', errorMessage: 'An unexpected issue occurred: **network error**.' /* DO NOT CHANGE '**network error**' - usually client-side broken */ };
 
-  // Mid-stream remote termination (e.g. Vercel Edge function timeout = graceful HTTP EOF deep inside the
+  // Mid-stream remote termination (e.g. Vercel function timeout = graceful HTTP EOF deep inside the
   // httpBatchStreamLink async-iterable). tRPC has thrown a DIFFERENT shape for this SAME event in each era (upstream #6989):
   //   <= 11.5.1:    Error('Stream closed')
   //   11.6 - 11.7:  bare `undefined`                  (the #6989 regression, PR #6960 - avoided: we ship >= 11.18)

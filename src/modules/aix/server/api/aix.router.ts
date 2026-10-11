@@ -12,7 +12,7 @@ import { AixWire_API, AixWire_API_ChatContentGenerate } from './aix.wiretypes';
 // --- AIX tRPC Router ---
 
 /**
- * Vercel hard-kills the edge function at 300s (limit set in the Vercel project settings) without running
+ * Vercel hard-kills the serverless function at 300s (limit set in the Vercel project settings) without running
  * any tRPC catch/finally, so a timed-out request leaves only a generic 'Task timed out' line with no model.
  * This arms a timer that logs the culprit ~15s before that kill - the only reliable way to see which
  * models/contexts run long enough to time out.

@@ -114,7 +114,7 @@ export function AixDebuggerFrame(props: {
         <div>Status:</div>
         <Box sx={{ display: 'flex', gap: 1 }}>
           <Chip variant={frame.transport !== 'csf' ? undefined : 'solid'} color={frame.transport === 'csf' ? 'primary' : 'success'}>
-            {frame.transport === 'csf' ? 'Direct Connection' : 'Edge Server'}
+            {frame.transport === 'csf' ? 'Direct Connection' : 'Server'}
           </Chip>
           <Chip variant={frame.isComplete ? undefined : 'solid'} color={frame.isComplete ? 'success' : 'warning'}>
             {frame.isComplete ? 'Done' : 'In Progress'}

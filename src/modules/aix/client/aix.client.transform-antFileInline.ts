@@ -38,7 +38,7 @@ function _isInlineableImageMimeType(mimeType: string): boolean {
  * `createAnthropicFileInlineTransform` in anthropic.transform-fileInline.ts.
  *
  * The server-side transform fetches files directly from the Anthropic File API using native fetch.
- * This works in Edge Runtime but NOT in the browser (CSF mode) because Anthropic's File API
+ * This works on the server but NOT in the browser (CSF mode) because Anthropic's File API
  * blocks CORS. The server-side transform tags itself `csfUnsafe` and gets stripped at the CSF
  * boundary (aix.client.direct-chatGenerate.ts).
  *

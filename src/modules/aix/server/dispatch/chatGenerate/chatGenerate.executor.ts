@@ -19,7 +19,7 @@ import { heartbeatsWhileAwaiting } from '../heartbeatsWhileAwaiting';
 
 
 /**
- * Local replacement for Promise.withResolvers (ES2024). Native in Node 22+/Edge, but this file
+ * Local replacement for Promise.withResolvers (ES2024). Native in Node 22+, but this file
  * ships to the browser via AIX client-side-fetch (CSF), where older browsers (Safari < 17.4,
  * Chrome < 119, Firefox < 121) lack it. This manual form works on every runtime.
  */

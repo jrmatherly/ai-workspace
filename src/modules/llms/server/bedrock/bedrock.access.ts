@@ -12,7 +12,7 @@
  * - **SigV4**: Traditional IAM credentials signing via aws4fetch
  *
  * Priority: client bearer > client IAM > server bearer > server IAM.
- * SigV4 uses explicit AWS credentials only (no credential chain) for Edge Runtime compatibility.
+ * SigV4 uses explicit AWS credentials only (no credential chain) so the same code runs on the server and in the browser (CSF).
  */
 
 import * as z from 'zod/v4';

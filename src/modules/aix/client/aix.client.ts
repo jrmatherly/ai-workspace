@@ -1049,7 +1049,7 @@ async function _aixChatGenerateContent_LL_unlocked(
 
       ) : (
 
-        // AIX Reattach from Upstream Handle - [CSF] - bypasses edge runtime, no 5-min timeout
+        // AIX Reattach from Upstream Handle - [CSF] - bypasses the server function, no 5-min timeout
         clientSideReattachUpstream ? clientSideReattachUpstream(
           aixAccess,
           accumulator_LL.generator.upstreamHandle,

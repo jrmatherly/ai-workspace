@@ -37,10 +37,9 @@ function _posthogServerSingleton(): PostHog | null {
 
 /**
  * Send server-side custom events to PostHog
- * The posthog-node library automatically uses the right implementation for Edge vs Node.js
  */
 export async function posthogServerSendEvent(eventName: string, distinctId: string, properties?: {
-  runtime?: 'edge' | 'nodejs';
+  runtime?: 'nodejs';
   $ip?: string; // PostHog property
   $pathname?: string; // PostHog property, URL path for the event
   //$useragent: PostHog user agent string, not needed - keep anonymous
@@ -77,10 +76,9 @@ export async function posthogServerSendEvent(eventName: string, distinctId: stri
 
 /**
  * Send server-side exceptions to PostHog
- * The posthog-node library automatically uses the right implementation for Edge vs Node.js
  */
 export async function posthogServerSendException(error: Error | unknown, distinctId: string | undefined, context: {
-  runtime: 'edge' | 'nodejs';
+  runtime: 'nodejs';
   domain: string; // e.g. 'trpc-onerror', which will become `server-trpc-onerror` in $exception_domain
   endpoint: string;
   method?: string;

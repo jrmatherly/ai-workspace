@@ -78,8 +78,8 @@ Create your GitHub fork, create a Vercel project over that fork, and deploy it. 
 
 ### Deploy on Cloudflare
 
-> Note: Cloudflare Pages deployment has limitations due to Edge Runtime constraints.
-> See the [Cloudflare guide](deploy-cloudflare.md) for details and known issues.
+> Note: Cloudflare Pages cannot run this app: the tRPC router at `/api/trpc` needs the Node.js runtime.
+> See the [Cloudflare note](deploy-cloudflare.md).
 
 ### Docker Deployments
 

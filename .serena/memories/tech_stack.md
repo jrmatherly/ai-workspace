@@ -10,4 +10,4 @@
 - `next.config.ts`: throws "missing build identity" without a git SHA or `NEXT_PUBLIC_BUILD_HASH`; `AI_WORKSPACE_BUILD=standalone|static`; (Next 16 no longer lints in build) validates `src/server/env.server.ts` (t3-env + zod) at config load; PostHog rewrites under `/a/ph`.
 - `middleware_BASIC_AUTH.ts` is inert until renamed to `middleware.ts`.
 - Deploy surfaces: Vercel, Docker (multi-stage, non-root), k8s manifests in `docs/k8s`, Cloudflare doc is unlisted/unsupported. `docker-compose.yaml` pulls `ghcr.io/jrmatherly/ai-workspace:latest`, not a local build.
-- Next 16: the AIX streaming path (Edge route) is unproven in this upgrade; no vendor API key file was present.
+- Next 16: the AIX streaming path on `/api/trpc` (Node) was proven on 16.4.0 with the mock vendor (`tools/develop/aix-mock-vendor`); no vendor API key file was present.

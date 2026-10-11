@@ -47,7 +47,7 @@
   "exclude": [
     "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx",
     "tools",
-    "private",
+    "private", // gitignored scratch; retired sources there import deleted modules
     "dist",
     "node_modules"
   ]

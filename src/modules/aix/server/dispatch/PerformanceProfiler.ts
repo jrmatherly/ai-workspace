@@ -14,9 +14,9 @@ interface PerformanceMeasurement extends Record<string, number | string> {
 
 
 /**
- * Lightweight 'performance'-like API for Edge runtimes.
+ * Lightweight 'performance'-like API that runs on the server and in the browser.
  *
- * Note (Enrico): on Edge runtimes the Date.now() function could be a bit coarse,
+ * Note (Enrico): in some runtimes the Date.now() function could be a bit coarse,
  * to prevent timing attacks. Still should be indicative enough for statistical
  * profiling in our use cases.
  */
@@ -100,7 +100,7 @@ export function performanceProfilerLog(label: string, measurements?: Performance
 
 
 /**
- * High-precision performance profiler - utility class. Compatible with Edge runtimes.
+ * High-precision performance profiler - utility class. Runtime-agnostic.
  */
 export class PerformanceProfiler {
 

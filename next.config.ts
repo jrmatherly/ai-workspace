@@ -150,7 +150,7 @@ let nextConfig: NextConfig = {
 };
 
 
-// Validate environment variables at build time, if required. Server env vars will be actually read and used at runtime (cloud/edge).
+// Validate environment variables at build time, if required. Server env vars will be actually read and used at runtime (server).
 import { env as validateEnv } from '~/server/env.server';
 import { POSTHOG_ASSETS_HOST, POSTHOG_INGEST_HOST } from '~/server/posthog/posthog.hosts';
 void validateEnv; // Triggers env validation - throws if required vars are missing

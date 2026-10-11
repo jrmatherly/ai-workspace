@@ -28,7 +28,7 @@ const handler = (req: Request) => fetchRequestHandler({
   },
 });
 
-// On Vercel, Node functions default to a short limit; raise it here or in the project settings
+// On Vercel, AI streams run for minutes: set maxDuration here or in the project's function settings
 // export const maxDuration = 300;
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

@@ -196,7 +196,7 @@ Read by `next.config.ts` at build or dev-server start, or by server code during 
 | `AGI_DIST_DIR` | Overrides the Next.js output directory, so parallel builds do not race over `.next/` |
 | `ANALYZE_BUNDLE` | Any value wraps the build with `@next/bundle-analyzer` and opens the report |
 | `SUPPRESS_FETCHER_LOGS` | Any value stops the server from logging upstream fetch errors to the console |
-| `LLMS_CEREBRAS_SKIP_LIVE` | `1` makes Cerebras model listing use the built-in model list without trying the live catalog (Edge always skips it) |
+| `LLMS_CEREBRAS_SKIP_LIVE` | `1` makes Cerebras model listing use the built-in model list without trying the live catalog |
 
 ---
 

@@ -86,6 +86,11 @@ When you hand-port a `~` hunk, translate upstream's spelling to ours before it l
 | test env `BIGAGI_TEST_*` | `AIWORKSPACE_TEST_*` |
 | mime hint `application/big-agi` | `application/vnd.ai-workspace` |
 | product name "Big-AGI" or "big-AGI" in UI copy, build banners, docs | "AI Workspace" (keep "big-AGI" where it names upstream) |
+| tRPC routes `app/api/edge/[trpc]/route.ts` (Edge runtime) and `app/api/cloud/[trpc]/route.ts` (Node) | one `app/api/trpc/[trpc]/route.ts` on Node (since 2026-10-11) |
+| `trpc.router-edge.ts` / `AppRouterEdge`, `trpc.router-cloud.ts` / `AppRouterCloud`, `trpc.next-edge.ts` | `trpc.router.ts` / `AppRouter`; the Edge adapter is gone |
+| clients `apiAsyncNode`, `apiStreamNode` (Node router) | `apiAsync`, `apiStream` (same router) |
+| `edgeProcedure`, `authedProcedure`, `premiumProcedure` | bare `t.procedure` (already true on upstream `main`) |
+| `VERCEL_WORKAROUND_EDGE_1MB_PAYLOAD_LIMIT` in `trpc.client.ts` | removed; the stream link always sets `maxItems: 1` |
 
 Keep upstream spelling, do not rename in a port: `agi-*` CSS classes and `--AGI-*` vars, `data-agi-*` attributes, `vnd.agi.*` fragment types, `agiUuid` helpers, `aifn/agi*` directories, `AGI_DIST_DIR`, `__AGI_CONFIG_PASS`.
 
@@ -112,7 +117,7 @@ An `x` marker means we removed the path, not always that the change is irrelevan
 
 - An upstream commit that only bumps dependencies is SKIP. If it moves a package past our version, evaluate the version on its own: `npm install <pkg>@<ver>`, then tscheck, lint, test, build. Never cherry-pick the lockfile.
 - A ported feature commit that adds a dependency gets it at the current release (`npm install <pkg>`), not upstream's pin. Resolve the `package.json` conflict by keeping our versions and adding only the new entry.
-- We sit ahead of upstream on: Prisma 7.10 (prisma-client generator, pg adapter, prisma.config.ts), Next 16.3 + React 19 (webpack via --webpack, flat eslint-config-next), Next 15.5 line, `/node` 26, `dexie-react-hooks` 4, `puppeteer-core` 25 (ESM-only, Node floor 22.13), `katex` 0.19 via `overrides`, ESLint 10 (JS files on the TS parser, react version pinned), TypeScript 7 via the `@typescript/native` alias (the 6.0 API stays as `typescript`), `react-resizable-panels` 4, `@mui/icons-material` 7.3, `pdfjs-dist` 6.4 with a browser floor of Chrome 125 / Safari 18 (upstream stays on Chrome 110 / Safari 16.4 and 5.4.54). Upstream hunks written against the older APIs are ADAPT, translated with the phase's rename table in `docs/superpowers/plans/2026-10-11-dependency-upgrade-refactor-tier.md`.
+- We sit ahead of upstream on: Prisma 7.10 (prisma-client generator, pg adapter, prisma.config.ts), Next 16.4 + React 19 (webpack via --webpack, flat eslint-config-next, one tRPC router on Node), `/node` 26, `dexie-react-hooks` 4, `puppeteer-core` 25 (ESM-only, Node floor 22.13), `katex` 0.19 via `overrides`, ESLint 10 (JS files on the TS parser, react version pinned), TypeScript 7 via the `@typescript/native` alias (the 6.0 API stays as `typescript`), `react-resizable-panels` 4, `@mui/icons-material` 7.3, `pdfjs-dist` 6.4 with a browser floor of Chrome 125 / Safari 18 (upstream stays on Chrome 110 / Safari 16.4 and 5.4.54). Upstream hunks written against the older APIs are ADAPT, translated with the table in "Name translations when porting".
 - When upstream later makes the same major move, their migration commits are ALREADY-HAVE for the mechanics and ADAPT only for behavior they add on top.
 - `pdfjs-dist` bumps must carry `public/workers/pdf.worker.min.mjs` from the same version; `src/common/util/pdfUtils.test.ts` fails otherwise.
 
