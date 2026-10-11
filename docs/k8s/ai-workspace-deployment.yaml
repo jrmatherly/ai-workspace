@@ -30,6 +30,18 @@ spec:
           envFrom:
             - secretRef:
                 name: env
+          # the tRPC capabilities query is the cheapest route that proves the Node server is up; there is no /health
+          readinessProbe:
+            httpGet:
+              path: /api/trpc/backend.listCapabilities
+              port: 3000
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/trpc/backend.listCapabilities
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 30
           # measured on the published image: 212Mi idle, 286Mi peak under 120 parallel page loads, CPU idle;
           # no CPU limit, a limit throttles the single Node process without protecting neighbors
           resources:

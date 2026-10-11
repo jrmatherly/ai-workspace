@@ -53,6 +53,8 @@ deployment.apps/deployment-ai-workspace   1/1     1            1           63m
 
 ### Step 6: Testing the Service
 
+The manifest probes `GET /api/trpc/backend.listCapabilities` (200 with a JSON body) for readiness and liveness; there is no dedicated health route. Use the same path from any external monitor.
+
 You can test the service by port-forwarding the service to your local machine:
 
 ```bash
