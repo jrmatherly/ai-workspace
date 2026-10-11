@@ -131,14 +131,15 @@ export const authProvidersInfo: { id: AuthProviderId; label: string }[] =
   authConfig?.providers.map(p => ({ id: p.id, label: p.label })) ?? [];
 
 
-export function isEmailTrusted(config: AuthConfig, providerId: AuthProviderId, emailVerified: boolean): boolean {
+/** An id outside the configured providers (or outside AuthProviderId at all) is never trusted. */
+export function isEmailTrusted(config: AuthConfig, providerId: string, emailVerified: boolean): boolean {
   const provider = config.providers.find(p => p.id === providerId);
   if (!provider) return false;
   return provider.emailTrust === 'idp' || emailVerified;
 }
 
 /** Who may sign in: applied at sign-in by Better Auth validateUserInfo. */
-export function isEmailAllowed(config: AuthConfig, providerId: AuthProviderId, email: string, emailVerified: boolean): boolean {
+export function isEmailAllowed(config: AuthConfig, providerId: string, email: string, emailVerified: boolean): boolean {
   return isEmailTrusted(config, providerId, emailVerified) && isEmailListed(config, email);
 }
 

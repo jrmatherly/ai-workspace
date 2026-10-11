@@ -4,11 +4,14 @@
 //  - run 'npx prisma generate' after making changes to this file (db push no longer runs it)
 //  - run 'npx prisma db push' to sync the remote database with the schema (reads prisma.config.ts)
 //
-// Database is optional: when the environment variables are not set, the database is not used at all,
-// and the storage of data in the app is limited to client-side (browser) storage.
+// Database is optional when auth is off: with no POSTGRES_* variables the database is not used at all,
+// and app data stays in the browser. It is REQUIRED when any AUTH_* provider is set.
 //
 // The database is used for:
 //  - the 'sharing' function, to let users share the chats with each other
+//  - authentication: users, sessions, linked provider accounts, OAuth state (Better Auth)
+//
+// Schema changes ship as committed migrations (src/server/prisma/migrations): npx prisma migrate dev --name <change>
 
 generator client {
   provider = "prisma-client"
@@ -59,4 +62,68 @@ enum LinkStorageVisibility {
 
 enum LinkStorageDataType {
   CHAT_V1
+}
+
+//
+// Authentication (Better Auth core schema). Regenerate the shape into a scratch file, never over this file.
+//
+model User {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
