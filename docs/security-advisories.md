@@ -43,6 +43,12 @@ sprintf-js
 
 `npm ls eslint` reports `invalid` peers for eslint-plugin-import 2.32.0, eslint-plugin-jsx-a11y 6.10.2 and eslint-plugin-react 7.37.5 (each declares at most `eslint ^9`; eslint-config-next 16 pulls them). `npm install` prints three `ERESOLVE overriding peer dependency` warnings and exits 0; `npm run lint` runs clean on the rules Next enables. Accepted until those plugins publish ESLint 10 peers. Never install with `--legacy-peer-deps`.
 
+## Build warnings
+
+`next build --webpack` prints "The Edge Runtime is deprecated" on Next 16. The Edge tRPC router (`app/api/edge`) stays on the Edge runtime by design, since AIX streams from it. Accepted until the routers move to the Node runtime.
+
+`npm install` prints `install-scripts` warnings only when a package with a postinstall script is not in `package.json` `allowScripts`. Bump the pinned version there after upgrades.
+
 ## Node floor
 
 `engines.node` is `^26.0.0 || ^24.0.0 || ^22.13.0`. The floor is set by puppeteer-core 25 (`>=22.12`, ESM-only) and rounded to the ESLint 10 line (`^22.13.0`) ahead of that upgrade; Prisma 7 (`^22.12`) landed; pdfjs-dist 6 (`>=22.13.0`) when it lands. Docker builds on `node:26-alpine`, CI reads `.nvmrc` (26).
