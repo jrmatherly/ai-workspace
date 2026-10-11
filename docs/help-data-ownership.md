@@ -23,7 +23,7 @@ You can see your data in your browser's local storage and IndexedDB - try it you
 2. Click 'Application' > 'Local Storage'
 3. See your settings and API keys
 
-![Browser local storage showing API keys and chat data](pixels/data_ownership_local_storage.png)
+![Local storage of a running AI Workspace, as listed under Application, Local storage](pixels/data_ownership_local_storage.png)
 
 ### What This Means For You
 
