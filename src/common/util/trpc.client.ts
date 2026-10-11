@@ -16,9 +16,6 @@ import { getBaseUrl } from './urlUtils';
 import { reactQueryClientSingleton } from '../app.queryclient';
 
 
-// configuration
-const VERCEL_WORKAROUND_EDGE_1MB_PAYLOAD_LIMIT = true;
-
 
 const enableLoggerLink = (opts: any) => {
   return process.env.NODE_ENV === 'development' ||
@@ -110,13 +107,9 @@ export const apiStream = createTRPCClient<AppRouter>({
       url: `${getBaseUrl()}/api/trpc`,
       transformer: transformer,
       fetch: streamingTransportFetch,
-      /**
-       * WORKAROUND:
-       * Due to the fact that we are sending large payloads with images, and having a 1MB max payload size
-       * limit on Vercel, we need to limit the number of items in the stream to 1, to err on the side of
-       * safety.
-       */
-      ...(VERCEL_WORKAROUND_EDGE_1MB_PAYLOAD_LIMIT && { maxItems: 1 }),
+      // one request per stream: a browse fetch is not held behind a sibling AI stream, and image-heavy
+      // payloads stay within per-request body limits (Vercel: 4.5MB)
+      maxItems: 1,
     }),
   ],
 });
