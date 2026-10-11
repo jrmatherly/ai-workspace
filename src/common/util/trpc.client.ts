@@ -6,13 +6,16 @@
  *
  * We also create a few inference helpers for input and output types.
  */
-import { createTRPCClient, httpBatchStreamLink, httpLink, loggerLink } from '@trpc/client';
+import { createTRPCClient, httpBatchStreamLink, httpLink, loggerLink, type TRPCLink } from '@trpc/client';
+import { tap } from '@trpc/server/observable';
 import { createTRPCNext } from '@trpc/next';
 
 import type { AppRouter } from '~/server/trpc/trpc.router';
 import { transformer } from '~/server/trpc/trpc.transformer';
 
 import { getBaseUrl } from './urlUtils';
+import { getAuthProviders } from '../app.serverconf';
+import { isAuthPublicPath, signInPath } from '../app.routes.auth';
 import { reactQueryClientSingleton } from '../app.queryclient';
 
 
@@ -48,12 +51,26 @@ const streamingTransportFetch: typeof fetch = async (input, init) => {
 };
 
 
+/**
+ * A typed UNAUTHORIZED (session expired or revoked, allowlist shrank) sends the browser to /signin?next=, except on
+ * public paths (a share-link viewer is never bounced) and when auth is off. Streaming gets the same error: the guard
+ * throws before the AIX generator starts, and proxy.ts never matches /api/*. No auth header: the session is the cookie.
+ */
+const unauthorizedRedirectLink: TRPCLink<AppRouter> = () => ({ next, op }) => next(op).pipe(tap({
+  error: error => {
+    if (typeof window !== 'undefined' && error.data?.code === 'UNAUTHORIZED' && getAuthProviders().length > 0 && !isAuthPublicPath(location.pathname))
+      window.location.assign(signInPath(location.pathname + location.search, location.origin));
+  },
+}));
+
+
 /// tRPC clients: async, query, and stream
 
 /** Typesafe async/await hooks for the tRPC API */
 export const apiAsync = createTRPCClient<AppRouter>({
   links: [
     loggerLink({ enabled: enableLoggerLink }),
+    unauthorizedRedirectLink,
     httpLink({
       url: `${getBaseUrl()}/api/trpc`,
       transformer: transformer,
@@ -74,15 +91,10 @@ export const apiQuery = createTRPCNext<AppRouter>({
       queryClient: reactQueryClientSingleton(),
       links: [
         loggerLink({ enabled: enableLoggerLink }),
+        unauthorizedRedirectLink,
         httpLink({
           url: `${getBaseUrl()}/api/trpc`,
           transformer: transformer,
-          // You can pass any HTTP headers you wish here
-          // async headers() {
-          //   return {
-          //     // authorization: getAuthCookie(),
-          //   };
-          // },
         }),
       ],
     };
@@ -103,6 +115,7 @@ export const apiQuery = createTRPCNext<AppRouter>({
 export const apiStream = createTRPCClient<AppRouter>({
   links: [
     loggerLink({ enabled: enableLoggerLink }),
+    unauthorizedRedirectLink,
     httpBatchStreamLink({
       url: `${getBaseUrl()}/api/trpc`,
       transformer: transformer,

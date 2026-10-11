@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { isAuthPublicPath, ROUTE_SIGNIN, safeNextPath } from './app.routes.auth';
+import { isAuthPublicPath, ROUTE_SIGNIN, safeNextPath, signInPath } from './app.routes.auth';
 
 const ORIGIN = 'https://ai.example.com';
 
@@ -27,4 +27,10 @@ test('safeNextPath rejects anything that leaves the origin', () => {
   assert.equal(safeNextPath(undefined, ORIGIN), '/');
   assert.equal(safeNextPath(['/a', '/b'], ORIGIN), '/');
   assert.equal(safeNextPath('', ORIGIN), '/');
+});
+
+test('signInPath carries a safe next, and nothing hostile', () => {
+  assert.equal(signInPath('/call?x=1', ORIGIN), '/signin?next=%2Fcall%3Fx%3D1');
+  assert.equal(signInPath('//evil.com', ORIGIN), '/signin?next=%2F');
+  assert.equal(signInPath('/', ORIGIN), '/signin?next=%2F');
 });

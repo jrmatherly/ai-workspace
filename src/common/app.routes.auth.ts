@@ -31,3 +31,8 @@ export function safeNextPath(next: string | string[] | undefined, origin: string
     return '/';
   }
 }
+
+/** The sign-in page URL that returns to `next` (pathname + search) after sign-in; hostile values collapse to '/'. */
+export function signInPath(next: string, origin: string): string {
+  return `${ROUTE_SIGNIN}?next=${encodeURIComponent(safeNextPath(next, origin))}`;
+}

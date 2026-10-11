@@ -8,7 +8,7 @@ import type { AuthProviderInfo } from '~/modules/backend/store-backend-capabilit
 import type { AuthUser } from '~/server/auth/auth.server';
 
 import { getAuthProviders } from '~/common/app.serverconf';
-import { ROUTE_SIGNIN } from '~/common/app.routes.auth';
+import { ROUTE_SIGNIN, signInPath } from '~/common/app.routes.auth';
 import { apiQuery } from '~/common/util/trpc.client';
 
 
@@ -59,7 +59,7 @@ export async function authSignIn(providerId: AuthProviderInfo['id'], nextPath: s
   const { error } = await authClient.signIn.social({
     provider: providerId,
     callbackURL: nextPath, // the gate runs on arrival: account-switch check, PostHog identify
-    errorCallbackURL: `${ROUTE_SIGNIN}?next=${encodeURIComponent(nextPath)}`, // Better Auth appends &error=<code>
+    errorCallbackURL: signInPath(nextPath, window.location.origin), // Better Auth appends &error=<code>
   });
   if (error) throw new Error(error.message ?? error.statusText ?? 'sign-in failed');
 }

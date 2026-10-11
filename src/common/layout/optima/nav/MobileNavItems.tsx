@@ -5,6 +5,7 @@ import { Box, Button, ButtonGroup, ColorPaletteProp, Sheet } from '@mui/joy';
 
 import { ROUTE_APP_NEWS } from '~/common/app.routes';
 import { checkDivider, checkVisibileIcon, NavItemApp, navItems } from '~/common/app.nav';
+import { authSignOut, useAuthUser } from '~/common/auth/auth.client';
 
 import { BringTheLove } from './BringTheLove';
 import { optimaCloseDrawer, optimaOpenModels } from '../useOptima';
@@ -69,6 +70,9 @@ const _styles = {
  * This can be plugged to the Drawer or Panel, to have nav items on Mobile.
  */
 export function MobileNavItems(props: { currentApp?: NavItemApp }) {
+
+  // external state
+  const auth = useAuthUser();
 
   // group apps into visible (rendered as of now) and overflow (rendered with a dropdown menu)
   let crossedDivider = false;
@@ -146,6 +150,19 @@ export function MobileNavItems(props: { currentApp?: NavItemApp }) {
         >
           Models
         </Button>
+
+        {/* Account */}
+        {auth.kind === 'user' && (
+          <Button
+            size='sm'
+            color='neutral'
+            variant='plain'
+            onClick={() => authSignOut().catch(error => console.warn('[auth] sign-out failed:', error))}
+            sx={_styles.button}
+          >
+            Sign out
+          </Button>
+        )}
 
         {/* External links (e.g. Discord) */}
         {navItems.links.slice(0, MAX_LINKS).map((link) => (

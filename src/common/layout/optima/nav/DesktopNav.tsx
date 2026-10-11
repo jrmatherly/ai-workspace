@@ -27,6 +27,7 @@ import { useOverlayComponents } from '~/common/layout/overlays/useOverlayCompone
 
 import { BringTheLove } from './BringTheLove';
 import { DesktopNavGroupBox, DesktopNavIcon, navItemClasses } from './DesktopNavIcon';
+import { UserNavIcon } from './UserNavIcon';
 import { InvertedBar, InvertedBarCornerItem } from '../InvertedBar';
 import { optimaActions, optimaOpenModels, optimaOpenPreferences, optimaToggleDrawer, useOptimaDrawerOpen, useOptimaDrawerPeeking, useOptimaModals } from '../useOptima';
 import { scratchClipSupported, useScratchClipVisibility } from '../scratchclip/store-scratchclip';
@@ -317,7 +318,7 @@ export function DesktopNav(props: { component: React.ElementType, currentApp?: N
       </DesktopNavGroupBox>
 
       <DesktopNavGroupBox sx={bottomGroupSx}>
-        {/*<UserNavIcon />*/}
+        <UserNavIcon />
         {navExtLinkItems}
         {navModalItems}
       </DesktopNavGroupBox>

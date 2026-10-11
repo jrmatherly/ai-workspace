@@ -142,24 +142,8 @@ export function ProviderBackendCapabilities(props: { children: React.ReactNode }
   }
 
   // Backend timeout notice
-  if (backendTimeout && versionVerified !== true) {
-    return (
-      <div style={styles.container}>
-        <div style={styles.content2}>
-          <h2 style={styles.heading}>Connection Error</h2>
-          <h2 style={styles.message}>Unable to connect to the server.<br /><br /></h2>
-          <button
-            style={styles.button}
-            onClick={() => window.location.reload()}
-            onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
-            onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
-          >
-            Reload Now
-          </button>
-        </div>
-      </div>
-    );
-  }
+  if (backendTimeout && versionVerified !== true)
+    return <ConnectionErrorNotice />;
 
   // Wait for the backend to respond
   if (versionVerified === null) {
@@ -175,4 +159,26 @@ export function ProviderBackendCapabilities(props: { children: React.ReactNode }
 
   // Render the children when ready
   return props.children;
+}
+
+
+
+/** Shared with ProviderAuthGate, which shows it when whoami keeps failing. */
+export function ConnectionErrorNotice() {
+  return (
+    <div style={styles.container}>
+      <div style={styles.content2}>
+        <h2 style={styles.heading}>Connection Error</h2>
+        <h2 style={styles.message}>Unable to connect to the server.<br /><br /></h2>
+        <button
+          style={styles.button}
+          onClick={() => window.location.reload()}
+          onMouseOver={(e) => e.currentTarget.style.opacity = '0.8'}
+          onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+        >
+          Reload Now
+        </button>
+      </div>
+    </div>
+  );
 }

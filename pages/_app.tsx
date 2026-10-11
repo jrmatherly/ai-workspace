@@ -23,6 +23,7 @@ import { ErrorBoundary } from '~/common/components/ErrorBoundary';
 import { Is } from '~/common/util/pwaUtils';
 import { OverlaysInsert } from '~/common/layout/overlays/OverlaysInsert';
 import { ProviderBackendCapabilities } from '~/common/providers/ProviderBackendCapabilities';
+import { ProviderAuthGate } from '~/common/providers/ProviderAuthGate';
 import { ProviderBootstrapLogic } from '~/common/providers/ProviderBootstrapLogic';
 import { ProviderSingleTab } from '~/common/providers/single-tab/ProviderSingleTab';
 import { ProviderTheming } from '~/common/providers/ProviderTheming';
@@ -51,11 +52,13 @@ const AiWorkspaceApp = ({ Component, emotionCache, pageProps }: MyAppProps) => {
         <ProviderBackendCapabilities>
           {/* ^ Backend capabilities & SSR boundary */}
           <ErrorBoundary outer>
-            <ProviderBootstrapLogic>
-              <SnackbarInsert />
-              {getLayout(<Component {...pageProps} />)}
-              <OverlaysInsert />
-            </ProviderBootstrapLogic>
+            <ProviderAuthGate>
+              <ProviderBootstrapLogic>
+                <SnackbarInsert />
+                {getLayout(<Component {...pageProps} />)}
+                <OverlaysInsert />
+              </ProviderBootstrapLogic>
+            </ProviderAuthGate>
           </ErrorBoundary>
         </ProviderBackendCapabilities>
       </ProviderSingleTab>
