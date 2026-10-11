@@ -1,6 +1,6 @@
  # LLM Editorial Control Surface
 
-This document maps where Big-AGI has editorial control over per-model metadata (and therefore can guarantee fields like `pubDate`, curated `description`, `chatPrice`, `benchmark`, `parameterSpecs`, etc.) versus where it must rely on the vendor API's dynamic discovery (and therefore cannot guarantee them).
+This document maps where AI Workspace has editorial control over per-model metadata (and therefore can guarantee fields like `pubDate`, curated `description`, `chatPrice`, `benchmark`, `parameterSpecs`, etc.) versus where it must rely on the vendor API's dynamic discovery (and therefore cannot guarantee them).
 
 For the forward-looking pipeline (extraction script, snapshot, website consumption, future schema extensions), see [LLM-models-catalog-pipeline.md](LLM-models-catalog-pipeline.md).
 
@@ -43,7 +43,7 @@ The rationale: today's date is a defensible 0-day proxy only when we know we're 
 
 It is **not**:
 
-- The date Big-AGI added the entry to its catalog (Ollama uses `added` for that)
+- The date AI Workspace added the entry to its catalog (Ollama uses `added` for that)
 - The training-data cutoff (proposed but not implemented; see `src/common/stores/llms/llms.types.next.ts:217`)
 - The date the model snapshot was built (suffixes like `-1212` may refer to build dates, but `pubDate` tracks public availability)
 
@@ -64,7 +64,7 @@ Three categories:
 
 - **Editorial** - the vendor file contains hand-curated entries; we control descriptions, pricing, benchmarks, interfaces, parameter specs, and `pubDate`.
 - **Hybrid** - the API returns the live model list, and editorial entries (keyed by id/idPrefix) merge over the API data via `fromManualMapping`. We control everything except *which models exist*.
-- **Dynamic** - the API is the only source of model identity and metadata. Big-AGI cannot reliably populate `pubDate` here (no editorial knob).
+- **Dynamic** - the API is the only source of model identity and metadata. AI Workspace cannot reliably populate `pubDate` here (no editorial knob).
 
 | Vendor | Category | File | Array | Entries | `pubDate` populated |
 |---|---|---|---|---|---|

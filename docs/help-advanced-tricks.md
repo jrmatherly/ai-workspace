@@ -2,12 +2,12 @@
 unlisted: true
 ---
 
-# Big-AGI Advanced Tips & Tricks
+# AI Workspace Advanced Tips & Tricks
 
 > 🚨 This file is not meant for publication, and it's just been created as a handbook with tips
-> and tricks to make Big-AGI more efficient and productive. 🚨
+> and tricks to make AI Workspace more efficient and productive. 🚨
 
-Welcome to the advanced tips and tricks guide for Big-AGI. This document will help you make the most of the platform's existing features.
+Welcome to the advanced tips and tricks guide for AI Workspace. This document will help you make the most of the platform's existing features.
 
 ---
 
@@ -17,7 +17,7 @@ Welcome to the advanced tips and tricks guide for Big-AGI. This document will he
 - **Shift + Trash Icon** to **delete** a chats and messages without confirmation.
   - also applies elsewhere: delete Attachments, etc.
 - **Shift + Click** on **New Chat** to create an incognito chat.
-- Drag a big-AGI saved chat into Big-AGI to load (or attach) it.
+- Drag a saved chat file into AI Workspace to load (or attach) it.
 
 ## Not-so-obvious Shortcuts
 

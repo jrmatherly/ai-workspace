@@ -1,6 +1,6 @@
 # Anthropic Code Execution, Containers, and Sandbox Direction
 
-How big-AGI drives the Anthropic code execution tool and its container, how that interacts with
+How AI Workspace drives the Anthropic code execution tool and its container, how that interacts with
 dynamic web search/fetch, the empirically-verified behavior behind those choices, and the
 forward-looking "Sandbox / execution environment" direction.
 
@@ -23,7 +23,7 @@ Single source of truth: `aixAnthropicHostedFeatures()` in
 tool list and the beta headers).
 
 Dynamic web tools (`web_search_20260209` / `web_fetch_20260209`) are a fourth, **implicit** source: they
-auto-run code execution internally for dynamic filtering. big-AGI never AUTO-adds the standalone tool for
+auto-run code execution internally for dynamic filtering. AI Workspace never AUTO-adds the standalone tool for
 them - see #1087 below.
 
 
@@ -60,7 +60,7 @@ code_execution_20260120, then I would prefer the default to be not persistent."*
   - `code_execution_20250825` (older, same tool name `code_execution`) -> **400**:
     `"Auto-injecting tools would conflict with existing tool names: ['code_execution']. Each tool name
     must be unique."` This is the hard form of "two execution environments."
-  big-AGI ships `code_execution_20260120`, so it is always on the safe (pinned) side.
+  AI Workspace ships `code_execution_20260120`, so it is always on the safe (pinned) side.
 - **Plain web search creates no container.** `web_search_20250305` (non-dynamic) returns `container: null`.
   Only the `_20260209` dynamic versions create one.
 - **Nothing active -> no container.** A request with no container-using tool returns `container: null`.
@@ -160,7 +160,7 @@ Direction agreed in design discussion; the architecture forks below are still op
 - **Umbrella noun: "Sandbox"** (chosen). The locus qualifies it.
 - **Locus enum (flat, hyphenated, extensible; prefix = operator):**
   - `vendor-container` - the LLM vendor runs it (today's `vndAntCodeSandbox`; OpenAI interpreter; Gemini).
-  - `hosted-vps` - big-AGI/operator-hosted persistent VM (OpenClaw-style; full OS, network, computer-use).
+  - `hosted-vps` - operator-hosted persistent VM (OpenClaw-style; full OS, network, computer-use).
   - `client-browser` - in-page isolate (iframe/Worker/Pyodide), app-bound, OPFS for file persistence.
   - `client-local` - the user's machine via the desktop app (real shell/FS). Maps to the XE `host` subsystem.
 - **Chat as execution context:** a conversation owns a roster of environment instances (locus, handle,

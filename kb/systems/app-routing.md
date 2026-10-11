@@ -1,10 +1,10 @@
-# Big-AGI Routing & Display States
+# AI Workspace Routing & Display States
 
-This document describes the routing architecture and display state hierarchy in Big-AGI, from top-level providers down to component-level states.
+This document describes the routing architecture and display state hierarchy in AI Workspace, from top-level providers down to component-level states.
 
 ## Overview
 
-Big-AGI uses Next.js Pages Router with a provider stack that determines what users see based on application state and configuration.
+AI Workspace uses Next.js Pages Router with a provider stack that determines what users see based on application state and configuration.
 
 ## Quick Reference: Route Configurations
 
@@ -140,7 +140,7 @@ _app.tsx (Root)
 
 ## Storage System
 
-Big-AGI uses a local-first architecture:
+AI Workspace uses a local-first architecture:
 - **Zustand** for reactive state management
 - **Zustand persist** to localStorage, except chats, which persist to IndexedDB (`createIDBPersistStorage`)
 - **Version-based migrations** for data structure upgrades

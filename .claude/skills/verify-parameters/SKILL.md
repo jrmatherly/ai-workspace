@@ -42,7 +42,7 @@ Report models where the definition doesn't match the sweep.
 ## Parameter Mapping
 
 Example parameter mapping. Note that new parameters may have been added to both the definition, and the sweep.
-The objective of the sweep is to hint at model definition values, but the model definitions are what matters for Big-AGI,
+The objective of the sweep is to hint at model definition values, but the model definitions are what matters for AI Workspace,
 and need to be carefully updated, otherwise thousands of clients may break.
 
 | Dialect   | Sweep Key                | Model paramId                |

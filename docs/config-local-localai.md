@@ -1,4 +1,4 @@
-# Run your models with `LocalAI` x `big-AGI`
+# Run your models with `LocalAI` x AI Workspace
 
 [LocalAI](https://localai.io) lets you run your AI models locally, or in the cloud. It supports text, image, asr, speech, and more models.
 
@@ -41,7 +41,7 @@ In addition to using the UI, configuration can also be done using
 
 ### Integration: Models Gallery
 
-> Note: The Gallery Admin feature described below may have been removed or renamed in recent versions of big-AGI.
+> Note: The Gallery Admin feature described below may have been removed or renamed in recent versions of AI Workspace.
 
 If the running LocalAI instance is configured with a [Model Gallery](https://localai.io/models/):
 
@@ -62,4 +62,4 @@ file with the mapping information between LocalAI model IDs and names/descriptio
 # 🤝 Support
 
 - Hop into the [LocalAI Discord](https://discord.gg/uJAeKSAGDy) for support and questions
-- For big-AGI support, please open an issue in the [issue tracker](https://github.com/jrmatherly/ai-workspace/issues)
+- For AI Workspace support, please open an issue in the [issue tracker](https://github.com/jrmatherly/ai-workspace/issues)

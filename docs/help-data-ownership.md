@@ -1,6 +1,6 @@
-# Big-AGI Data Ownership Guide
+# AI Workspace Data Ownership Guide
 
-Big-AGI is a **client-first** web application, which means it prioritizes speed and data ownership compared to cloud apps.
+AI Workspace is a **client-first** web application, which means it prioritizes speed and data ownership compared to cloud apps.
 Your *API keys*, *chat history*, and *settings* live in your
 browser's [local storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage), not
 on cloud servers.
@@ -9,13 +9,13 @@ This guide explains how the open-source version handles your data. You can verif
 
 ## Client-Side Storage
 
-Within Big-AGI almost all chat/keys data is handled client-side in your browser using two
+Within AI Workspace almost all chat/keys data is handled client-side in your browser using two
 standard browser storage mechanisms:
 
 - **Local Storage**: API keys, settings, and configurations ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage))
 - **IndexedDB**: Chat history and larger files ([learn more](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API))
 
-The Big-AGI backend mainly passes requests to AI services (OpenAI, Anthropic, etc.). It doesn't store your data, except for the chat-sharing function if used.
+The AI Workspace backend mainly passes requests to AI services (OpenAI, Anthropic, etc.). It doesn't store your data, except for the chat-sharing function if used.
 
 You can see your data in your browser's local storage and IndexedDB - try it yourself:
 
@@ -36,7 +36,7 @@ Storing data in your browser means:
 
 ## How Data Flows
 
-AI interactions in Big-AGI, such as chats, AI titles, text to speech, browsing, flow through three components:
+AI interactions in AI Workspace, such as chats, AI titles, text to speech, browsing, flow through three components:
 
 1. **Browser** (client/installed App) - Stores your keys & data locally
 2. **Backend** (routing server) - Passes requests to AI services
@@ -52,22 +52,22 @@ the upstream AI services on a per-request basis.
 
 ### Direct Connection (Browser → AI Service)
 
-Most AI services offer a **Direct Connection** toggle (under a service's Advanced settings). When enabled, the browser calls the AI provider's API directly, skipping the Big-AGI server entirely.
+Most AI services offer a **Direct Connection** toggle (under a service's Advanced settings). When enabled, the browser calls the AI provider's API directly, skipping the AI Workspace server entirely.
 
 Benefits:
 
 - **No 4.5 MB upload limit** - the Vercel body-size cap does not apply, so larger attachments and long prompts go through.
 - **No 300-second timeout** - the Vercel function timeout does not apply, so long-running generations keep streaming.
-- **More privacy** - connection metadata (IP, timestamp, edge region, Vercel telemetry) is not observable by the Big-AGI edge server.
+- **More privacy** - connection metadata (IP, timestamp, edge region, Vercel telemetry) is not observable by the AI Workspace edge server.
 
 Tradeoff:
 
-- **Slightly more downlink bandwidth**: when traffic passes through the Big-AGI edge, repetitive streaming frames are compacted; direct streams arrive verbatim from the provider.
+- **Slightly more downlink bandwidth**: when traffic passes through the AI Workspace edge, repetitive streaming frames are compacted; direct streams arrive verbatim from the provider.
 
 Availability requires both:
 
 1. The API key is set in your browser (client-side), not via server environment variables. Server-key deployments cannot use Direct Connection because the browser has no credential to send.
-2. The AI service allows CORS (browser-origin requests). Most major providers do; Big-AGI sets any extra headers they require.
+2. The AI service allows CORS (browser-origin requests). Most major providers do; AI Workspace sets any extra headers they require.
 
 Direct Connection is a net win on speed, limits, and privacy whenever the provider permits it.
 

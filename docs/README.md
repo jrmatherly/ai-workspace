@@ -1,6 +1,6 @@
-# Big-AGI Documentation
+# AI Workspace Documentation
 
-Information you need to get started, configure, and use big-AGI productively.
+Information you need to get started, configure, and use AI Workspace productively.
 
 👉 **[Releases](https://github.com/jrmatherly/ai-workspace/releases)** - See what's new
 
@@ -15,9 +15,9 @@ Essential guides:
 
 ## AI Services
 
-How to set up AI models and features in big-AGI.
+How to set up AI models and features in AI Workspace.
 
-> 👉 The following applies to users of big-AGI.com, as the public instance is empty and requires user configuration.
+> 👉 The following applies to instances without server-side keys, where AI services start empty and require user configuration.
 
 - **Cloud AI Services**:
   - Easy API key configuration:
@@ -52,12 +52,12 @@ How to set up AI models and features in big-AGI.
 
 ## Deployment & Customization
 
-> 👉 The following applies to developers and experts who deploy their own big-AGI instance.
+> 👉 The following applies to developers and experts who deploy their own AI Workspace instance.
 
-For deploying a custom big-AGI instance:
+For deploying a custom AI Workspace instance:
 
 - **[Installation Guide](installation.md)**, including:
-  - Set up your own big-AGI instance
+  - Set up your own AI Workspace instance
   - Source build or pre-built options
   - Local, cloud, or on-premises deployment
 

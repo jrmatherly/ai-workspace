@@ -1,11 +1,11 @@
-# Deploy `big-AGI` with Kubernetes ☸️
+# Deploy AI Workspace with Kubernetes ☸️
 
-In this tutorial, we will guide you through the process of deploying big-AGI
+In this tutorial, we will guide you through the process of deploying AI Workspace
 in a Kubernetes environment using the kubectl command-line tool.
 
 ## First Deployment
 
-### Step 1: Clone the big-AGI repository
+### Step 1: Clone the AI Workspace repository
 
 ```bash
 $ git clone https://github.com/jrmatherly/ai-workspace
@@ -61,11 +61,11 @@ Forwarding from 127.0.0.1:3000 -> 3000
 Forwarding from [::1]:3000 -> 3000
 ```
 
-Now you can access the service at `http://localhost:3000`, and you should see the big-AGI homepage.
+Now you can access the service at `http://localhost:3000`, and you should see the AI Workspace homepage.
 
-## Updating big-AGI
+## Updating AI Workspace
 
-To update big-AGI to the latest version:
+To update AI Workspace to the latest version:
 
 1. Pull the latest changes from the repository:
    ```bash
@@ -79,7 +79,7 @@ To update big-AGI to the latest version:
 
 This will trigger a rolling update of the deployment with the latest image.
 
-**Note**: If you're deploying big-AGI behind a reverse proxy, you may need to configure
+**Note**: If you're deploying AI Workspace behind a reverse proxy, you may need to configure
 your proxy to support streaming. See our [Reverse Proxy Deployment Guide](deploy-reverse-proxy.md) for more information.
 
 Note: For production use, consider setting up an Ingress Controller or Load Balancer instead of using port-forward.

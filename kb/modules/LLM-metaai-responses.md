@@ -1,6 +1,6 @@
 # Meta AI (`metaai`) over the Responses dialect
 
-Vendor `metaai` ("Meta AI"; the product is the Meta Model API at dev.meta.ai) serves the Muse models at `https://api.meta.ai/v1` behind a bearer key. big-AGI drives every Meta model over the OpenAI Responses dialect (`chatGenerate.dispatch.ts`, `RESPONSES_ONLY_DIALECTS`), reusing `aixToOpenAIResponses` (Meta row in `_RSP_DIALECT_QUIRKS`) and `createOpenAIResponsesEventParser('metaai')`; `metaai` is one of the `AixWire_Vendors.RSP_VENDORS` (`aix.wiretypes.ts`), the Responses vendors that share the wire format but keep a private `_vnd` namespace for continuity state. Everything below was measured on the wire on 2026-09-02; docs are `https://dev.meta.ai/docs/<page>.md` (index `docs/llms.txt`) and disagree with the wire where marked.
+Vendor `metaai` ("Meta AI"; the product is the Meta Model API at dev.meta.ai) serves the Muse models at `https://api.meta.ai/v1` behind a bearer key. AI Workspace drives every Meta model over the OpenAI Responses dialect (`chatGenerate.dispatch.ts`, `RESPONSES_ONLY_DIALECTS`), reusing `aixToOpenAIResponses` (Meta row in `_RSP_DIALECT_QUIRKS`) and `createOpenAIResponsesEventParser('metaai')`; `metaai` is one of the `AixWire_Vendors.RSP_VENDORS` (`aix.wiretypes.ts`), the Responses vendors that share the wire format but keep a private `_vnd` namespace for continuity state. Everything below was measured on the wire on 2026-09-02; docs are `https://dev.meta.ai/docs/<page>.md` (index `docs/llms.txt`) and disagree with the wire where marked.
 
 ## Catalog
 

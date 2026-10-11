@@ -43,7 +43,7 @@ Upstream is `enricoros/big-AGI` `main`. This tree was copied at upstream commit 
 - `.claude/skills/upstream-review/scripts/upstream-review.sh --stat` lists un-reviewed upstream commits with a per-file marker: `=` unchanged since the copy (cherry-picks cleanly), `~` we changed it (hand-port), `x` we removed it, `+` new upstream file
 - State is tracked in `.upstream-review/watermark.json` and `.upstream-review/reviews/<date>-review.md`
 - Adopt with `git cherry-pick -x <sha>` for `=` files; never `git merge upstream/main`, and never use a merge-base (there is none)
-- Upstream's hosted line (`dev`, `big-agi-private`, big-agi.com, "Big-AGI Pro") does not exist here. Content gated on it is skipped. The product display name "Big-AGI" is kept in UI copy for now; URLs, repo links, images and the container image point at this repo.
+- Upstream's hosted line (`dev`, `big-agi-private`, big-agi.com, "Big-AGI Pro") does not exist here. Content gated on it is skipped. The product display name is "AI Workspace"; "big-AGI" stays only where it names upstream (provenance, upstream issue links, `docs/changelog.md`). URLs, repo links, images and the container image point at this repo.
 
 ### Repository Layout
 

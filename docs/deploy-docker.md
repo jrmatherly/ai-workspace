@@ -1,11 +1,11 @@
-# Deploying `big-AGI` with Docker
+# Deploying AI Workspace with Docker
 
-Utilize Docker containers to deploy the big-AGI application for an efficient and automated deployment process.
+Utilize Docker containers to deploy the AI Workspace application for an efficient and automated deployment process.
 Docker ensures faster development cycles, easier collaboration, and seamless environment management.
 
 ## Build and run your container 🔧
 
-1. **Clone big-AGI**
+1. **Clone AI Workspace**
    ```bash
    git clone https://github.com/jrmatherly/ai-workspace.git
    cd ai-workspace
@@ -25,7 +25,7 @@ Docker ensures faster development cycles, easier collaboration, and seamless env
 
 ## Run Official Containers 📦
 
-`big-AGI` is pre-built from source code and published as a Docker image on the GitHub Container Registry (ghcr).
+AI Workspace is pre-built from source code and published as a Docker image on the GitHub Container Registry (ghcr).
 The build process is transparent, and happens via GitHub Actions, as described in the
 file.
 
@@ -67,11 +67,11 @@ To make local services running on your host machine accessible to a Docker conta
 
 ### Reverse Proxy Configuration
 
-A reverse proxy is a server that sits in front of big-AGI's container and can forwards web
+A reverse proxy is a server that sits in front of AI Workspace's container and can forwards web
 requests to it. Often used to run multiple web applications, expose them to the internet,
 increase security.
 
-If you're deploying big-AGI behind a reverse proxy, you may want to see
+If you're deploying AI Workspace behind a reverse proxy, you may want to see
 our [Reverse Proxy Deployment Guide](deploy-reverse-proxy.md) for more information.
 
 <br/>
@@ -83,7 +83,7 @@ installs dependencies, and creates a production-ready version of the application
 
 The [`docker-compose.yaml`](../docker-compose.yaml) file is configured to run the
 official image (big-agi:latest). This file is used to define the `big-agi` service, to expose
-port 3000 on the host, and launch big-AGI within the container (startup command).
+port 3000 on the host, and launch AI Workspace within the container (startup command).
 
 The [`.github/workflows/docker-image.yml`](../.github/workflows/docker-image.yml) file is used
 to build the Official Docker images and publish them to the GitHub Container Registry (ghcr).
@@ -91,4 +91,4 @@ The build process is transparent and happens via GitHub Actions.
 
 <br/>
 
-Leverage Docker's capabilities for a reliable and efficient big-AGI deployment!
+Leverage Docker's capabilities for a reliable and efficient AI Workspace deployment!

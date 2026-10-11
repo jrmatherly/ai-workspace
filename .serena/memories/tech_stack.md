@@ -9,4 +9,4 @@
 - Generated-but-committed: `src/modules/llms/server/gen/llms.defs.versions.ts` (by `tools/develop/gen-llms-defs/generate-llms-defs.mjs`, runs in `predev`/`prebuild`; `--check` exits 2 if stale). Never hand-edit. Generated-and-ignored: `public/.well-known/appspecific/com.chrome.devtools.json`, `public/sw.js*`.
 - `next.config.ts`: throws "missing build identity" without a git SHA or `NEXT_PUBLIC_BUILD_HASH`; `BIG_AGI_BUILD=standalone|static`; `NO_LINT_BUILD`; validates `src/server/env.server.ts` (t3-env + zod) at config load; PostHog rewrites under `/a/ph`.
 - `middleware_BASIC_AUTH.ts` is inert until renamed to `middleware.ts`.
-- Deploy surfaces: Vercel, Docker (multi-stage, non-root), k8s manifests in `docs/k8s`, Cloudflare doc is unlisted/unsupported. `docker-compose.yaml` pulls upstream's `ghcr.io/enricoros/big-agi:latest`, not a local build.
+- Deploy surfaces: Vercel, Docker (multi-stage, non-root), k8s manifests in `docs/k8s`, Cloudflare doc is unlisted/unsupported. `docker-compose.yaml` pulls `ghcr.io/jrmatherly/ai-workspace:latest`, not a local build.

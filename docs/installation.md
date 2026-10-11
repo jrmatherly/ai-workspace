@@ -1,9 +1,9 @@
 # Installation Guide
 
-Welcome to the big-AGI Installation Guide - Whether you're a developer
+Welcome to the AI Workspace Installation Guide - Whether you're a developer
 eager to explore, a system integrator, or an enterprise looking for a
 white-label solution, this comprehensive guide ensures a smooth setup
-process for your own instance of big-AGI and related products.
+process for your own instance of AI Workspace.
 
 ## 🧩 Build-your-own
 
@@ -18,7 +18,7 @@ add your own models, or run your own instance, follow the steps below.
 
 **Steps:**
 
-1. Clone the big-AGI repository:
+1. Clone the AI Workspace repository:
    ```bash
    git clone https://github.com/jrmatherly/ai-workspace.git
    cd ai-workspace
@@ -31,7 +31,7 @@ add your own models, or run your own instance, follow the steps below.
    ```bash
    npm run dev
    ```
-   Your big-AGI instance is now running at `http://localhost:3000`.
+   Your AI Workspace instance is now running at `http://localhost:3000`.
 
 ### Local Production build
 
@@ -47,7 +47,7 @@ the same steps 1 and 2 as for [local development](#local-development).
    ```bash
    npx next start --port 3000
    ```
-   Your big-AGI production instance is on `http://localhost:3000`.
+   Your AI Workspace production instance is on `http://localhost:3000`.
 
 ### Advanced Customization
 
@@ -56,11 +56,11 @@ Check out the [Customizations Guide](README.md) for detailed instructions.
 
 ## ☁️ Cloud Deployment Options
 
-To deploy big-AGI on a public server, you have several options. Choose the one that best fits your needs.
+To deploy AI Workspace on a public server, you have several options. Choose the one that best fits your needs.
 
 ### Deploy on Vercel
 
-Install big-AGI on Vercel with just a few clicks.
+Install AI Workspace on Vercel with just a few clicks.
 
 Create your GitHub fork, create a Vercel project over that fork, and deploy it. Or press the button below for convenience.
 
@@ -73,7 +73,7 @@ Create your GitHub fork, create a Vercel project over that fork, and deploy it. 
 
 ### Docker Deployments
 
-Containerize your big-AGI installation using Docker for portability and scalability.
+Containerize your AI Workspace installation using Docker for portability and scalability.
 Our [Docker Deployment Guide](deploy-docker.md) will walk you through the process,
 or follow the steps below for a quick start.
 
@@ -92,15 +92,15 @@ or follow the steps below for a quick start.
    # 2C. or use docker-compose:
    docker-compose up
    ```
-   Access your big-AGI instance at `http://localhost:3000`.
+   Access your AI Workspace instance at `http://localhost:3000`.
 
-If you deploy big-AGI behind a reverse proxy, you may want to check out the [Reverse Proxy Configuration Guide](deploy-reverse-proxy.md).
+If you deploy AI Workspace behind a reverse proxy, you may want to check out the [Reverse Proxy Configuration Guide](deploy-reverse-proxy.md).
 
 ### Kubernetes Deployment
 
-Deploy big-AGI on a Kubernetes cluster for enhanced scalability and management. Follow these steps for a Kubernetes deployment:
+Deploy AI Workspace on a Kubernetes cluster for enhanced scalability and management. Follow these steps for a Kubernetes deployment:
 
-1. Clone the big-AGI repository:
+1. Clone the AI Workspace repository:
    ```bash
    git clone https://github.com/jrmatherly/ai-workspace.git
    cd ai-workspace
@@ -123,11 +123,11 @@ Deploy big-AGI on a Kubernetes cluster for enhanced scalability and management. 
    kubectl -n ns-big-agi get svc,pod,deployment
    ```
 
-5. Access the big-AGI application:
+5. Access the AI Workspace application:
    ```bash
    kubectl -n ns-big-agi port-forward service/svc-big-agi 3000:3000
    ```
-   Your big-AGI instance is now accessible at `http://localhost:3000`.
+   Your AI Workspace instance is now accessible at `http://localhost:3000`.
 
 For more detailed instructions on Kubernetes deployment, including updating and troubleshooting, refer to our [Kubernetes Deployment Guide](deploy-k8s.md).
 

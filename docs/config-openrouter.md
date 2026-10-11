@@ -2,7 +2,7 @@
 
 [OpenRouter](https://openrouter.ai) is a standalone, premium service
 that provides access to a wide range of AI models from multiple providers through a single API.
-This document details the process of integrating OpenRouter with big-AGI.
+This document details the process of integrating OpenRouter with AI Workspace.
 
 ### 1. OpenRouter Account Setup and API Key Generation
 
@@ -12,9 +12,9 @@ This document details the process of integrating OpenRouter with big-AGI.
    - **Remember to copy and securely store your API key** - the key will not be displayed again and will be in the format `sk-or-v1-...`.
    - Keep the key confidential as it can be used to expend your credits.
 
-### 2. Integrating OpenRouter with big-AGI
+### 2. Integrating OpenRouter with AI Workspace
 
-1. Launch big-AGI, and navigate to the AI **Models** settings.
+1. Launch AI Workspace, and navigate to the AI **Models** settings.
 2. Add a Vendor, and select **OpenRouter**.
    ![feature-openrouter-add.png](pixels/feature-openrouter-add.png)
 3. Input the API key into the **OpenRouter API Key** field, and load the Models.
@@ -26,7 +26,7 @@ In addition to using the UI, configuration can also be done using
 
 ### Pricing
 
-OpenRouter independently manages its service and pricing and is not affiliated with big-AGI.
+OpenRouter independently manages its service and pricing and is not affiliated with AI Workspace.
 For more detailed information, please visit [this page](https://openrouter.ai/docs#models).
 
 Please note that running large models can be costly and may rapidly consume credits.

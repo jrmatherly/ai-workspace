@@ -3,7 +3,7 @@
 [NVIDIA NIM](https://build.nvidia.com) is NVIDIA's hosted API catalog: free, rate-limited access
 to open frontier models (Nemotron 3, GPT-OSS, DeepSeek V4, GLM, Llama, and more) served on
 NVIDIA's own infrastructure at `integrate.api.nvidia.com`. This document details the process of
-integrating NVIDIA NIM with big-AGI.
+integrating NVIDIA NIM with AI Workspace.
 
 ### 1. NVIDIA Account Setup and API Key Generation
 
@@ -16,9 +16,9 @@ integrating NVIDIA NIM with big-AGI.
    - The key has the format `nvapi-...` and a user-chosen expiration date. Copy and store it
      securely.
 
-### 2. Integrating NVIDIA NIM with big-AGI
+### 2. Integrating NVIDIA NIM with AI Workspace
 
-1. Launch big-AGI, and navigate to the AI **Models** settings.
+1. Launch AI Workspace, and navigate to the AI **Models** settings.
 2. Add a Vendor, and select **NVIDIA NIM**.
 3. Input the API key into the **NVIDIA API Key** field, and load the Models.
 4. A curated list of live-verified models will appear, with measured context windows and
@@ -32,10 +32,10 @@ In addition to using the UI, configuration can also be done using
 
 - **Rate limits**: NVIDIA does not publish a rate; in practice the free tier allows roughly
   40 requests per minute per account, varying with load. The limit applies to requests, not
-  tokens - long prompts and long answers are not penalized. big-AGI automatically paces
+  tokens - long prompts and long answers are not penalized. AI Workspace automatically paces
   requests on the default host to avoid instant rate-limit errors.
 - **Catalog churn**: NVIDIA retires hosted models regularly, and its raw model list includes
-  many retired entries. big-AGI curates the list to live-verified models, so retired models do
+  many retired entries. AI Workspace curates the list to live-verified models, so retired models do
   not appear or fail mid-chat. Genuinely new models appear with a `[?]` prefix until verified.
 - **Terms**: the hosted endpoint is free of charge, and NVIDIA's trial terms disallow
   production use and allow NVIDIA to use prompts and outputs to improve its services. Review
@@ -43,7 +43,7 @@ In addition to using the UI, configuration can also be done using
 
 ### Self-hosted NIM and DGX Spark
 
-The same big-AGI service can point at a self-hosted NVIDIA endpoint (a NIM container, vLLM, or
+The same AI Workspace service can point at a self-hosted NVIDIA endpoint (a NIM container, vLLM, or
 similar OpenAI-compatible server), which uses the identical protocol and model naming:
 
 1. In the NVIDIA NIM service settings, open the advanced options and set the **API Host** to

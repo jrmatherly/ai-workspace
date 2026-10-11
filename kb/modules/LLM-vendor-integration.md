@@ -1,6 +1,6 @@
 # LLM Vendor Integration Guide
 
-How to add support for new LLM providers in Big-AGI. There are two integration paths, and
+How to add support for new LLM providers in AI Workspace. There are two integration paths, and
 the dynamic backend path is strongly preferred for new vendors.
 
 ## Integration Paths

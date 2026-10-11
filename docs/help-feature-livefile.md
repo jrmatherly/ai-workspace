@@ -2,18 +2,18 @@
 
 ## Introduction
 
-**LiveFile** is a powerful feature in big-AGI that allows you to **pair and synchronize
+**LiveFile** is a powerful feature in AI Workspace that allows you to **pair and synchronize
 your documents and code blocks** with files on your local system.
 
-This feature enables a **two-way connection between big-AGI and your local files on disk**,
+This feature enables a **two-way connection between AI Workspace and your local files on disk**,
 saving you time and effort.
 
 With LiveFile, you can:
 
 - **Pair** documents and code blocks with local files.
-- **Monitor** changes in local files and update content in big-AGI.
+- **Monitor** changes in local files and update content in AI Workspace.
 - **Refresh** chat attachments with the latest content.
-- **Save** edits made in big-AGI back to your local files.
+- **Save** edits made in AI Workspace back to your local files.
 - **Store** AI-generated code and content.
 
 ---
@@ -37,14 +37,14 @@ With LiveFile, you can:
     - LiveFile connections **do not persist across sessions**.
     - After reloading the page, you will need to re-pair your files.
   - **Saving Overwrites:**
-    - Saving changes in big-AGI will **overwrite the entire file**.
+    - Saving changes in AI Workspace will **overwrite the entire file**.
     - Use external tools for version control or incremental backups.
 
 ---
 
 ## Enabling LiveFile
 
-LiveFile can be enabled automatically or manually in your Big-AGI workflow.
+LiveFile can be enabled automatically or manually in your AI Workspace workflow.
 
 ### Automatic Pairing
 
@@ -75,7 +75,7 @@ You can manually pair them with a local file.
   - Alternatively, you can select a new file from your local system.
 
 3. **Grant Permissions**
-  - When prompted, allow big-AGI to access the file.
+  - When prompted, allow AI Workspace to access the file.
 
 #### Pairing Code Blocks
 
@@ -97,16 +97,16 @@ You can manually pair them with a local file.
 
 - **Automatic Monitoring:**
   - LiveFile watches for changes in your paired local files.
-  - If the file is modified outside of big-AGI, you'll be shown the changes in the LiveFile bar.
+  - If the file is modified outside of AI Workspace, you'll be shown the changes in the LiveFile bar.
   - There is also a **"Replace with File"** option to manually load the latest content and see the changes.
 
 - **Refreshing Content:**
-  - Click **"Replace with File"** (🔄) to load the latest content from the paired file into big-AGI.
+  - Click **"Replace with File"** (🔄) to load the latest content from the paired file into AI Workspace.
 
 ### Saving Edits Back to Paired Files
 
 - **Editing Attachments or Code Blocks:**
-  - Modify the content directly within big-AGI.
+  - Modify the content directly within AI Workspace.
   - Attachments: Click on the attachment to open the previewer and click on "Edit" to make changes.
   - Code Blocks: Select "Edit" on the chat message to update code blocks.
 
@@ -119,7 +119,7 @@ You can manually pair them with a local file.
 ## Best Practices
 
 - **Monitor External Changes:**
-  - Refresh content in big-AGI if the local file has been modified outside the application.
+  - Refresh content in AI Workspace if the local file has been modified outside the application.
 
 - **Use a Version Control System:**
   - For critical files, consider using Git or other version control systems to track and monitor changes, authorship, and history.
@@ -130,10 +130,10 @@ You can manually pair them with a local file.
 
 - **LiveFile Options Not Visible:**
   - Ensure you are using a **supported desktop browser**.
-  - Check that you have the latest version of big-AGI.
+  - Check that you have the latest version of AI Workspace.
 
 - **Permission Issues:**
-  - Confirm that you granted big-AGI permission to access your files.
+  - Confirm that you granted AI Workspace permission to access your files.
   - Check your browser's settings to ensure file access is allowed.
 
 ---
@@ -149,16 +149,16 @@ an open-source project by Google Chrome Labs, which provides an easy interface t
 
 - **Performance:** 
   - Designed to handle dozens of files efficiently (tested on hundreds).
-  - Works with the Big-AGI attachment system to recursively add directories.
+  - Works with the AI Workspace attachment system to recursively add directories.
 
 - **Browser Support:**
   - Fully supported on **Google Chrome** and **Microsoft Edge** desktop versions.
 
 ---
 
-## Another Big-AGI First!
+## Live file sync
 
-You can significantly boost your productivity and streamline your workflow within big-AGI
+You can significantly boost your productivity and streamline your workflow within AI Workspace
 by understanding how to utilize LiveFile's features fully.
 
 This Feature is in Beta as there are a few limitations and improvements to be made. 

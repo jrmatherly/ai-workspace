@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>Big-AGI</h1>
+<h1>AI Workspace</h1>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-A8E6CF?style=for-the-badge&labelColor=000)](https://opensource.org/licenses/MIT)
 
@@ -12,12 +12,12 @@ Derived from [enricoros/big-AGI](https://github.com/enricoros/big-AGI) at commit
 
 <br/>
 
-# Big-AGI Open 🧠
+# AI Workspace 🧠
 
-This is the open-source foundation of **Big-AGI**, ___the multi-model AI workspace for experts___.
+**AI Workspace** is a self-hosted copy of big-AGI: ___the multi-model AI workspace for experts___.
 
-Big-AGI is the multi-model AI workspace for experts: Engineers architecting systems. Founders making decisions. Researchers validating hypotheses.
-You need to think broader, decide faster, and build with confidence, then you need Big-AGI.
+Built for experts: Engineers architecting systems. Founders making decisions. Researchers validating hypotheses.
+You need to think broader, decide faster, and build with confidence, then you need AI Workspace.
 
 It comes packed with **world-class features** like Beam, and is praised for its **best-in-class AI chat UX**.
 
@@ -25,7 +25,7 @@ It comes packed with **world-class features** like Beam, and is praised for its 
 ![Feature Beam](https://img.shields.io/badge/AI--Validation-BEAM-000?style=for-the-badge&labelColor=purple)&nbsp;
 ![Feature Inspector](https://img.shields.io/badge/Expert_Mode-AI_Inspector-000?style=for-the-badge&labelColor=purple)
 
-### What makes Big-AGI different:
+### What makes AI Workspace different:
 
 **Intelligence**: with Beam & Merge for multi-model de-hallucination, native search, and bleeding-edge AI models like Opus 5, GPT 5.6, Gemini 3.7, Kimi K3 or Grok 4.6 -
 **Control**: with personas, data ownership, requests inspection, unlimited usage with API keys, and *no vendor lock-in* -
@@ -74,12 +74,12 @@ AI Inspector
 </tr>
 </table>
 
-### Who uses Big-AGI:  
+### Who uses AI Workspace:  
 Loved by engineers, founders, researchers, self-hosters, and IT departments for its power, reliability, and transparency.
 
 <img width="830" height="370" alt="image" src="https://github.com/user-attachments/assets/513c4f77-0970-4a56-b23b-1416c8246174" />
 
-Choose Big-AGI because you don't need another clone or slop - you need an AI tool that scales with you.
+Choose AI Workspace because you don't need another clone or slop - you need an AI tool that scales with you.
 
 ### Show me a screenshot:
 Sure - here is real-world screeengrab as I'm writing this, while running a Beam to extract SVG from an image with Sonnet 4.5, Opus 4.1, GPT 5.1, Gemini 2.5 Pro, Nano Banana, etc.  
@@ -88,7 +88,7 @@ Sure - here is real-world screeengrab as I'm writing this, while running a Beam 
 
 ## Get Started
 
-Configuration requires your API keys. *Big-AGI does not charge for model usage or limit your access*.
+Configuration requires your API keys. *AI Workspace does not charge for model usage or limit your access*.
 
 **Self-host and developers** (full control)  
 - Develop locally or self-host with Docker on your own infrastructure - [guide](docs/installation.md)  
@@ -124,7 +124,7 @@ Delightful UX with latest models exclusive features like Beam for **multi-model 
 |---------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------| 
 | **Chat**<br/>**Call**<br/>**Beam**<br/>**Draw**, ...                                                          | Local & Cloud<br/>Open & Closed<br/>Cheap & Heavy<br/>Google, Mistral, ...                                              | Attachments<br/>Diagrams<br/>Multi-Chat<br/>Mobile-first UI                                                          | Stored Locally<br/>Easy self-Host<br/>Local actions<br/>Data = Gold                                                    | AI Personas<br/>Voice Modes<br/>Screen Capture<br/>Camera + OCR                                                      |
 
-![big-AGI screenshot](docs/pixels/big-AGI-compo-20240201_small.png)
+![AI Workspace screenshot](docs/pixels/big-AGI-compo-20240201_small.png)
 
 ### AI Models & Vendors
 

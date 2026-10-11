@@ -1,12 +1,12 @@
-# Browse Functionality in big-AGI 🌐
+# Browse Functionality in AI Workspace 🌐
 
-Allows users to load web pages across various components of `big-AGI`. This feature is supported by Puppeteer-based
+Allows users to load web pages across various components of AI Workspace. This feature is supported by Puppeteer-based
 browsing services, which are the most common way to render web pages in a headless environment.
 
 Once configured, the Browsing service provides the following functionality:
 
-- ✅ **Paste a URL**: Simply paste/drag a URL into the chat, and `big-AGI` will load and attach the page (very effective)
-- ✅ **Use /browse**: Type `/browse [URL]` in the chat to command `big-AGI` to load the specified web page
+- ✅ **Paste a URL**: Simply paste/drag a URL into the chat, and AI Workspace will load and attach the page (very effective)
+- ✅ **Use /browse**: Type `/browse [URL]` in the chat to command AI Workspace to load the specified web page
 - ✅ **ReAct**: ReAct will automatically use the `loadURL()` function whenever a URL is encountered
 
 It does not yet support the following functionality:
@@ -14,7 +14,7 @@ It does not yet support the following functionality:
 - ✖️ **Auto-browsing by LLMs**: if an LLM encounters a URL, it will NOT load the page and will likely respond
   that it cannot browse the web - No technical limitation, just haven't gotten to implement this yet outside of `/react` yet
 
-First of all, you need to procure a Puppteer web browsing service endpoint. `big-AGI` supports services like:
+First of all, you need to procure a Puppteer web browsing service endpoint. AI Workspace supports services like:
 
 | Service                                                                              | Working | Type        | Location       | Special Features                            |
 |--------------------------------------------------------------------------------------|---------|-------------|----------------|---------------------------------------------|
@@ -30,7 +30,7 @@ First of all, you need to procure a Puppteer web browsing service endpoint. `big
    - Ensure that your browsing service is running (remote or local) and has a WebSocket endpoint available
    - Write down the address: `wss://${auth}@{some host}:{port}`, or ws:// for local services on your machine
 
-2. **Configure `big-AGI`**
+2. **Configure AI Workspace**
    - navigate to **Preferences** > **Tools** > **Browse**
    - Enter the 'wss://...' connection string provided by your browsing service
 
@@ -42,7 +42,7 @@ First of all, you need to procure a Puppteer web browsing service endpoint. `big
 ### 🌐 Browserless 2.0
 
 [Browserless 2.0](https://github.com/browserless/browserless) is a Docker-based service that provides a headless
-browsing experience compatible with `big-AGI`. An open-source solution that simplifies web automation tasks,
+browsing experience compatible with AI Workspace. An open-source solution that simplifies web automation tasks,
 in a scalable manner.
 
 Launch Browserless with:
@@ -51,7 +51,7 @@ Launch Browserless with:
 docker run -p 9222:3000 browserless/chrome:latest
 ```
 
-Now you can use the following connection string in `big-AGI`: `ws://127.0.0.1:9222`.
+Now you can use the following connection string in AI Workspace: `ws://127.0.0.1:9222`.
 You can also browse to [http://127.0.0.1:9222](http://127.0.0.1:9222) to see the Browserless debug viewer
 and configure some options.
 
@@ -80,7 +80,7 @@ This is how you can define it in a one liner docker
 
 Note: if you are using `docker-compose`, please see the
 [docker/docker-compose-browserless.yaml](docker/docker-compose-browserless.yaml) file for an example
-on how to run `big-AGI` and Browserless simultaneously in a single application.
+on how to run AI Workspace and Browserless simultaneously in a single application.
 
 
 ### 🌐 Your own Chrome browser
@@ -111,6 +111,6 @@ If you encounter any issues or have questions about configuring the browse funct
 
 ---
 
-Enjoy the enhanced browsing experience within `big-AGI` and explore the web without ever leaving your chat!
+Enjoy the enhanced browsing experience within AI Workspace and explore the web without ever leaving your chat!
 
 Last updated on Feb 27, 2024 ([edit on GitHub](https://github.com/jrmatherly/ai-workspace/edit/main/docs/config-feature-browse.md))

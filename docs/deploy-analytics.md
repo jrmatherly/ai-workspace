@@ -1,13 +1,13 @@
-# big-AGI Analytics
+# AI Workspace Analytics
 
-The open-source big-AGI project provides support for the following analytics services:
+The open-source AI Workspace project provides support for the following analytics services:
 
 - **Google Analytics 4**: manual setup required
 - **PostHog Analytics**: manual setup required
 - **Vercel Analytics**: automatic when deployed to Vercel
 
 The following is a quick overview of the Analytics options for the deployers of this open-source project.
-big-AGI is deployed to many large-scale and enterprise though various ways (custom builds, Docker, Vercel, Cloudflare, etc.),
+AI Workspace can be deployed in various ways (custom builds, Docker, Vercel, Cloudflare, etc.),
 and this guide is for its customization.
 
 ## Service Configuration
@@ -18,7 +18,7 @@ and this guide is for its customization.
 - What: https://support.google.com/analytics/answer/11593727
 
 Google Analytics 4 (GA4) is a powerful tool for understanding user behavior and engagement.
-This can help optimize big-AGI, understanding which features are needed/users and which aren't.
+This can help optimize AI Workspace, understanding which features are needed/users and which aren't.
 
 To enable Google Analytics 4, you need to set the `NEXT_PUBLIC_GA4_MEASUREMENT_ID` environment variable
 before starting the local build or the docker build (i.e. at build time), at which point the
@@ -37,7 +37,7 @@ unset, the images report nothing. Build from source to choose your own property.
 - Why: feature usage tracking, user journeys, conversion optimization, product analytics
 - What: page views, page leave events, user interactions, and deployment context
 
-PostHog provides comprehensive product analytics with privacy controls. It helps understand how users interact with big-AGI's features, identify opportunities for improvement, and optimize the user experience.
+PostHog provides comprehensive product analytics with privacy controls. It helps understand how users interact with AI Workspace's features, identify opportunities for improvement, and optimize the user experience.
 
 To enable PostHog, set the `NEXT_PUBLIC_POSTHOG_KEY` environment variable at build time. The instance defaults to PostHog US cloud; set `NEXT_PUBLIC_POSTHOG_HOST` for EU cloud (`https://eu.i.posthog.com`) or a self-hosted PostHog. Error tracking with source maps additionally needs `POSTHOG_API_KEY` and `POSTHOG_ENV_ID` at build time. PostHog is configured with tracking optimization and privacy in mind:
 
@@ -68,7 +68,7 @@ const MyApp = ({ Component, emotionCache, pageProps }: MyAppProps) => <>
 </>;
 ```
 
-When big-AGI is served on Vercel hosts, the `process.env.NEXT_PUBLIC_VERCEL_URL` environment variable is trueish, and
+When AI Workspace is served on Vercel hosts, the `process.env.NEXT_PUBLIC_VERCEL_URL` environment variable is trueish, and
 analytics will be sent by default to the Vercel Analytics service which is deployed by Vercel IF configured from the
 Vercel project dashboard.
 
@@ -78,8 +78,8 @@ In summary: to turn it on: activate the `Analytics` service in the Vercel projec
 
 | Scope                                                                                                                   | Default                   | Description / Instructions                                                                                                                                                  |
 |-------------------------------------------------------------------------------------------------------------------------|---------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Your **Source** builds of big-AGI                                                                                       | None                      | **Google Analytics**: set environment variable at build time · **PostHog**: set environment variable at build time · **Vercel**: enable Vercel Analytics from the dashboard | 
-| Your **Docker** builds of big-AGI                                                                                       | None                      | (**Vercel**: n/a) · **Google Analytics**: set environment variable at `docker build` time · **PostHog**: set environment variable at `docker build` time.                   |
+| Your **Source** builds of AI Workspace                                                                                       | None                      | **Google Analytics**: set environment variable at build time · **PostHog**: set environment variable at build time · **Vercel**: enable Vercel Analytics from the dashboard | 
+| Your **Docker** builds of AI Workspace                                                                                       | None                      | (**Vercel**: n/a) · **Google Analytics**: set environment variable at `docker build` time · **PostHog**: set environment variable at `docker build` time.                   |
 | [prebuilt Docker packages](https://github.com/jrmatherly/ai-workspace/pkgs/container/ai-workspace) | Google Analytics if the `GA4_MEASUREMENT_ID` secret is set; PostHog if the `POSTHOG_KEY` secret is set | **Vercel**: n/a · **Google Analytics**: baked at build time from the repository secret · **PostHog**: baked from the `POSTHOG_KEY` secret and the `POSTHOG_HOST` variable; rebuild to change or remove |
 
 Note: this information is updated as of August 26, 2026 and can change at any time.

@@ -1,6 +1,6 @@
-# Integrating LM Studio with big-AGI
+# Integrating LM Studio with AI Workspace
 
-Quickly set up LM Studio with big-AGI to run local and open LLMs on your computer for enhanced privacy and control over AI interactions.
+Quickly set up LM Studio with AI Workspace to run local and open LLMs on your computer for enhanced privacy and control over AI interactions.
 
 ## Video Tutorial
 
@@ -11,9 +11,9 @@ For a visual step-by-step guide, watch our [YouTube tutorial](https://www.youtub
 
 ## Quick Setup Guide
 
-### Installing big-AGI
+### Installing AI Workspace
 
-Clone and set up big-AGI:
+Clone and set up AI Workspace:
 
 ```bash
 git clone https://github.com/jrmatherly/ai-workspace.git && cd ai-workspace
@@ -31,9 +31,9 @@ Check the URL and modify if different.
 2. Start the LM Studio server
 3. Optionally. Check the logs
 
-### Integration in big-AGI
+### Integration in AI Workspace
 
-1. In big-AGI, navigate to **Models** > **Add** > **LM Studio**
+1. In AI Workspace, navigate to **Models** > **Add** > **LM Studio**
 2. Enter the API URL: `http://localhost:1234` (modify if different)
 3. Refresh by clicking on the `Models` button to load models from LM Studio
 
@@ -50,5 +50,5 @@ In addition to using the UI, configuration can also be done using
 
 Advanced configurations and more:
 
-- big-AGI issues: [GitHub](https://github.com/jrmatherly/ai-workspace/issues)
+- AI Workspace issues: [GitHub](https://github.com/jrmatherly/ai-workspace/issues)
 - LM Studio: [LM Studio home page](https://lmstudio.ai/)
