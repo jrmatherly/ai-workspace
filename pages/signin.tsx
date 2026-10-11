@@ -5,18 +5,13 @@ import { Box, Button, Typography } from '@mui/joy';
 
 import { InlineError } from '~/common/components/InlineError';
 import { authSignIn, useAuthUser } from '~/common/auth/auth.client';
+import { SIGN_IN_START_FAILED, signInErrorText } from '~/common/auth/signInErrorText';
 import { getAuthProviders } from '~/common/app.serverconf';
 import { safeNextPath } from '~/common/app.routes.auth';
 import { navigateToIndex, useRouterQuery } from '~/common/app.routes';
 import { withNextJSPerPageLayout } from '~/common/layout/withLayout';
 
 
-const ERROR_TEXT: Record<string, string> = {
-  email_not_allowed: 'This account is not allowed on this workspace.',
-  not_allowed: 'This account is no longer allowed on this workspace.',
-};
-// an ?error= code without its own text, and any failed sign-in start (Better Auth's own messages are developer-facing)
-const ERROR_FALLBACK = 'Sign-in with this provider is unavailable right now. Try again.';
 const ERROR_SESSION = 'Could not check your session. Reload to try again.';
 
 
@@ -48,7 +43,7 @@ function SignInPage(props: { next: string; error: string | null }) {
   // a failed sign-in start (e.g. Pocket ID unregistered after failed discovery; the server retries every 60 s) takes precedence over ?error=
   const errorText = signInError
     ?? (auth.kind === 'error' ? ERROR_SESSION : null)
-    ?? (props.error ? ERROR_TEXT[props.error] ?? ERROR_FALLBACK : null);
+    ?? signInErrorText(props.error);
 
   return (
     <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, p: { xs: 3, md: 6 } }}>
@@ -67,7 +62,7 @@ function SignInPage(props: { next: string; error: string | null }) {
             authSignIn(provider.id, props.next).catch((error: unknown) => {
               console.warn('[auth] sign-in start failed:', error);
               setPendingId(null);
-              setSignInError(ERROR_FALLBACK);
+              setSignInError(SIGN_IN_START_FAILED);
             });
           }}
           sx={{ minWidth: 260 }}
