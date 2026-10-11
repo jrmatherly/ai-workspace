@@ -67,6 +67,7 @@ Retention: 1 day free, 55 days paid.
 | Status            | Meaning                                       | Handling                                              |
 |-------------------|-----------------------------------------------|-------------------------------------------------------|
 | `in_progress`     | Live run **or** zombie (see C)                | Surface diagnostics; offer Resume/Recover/Stop        |
+| `queued`          | Waiting for capacity before processing (spec 2026-10) | Non-terminal; handled exactly like `in_progress`      |
 | `completed`       | Done with content in `steps[]`                | Emit fragments, `tokenStopReason='ok'`                |
 | `failed`          | Server-side failure                           | Terminating issue                                     |
 | `cancelled`       | We or another client cancelled                | Close as `cg-issue`                                   |

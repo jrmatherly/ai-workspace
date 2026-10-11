@@ -408,6 +408,7 @@ export namespace GeminiInteractionsWire_API_Interactions {
 
   export const Status_enum = z.enum([
     'in_progress',
+    'queued',           // waiting for capacity before processing starts; non-terminal, handled like in_progress
     'completed',
     'failed',
     'cancelled',

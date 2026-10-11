@@ -159,7 +159,7 @@ export function createGeminiInteractionsParserSSE(requestedModelName: string | n
         // separate event (interaction.status_update / interaction.in_progress) OR be implied by created.
         // Opening here too ensures operationOpId is set (tool ops require it as parentOpId) even if the
         // separate in-progress event never lands. Idempotent via operationOpenEmitted.
-        if (event.interaction.status === undefined || event.interaction.status === 'in_progress')
+        if (event.interaction.status === undefined || event.interaction.status === 'in_progress' || event.interaction.status === 'queued')
           openRunChip(pt, event.interaction.id);
         break;
 
@@ -169,7 +169,7 @@ export function createGeminiInteractionsParserSSE(requestedModelName: string | n
           pt.setUpstreamHandle(event.interaction_id, 'vnd.gem.interactions');
           upstreamHandleSent = true;
         }
-        if (event.status === 'in_progress')
+        if (event.status === 'in_progress' || event.status === 'queued')
           openRunChip(pt, event.interaction_id);
         break;
 
@@ -488,6 +488,7 @@ export function createGeminiInteractionsParserNS(requestedModelName: string | nu
       case 'requires_action':
         pt.setDialectTerminatingIssue('Deep Research returned requires_action (not supported in this client)', null, 'srv-warn');
         break;
+      case 'queued':
       case 'in_progress': {
         // Two scenarios both surface as `in_progress`:
         //  1) Run is genuinely live server-side (just slow) - polling later will yield content.
@@ -863,6 +864,7 @@ function _handleInteractionCompleted(
       pt.setDialectEnded('done-dialect');
       break;
 
+    case 'queued':
     case 'in_progress':
       // Anomalous: interaction.completed is the TERMINAL SSE event, so status=in_progress here means the
       // run did not actually finish AND no further frames will arrive. Terminate cleanly instead of leaving
