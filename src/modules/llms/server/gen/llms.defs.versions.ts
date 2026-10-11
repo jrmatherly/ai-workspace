@@ -14,7 +14,7 @@ export const LLMS_DEFS_VERSIONS = {
   anthropic: '91b2fa9d3928',
   azure: 'd7a9698b050e',
   bedrock: 'e79e52a7578a',
-  cerebras: '5d9a05eafc9b',
+  cerebras: 'ef721e97dbf3',
   cohere: '244b4ec3d312',
   deepseek: 'b064e339342b',
   googleai: '2eb807477e6d',
