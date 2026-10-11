@@ -47,6 +47,12 @@ Configuration requires your API keys. *AI Workspace does not charge for model us
 
 **Local-first** (chats stay in your browser), multi-model by default (Beam runs several models side by side with a human in the loop), no vendor lock-in (one AIX protocol layer in front of every provider), and a UI tuned for speed.
 
+## Architecture
+
+![AI Workspace runtime architecture: browser, Node.js server and third-party services, with the chat path from the composer through the AIX client and the tRPC route to the AI vendors](docs/pixels/ai-workspace-runtime.svg)
+
+The browser holds your keys and chats; one Node.js tRPC route at `/api/trpc` fronts every AI vendor through the AIX layer, and the browser can also call vendors directly where CORS allows. Subsystem docs live in [kb/](kb/KB.md).
+
 ---
 
 ## Release Notes
