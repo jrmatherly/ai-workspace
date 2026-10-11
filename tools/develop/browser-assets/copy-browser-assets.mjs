@@ -40,7 +40,7 @@ const groups = [
     clear: ['public/tesseract'],
     copies: [
       ['tesseract.js/dist/worker.min.js', 'public/tesseract/worker.min.js'],
-      ['tesseract.js/dist/worker.min.js.map', 'public/tesseract/worker.min.js.map'],
+      ['tesseract.js/dist/worker.min.js.LICENSE.txt', 'public/tesseract/worker.min.js.LICENSE.txt'],
       ['tesseract.js-core/tesseract-core-relaxedsimd-lstm.wasm.js', 'public/tesseract/core/tesseract-core-relaxedsimd-lstm.wasm.js'],
       ['tesseract.js-core/tesseract-core-simd-lstm.wasm.js', 'public/tesseract/core/tesseract-core-simd-lstm.wasm.js'],
       ['tesseract.js-core/tesseract-core-lstm.wasm.js', 'public/tesseract/core/tesseract-core-lstm.wasm.js'],

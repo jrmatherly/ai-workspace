@@ -58,7 +58,7 @@ Users are advised to review the license terms of the original repository.
 
 **Original Repositories:** [naptha/tesseract.js](https://github.com/naptha/tesseract.js), [naptha/tesseract.js-core](https://github.com/naptha/tesseract.js-core), [naptha/tessdata](https://github.com/naptha/tessdata)
 
-**License:** Apache-2.0 for `tesseract.js` and `tesseract.js-core` (their `LICENSE` files); `@tesseract.js-data/eng` declares MIT in its package manifest and ships the `eng.traineddata` model (tessdata_best, Apache-2.0 upstream) without a license file.
+**License:** Apache-2.0 for `tesseract.js` (`LICENSE.md`) and `tesseract.js-core` (`LICENSE`); the served `worker.min.js` bundles buffer (MIT), ieee754 (BSD-3-Clause), regenerator-runtime (MIT) and zlib.js (MIT), attributed in the `worker.min.js.LICENSE.txt` copied beside it; `@tesseract.js-data/eng` declares MIT in its package manifest and ships the `eng.traineddata` model (tessdata_best, Apache-2.0 upstream) without a license file.
 
 Test fixtures in `src/common/util/pdfUtils.test-fixtures/`: `jpx_smaskindata.pdf` is from the pdf.js test corpus (`test/pdfs/`, Apache-2.0); `cjk-nonembedded.pdf` was written for this repo.
 
