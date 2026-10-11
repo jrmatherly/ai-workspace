@@ -106,6 +106,16 @@ An `x` marker means we removed the path, not always that the change is irrelevan
 - Other `Monotonics` (`Aix`) are cache-bust counters tied to code behavior: port with the commit that needs them, never lower them.
 - `docs/changelog.md` and `src/apps/news/*` are ours. Do not port upstream's entries; add one in our style when an adopted commit changes user-visible behavior. Record adopted SHAs in the decision log.
 
+## Dependencies
+
+`package.json` and `package-lock.json` are ours. Versions follow our own upgrade policy (bulk tier for bumps that need no source change and pass tscheck, lint, test and build; a reviewed plan for the rest), not upstream's pins. Both files show `~` on every upstream commit that touches them; that marker is expected, not a divergence to resolve.
+
+- An upstream commit that only bumps dependencies is SKIP. If it moves a package past our version, evaluate the version on its own: `npm install <pkg>@<ver>`, then tscheck, lint, test, build. Never cherry-pick the lockfile.
+- A ported feature commit that adds a dependency gets it at the current release (`npm install <pkg>`), not upstream's pin. Resolve the `package.json` conflict by keeping our versions and adding only the new entry.
+- We sit ahead of upstream on: Next 15.5 line, `/node` 26, `dexie-react-hooks` 4, `puppeteer-core` 25 (ESM-only, Node floor 22.13), `katex` 0.19 via `overrides`. The refactor tier (Prisma 7, Next 16 + React 19, TypeScript 7, ESLint 10, `react-resizable-panels` 4, `pdfjs-dist` 6, `/icons-material`) is planned in `docs/superpowers/plans/2026-10-11-dependency-upgrade-refactor-tier.md`; once a phase lands, upstream hunks written against the older API are ADAPT, translated with that phase's rename table.
+- When upstream later makes the same major move, their migration commits are ALREADY-HAVE for the mechanics and ADAPT only for behavior they add on top.
+- `pdfjs-dist` bumps must carry `public/workers/pdf.worker.min.mjs` from the same version; `src/common/util/pdfUtils.test.ts` fails otherwise.
+
 ## Decision log template
 
 ```markdown
