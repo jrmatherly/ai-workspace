@@ -40,6 +40,7 @@ sprintf-js
 | --- | --- |
 | [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7) katex `<0.18.2` | `overrides.katex` `^0.19.0` (commit 886844912); rehype-katex and micromark-extension-math still declare `^0.16` |
 | [GHSA-r4xh-jqrq-34v2](https://github.com/advisories/GHSA-r4xh-jqrq-34v2) smol-toml `<=1.8.0` | `overrides.smol-toml` `^1.9.0`; markdownlint-cli2 0.23.3 pins `1.8.0` |
+| [GHSA-ggr8-5vv4-36mx](https://github.com/advisories/GHSA-ggr8-5vv4-36mx) deepmerge-ts `<8.0.0`, mysql2 `<=3.23.0` (two GHSAs), both under the Prisma 7 CLI | `overrides.deepmerge-ts` `^8`, `overrides.mysql2` `^3.23.1`; `prisma generate`, `db push` and the share round trip pass with them |
 
 ## Peer-range warnings
 
@@ -47,4 +48,4 @@ None accepted today. (Updated by the phase that introduces one.)
 
 ## Node floor
 
-`engines.node` is `^26.0.0 || ^24.0.0 || ^22.13.0`. The floor is set by puppeteer-core 25 (`>=22.12`, ESM-only) and rounded to the ESLint 10 line (`^22.13.0`) ahead of that upgrade; it also covers Prisma 7 (`^22.12`) and pdfjs-dist 6 (`>=22.13.0`) when they land. Docker builds on `node:26-alpine`, CI reads `.nvmrc` (26).
+`engines.node` is `^26.0.0 || ^24.0.0 || ^22.13.0`. The floor is set by puppeteer-core 25 (`>=22.12`, ESM-only) and rounded to the ESLint 10 line (`^22.13.0`) ahead of that upgrade; Prisma 7 (`^22.12`) landed; pdfjs-dist 6 (`>=22.13.0`) when it lands. Docker builds on `node:26-alpine`, CI reads `.nvmrc` (26).

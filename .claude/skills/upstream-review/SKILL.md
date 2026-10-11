@@ -112,9 +112,23 @@ An `x` marker means we removed the path, not always that the change is irrelevan
 
 - An upstream commit that only bumps dependencies is SKIP. If it moves a package past our version, evaluate the version on its own: `npm install <pkg>@<ver>`, then tscheck, lint, test, build. Never cherry-pick the lockfile.
 - A ported feature commit that adds a dependency gets it at the current release (`npm install <pkg>`), not upstream's pin. Resolve the `package.json` conflict by keeping our versions and adding only the new entry.
-- We sit ahead of upstream on: Next 15.5 line, `/node` 26, `dexie-react-hooks` 4, `puppeteer-core` 25 (ESM-only, Node floor 22.13), `katex` 0.19 via `overrides`. The refactor tier (Prisma 7, Next 16 + React 19, TypeScript 7, ESLint 10, `react-resizable-panels` 4, `pdfjs-dist` 6, `/icons-material`) is planned in `docs/superpowers/plans/2026-10-11-dependency-upgrade-refactor-tier.md`; once a phase lands, upstream hunks written against the older API are ADAPT, translated with that phase's rename table.
+- We sit ahead of upstream on: Prisma 7.10 (prisma-client generator, pg adapter, prisma.config.ts), Next 15.5 line, `/node` 26, `dexie-react-hooks` 4, `puppeteer-core` 25 (ESM-only, Node floor 22.13), `katex` 0.19 via `overrides`. The refactor tier (Next 16 + React 19, TypeScript 7, ESLint 10, `react-resizable-panels` 4, `pdfjs-dist` 6, `/icons-material`) is planned in `docs/superpowers/plans/2026-10-11-dependency-upgrade-refactor-tier.md`; once a phase lands, upstream hunks written against the older API are ADAPT, translated with that phase's rename table.
 - When upstream later makes the same major move, their migration commits are ALREADY-HAVE for the mechanics and ADAPT only for behavior they add on top.
 - `pdfjs-dist` bumps must carry `public/workers/pdf.worker.min.mjs` from the same version; `src/common/util/pdfUtils.test.ts` fails otherwise.
+
+## Rename tables
+
+Translate an upstream hunk written against the older API with the row for that phase.
+
+### Prisma 7 (landed)
+
+| Upstream form | Our form |
+| --- | --- |
+| `import { PrismaClient } from '@prisma/client'` | `import { PrismaClient } from './generated/client'` (in `src/server/prisma/prismaDb.ts`) |
+| `import { LinkStorageDataType, ... } from '@prisma/client'` | `from '~/server/prisma/generated/enums'` |
+| `url = env(...)`, `directUrl = env(...)` in `schema.prisma` | `datasource.url` in `prisma.config.ts` (CLI), `PrismaPg({ connectionString })` in `prismaDb.ts` (runtime) |
+| `new PrismaClient({ log })` | `new PrismaClient({ adapter: new PrismaPg(...), log })` |
+| `"prisma": { "schema": ... }` in `package.json` | `schema:` in `prisma.config.ts` |
 
 ## Decision log template
 
