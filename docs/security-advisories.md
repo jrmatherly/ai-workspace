@@ -12,16 +12,13 @@ Expected output as of 2026-10-11:
 
 ```text
 @next/eslint-plugin-next
-argparse
 braces
 eslint-config-next
 fast-glob
 globby
-mammoth
 markdownlint-cli2
 micromatch
-sprintf-js
-10
+7
 ```
 
 ## Accepted entries
@@ -29,7 +26,6 @@ sprintf-js
 | Advisory | Severity | Flagged packages | Why accepted | Clears when |
 | --- | --- | --- | --- | --- |
 | [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) braces, stack exhaustion on nested patterns | high | braces, micromatch, fast-glob, globby, @next/eslint-plugin-next, eslint-config-next, markdownlint-cli2 | braces 3.0.3 is the latest release, so no fixed version exists. npm's "fix" downgrades markdownlint-cli2 to 0.21.0. Dev-only glob tooling (lint config, markdown lint), never in the served bundle, never fed untrusted patterns | a braces release above 3.0.3 |
-| [GHSA-hp3w-g68c-fv3c](https://github.com/advisories/GHSA-hp3w-g68c-fv3c) sprintf-js, unbounded precision | moderate | sprintf-js, argparse, mammoth | sprintf-js 1.1.3 is the latest release. `argparse` is required only by `node_modules/mammoth/bin/mammoth` (the CLI); `convertToHtml`, the only import (`src/common/attachment-drafts/file-converters/DocxToMarkdown.ts:1`), never reaches it. npm's "fix" downgrades mammoth to 0.3.29 | a sprintf-js release above 1.1.3 |
 
 ## Fixed by override
 
@@ -38,10 +34,11 @@ sprintf-js
 | [GHSA-238p-pmpm-9mq7](https://github.com/advisories/GHSA-238p-pmpm-9mq7) katex `<0.18.2` | `overrides.katex` `^0.19.0` (commit 886844912); rehype-katex and micromark-extension-math still declare `^0.16` |
 | [GHSA-r4xh-jqrq-34v2](https://github.com/advisories/GHSA-r4xh-jqrq-34v2) smol-toml `<=1.8.0` | `overrides.smol-toml` `^1.9.0`; markdownlint-cli2 0.23.3 pins `1.8.0` |
 | [GHSA-ggr8-5vv4-36mx](https://github.com/advisories/GHSA-ggr8-5vv4-36mx) deepmerge-ts `<8.0.0`, mysql2 `<=3.23.0` (two GHSAs), both under the Prisma 7 CLI | `overrides.deepmerge-ts` `^8`, `overrides.mysql2` `^3.23.1`; `prisma generate`, `db push` and the share round trip pass with them |
+| [GHSA-hp3w-g68c-fv3c](https://github.com/advisories/GHSA-hp3w-g68c-fv3c) sprintf-js, unbounded precision, under mammoth's `argparse ~1.0.3` | `overrides.mammoth.argparse` `^2.0.1`, scoped so markdown-it keeps argparse 3; argparse is required only by `node_modules/mammoth/bin/mammoth` (the CLI), and `require("mammoth")` loads with it |
 
 ## Peer-range warnings
 
-`npm ls eslint` reports `invalid` peers for eslint-plugin-import 2.32.0, eslint-plugin-jsx-a11y 6.10.2 and eslint-plugin-react 7.37.5 (each declares at most `eslint ^9`; eslint-config-next 16 pulls them). `npm install` prints three `ERESOLVE overriding peer dependency` warnings and exits 0; `npm run lint` runs clean on the rules Next enables. Accepted until those plugins publish ESLint 10 peers. Never install with `--legacy-peer-deps`.
+eslint-plugin-import 2.32.0, eslint-plugin-jsx-a11y 6.10.2 and eslint-plugin-react 7.37.5 declare at most `eslint ^9`; eslint-config-next 16.4.0 still pulls them (ESLint 10 support: jsx-a11y PR 1081 open, react issue 4027 open, import issue 3278 open as of 2026-10-11). `package.json` `overrides` rewrites each plugin's `eslint` peer edge to `$eslint`, the root version, so `npm install` prints no `ERESOLVE` warning and `npm ls eslint` reports no `invalid` peer. The 24 rules Next enables from those plugins lint clean on ESLint 10. Remove the three overrides once the plugins publish `^10` peers. Never install with `--legacy-peer-deps`.
 
 ## Build warnings
 
