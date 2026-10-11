@@ -67,7 +67,7 @@
     "posthog-js": "^1.434.13",
     "posthog-node": "^5.53.0",
     "prismjs": "^1.30.0",
-    "puppeteer-core": "^24",
+    "puppeteer-core": "^25",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.88.0",
