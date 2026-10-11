@@ -1,6 +1,7 @@
 import { defineConfig } from "eslint/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import pluginCompat from "eslint-plugin-compat";
 // typed linting - explicit devDependencies since ESLint 10, same range as eslint-config-next 16 (one copy, or ESLint throws "Cannot redefine plugin")
@@ -9,6 +10,7 @@ import tsPlugin from "@typescript-eslint/eslint-plugin";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const reactVersion = createRequire(import.meta.url)("react/package.json").version;
 
 export default defineConfig([{
     /* Ours to declare: `lint` calls eslint directly (`next lint` supplied these, and is removed in
@@ -50,7 +52,7 @@ export default defineConfig([{
     // eslint-config-next 16 registers its plugins only under this glob; the house rules below name them
     files: ["**/*.{js,jsx,mjs,ts,tsx,mts,cts}"],
     // eslint-plugin-react 7.37 crashes on ESLint 10 when version is "detect" (eslint-config-next's default)
-    settings: { react: { version: "19.3" } },
+    settings: { react: { version: reactVersion } },
     rules: {
         // intentional empty catches (fire-and-forget cleanup) are house style
         "no-empty": ["error", { allowEmptyCatch: true }],
