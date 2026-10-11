@@ -7,6 +7,7 @@
 - Prettier config exists (`singleQuote`, printWidth 160) but no script; not enforced.
 - Tests: node:test via `tsx`, only `src/modules/llms/server/listModels.test.ts`; live vendor lanes skip without `<VENDOR>_API_KEY` env vars. `.env.api-keys` (CLAUDE.md) is absent.
 - Generated-but-committed: `src/modules/llms/server/gen/llms.defs.versions.ts` (by `tools/develop/gen-llms-defs/generate-llms-defs.mjs`, runs in `predev`/`prebuild`; `--check` exits 2 if stale). Never hand-edit. Generated-and-ignored: `public/.well-known/appspecific/com.chrome.devtools.json`, `public/sw.js*`.
-- `next.config.ts`: throws "missing build identity" without a git SHA or `NEXT_PUBLIC_BUILD_HASH`; `AI_WORKSPACE_BUILD=standalone|static`; `NO_LINT_BUILD`; validates `src/server/env.server.ts` (t3-env + zod) at config load; PostHog rewrites under `/a/ph`.
+- `next.config.ts`: throws "missing build identity" without a git SHA or `NEXT_PUBLIC_BUILD_HASH`; `AI_WORKSPACE_BUILD=standalone|static`; (Next 16 no longer lints in build) validates `src/server/env.server.ts` (t3-env + zod) at config load; PostHog rewrites under `/a/ph`.
 - `middleware_BASIC_AUTH.ts` is inert until renamed to `middleware.ts`.
 - Deploy surfaces: Vercel, Docker (multi-stage, non-root), k8s manifests in `docs/k8s`, Cloudflare doc is unlisted/unsupported. `docker-compose.yaml` pulls `ghcr.io/jrmatherly/ai-workspace:latest`, not a local build.
+- Next 16: the AIX streaming path (Edge route) is unproven in this upgrade; no vendor API key file was present.

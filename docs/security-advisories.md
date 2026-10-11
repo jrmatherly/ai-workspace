@@ -20,10 +20,8 @@ globby
 mammoth
 markdownlint-cli2
 micromatch
-next
-postcss
 sprintf-js
-12
+10
 ```
 
 ## Accepted entries
@@ -31,7 +29,6 @@ sprintf-js
 | Advisory | Severity | Flagged packages | Why accepted | Clears when |
 | --- | --- | --- | --- | --- |
 | [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) braces, stack exhaustion on nested patterns | high | braces, micromatch, fast-glob, globby, @next/eslint-plugin-next, eslint-config-next, markdownlint-cli2 | braces 3.0.3 is the latest release, so no fixed version exists. npm's "fix" downgrades markdownlint-cli2 to 0.21.0. Dev-only glob tooling (lint config, markdown lint), never in the served bundle, never fed untrusted patterns | a braces release above 3.0.3 |
-| [GHSA-qx2v-qp2m-jg93](https://github.com/advisories/GHSA-qx2v-qp2m-jg93), [GHSA-6g55-p6wh-862q](https://github.com/advisories/GHSA-6g55-p6wh-862q), [GHSA-fxqj-rqcc-2cmp](https://github.com/advisories/GHSA-fxqj-rqcc-2cmp), [GHSA-r28c-9q8g-f849](https://github.com/advisories/GHSA-r28c-9q8g-f849) postcss | high | postcss, next | next 15.5.27 pins postcss 8.4.31 as a dependency; the vulnerable range is `<=8.5.22`. PostCSS only runs at build time on this repo's own CSS | next 16.3.8, which depends on postcss 8.5.23 |
 | [GHSA-hp3w-g68c-fv3c](https://github.com/advisories/GHSA-hp3w-g68c-fv3c) sprintf-js, unbounded precision | moderate | sprintf-js, argparse, mammoth | sprintf-js 1.1.3 is the latest release. `argparse` is required only by `node_modules/mammoth/bin/mammoth` (the CLI); `convertToHtml`, the only import (`src/common/attachment-drafts/file-converters/DocxToMarkdown.ts:1`), never reaches it. npm's "fix" downgrades mammoth to 0.3.29 | a sprintf-js release above 1.1.3 |
 
 ## Fixed by override

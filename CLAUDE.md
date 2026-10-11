@@ -4,7 +4,7 @@ Guidance to Claude Code when working with code in this repository.
 
 ## Architecture Overview
 
-**Stack**: Next.js 15 (Pages Router for pages, App Router for API routes only), React 18, Emotion (CSS-in-JS), Zustand, tRPC + TanStack React Query, Edge runtime for AI and Node.js for data ops. UI is Material-UI **Joy**, not Material: import from `@mui/joy`; `next.config.ts` webpack-aliases `@mui/material` -> `@mui/joy` so stray/transitive Material imports still resolve to Joy (webpack only - turbopack skips that hook).
+**Stack**: Next.js 16 (Pages Router for pages, App Router for API routes only; webpack via --webpack, Turbopack skips the config hook), React 19, Emotion (CSS-in-JS), Zustand, tRPC + TanStack React Query, Edge runtime for AI and Node.js for data ops. UI is Material-UI **Joy**, not Material: import from `@mui/joy`; `next.config.ts` webpack-aliases `@mui/material` -> `@mui/joy` so stray/transitive Material imports still resolve to Joy (webpack only - turbopack skips that hook).
 
 **Distinctive**, vs other chat UIs: Beam runs N models in parallel and fuses the answers (scatter/gather); every vendor sits behind one AIX protocol layer, reusing a few wire dialects instead of one integration each; chat is stored client-side in IndexedDB by default; BYO-keys (self-hosters may additionally set server-side vendor keys in env vars); AI calls can go browser-direct to the vendor (CSF); messages are typed fragments, not strings; personas and multi-pane conversations are first-class.
 
@@ -19,7 +19,7 @@ eslint src/path/to/file.ts           # lint one file
 npm run lint:md                     # markdown, rules in .markdownlint-cli2.jsonc; append -- --fix to repair
 
 # Full build - slow, only when suspecting runtime/bundle issues
-npm run build  # compile+lint+types, but stops at the first type-error file; tsc shows all at once
+npm run build  # compile+types (Next 16 no longer lints in build), stops at the first type-error file; tsc shows all at once
 ```
 
 - `src/modules/llms/server/gen/llms.defs.versions.ts` is generated and committed; regenerate with `node tools/develop/gen-llms-defs/generate-llms-defs.mjs`, never hand-edit (rule: `.claude/rules/generated-files.md`)
@@ -142,3 +142,15 @@ Two tRPC routers, split by runtime. **Key pattern**: Edge runtime for AI (fast, 
 @kb/KB.md
 
 @kb/vision-inlined.md
+
+<!-- markdownlint-disable MD025 -->
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+<!-- markdownlint-enable MD025 -->

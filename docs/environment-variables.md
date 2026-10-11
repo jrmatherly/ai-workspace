@@ -192,7 +192,6 @@ Read by `next.config.ts` at build or dev-server start, or by server code during 
 
 | Variable | Description |
 | :-------------------------- | :------------------------------------------------------------------------------------------------------------------- |
-| `NO_LINT_BUILD` | Any value skips the ESLint pass during `next build` (for CI that already ran `npm run lint`) |
 | `NO_STRICT_MODE` | Any value turns off React Strict Mode |
 | `AGI_DIST_DIR` | Overrides the Next.js output directory, so parallel builds do not race over `.next/` |
 | `ANALYZE_BUNDLE` | Any value wraps the build with `@next/bundle-analyzer` and opens the report |

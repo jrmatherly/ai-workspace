@@ -35,7 +35,7 @@ From the Vercel Project > Settings > General > Build & Development Settings,
 you can for instance set the build command to:
 
 ```bash
-next build
+next build --webpack
 ```
 
 ### Change the Personas (v1.x only)
