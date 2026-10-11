@@ -44,6 +44,7 @@ npm-debug.log*
 /private/
 .codegraph/
 .remember/
+docs/superpowers/
 
 # per-user Claude Code settings
 .claude/settings.local.json
