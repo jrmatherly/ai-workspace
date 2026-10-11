@@ -23,8 +23,8 @@ import { type LocalActiveWorkSnapshot, localActiveWorkGet } from './localActiveW
  */
 
 // configuration
-const LOCK_NAME = 'ai-workspace-instance';
-const CHANNEL_NAME = 'ai-workspace-tabs';
+const LOCK_NAME = 'big-agi-instance'; // wire name, do not rename: a tab on an older build must contend for the same lock
+const CHANNEL_NAME = 'big-agi-tabs'; // wire name, do not rename (see LOCK_NAME)
 const PEER_POLL_MS = 2000; // follower -> leader state poll, only while the follower is visible
 const PEER_UNRESPONSIVE_MS = 6000; // no reply for this long: the other window is frozen or gone
 const TRANSFER_GRACE_MS = 2500; // wait for a cooperative hand-over before taking the lock by force

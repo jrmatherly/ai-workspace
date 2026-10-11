@@ -5,7 +5,7 @@ import type { DBlobAsset, DBlobAssetId, DBlobAssetType, DBlobDBAsset, DBlobDBCon
 
 // configuration
 export const DBLOBS_DEBUG_GC = false;
-export const DBLOBS_DB_NAME = 'AI-Workspace';
+export const DBLOBS_DB_NAME = 'Big-AGI'; // persisted IndexedDB name: renaming it orphans every user's stored assets (images, audio, documents) and breaks restore of older backups
 
 
 /**

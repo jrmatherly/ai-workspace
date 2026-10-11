@@ -25,6 +25,7 @@ import { prettyTimestampForFilenames } from '~/common/util/timeUtils';
 // configuration
 const BACKUP_FILE_FORMAT = 'AI Workspace Backup File';
 const BACKUP_APPLICATION = 'AI-Workspace';
+const BACKUP_APPLICATIONS_ACCEPTED = [BACKUP_APPLICATION, 'Big-AGI']; // 'Big-AGI': files written before the rename (and by upstream), same layout
 const BACKUP_FORMAT_VERSION = '1.2';
 const BACKUP_FORMAT_VERSION_NUMBER = 102000;
 const WINDOW_RELOAD_DELAY = 300;
@@ -726,7 +727,7 @@ export function FlashRestore(props: { unlockRestore?: boolean }) {
         logger.warn('User selected invalid backup file format', { data: { hasMetadata: !!data?.metadata, hasStorage: !!data?.storage } }, undefined, { skipReporting: true });
         return;
       }
-      if (data.metadata.application !== BACKUP_APPLICATION) {
+      if (!BACKUP_APPLICATIONS_ACCEPTED.includes(data.metadata.application)) {
         // User selected incompatible file - this is expected, not a system error
         setRestoreState('error');
         setErrorMessage(`Incompatible backup file. Found application "${data.metadata.application}" but expected "${BACKUP_APPLICATION}".`);
