@@ -22,7 +22,7 @@
     "noEmit": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "plugins": [{"name": "next"}],
     "incremental": true,
 
@@ -39,8 +39,8 @@
   },
   "include": [
     "**/*.ts", "**/*.tsx",
-    // nextjs augmentation
-    "next-env.d.ts", ".next/types/**/*.ts",
+    // nextjs augmentation (Next 16 also writes dev types under .next/dev)
+    "next-env.d.ts", ".next/types/**/*.ts", ".next/dev/types/**/*.ts",
     // this is here only because otherwise, during standalone build the process would update this file
     "dist/types/**/*.ts"
   ],

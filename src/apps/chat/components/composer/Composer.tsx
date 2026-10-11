@@ -105,7 +105,7 @@ const minimizedSx: SxProps = {
 export function Composer(props: {
   isMobile: boolean;
   chatLLM: DLLM | null;
-  composerTextAreaRef: React.RefObject<HTMLTextAreaElement>;
+  composerTextAreaRef: React.RefObject<HTMLTextAreaElement | null>;
   targetConversationId: DConversationId | null;
   capabilityHasT2I: boolean;
   capabilityHasT2IEdit: boolean;

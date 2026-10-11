@@ -40,9 +40,8 @@ buildType && log(`🛠 building for ${buildType}...\n`);
 let nextConfig: NextConfig = {
   reactStrictMode: !process.env.NO_STRICT_MODE, // default: enabled
 
-  // build-time lint: default ON (a build is the last gate); NO_LINT_BUILD=1 skips the ~15s
-  // typed pass when CI already ran `npm run lint` as its own step
-  eslint: { ignoreDuringBuilds: !!process.env.NO_LINT_BUILD },
+  // next/image: Next 16 serves only listed qualities (default [75]); AppNews asks for 90
+  images: { qualities: [75, 90] },
 
   // [exports] https://nextjs.org/docs/advanced-features/static-html-export
   ...(buildType && {
@@ -64,7 +63,8 @@ let nextConfig: NextConfig = {
   // NOTE: we may not be needing this anymore, as we use '@cloudflare/puppeteer'
   serverExternalPackages: ['puppeteer-core'],
 
-  // WEBPACK ONLY: turbopack skips this hook (client mocks, wasm) - never run --turbopack
+  // WEBPACK ONLY: turbopack skips this hook (client mocks, wasm). Next 16 defaults to turbopack, so every
+  // dev/build script passes --webpack; a turbopack port (resolveAlias for @mui/material) is a separate task
   webpack: (config: any, { isServer, dev, webpack /*, nextRuntime*/ }: WebpackConfigContext) => {
     // @mui/joy: anything material gets redirected to Joy
     config.resolve.alias['@mui/material'] = '@mui/joy';

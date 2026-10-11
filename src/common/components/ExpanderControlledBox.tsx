@@ -38,10 +38,8 @@ const collapserNoContainSx = {
 
 // Collapsed content is unreachable: `inert` blurs any focused descendant (otherwise the browser refuses
 // the `aria-hidden` and warns), drops the subtree from the tab order and hides it from assistive tech.
-// React 18 has no `inert` property: the empty string sets the attribute, a boolean is dropped with a
-// warning; the experimental React types already declare the React 19 boolean, hence the cast.
-// React 19 warns on the empty string: switch to `true` then.
-const collapsedInertProps = { inert: '' as unknown as boolean };
+// React 19 renders the boolean as the bare attribute; the React 18 form (empty string) is false on 19.
+const collapsedInertProps = { inert: true };
 
 const BoxCollapsee = styled(Box, { name: 'BoxCollapsee' })({
   /**
