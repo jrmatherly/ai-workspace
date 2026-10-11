@@ -14,6 +14,8 @@ import type { DConversationId } from '~/common/stores/chat/chat.conversation';
 
 import { isBrowser } from './util/pwaUtils';
 
+export { isAuthPublicPath, ROUTE_SIGNIN, safeNextPath } from './app.routes.auth';
+
 
 export const ROUTE_INDEX = '/';
 export const ROUTE_APP_CHAT = '/';
