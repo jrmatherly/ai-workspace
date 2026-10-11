@@ -44,6 +44,7 @@ else
   if [[ -z "$SESSION" ]]; then
     PROJ="$HOME/.claude/projects/$(pwd | sed 's/[^A-Za-z0-9]/-/g')"
     if [[ -d "$PROJ" ]]; then
+      # shellcheck disable=SC2012 # newest transcript; session files are UUID-named, so ls is safe
       SESSION=$(ls -t "$PROJ"/*.jsonl 2>/dev/null | head -1 || true)
     fi
   fi
