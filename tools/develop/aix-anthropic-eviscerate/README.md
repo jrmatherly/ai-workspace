@@ -5,9 +5,7 @@ search/fetch), client functions, programmatic tool calling (PTC), and tool searc
 and what history must (or must not) be re-sent on the next. Direct `fetch()` streaming, no SDK,
 no app layer.
 
-Findings live in `kb/modules/AIX-anthropic-agentic-loop.md` (the loop/serialization playbook),
-`kb/modules/AIX-stateless-roundtrip-retention.md` (retention + token costs), and
-`kb/modules/AIX-anthropic-code-execution.md` (container behavior).
+Findings live in `kb/modules/AIX-anthropic-code-execution.md`.
 
 Reads `ANTHROPIC_API_KEY` from `process.env`, then the repo-root `.env.api-keys` / `.env.local` /
 `.env`. Live captures land in `out/` (gitignored, contains real search content/encrypted blobs -

@@ -38,7 +38,7 @@ declare -A EXAMPLES=(
   [build]="Create /tmp/hello.py with a short hello-world script, run it with python3, and report the stdout."
   [search]="Search the web for 'Claude Shannon information theory wikipedia', then summarize the top result in two sentences. Cite the URL."
   [fetch]="Fetch https://example.com with bash curl. Report the HTTP status and the <title>."
-  [research]="Search the web for 'Enrico Ros big-AGI', pick one authoritative source, fetch it, and write a one-paragraph summary to /tmp/enrico-summary.md. Then read the file back and print it."
+  [research]="Search the web for 'Claude Shannon', pick one authoritative source, fetch it, and write a one-paragraph summary to /tmp/shannon-summary.md. Then read the file back and print it."
   [report]="Write a Python script in /tmp/plot.py that uses matplotlib to plot a simple sine wave and save to /tmp/sine.png. Run it. Report whether the file was created and its size."
   [mixed]="Do all of these in order: (1) run 'uname -a', (2) search the web for 'gvisor sandbox', (3) curl https://example.com, (4) write a one-line summary to /tmp/notes.txt. Briefly report each step."
 )

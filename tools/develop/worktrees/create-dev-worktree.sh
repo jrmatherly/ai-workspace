@@ -357,7 +357,7 @@ if [ "$1" = "--materialize" ] || [ "$1" = "-m" ]; then
     print_header
 
     # Resolve the target to a registered worktree path. Accept a direct path,
-    # a branch name, or a directory basename (big-agi_<name>, big-agi-<name>,
+    # a branch name, or a directory basename (ai-workspace_<name>,
     # or <name>) - same resolution as --remove.
     TARGET_PATH=""
     if [ -d "$MATERIALIZE_TARGET" ] && [ -e "$MATERIALIZE_TARGET/.git" ]; then
@@ -370,8 +370,7 @@ if [ "$1" = "--materialize" ] || [ "$1" = "-m" ]; then
             wt_base=$(basename "$wt_path")
             wt_branch=$(echo "$wt_line" | sed 's/.*\[\([^]]*\)\].*/\1/')
             if [ "$wt_branch" = "$MATERIALIZE_TARGET" ] \
-                || [ "$wt_base" = "big-agi_$MATERIALIZE_TARGET" ] \
-                || [ "$wt_base" = "big-agi-$MATERIALIZE_TARGET" ] \
+                || [ "$wt_base" = "ai-workspace_$MATERIALIZE_TARGET" ] \
                 || [ "$wt_base" = "$MATERIALIZE_TARGET" ]; then
                 TARGET_PATH="$wt_path"
                 break
@@ -380,7 +379,7 @@ if [ "$1" = "--materialize" ] || [ "$1" = "-m" ]; then
     fi
 
     if [ -z "$TARGET_PATH" ]; then
-        print_color "$RED" "✗ No worktree found for '$MATERIALIZE_TARGET' (tried path, branch name, and big-agi_<name>)"
+        print_color "$RED" "✗ No worktree found for '$MATERIALIZE_TARGET' (tried path, branch name, and ai-workspace_<name>)"
         echo
         list_worktrees
         exit 1
@@ -427,7 +426,7 @@ if [ "$1" = "--remove" ]; then
     fi
     
     BRANCH_TO_REMOVE=$2
-    WORKTREE_TO_REMOVE="../big-agi_$BRANCH_TO_REMOVE"
+    WORKTREE_TO_REMOVE="../ai-workspace_$BRANCH_TO_REMOVE"
     
     print_header
     
@@ -457,7 +456,7 @@ if [ "$1" = "--remove" ]; then
     
     # Resolve by branch name OR directory basename. Accept EITHER a branch name
     # (the worktree with that branch checked out) OR a worktree dir name
-    # (big-agi_<arg>, old big-agi-<arg>, or <arg>). This handles repurposed
+    # (ai-workspace_<arg> or <arg>). This handles repurposed
     # worktrees whose checked-out branch no longer matches the directory name
     # (e.g. a scratch worktree left on `main`).
     WORKTREE_BRANCH=""
@@ -467,8 +466,7 @@ if [ "$1" = "--remove" ]; then
         wt_base=$(basename "$wt_path")
         wt_branch=$(echo "$wt_line" | sed 's/.*\[\([^]]*\)\].*/\1/')
         if [ "$wt_branch" = "$BRANCH_TO_REMOVE" ] \
-            || [ "$wt_base" = "big-agi_$BRANCH_TO_REMOVE" ] \
-            || [ "$wt_base" = "big-agi-$BRANCH_TO_REMOVE" ] \
+            || [ "$wt_base" = "ai-workspace_$BRANCH_TO_REMOVE" ] \
             || [ "$wt_base" = "$BRANCH_TO_REMOVE" ]; then
             WORKTREE_PATH="$wt_path"
             WORKTREE_BRANCH="$wt_branch"
@@ -678,7 +676,7 @@ if [ -z "$SOURCE_COMMIT" ]; then
     echo
     exit 1
 fi
-WORKTREE_PATH="../big-agi_$NEW_BRANCH_NAME"
+WORKTREE_PATH="../ai-workspace_$NEW_BRANCH_NAME"
 
 print_header
 

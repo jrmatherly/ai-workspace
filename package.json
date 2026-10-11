@@ -1,10 +1,13 @@
 {
   "name": "ai-workspace",
   "version": "2.1.1",
+  "description": "Self-hosted, local-first, multi-model AI workspace",
+  "license": "MIT",
   "private": true,
   "author": "Jason Matherly",
   "homepage": "https://github.com/jrmatherly/ai-workspace",
   "repository": "https://github.com/jrmatherly/ai-workspace",
+  "bugs": "https://github.com/jrmatherly/ai-workspace/issues",
   "scripts": {
     "predev": "node tools/develop/gen-devtools-workspace/generate-devtools-workspace.mjs && node tools/develop/gen-llms-defs/generate-llms-defs.mjs",
     "predev-debug": "node tools/develop/gen-devtools-workspace/generate-devtools-workspace.mjs && node tools/develop/gen-llms-defs/generate-llms-defs.mjs",

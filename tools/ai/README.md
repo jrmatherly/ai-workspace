@@ -8,7 +8,7 @@ Claude Code.
 
 ```bash
 # Run this from the ROOT of your git repository
-curl -fsSL https://raw.githubusercontent.com/jrmatherly/ai-workspace/main/tools/ai/repo-structure.sh | sh
+curl -fsSL https://raw.githubusercontent.com/jrmatherly/ai-workspace/main/tools/ai/repo-structure.sh | bash
 ```
 
 ## Options
@@ -19,11 +19,11 @@ curl -fsSL https://raw.githubusercontent.com/jrmatherly/ai-workspace/main/tools/
 
 Example with options (include hidden files):
 
-- `curl -fsSL https://raw.githubusercontent.com/jrmatherly/ai-workspace/main/tools/ai/repo-structure.sh | sh -s -- -a`
+- `curl -fsSL https://raw.githubusercontent.com/jrmatherly/ai-workspace/main/tools/ai/repo-structure.sh | bash -s -- -a`
 
 ## Requirements
 
-- Bash 4+ (for associative arrays)
+- Bash 3.2+
 - Git (the repository must be initialized)
 - For clipboard functionality:
   - macOS: pbcopy (built-in)

@@ -12,7 +12,7 @@ create-dev-worktree.sh --remove <branch-name>       # Remove worktree
 create-dev-worktree.sh --list                       # List worktrees
 ```
 
-Creates worktree at `../big-agi_<branch-name>` with:
+Creates worktree at `../ai-workspace_<branch-name>` with:
 
 - New branch at current HEAD, or `--from <ref>` when provided
 - All `.env*` files, unless `--no-env` is provided

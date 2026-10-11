@@ -85,7 +85,7 @@ export const LAB_SCENARIOS: LabScenario[] = [
   {
     id: 'search',
     description: 'Direct server-side web search, no code execution.',
-    prompt: 'Search the web for "Enrico Ros" and "Token Fabrics" in parallel if you can, then summarize each in one sentence with a source link.',
+    prompt: 'Search the web for "Claude Shannon" and "WebAssembly" in parallel if you can, then summarize each in one sentence with a source link.',
     caps: { webSearch: true },
   },
   {
@@ -113,8 +113,8 @@ export const LAB_SCENARIOS: LabScenario[] = [
     prompt: 'Do ALL of these now, in parallel where possible:\n' +
       '1. Call get_capybara_info_given_name_and_color for "enrico" (brown) AND for "coolio" (golden) - two separate calls.\n' +
       '2. Execute Python code computing 41*10+7.\n' +
-      '3. Search the web for "Token Fabrics".\n' +
-      '4. Fetch https://big-agi.com.\n' +
+      '3. Search the web for "WebAssembly".\n' +
+      '4. Fetch https://example.com.\n' +
       'If your code execution environment can invoke the capybara function programmatically, call it from code. ' +
       'End with the single word: done',
     caps: { reasoning: true, webSearch: true, webFetch: true, codeExec: true, fnCall: true },
@@ -122,9 +122,9 @@ export const LAB_SCENARIOS: LabScenario[] = [
   {
     id: 'pfc',
     description: 'Anthropic dynamic web tools: search+fetch with INTERNAL code execution - encrypted code-exec results, nested callers, the "are intermediates kept" case.',
-    prompt: 'Search the web for the latest big-AGI release and for "Token Fabrics", filtering the results programmatically if you can. ' +
-      'Then fetch https://big-agi.com and extract the main headline. ' +
-      'Report: the release you found, one fact about Token Fabrics, and the headline - each with a source link.',
+    prompt: 'Search the web for the latest Node.js release and for "WebAssembly", filtering the results programmatically if you can. ' +
+      'Then fetch https://example.com and extract the main headline. ' +
+      'Report: the release you found, one fact about WebAssembly, and the headline - each with a source link.',
     caps: { reasoning: true, webSearch: true, webFetch: true, webDynamic: true },
   },
   {
@@ -134,8 +134,8 @@ export const LAB_SCENARIOS: LabScenario[] = [
     prompt: 'In ONE step, in parallel, do ALL of:\n' +
       '1. get_capybara_info_given_name_and_color for "enrico" (brown) AND "coolio" (golden) - two separate calls.\n' +
       '2. convert_temperature 100 from "C" to "F" - one call.\n' +
-      '3. Search the web for "big-AGI", filtering the results programmatically if your tools support it.\n' +
-      '4. Fetch https://big-agi.com.\n' +
+      '3. Search the web for "Node.js", filtering the results programmatically if your tools support it.\n' +
+      '4. Fetch https://example.com.\n' +
       'Then reply with only: ok',
     caps: { reasoning: true, webSearch: true, webFetch: true, codeExec: true, webDynamic: true, fnCall: true, multiFn: true },
   },
@@ -143,16 +143,16 @@ export const LAB_SCENARIOS: LabScenario[] = [
     id: 'kitchen-sink',
     description: 'The canonical gauntlet: reasoning + parallel search + code exec + parallel fetch + final text + in-response reasoning continuity probe.',
     prompt: 'Think deeply of a random number between 1 and 1000 and keep it to yourself for now. ' +
-      'Then search the web for "Enrico Ros" and "Token Fabrics", in parallel if possible. ' +
+      'Then search the web for "Claude Shannon" and "WebAssembly", in parallel if possible. ' +
       'Then execute code to sum 333+334 in Python. ' +
-      'Then fetch simultaneously https://www.enricoros.com and https://big-agi.com. ' +
+      'Then fetch simultaneously https://www.iana.org and https://example.com. ' +
       'Finally write "hi", the sum, and the number you originally thought of.',
     caps: { reasoning: true, webSearch: true, webFetch: true, codeExec: true },
   },
   {
     id: 'fetch',
     description: 'Direct server-side web fetch only - the fetched document as a hosted result, citations from it.',
-    prompt: 'Fetch https://big-agi.com and quote its main headline verbatim, with a citation. One sentence.',
+    prompt: 'Fetch https://example.com and quote its main headline verbatim, with a citation. One sentence.',
     caps: { reasoning: true, webFetch: true },
   },
   {

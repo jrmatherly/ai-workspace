@@ -33,7 +33,6 @@
     /* Path Aliases */
     "paths": {
       "~/common/*": ["./src/common/*"],
-      "~/extensions/*": ["./src/extensions/*"],
       "~/modules/*": ["./src/modules/*"],
       "~/server/*": ["./src/server/*"]
     }
@@ -47,7 +46,6 @@
   ],
   "exclude": [
     "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx",
-    "electron",
     "tools",
     "dist",
     "node_modules"

@@ -24,8 +24,6 @@ export default defineConfig([{
       ".next*/**", "out/**", "dist/**", // build output (minified bundles trip compat/ on every modern API)
       "public/**",                      // served verbatim, outside the bundler + type program
       ".claude/**",                     // agent tooling, own runtime
-      "electron/**",                    // excluded from the type program (root tsconfig)
-      "tools/video/**",                 // self-contained package, own toolchain
     ],
 }, {
 //     // eslint's own base layer (no-dupe-keys, no-cond-assign, no-fallthrough, ...) - next/core-web-vitals
@@ -102,7 +100,7 @@ export default defineConfig([{
         "compat/compat": "off",
     },
 }, {
-    // Enrico 2026-07-30: TYPED rules - needs a full type program, so this is the ~15s of `npm run lint`
+    // Typed rules (upstream, 2026-07-30) - needs a full type program, so this is the ~15s of `npm run lint`
     // unbound-method: detaching a prototype method (destructure, stored reference, callback) silently
     // rebinds `this` - the destructure-heavy house style is only safe with this guard.
     // Annotate genuinely 'detach-safe' declarations with `this: void` (or declare them property-style).

@@ -57,6 +57,7 @@ You are started from the root of the repository (i.e. where the git folder is or
 - `/src/modules/` - reusable business logic: `aix/` (AI streaming), `beam/` (scatter/gather), `blocks/` (content rendering), `llms/` (vendor abstraction), and more
 - `/src/common/` - shared infrastructure and utilities; `/src/server/` - tRPC backend
 - `/kb/` - knowledge base, indexed in `kb/KB.md`
+- `/tools/` - dev scripts, API probes and generators (`tools/develop/*`, `tools/data/llms/`), type-checked by the second `tscheck` leg via `tools/tsconfig.json`
 
 ### Key Subsystems
 

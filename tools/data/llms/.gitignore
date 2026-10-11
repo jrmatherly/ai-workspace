@@ -1,15 +1,9 @@
-# LLM Registry Sync - Sensitive Data
-# Do not commit API keys or database files
+# LLM Registry Sync - local data
 
-# Production configuration with API keys
-llm-services.json
-
-# Any LLM configuration files
+# configuration with API keys (any name), the committed example excepted
 llm*.json
+services.json
+!llm-services.example.json
 
 # SQLite database (and backups/wal/shm)
 llm-registry.db*
-
-# Debug/test scripts (optional)
-debug-*.ts
-validate-json.ts

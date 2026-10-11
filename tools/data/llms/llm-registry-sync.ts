@@ -685,7 +685,7 @@ function parseArgs(): CliOptions {
 
 function printHelp(): void {
   console.log(`
-${COLORS.bright}Big-AGI LLM Registry Sync${COLORS.reset}
+${COLORS.bright}AI Workspace LLM Registry Sync${COLORS.reset}
 
 ${COLORS.bright}Usage:${COLORS.reset}
   llm-registry-sync.sh [options]

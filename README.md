@@ -19,7 +19,7 @@ Derived from [enricoros/big-AGI](https://github.com/enricoros/big-AGI) at commit
 Built for experts: Engineers architecting systems. Founders making decisions. Researchers validating hypotheses.
 You need to think broader, decide faster, and build with confidence, then you need AI Workspace.
 
-It comes packed with **world-class features** like Beam, and is praised for its **best-in-class AI chat UX**.
+Beam runs several models on the same prompt and fuses the answers.
 
 ![LLM Vendors](https://img.shields.io/badge/20+_LLM_Services-500+_Models-black?style=for-the-badge&logo=anthropic&logoColor=white&labelColor=purple)&nbsp;
 ![Feature Beam](https://img.shields.io/badge/AI--Validation-BEAM-000?style=for-the-badge&labelColor=purple)&nbsp;
@@ -74,17 +74,6 @@ AI Inspector
 </tr>
 </table>
 
-### Who uses AI Workspace:  
-Loved by engineers, founders, researchers, self-hosters, and IT departments for its power, reliability, and transparency.
-
-<img width="830" height="370" alt="image" src="https://github.com/user-attachments/assets/513c4f77-0970-4a56-b23b-1416c8246174" />
-
-Choose AI Workspace because you don't need another clone or slop - you need an AI tool that scales with you.
-
-### Show me a screenshot:
-Sure - here is real-world screeengrab as I'm writing this, while running a Beam to extract SVG from an image with Sonnet 4.5, Opus 4.1, GPT 5.1, Gemini 2.5 Pro, Nano Banana, etc.  
-<img alt="Real-world screen capture as of Nov 15 2025, 2am" src="https://github.com/user-attachments/assets/853f4160-27cb-4ac9-826b-402f1e63d4af" />
-
 
 ## Get Started
 
@@ -118,7 +107,7 @@ Delightful UX with latest models exclusive features like Beam for **multi-model 
 |---------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------| 
 | **Chat**<br/>**Call**<br/>**Beam**<br/>**Draw**, ...                                                          | Local & Cloud<br/>Open & Closed<br/>Cheap & Heavy<br/>Google, Mistral, ...                                              | Attachments<br/>Diagrams<br/>Multi-Chat<br/>Mobile-first UI                                                          | Stored Locally<br/>Easy self-Host<br/>Local actions<br/>Data = Gold                                                    | AI Personas<br/>Voice Modes<br/>Screen Capture<br/>Camera + OCR                                                      |
 
-![AI Workspace screenshot](docs/pixels/ai-workspace-compo-20240201_small.png)
+![AI Workspace screenshot](docs/pixels/ai-workspace-hero.png)
 
 ### AI Models & Vendors
 
@@ -163,4 +152,4 @@ Self-host with Docker, deploy on Vercel, or develop locally. Full setup guide:
 
 MIT License · [Third-Party Notices](src/modules/3rdparty/THIRD_PARTY_NOTICES.md)
 
-Copyright (c) 2023-2026 Enrico Ros, see [LICENSE](LICENSE).
+Copyright (c) 2026 Jason Matherly and (c) 2023-2026 Enrico Ros, see [LICENSE](LICENSE).

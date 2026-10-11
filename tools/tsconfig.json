@@ -18,12 +18,7 @@
     // the TS service walks up, loads the whole root program, and falls back to an inferred project
     "**/*.mjs",
     "../src/**/*.test.ts",
-    // ambient augmentations (authjs.d.ts widens next-auth's Session): nothing imports them, so
-    // without this the shared src/ files they describe fail here but pass at the root
+    // ambient augmentations (next.page.d.ts): nothing imports them, so without this the shared src/ files they describe fail here but pass at the root
     "../src/**/*.d.ts"
-  ],
-  "exclude": [
-    // SELF-CONTAINED package (own package.json + tsconfig + node_modules + lockfile: Remotion pins its own React)
-    "video"
   ]
 }
