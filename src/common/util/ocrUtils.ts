@@ -7,13 +7,11 @@
  * - pdf-images-ocr converter (forced OCR on PDF pages)
  */
 
-import type { recognize as TesseractRecognize } from 'tesseract.js';
-
 /**
  * Where tesseract.js loads its worker, wasm core and language data, copied from node_modules by
  * tools/develop/browser-assets. Unset, tesseract.js fetches all three from the jsDelivr CDN at first use.
- * LSTM-only: only the three `-lstm` cores and the `best_int` English model are served, so callers must keep the
- * default OEM (no `legacyCore`, no `TESSERACT_ONLY` / `TESSERACT_LSTM_COMBINED`, no `detect()`).
+ * LSTM-only: only the three `-lstm` cores and the `best_int` English model are served, so workers stay on
+ * `OEM.LSTM_ONLY` (no `legacyCore`, no `TESSERACT_ONLY` / `TESSERACT_LSTM_COMBINED`, no `detect()`).
  */
 export const TESSERACT_ASSET_OPTIONS = {
   workerPath: '/tesseract/worker.min.js',
@@ -21,15 +19,43 @@ export const TESSERACT_ASSET_OPTIONS = {
   langPath: '/tesseract/lang',
 } as const;
 
-// Cache the Tesseract module to avoid re-importing on every call
-let cachedRecognize: typeof TesseractRecognize | null = null;
+type OcrRecognize = (image: Blob | string, onProgress?: (progress: number) => void) => Promise<string>;
 
-async function getTesseractRecognize(): Promise<typeof TesseractRecognize> {
-  if (!cachedRecognize) {
-    const tesseract = await import('tesseract.js');
-    cachedRecognize = tesseract.recognize;
+/**
+ * Runs `fn` with one English LSTM worker: the ~4 MB core and model load once per call, not once per image.
+ */
+async function withOcrWorker<T>(fn: (recognize: OcrRecognize) => Promise<T>): Promise<T> {
+  const { createWorker, OEM } = await import('tesseract.js');
+
+  let onPageProgress: ((progress: number) => void) | undefined;
+  let lastProgress = -1;
+
+  const worker = await createWorker('eng', OEM.LSTM_ONLY, {
+    ...TESSERACT_ASSET_OPTIONS,
+    errorHandler: e => {
+      // NOTE: shall we inform the user about the error?
+      console.error('[OCR Error]', e);
+    },
+    logger: (message) => {
+      if (!onPageProgress || message.status !== 'recognizing text')
+        return;
+      if (message.progress > lastProgress + 0.01) {
+        lastProgress = message.progress;
+        onPageProgress(message.progress);
+      }
+    },
+  });
+
+  try {
+    return await fn(async (image, onProgress) => {
+      onPageProgress = onProgress;
+      lastProgress = -1;
+      const { data: page } = await worker.recognize(image);
+      return page.text;
+    });
+  } finally {
+    await worker.terminate();
   }
-  return cachedRecognize;
 }
 
 
@@ -54,26 +80,7 @@ export async function ocrImageWithProgress(
   imageData: Blob | string,
   onProgress?: (progress: number) => void,
 ): Promise<string> {
-  const recognize = await getTesseractRecognize();
-  let lastProgress = -1;
-
-  const { data: page } = await recognize(imageData, undefined, {
-    ...TESSERACT_ASSET_OPTIONS,
-    errorHandler: e => {
-      // NOTE: shall we inform the user about the error?
-      console.error('[OCR Error]', e);
-    },
-    logger: (message) => {
-      if (!onProgress || message.status !== 'recognizing text')
-        return;
-      if (message.progress > lastProgress + 0.01) {
-        lastProgress = message.progress;
-        onProgress(message.progress);
-      }
-    },
-  });
-
-  return page.text;
+  return withOcrWorker(recognize => recognize(imageData, onProgress));
 }
 
 
@@ -89,27 +96,19 @@ export async function ocrPdfPagesWithProgress(
   onProgress?: (progress: number) => void,
 ): Promise<OcrResult> {
 
-  const pageTexts: string[] = [];
   const totalPages = imageDataURLs.length;
 
-  for (let pageNum = 0; pageNum < totalPages; pageNum++) {
-    const pageImage = imageDataURLs[pageNum];
-
-    // Convert base64 to data URL for Tesseract
-    const dataUrl = `data:${pageImage.mimeType};base64,${pageImage.base64Data}`;
-    const pageText = await ocrImageWithProgress(dataUrl,
-      (pageProgress) => {
-        // Distribute progress across all pages
-        const cumulativeProgress = (pageNum + pageProgress) / totalPages;
-        onProgress?.(cumulativeProgress);
-      },
-    );
-
-    pageTexts.push(pageText);
-
-    // Update progress after each page completes
-    onProgress?.((pageNum + 1) / totalPages);
-  }
+  const pageTexts = await withOcrWorker(async (recognize) => {
+    const texts: string[] = [];
+    for (let pageNum = 0; pageNum < totalPages; pageNum++) {
+      const { mimeType, base64Data } = imageDataURLs[pageNum];
+      texts.push(await recognize(`data:${mimeType};base64,${base64Data}`,
+        (pageProgress) => onProgress?.((pageNum + pageProgress) / totalPages),
+      ));
+      onProgress?.((pageNum + 1) / totalPages);
+    }
+    return texts;
+  });
 
   // Combine pages with informative separators for multi-page PDFs
   const combinedText = pageTexts
