@@ -652,6 +652,9 @@ export function AppChat() {
 
           <Panel
             id={_keyAndId}
+            // v4: minSize defaults to 0 so this never auto-collapses, but it enables Enter on a focused separator to
+            // collapse the pane to 0, which onLayoutChanged above turns into a pane removal
+            collapsible={chatPanes.length === 2}
             // v4: a bare number is pixels, a unit-less string is percent
             defaultSize={(_panesCount === 3 && idx === 1) ? '34%' : `${Math.round(100 / _panesCount)}%`}
             // minSize={20 /* IMPORTANT: this forces a reflow even on a simple on hover */}
