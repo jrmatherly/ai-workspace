@@ -4,7 +4,7 @@ Guidance to Claude Code when working with code in this repository.
 
 ## Architecture Overview
 
-**Stack**: Next.js 16 (Pages Router for pages, App Router for API routes only; webpack via --webpack, Turbopack skips the config hook), React 19, Emotion (CSS-in-JS), Zustand, tRPC + TanStack React Query, Edge runtime for AI and Node.js for data ops. UI is Material-UI **Joy**, not Material: import from `@mui/joy`; `next.config.ts` webpack-aliases `@mui/material` -> `@mui/joy` so stray/transitive Material imports still resolve to Joy (webpack only - turbopack skips that hook).
+**Stack**: Next.js 16 (Pages Router for pages, App Router for API routes only; webpack via --webpack, Turbopack skips the config hook), React 19, Emotion (CSS-in-JS), Zustand, tRPC + TanStack React Query, both tRPC routers on the Node.js runtime (Next 16 deprecated the Edge runtime; the `/api/edge` path name is historical). UI is Material-UI **Joy**, not Material: import from `@mui/joy`; `next.config.ts` webpack-aliases `@mui/material` -> `@mui/joy` so stray/transitive Material imports still resolve to Joy (webpack only - turbopack skips that hook).
 
 **Distinctive**, vs other chat UIs: Beam runs N models in parallel and fuses the answers (scatter/gather); every vendor sits behind one AIX protocol layer, reusing a few wire dialects instead of one integration each; chat is stored client-side in IndexedDB by default; BYO-keys (self-hosters may additionally set server-side vendor keys in env vars); AI calls can go browser-direct to the vendor (CSF); messages are typed fragments, not strings; personas and multi-pane conversations are first-class.
 
@@ -134,9 +134,9 @@ Local-first: Zustand in memory with `persist` to localStorage, except chats, whi
 
 ## Server Architecture
 
-Two tRPC routers, split by runtime. **Key pattern**: Edge runtime for AI (fast, distributed), Cloud runtime for data ops (centralized, Node.js).
+Two tRPC routers, split by concern, both on the Node.js runtime since 2026-10 (Next 16 deprecated the Edge runtime). The `/api/edge` path and the `trpc.router-edge.ts` name stay: clients hard-code the path, and the file is upstream-hot.
 
-- **Edge** (`/src/server/trpc/trpc.router-edge.ts`) - AIX streaming, per-vendor LLM routers, unified Speex TTS, external services; one mount per vendor/service, so the router file is the list. AIX, LLM and Speex also support **client-side fetch (CSF)**: the same code is rebundled with stubs and included client-side, so the browser can call the vendor directly where CORS allows, cutting latency and network barriers.
+- **Edge** (`/src/server/trpc/trpc.router-edge.ts`, mounted at `/api/edge`) - AIX streaming, per-vendor LLM routers, unified Speex TTS, external services; one mount per vendor/service, so the router file is the list. AIX, LLM and Speex also support **client-side fetch (CSF)**: the same code is rebundled with stubs and included client-side, so the browser can call the vendor directly where CORS allows, cutting latency and network barriers.
 - **Cloud** (`/src/server/trpc/trpc.router-cloud.ts`) - Node-only data ops: Browse (fetch and extract page content), and the shared-link store.
 
 @kb/KB.md

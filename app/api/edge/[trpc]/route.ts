@@ -14,7 +14,8 @@ const handlerEdgeRoutes = (req: Request) => fetchRequestHandler({
       : undefined,
 });
 
-// NOTE: we don't set maxDuration explicitly here - however we set it in the Vercel project settings, raising to the limit of 300s
-// export const maxDuration = 60;
-export const runtime = 'edge';
+// Node runtime since Next 16 deprecated the Edge runtime (2026-10). The '/api/edge' path stays: clients hard-code it.
+// On Vercel, set maxDuration here or in the project settings; Node functions default to a short limit.
+// export const maxDuration = 300;
+export const runtime = 'nodejs';
 export { handlerEdgeRoutes as GET, handlerEdgeRoutes as POST };

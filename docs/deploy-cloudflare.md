@@ -4,6 +4,8 @@ unlisted: true
 
 # Deploying a Next.js App on Cloudflare Pages
 
+> OUTDATED (2026-10): both tRPC routers now run on the Node.js runtime, so this guide no longer applies as written. Cloudflare Pages cannot run the AI router either.
+>
 > WARNING: Cloudflare Pages only supports Edge Runtime functions, not the full Node.js runtime.
 >
 > The cloud router in this project requires a Node.js runtime for Supabase SDK, authentication,

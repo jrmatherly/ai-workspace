@@ -18,7 +18,7 @@ editing tools, models switching, personas, and more.
 3. **Enter Ollama Host URL**: Provide the Ollama Host URL where the API server is accessible (e.g., `http://localhost:11434`)
 4. **Refresh Model List**: Once connected, refresh the list of available models to include the Ollama models
    > Optional: use the Ollama Admin interface to see which models are available and 'Pull' them in your local machine. Note
-   that this operation will likely timeout due to Edge Functions timeout on the AI Workspace server while pulling, and
+   that this operation will likely timeout due to the server function timeout on the AI Workspace server while pulling, and
    you'll have to press the 'Pull' button again, until a green message appears.
 5. **Chat with Ollama models**: select an Ollama model and begin chatting with AI personas
 

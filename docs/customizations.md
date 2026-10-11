@@ -16,7 +16,7 @@ Application customization *requires manual code modifications or the use of envi
 ## Code Alterations
 
 Start by creating a fork of the [repository](https://github.com/jrmatherly/ai-workspace) on GitHub for a personal development space.
-Understand the Architecture: AI Workspace uses Next.js, React for the front end, and Node.js (Next.js edge functions) for the back end.
+Understand the Architecture: AI Workspace uses Next.js, React for the front end, and Node.js (Next.js route handlers) for the back end.
 
 ### Add Authentication
 
@@ -69,7 +69,7 @@ Example: `NEXT_PUBLIC_MOTD=🚀 New features available in {{app_build_pkgver}}! 
 
 ## Testing & Deployment
 
-Test your application thoroughly using local development (refer to README.md for local build instructions). Deploy using your preferred hosting service. AI Workspace supports deployment on platforms like Vercel, Docker, or any Node.js-compatible service, especially those supporting NextJS's "Edge Runtime."
+Test your application thoroughly using local development (refer to README.md for local build instructions). Deploy using your preferred hosting service. AI Workspace supports deployment on platforms like Vercel, Docker, or any Node.js-compatible service.
 
 - [deploy-cloudflare.md](deploy-cloudflare.md): for Cloudflare Pages deployment (limited support)
 - [deploy-docker.md](deploy-docker.md): for Docker deployment instructions and examples

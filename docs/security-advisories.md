@@ -45,8 +45,6 @@ sprintf-js
 
 ## Build warnings
 
-`next build --webpack` prints "The Edge Runtime is deprecated" on Next 16. The Edge tRPC router (`app/api/edge`) stays on the Edge runtime by design, since AIX streams from it. Accepted until the routers move to the Node runtime.
-
 `npm install` prints `install-scripts` warnings only when a package with a postinstall script is not in `package.json` `allowScripts`. Bump the pinned version there after upgrades.
 
 ## Node floor
