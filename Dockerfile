@@ -59,7 +59,7 @@ COPY . .
 # Build the application
 ENV NODE_ENV=production
 RUN npm run build \
- && npm prune --omit=dev
+  && npm prune --omit=dev
 
 
 # Runner
@@ -70,8 +70,8 @@ WORKDIR /app
 # an apk version pin breaks the build once Alpine rotates the package
 # hadolint ignore=DL3018
 RUN addgroup --system --gid 1001 nodejs \
- && adduser --system --uid 1001 nextjs \
- && apk add --no-cache openssl
+  && adduser --system --uid 1001 nextjs \
+  && apk add --no-cache openssl
 
 # Copy Built app
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
