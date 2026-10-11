@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-// pdf.js fetches its worker and on-demand assets by URL from public/, where tools/develop/pdfjs-assets copies
+// pdf.js fetches its worker and on-demand assets by URL from public/, where tools/develop/browser-assets copies
 // them from the installed pdfjs-dist (pretest runs it). pdf.js refuses to run when the API and worker versions
 // differ, and silently degrades when the asset URLs are wrong: no type-check or build sees either, only this.
 
@@ -40,7 +40,7 @@ test('public PDF worker matches the installed pdfjs-dist version', () => {
   // minified form of the worker's version check: `{docId:i,apiVersion:o}=e,l="6.4.299";if(o!==l)throw`
   const match = worker.match(/apiVersion:\w+\}=\w+,\w+="(\d+\.\d+\.\d+)";if\(/);
   assert.ok(match, 'worker file carries no API-version check');
-  assert.equal(match[1], installed, 'worker version differs from the installed pdfjs-dist: rerun tools/develop/pdfjs-assets');
+  assert.equal(match[1], installed, 'worker version differs from the installed pdfjs-dist: rerun tools/develop/browser-assets');
 });
 
 test('non-embedded CJK font extracts text through the served CMaps', async () => {

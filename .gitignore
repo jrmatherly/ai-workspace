@@ -41,9 +41,10 @@ npm-debug.log*
 /public/sw.js
 /public/sw.js.map
 
-# pdf.js worker and assets, copied from pdfjs-dist by tools/develop/pdfjs-assets (prebuild, predev, pretest)
+# pdf.js and Tesseract runtime files, copied from node_modules by tools/develop/browser-assets (prebuild, predev, pretest)
 /public/workers/pdf.worker.min.mjs
 /public/pdfjs/
+/public/tesseract/
 
 /private/
 .codegraph/

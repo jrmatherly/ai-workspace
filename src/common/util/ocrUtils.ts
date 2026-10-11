@@ -9,6 +9,18 @@
 
 import type { recognize as TesseractRecognize } from 'tesseract.js';
 
+/**
+ * Where tesseract.js loads its worker, wasm core and language data, copied from node_modules by
+ * tools/develop/browser-assets. Unset, tesseract.js fetches all three from the jsDelivr CDN at first use.
+ * LSTM-only: only the three `-lstm` cores and the `best_int` English model are served, so callers must keep the
+ * default OEM (no `legacyCore`, no `TESSERACT_ONLY` / `TESSERACT_LSTM_COMBINED`, no `detect()`).
+ */
+export const TESSERACT_ASSET_OPTIONS = {
+  workerPath: '/tesseract/worker.min.js',
+  corePath: '/tesseract/core/',
+  langPath: '/tesseract/lang',
+} as const;
+
 // Cache the Tesseract module to avoid re-importing on every call
 let cachedRecognize: typeof TesseractRecognize | null = null;
 
@@ -46,6 +58,7 @@ export async function ocrImageWithProgress(
   let lastProgress = -1;
 
   const { data: page } = await recognize(imageData, undefined, {
+    ...TESSERACT_ASSET_OPTIONS,
     errorHandler: e => {
       // NOTE: shall we inform the user about the error?
       console.error('[OCR Error]', e);
@@ -59,8 +72,6 @@ export async function ocrImageWithProgress(
       }
     },
   });
-
-  console.log('OCR', {page});
 
   return page.text;
 }

@@ -4,7 +4,7 @@ import { canvasToDataURLAndMimeType } from './canvasUtils';
 const SKIP_LOADING_IN_DEV = false;
 
 /**
- * Where pdf.js fetches its on-demand assets, copied from pdfjs-dist by tools/develop/pdfjs-assets. Unset, each
+ * Where pdf.js fetches its on-demand assets, copied from pdfjs-dist by tools/develop/browser-assets. Unset, each
  * fetch throws: predefined CMaps (non-embedded CJK fonts extract no text), the standard 14 fonts (rendered
  * with a substitute), the wasm decoders (JPX images decode to nothing) and the CMYK ICC profile (no color
  * management). pdf.js only lets the worker fetch when the first three are all set.

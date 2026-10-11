@@ -41,7 +41,7 @@ Users are advised to review the license terms of the original repository.
 
 ## pdf.js worker and assets
 
-**Location:** `public/workers/pdf.worker.min.mjs` and `public/pdfjs/{cmaps,standard_fonts,wasm,iccs}`, copied from the installed `pdfjs-dist` by `tools/develop/pdfjs-assets/copy-pdfjs-assets.mjs` (prebuild, predev, pretest) and gitignored. The browser fetches them by URL; `src/common/util/pdfUtils.ts` sets the URLs and `src/common/util/pdfUtils.test.ts` checks the worker version and that CMaps and the wasm decoders serve.
+**Location:** `public/workers/pdf.worker.min.mjs` and `public/pdfjs/{cmaps,standard_fonts,wasm,iccs}`, copied from the installed `pdfjs-dist` by `tools/develop/browser-assets/copy-browser-assets.mjs` (prebuild, predev, pretest) and gitignored. The browser fetches them by URL; `src/common/util/pdfUtils.ts` sets the URLs and `src/common/util/pdfUtils.test.ts` checks the worker version and that CMaps and the wasm decoders serve.
 
 **Original Repository:** [mozilla/pdf.js](https://github.com/mozilla/pdf.js)
 
@@ -51,6 +51,14 @@ Users are advised to review the license terms of the original repository.
 - `standard_fonts/`: Foxit Type 1 fonts, BSD-3-Clause, Copyright 2014 PDFium Authors (`LICENSE_FOXIT`); Liberation fonts, GPL-2.0 with the font-embedding exception, Copyright 2007-2011 Red Hat (`LICENSE_LIBERATION`)
 - `wasm/`: OpenJPEG, BSD-2-Clause (`LICENSE_OPENJPEG`) with pdf.js's wrapper under BSD-2-Clause (`LICENSE_PDFJS_OPENJPEG`); the PDFium JBIG2 decoder, BSD-3-Clause, Copyright 2014 The PDFium Authors (`LICENSE_JBIG2`) with pdf.js's wrapper under Apache-2.0 (`LICENSE_PDFJS_JBIG2`); qcms, MIT, Copyright Mozilla Corporation and Marti Maria (`LICENSE_QCMS`) with pdf.js's wrapper under MIT (`LICENSE_PDFJS_QCMS`); `quickjs-eval.*` is pdf.js's QuickJS build for PDF scripting, shipped without a license file in pdfjs-dist (QuickJS itself is MIT)
 - `iccs/`: the CGATS001 compatibility ICC profile, CC0 1.0 (`iccs/LICENSE`)
+
+## Tesseract OCR runtime
+
+**Location:** `public/tesseract/{worker.min.js,core/,lang/}`, copied from the installed `tesseract.js`, `tesseract.js-core` and `@tesseract.js-data/eng` by `tools/develop/browser-assets/copy-browser-assets.mjs` (prebuild, predev, pretest) and gitignored. `src/common/util/ocrUtils.ts` sets the URLs; unset, tesseract.js would fetch the same files from the jsDelivr CDN. `src/common/util/ocrUtils.test.ts` checks they are present.
+
+**Original Repositories:** [naptha/tesseract.js](https://github.com/naptha/tesseract.js), [naptha/tesseract.js-core](https://github.com/naptha/tesseract.js-core), [naptha/tessdata](https://github.com/naptha/tessdata)
+
+**License:** Apache-2.0 for `tesseract.js` and `tesseract.js-core` (their `LICENSE` files); `@tesseract.js-data/eng` declares MIT in its package manifest and ships the `eng.traineddata` model (tessdata_best, Apache-2.0 upstream) without a license file.
 
 Test fixtures in `src/common/util/pdfUtils.test-fixtures/`: `jpx_smaskindata.pdf` is from the pdf.js test corpus (`test/pdfs/`, Apache-2.0); `cjk-nonembedded.pdf` was written for this repo.
 
