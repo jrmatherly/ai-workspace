@@ -27,6 +27,7 @@
     "postinstall": "prisma generate --no-hints",
     "gen:icon-sprites": "node tools/develop/gen-icon-sprites/generate-llm-sprites.ts",
     "db:push": "prisma db push",
+    "db:migrate": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "vercel:env:pull": "npx vercel env pull .env.development.local",
     "sharp:win32_x64": "npm install --os=win32 --cpu=x64 sharp"

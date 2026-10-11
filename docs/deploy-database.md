@@ -1,23 +1,22 @@
-**Connecting Your Database for Enhanced Features:**
+# Database
 
-This guide outlines the database setup for enabling features like Chat Link Sharing in your application.
+Postgres backs Chat Link Sharing, and authentication when any `AUTH_*` provider is set
+([Authentication](deploy-authentication.md)). Without either, the app runs with no database.
 
-### Database
+## Hosting
 
-**Serverless Postgres:**
+- Serverless or self-hosted Postgres; tested on Postgres 18.
+- Connection string: `postgres://USER:PASS@HOST/DB?pgbouncer=true` (pooled) and a direct URL for migrations.
 
-- Available on Vercel, Neon, and other platforms. Tested on Postgres 18.
-- **Connection String:** Replace placeholders with your Postgres credentials.
-  - `postgres://USER:PASS@SOMEHOST.postgres.vercel-storage.com/SOMEDB?pgbouncer=true`
-
-### Environment Variables
+## Environment Variables
 
 Set both. Chat Link Sharing turns on only when both are set (`hasDB` in `src/modules/backend/backend.router.ts`).
+Authentication refuses to start without both.
 
 | Variable | |
 | --- | --- |
 | `POSTGRES_PRISMA_URL` | Pooled connection URL, used at runtime through `@prisma/adapter-pg` (`src/server/prisma/prismaDb.ts`) |
-| `POSTGRES_URL_NON_POOLING` | Direct (non-pooled) connection URL, used by the Prisma CLI through `prisma.config.ts` (`db push`, `studio`) |
+| `POSTGRES_URL_NON_POOLING` | Direct (non-pooled) connection URL, used by the Prisma CLI through `prisma.config.ts` (`migrate deploy`, `migrate resolve`, `studio`) |
 
 Connection behavior since Prisma 7 (the `pg` driver, not the Rust engine, opens the socket):
 
@@ -25,11 +24,26 @@ Connection behavior since Prisma 7 (the `pg` driver, not the Rust engine, opens 
 - `connect_timeout` in the URL is ignored. The connect timeout is 15 seconds, set in code (`connectionTimeoutMillis`).
 - `pgbouncer=true` is accepted and ignored; PgBouncer 1.26.0 or later in transaction mode works (tested with scram-sha-256).
 
-### Initial Setup Steps
+## Schema changes
 
-1. **Run `npx prisma db push`:** Create or update the database schema (run once after connecting). The CLI reads `POSTGRES_URL_NON_POOLING` from the environment or a local `.env`.
-2. After editing `src/server/prisma/schema.prisma`, run `npx prisma generate` (`db push` no longer does).
+The schema is versioned by committed migrations in `src/server/prisma/migrations/`. `0_init` is the baseline of the
+`db push` era (the `LinkStorage` table).
 
-### Additional Resources
+- **Fresh database:** run `npm run db:migrate` (`prisma migrate deploy`). It applies `0_init` and every later migration.
+- **Database created with `npx prisma db push`:** run `npx prisma migrate resolve --applied 0_init` once, then
+  `npm run db:migrate`.
+- **Every release:** run `npm run db:migrate` once, on `POSTGRES_URL_NON_POOLING`, before the new version serves traffic.
+  - Kubernetes: one Job before the rollout, or an init container with replicas 1, from the `migrate` image target
+    (`docker build --target migrate`). Never in every replica at start: a second concurrent run times out on the
+    advisory lock (`P1002`) and must be re-run.
+  - Vercel: in the build command before `next build`; `POSTGRES_URL_NON_POOLING` must be available at build time.
+  - Docker: `docker build --target migrate -t <migrate image> .`, then `docker run --rm -e POSTGRES_URL_NON_POOLING=... <migrate image>`.
+- The database role needs DDL rights (`CREATE TABLE`, `CREATE TYPE`, write on `_prisma_migrations`); production
+  never needs `CREATEDB`.
+- **Development:** after editing `src/server/prisma/schema.prisma`, run `npx prisma migrate dev --name <change>`
+  against a local database (needs `CREATEDB` for the shadow database) and commit the new directory.
+  `npm run db:push` remains for throwaway prototyping only.
+
+## Additional Resources
 
 - Prisma documentation: [https://www.prisma.io/docs/](https://www.prisma.io/docs/)

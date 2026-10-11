@@ -18,6 +18,14 @@ ENV NODE_ENV=development
 RUN npm ci
 
 
+# Migrate: run once per release before the rollout (k8s Job, or an init container with replicas 1).
+# The runner image has dev dependencies pruned (builder stage), so the prisma CLI is only available in this stage.
+# Needs POSTGRES_URL_NON_POOLING. Runs as the unprivileged node user: migrate deploy only reads the image.
+FROM deps AS migrate
+USER node
+CMD ["npx", "prisma", "migrate", "deploy"]
+
+
 # Builder
 FROM base AS builder
 WORKDIR /app
