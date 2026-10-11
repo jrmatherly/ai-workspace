@@ -24,7 +24,9 @@ export function safeNextPath(next: string | string[] | undefined, origin: string
   if (typeof next !== 'string' || next.includes('\\')) return '/';
   try {
     const url = new URL(next, origin);
-    return url.origin === origin ? url.pathname + url.search : '/';
+    // '/..//evil.com' normalises to the pathname '//evil.com', same origin here but protocol-relative once redirected to
+    if (url.origin !== origin || url.pathname.startsWith('//')) return '/';
+    return url.pathname + url.search;
   } catch {
     return '/';
   }
