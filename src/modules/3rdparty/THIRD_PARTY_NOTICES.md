@@ -47,7 +47,7 @@ Users are advised to review the license terms of the original repository.
 
 **License:** [Apache-2.0](https://github.com/mozilla/pdf.js/blob/master/LICENSE), Copyright 2024 Mozilla Foundation. The full license text is in the file header.
 
-The copy must match the installed `pdfjs-dist` version (5.4.54 today); `src/common/util/pdfUtils.test.ts` checks it. After a bump, copy `node_modules/pdfjs-dist/build/pdf.worker.min.mjs` to `public/workers/`.
+The copy must match the installed `pdfjs-dist` version (5.4.624 today); `src/common/util/pdfUtils.test.ts` checks it. After a bump, copy `node_modules/pdfjs-dist/build/pdf.worker.min.mjs` to `public/workers/`.
 
 ---
 

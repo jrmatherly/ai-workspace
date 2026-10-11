@@ -55,7 +55,7 @@ eslint-plugin-import 2.32.0, eslint-plugin-jsx-a11y 6.10.2 and eslint-plugin-rea
 | Package | Current | Latest | Why it stays |
 | --- | --- | --- | --- |
 | @mui/icons-material | 7.3.11 | 9.5.0 | 9.x re-exports `createSvgIcon` from `@mui/material/SvgIcon`, which the webpack alias maps to `@mui/joy/SvgIcon`, a file without it. Blocked until the alias can supply it |
-| pdfjs-dist | 5.4.54 | 6.4.299 | 6.0 requires `AbortSignal.any()`, `:dir()`, `light-dark()` and CSS nesting natively (Chrome 125, Safari 18); gated on raising the browser floor from Chrome 110 / Safari 16.4 |
+| pdfjs-dist | 5.4.624 | 6.4.299 | 5.4.624 is the last build before 5.5 raised the Chrome minimum to 118 (pdf.js PR 20645); 6.0 requires `AbortSignal.any()`, `:dir()`, `light-dark()` and CSS nesting natively (Chrome 125, Safari 18). Gated on raising the browser floor from Chrome 110 / Safari 16.4. Note the modern build we import already calls `AbortSignal.any()` and `Promise.withResolvers()` at 5.4.x, so the stated floors are pdf.js's legacy-build numbers, not a measured floor for ours |
 | prisma | 7.10.0 | 8.0.0-rc.22 | `latest` points at an 8.0 release candidate. `@prisma/client` and `@prisma/adapter-pg` stay on 7.10.0 with it; Dependabot ignores majors |
 
 Not listed by `npm outdated` but deliberately held: `typescript` as the `@typescript/typescript6` alias (6.0.2 is its only release; `tsc` is 7.0.2 from `@typescript/native`).

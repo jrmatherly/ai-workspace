@@ -65,7 +65,7 @@
     "nanoid": "^6.0.2",
     "next": "16.4.0",
     "nprogress": "^0.2.0",
-    "pdfjs-dist": "5.4.54",
+    "pdfjs-dist": "5.4.624",
     "posthog-js": "1.438.7",
     "posthog-node": "5.55.2",
     "prismjs": "^1.30.0",
