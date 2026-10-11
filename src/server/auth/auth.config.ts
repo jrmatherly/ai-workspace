@@ -34,7 +34,14 @@ export interface AuthConfig {
 
 export type AuthRole = 'admin' | 'user';
 
-export type AuthEnv = Partial<typeof env>;
+export type AuthEnv = Partial<Pick<typeof env,
+  | 'AUTH_SECRET' | 'AUTH_URL'
+  | 'AUTH_OIDC_ISSUER' | 'AUTH_OIDC_NAME' | 'AUTH_OIDC_CLIENT_ID' | 'AUTH_OIDC_CLIENT_SECRET'
+  | 'AUTH_GOOGLE_CLIENT_ID' | 'AUTH_GOOGLE_CLIENT_SECRET'
+  | 'AUTH_GITHUB_CLIENT_ID' | 'AUTH_GITHUB_CLIENT_SECRET'
+  | 'AUTH_MICROSOFT_CLIENT_ID' | 'AUTH_MICROSOFT_CLIENT_SECRET' | 'AUTH_MICROSOFT_TENANT_ID'
+  | 'AUTH_ALLOWED_EMAILS' | 'AUTH_ADMIN_EMAILS'
+  | 'POSTGRES_PRISMA_URL' | 'POSTGRES_URL_NON_POOLING'>>;
 
 const MULTI_TENANT_AUTHORITIES = ['common', 'organizations', 'consumers'];
 
