@@ -58,10 +58,8 @@ COPY . .
 
 # Build the application
 ENV NODE_ENV=production
-RUN npm run build
-
-# Reduce installed packages to production-only
-RUN npm prune --omit=dev
+RUN npm run build \
+ && npm prune --omit=dev
 
 
 # Runner
@@ -69,6 +67,8 @@ FROM base AS runner
 WORKDIR /app
 
 # As user
+# an apk version pin breaks the build once Alpine rotates the package
+# hadolint ignore=DL3018
 RUN addgroup --system --gid 1001 nodejs \
  && adduser --system --uid 1001 nextjs \
  && apk add --no-cache openssl
@@ -88,7 +88,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/*.json ./.next/
 ENV NODE_ENV=production
 
 # Run as non-root user
-USER nextjs
+USER 1001:1001
 
 # Expose port 3000 for the application to listen on
 EXPOSE 3000
