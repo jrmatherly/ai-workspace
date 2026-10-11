@@ -62,7 +62,7 @@ const REPO = 'https://github.com/jrmatherly/ai-workspace';
 const UPSTREAM_REPO = 'https://github.com/enricoros/big-AGI'; // fork origin: only for links to its historical issue threads
 
 export const BaseProduct = {
-  ProductName: 'Big-AGI',
+  ProductName: 'AI Workspace',
   ProductURL: REPO,
   // ecosystem
   DocsBaseSite: REPO + '/blob/main/docs/',

@@ -61,7 +61,7 @@ export const DevNewsItem: NewsItem = {
   versionName: 'Development Build',
   versionDate: undefined,
   items: [
-    { text: <>You&apos;re running an unsupported <B>developer build</B> of Big-AGI Open {_frontendPkgVersion}</> },
+    { text: <>You&apos;re running an unsupported <B>developer build</B> of AI Workspace {_frontendPkgVersion}</> },
     { text: <>Please report screenshots of breakages and console error messages</> },
     { text: <ExternalLink href={BaseProduct.NewsSite}>Latest releases</ExternalLink> },
   ],

@@ -138,7 +138,7 @@ function _createDLLMFromModelDescription(d: ModelDescriptionSchema, service: DMo
   // DLLM is a fundamental type in our application
   const dllm: DLLM = {
 
-    // this id is Big-AGI specific, not the vendor's
+    // this id is AI Workspace specific, not the vendor's
     id: `${service.id}-${_clientIdWithVariant(d.id, d.idVariant)}`,
 
     // factory properties

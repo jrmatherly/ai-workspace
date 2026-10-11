@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Inspect · Heal - big-AGI</title>
+  <title>Inspect · Heal - AI Workspace</title>
   <link rel="stylesheet" href="/dev/inspect/_inspect.css" />
 </head>
 <body>
@@ -13,11 +13,11 @@
       <div class="brand"><a href="/dev">Inspect</a><span class="sub">/ heal</span></div>
     </header>
     <div class="tagline">Detects known corruption &amp; bloat and offers confirmed repairs. Everything runs on your device.</div>
-    <div class="warnbar danger">⚠ <b>Do NOT run these unless you know what you are doing.</b> Each repair permanently modifies this browser's storage and asks you to type a confirmation. Deleting a synced database re-downloads from the server, but local-only unsynced changes are lost. <b>Reload big-AGI</b> afterward.</div>
+    <div class="warnbar danger">⚠ <b>Do NOT run these unless you know what you are doing.</b> Each repair permanently modifies this browser's storage and asks you to type a confirmation. Deleting a synced database re-downloads from the server, but local-only unsynced changes are lost. <b>Reload AI Workspace</b> afterward.</div>
 
     <div class="toolbar">
       <button class="primary" id="btn-rescan">Re-scan</button>
-      <button id="btn-reload" onclick="location.href='/'">Reload big-AGI</button>
+      <button id="btn-reload" onclick="location.href='/'">Reload AI Workspace</button>
       <button id="btn-heal-storage" onclick="location.href='/dev/inspect/storage?heal=1'">Open Storage for Healing</button>
       <button id="btn-copy">Copy for GitHub</button>
       <div class="spacer"></div>
@@ -74,7 +74,7 @@
         var ok = await canOpen(d.name);
         if (!ok) {
           (function (name) {
-            F.push({ sev: 'issue', title: 'Zync database "' + name + '" is unopenable', detail: 'This triggers the "Cannot Launch big-AGI" screen. Deleting it lets the app recreate it and re-sync from the server. Local-only changes that were never synced would be lost.', actions: [{ label: 'Delete "' + name + '"', danger: true, confirmPhrase: name, confirmText: 'Delete the corrupted database "' + name + '". The app will recreate it and re-download synced data; unsynced local changes will be lost.\n\nType the database name (' + name + ') to confirm:', run: function () { return deleteDB(name); } }] });
+            F.push({ sev: 'issue', title: 'Zync database "' + name + '" is unopenable', detail: 'This triggers the "Cannot Launch AI Workspace" screen. Deleting it lets the app recreate it and re-sync from the server. Local-only changes that were never synced would be lost.', actions: [{ label: 'Delete "' + name + '"', danger: true, confirmPhrase: name, confirmText: 'Delete the corrupted database "' + name + '". The app will recreate it and re-download synced data; unsynced local changes will be lost.\n\nType the database name (' + name + ') to confirm:', run: function () { return deleteDB(name); } }] });
           })(d.name);
         }
       }
@@ -145,7 +145,7 @@
       this.disabled = true; var prev = this.textContent; this.textContent = 'Working...';
       try {
         var r = await act.run();
-        toast(r === 'blocked' ? 'Blocked - close other big-AGI tabs and retry' : 'Done - reload big-AGI to apply');
+        toast(r === 'blocked' ? 'Blocked - close other AI Workspace tabs and retry' : 'Done - reload AI Workspace to apply');
       } catch (e) { toast('Failed: ' + (e && e.message || e)); this.textContent = prev; this.disabled = false; }
       await rescan();
     }
@@ -158,7 +158,7 @@
     }
 
     function toMarkdown() {
-      var L = ['# big-AGI - Heal report', '', '- Generated: ' + new Date().toISOString(), '- URL: ' + location.href, ''];
+      var L = ['# AI Workspace - Heal report', '', '- Generated: ' + new Date().toISOString(), '- URL: ' + location.href, ''];
       FINDINGS.forEach(function (f) { L.push('- [' + f.sev.toUpperCase() + '] ' + f.title + ' - ' + f.detail); });
       return L.join('\n') + '\n';
     }

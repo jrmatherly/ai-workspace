@@ -8,7 +8,7 @@ export const DBLOBS_DEBUG_GC = false;
 
 
 /**
- * Dexie DB for Big-AGI
+ * Dexie DB for AI Workspace (the database keeps the legacy name 'Big-AGI')
  * - assets: we store large assets like images/audio/video/documents...
  *
  * [DEV NOTE] To delete the full DB (don't do it!):

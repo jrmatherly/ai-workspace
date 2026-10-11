@@ -130,9 +130,9 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     const isChunkLoad = isChunkLoadError(error);
     const heading = isChunkLoad ? 'Update Required' : 'Oops, we hit a snag';
     const message = isChunkLoad
-      ? 'A part of Big-AGI could not be loaded. This usually happens when the app has been updated while this tab is still running, '
+      ? `A part of ${BaseProduct.ProductName} could not be loaded. This usually happens when the app has been updated while this tab is still running, `
         + 'so the loaded app and deployed files are out of sync. Reloading should fetch the current version.'
-      : `An unexpected error occurred.${outer ? ' Please try reloading Big-AGI.' : ''}`;
+      : `An unexpected error occurred.${outer ? ` Please try reloading ${BaseProduct.ProductName}.` : ''}`;
 
     if (hasError && error)
       return fallback ? fallback : (
@@ -184,7 +184,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1rem' }}>
               {outer || isChunkLoad ? (
                 <button className='button' onClick={() => window.location.reload()}>
-                  Reload Big-AGI
+                  Reload {BaseProduct.ProductName}
                 </button>
               ) : (
                 <button className='button' onClick={() => this.resetErrorBoundary()}>

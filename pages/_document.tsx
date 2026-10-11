@@ -58,7 +58,7 @@ export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
         <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify({
           '@context': 'https://schema.org',
           '@type': 'SoftwareApplication',
-          'name': 'Big-AGI',
+          'name': Brand.Title.Base,
           'url': siteOrigin || Brand.URIs.Home,
           'applicationCategory': 'ProductivityApplication',
           'operatingSystem': 'All, Web',

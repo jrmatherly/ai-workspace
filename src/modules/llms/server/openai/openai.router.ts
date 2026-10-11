@@ -213,7 +213,7 @@ export const llmOpenAIRouter = createTRPCRouter({
           ...restConfig, // includes response_format for LocalAI
           model: model as any, // [LocalAI] Fix: LocalAI wants 'stablediffusion' as model name
           n: count,
-          user: config.user || 'Big-AGI',
+          user: config.user || 'AI-Workspace',
         };
 
         // auto-selects the output image mime type - or defaults to the first one
@@ -232,7 +232,7 @@ export const llmOpenAIRouter = createTRPCRouter({
         if (count > 1) requestBody.append('n', '' + count);
         if (quality && (quality as string) !== 'auto') requestBody.append('quality', quality);
         if (size && (size as string) !== 'auto') requestBody.append('size', size);
-        requestBody.append('user', user || 'Big-AGI');
+        requestBody.append('user', user || 'AI-Workspace');
 
         // append input images
         const imagesCount = editConfig.inputImages.length;

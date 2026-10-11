@@ -12,7 +12,7 @@ import type { DModelsServiceId } from './llms.service.types';
 
 
 /**
- * Identifies a model in the DB. Used to refer to Big-AGI client-side models, by their
+ * Identifies a model in the DB. Used to refer to AI Workspace client-side models, by their
  * IDs only. E.g. will use hooks with the store to react to them.
  */
 export type DLLMId = string;

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Inspect · Boot Doctor - big-AGI</title>
+  <title>Inspect · Boot Doctor - AI Workspace</title>
   <link rel="stylesheet" href="/dev/inspect/_inspect.css" />
 </head>
 <body>
@@ -12,7 +12,7 @@
     <header>
       <div class="brand"><a href="/dev">Inspect</a><span class="sub">/ doctor</span></div>
     </header>
-    <div class="tagline">A one-glance health check of the things that break big-AGI's boot. Read-only, it runs entirely on your device.</div>
+    <div class="tagline">A one-glance health check of the things that break AI Workspace's boot. Read-only, it runs entirely on your device.</div>
 
     <div class="toolbar">
       <button class="primary" id="btn-copy">Copy for GitHub</button>
@@ -118,7 +118,7 @@
             if (missing.length) add('warn', 'Zync DB ' + name, 'v' + (list[i].version || '?') + ' opens, but missing store(s): ' + missing.join(', '));
             else add('pass', 'Zync DB ' + name, 'v' + (list[i].version || '?') + ' opens, all stores present');
           } catch (e) {
-            add('fail', 'Zync DB ' + name, 'UNOPENABLE (' + e + ') - this triggers the "Cannot Launch big-AGI" screen. Heal can delete it (data re-syncs).');
+            add('fail', 'Zync DB ' + name, 'UNOPENABLE (' + e + ') - this triggers the "Cannot Launch AI Workspace" screen. Heal can delete it (data re-syncs).');
           }
         } else if (LEGACY_DBS[name]) {
           add('info', 'Legacy DB ' + name, LEGACY_DBS[name] + ' still present - Heal can remove it to reclaim space');
@@ -155,7 +155,7 @@
     }
 
     function toMarkdown() {
-      var L = ['# big-AGI - Boot Doctor', '', '- Generated: ' + new Date().toISOString(), '- URL: ' + location.href, '- User agent: ' + navigator.userAgent, ''];
+      var L = ['# AI Workspace - Boot Doctor', '', '- Generated: ' + new Date().toISOString(), '- URL: ' + location.href, '- User agent: ' + navigator.userAgent, ''];
       var fails = CHECKS.filter(function (c) { return c.status === 'fail'; }).length;
       var warns = CHECKS.filter(function (c) { return c.status === 'warn'; }).length;
       L.push('**Verdict:** ' + (fails ? (fails + ' FAIL') : warns ? (warns + ' WARN') : 'all clear') + (warns && fails ? ', ' + warns + ' WARN' : ''));

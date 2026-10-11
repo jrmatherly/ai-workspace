@@ -653,7 +653,7 @@ async function createFlashObject(backupType: 'full' | 'partial' | 'auto-before-r
 
 
 /**
- * Backup and Restore (Flashing) functionality for Big-AGI client-side data.
+ * Backup and Restore (Flashing) functionality for AI Workspace client-side data.
  * Saves and fully restores localStorage and IndexedDB data.
  */
 export function FlashRestore(props: { unlockRestore?: boolean }) {
@@ -735,7 +735,7 @@ export function FlashRestore(props: { unlockRestore?: boolean }) {
       const currentSchemaVersion = BACKUP_FORMAT_VERSION_NUMBER;
       const backupSchemaVersion = data.schemaVersion || 0;
       if (backupSchemaVersion > currentSchemaVersion)
-        setSchemaVersionWarning(`WARNING: You are restoring from an newer Big-AGI version to this one. This is a DOWNGRADE and may cause data loss or application errors.`);
+        setSchemaVersionWarning(`WARNING: You are restoring from a newer AI Workspace version to this one. This is a DOWNGRADE and may cause data loss or application errors.`);
       else {
         // Check for tenant slug mismatch
         const currentTenantSlug = Release.TenantSlug;
@@ -774,7 +774,7 @@ export function FlashRestore(props: { unlockRestore?: boolean }) {
       //     'auto-before-restore',
       //     true, // auto-backup with streaming
       //     false, // auto-backup without images
-      //     `Big-AGI-auto-pre-flash-${dateStr}.json`,
+      //     `AI-Workspace-auto-pre-flash-${dateStr}.json`,
       //   );
       //   logger.info('Created auto-backup before restore');
       // } catch (error: any) {
@@ -997,7 +997,7 @@ export function FlashBackup(props: {
         includeImages,
         includeSettings,
         true, // includeIndexedDB - full backup includes everything
-        `Big-AGI-${tradeFileVariant()}-flash${includeImages ? '+images' : ''}${includeSettings ? '' : '-nosets'}${event.ctrlKey ? '-download' : ''}-${dateStr}.json`,
+        `AI-Workspace-${tradeFileVariant()}-flash${includeImages ? '+images' : ''}${includeSettings ? '' : '-nosets'}${event.ctrlKey ? '-download' : ''}-${dateStr}.json`,
       );
       setBackupState(success ? 'success' : 'idle');
       if (typeof success === 'number')
