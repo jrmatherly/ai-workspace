@@ -48,3 +48,6 @@ docs/superpowers/
 
 # per-user Claude Code settings
 .claude/settings.local.json
+
+# written by next (build, dev, typegen); its import path follows distDir, so it is regenerated, not tracked
+next-env.d.ts

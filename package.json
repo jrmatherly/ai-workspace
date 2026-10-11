@@ -19,7 +19,7 @@
     "start": "next start",
     "lint": "eslint .",
     "lint:md": "markdownlint-cli2",
-    "pretscheck": "npm install",
+    "pretscheck": "npm install && next typegen",
     "tscheck": "tsc --noEmit --pretty && tsc --noEmit --pretty -p tools/tsconfig.json",
     "test": "cross-env NODE_ENV=development tsx --test \"src/**/*.test.ts\"",
     "postinstall": "prisma generate --no-hints",
