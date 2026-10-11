@@ -53,9 +53,10 @@ ENV NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build the application
+# Build the application (the generated Prisma client lives under src/ and is dockerignored, so regenerate here)
 ENV NODE_ENV=production
-RUN npm run build \
+RUN npx prisma generate --no-hints \
+  && npm run build \
   && npm prune --omit=dev
 
 
@@ -64,16 +65,12 @@ FROM base AS runner
 WORKDIR /app
 
 # As user
-# an apk version pin breaks the build once Alpine rotates the package
-# hadolint ignore=DL3018
 RUN addgroup --system --gid 1001 nodejs \
-  && adduser --system --uid 1001 nextjs \
-  && apk add --no-cache openssl
+  && adduser --system --uid 1001 nextjs
 
 # Copy Built app
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nextjs:nodejs /app/src/server/prisma ./src/server/prisma
 # Instead of `COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next`, we only extract some parts, excluding .next/cache which is build time only:
 COPY --from=builder --chown=nextjs:nodejs /app/.next/BUILD_ID ./.next/
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
