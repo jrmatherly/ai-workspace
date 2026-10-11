@@ -1,7 +1,7 @@
 <!--
   Upstream snapshot - DO NOT EDIT - run _upstream/sync.sh to refresh
   Source: https://ai.google.dev/gemini-api/docs/interactions-breaking-changes-may-2026.md.txt
-  Synced: 2026-06-02
+  Synced: 2026-10-11
   Consumed by: gemini.interactions.wiretypes.ts, gemini.interactions.parser.ts, gemini.interactionsCreate.ts
   Companion: ./gemini.interactions.spec.md, ./gemini.interactions.guide.md, ./gemini.deep-research.guide.md
 -->
@@ -25,19 +25,6 @@ of changes:
 Follow the steps in [How to migrate to the new schema](https://ai.google.dev/gemini-api/docs/interactions-breaking-changes-may-2026#how-to-migrate) to
 update your integration.
 
-> [!NOTE]
-> **Automate this migration with a coding agent.** If you use
-> a coding agent that supports skills (like Gemini CLI or Jules), install the
-> [Gemini
-> Interactions API skill](https://ai.google.dev/gemini-api/docs/coding-agents#gemini-interactions-api) and run:
->
-> ```
-> /gemini-interactions-api migrate my app to the new steps schema
-> ```
->
-> The skill applies the breaking changes described in this
-> guide.
-
 ## Core change: `outputs` to `steps`
 
 The new schema replaces the `outputs` array with a `steps` array.
@@ -56,7 +43,7 @@ returns the full step timeline, including the initial `user_input` step.
 
     # Request
     interaction = client.interactions.create(
-        model="gemini-3.5-flash", input="Tell me a joke."
+        model="gemini-3.8-flash", input="Tell me a joke."
     )
 
     # Response access
@@ -66,7 +53,7 @@ returns the full step timeline, including the initial `user_input` step.
 
     // Request
     const interaction = await client.interactions.create({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         input: 'Tell me a joke.'
     });
 
@@ -78,7 +65,7 @@ returns the full step timeline, including the initial `user_input` step.
     curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions?key=$GEMINI_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "input": "Tell me a joke."
       }'
 
@@ -100,7 +87,7 @@ returns the full step timeline, including the initial `user_input` step.
 
     # Request
     interaction = client.interactions.create(
-        model="gemini-3.5-flash", input="Tell me a joke."
+        model="gemini-3.8-flash", input="Tell me a joke."
     )
 
     # Response access (Recommended sugar)
@@ -110,7 +97,7 @@ returns the full step timeline, including the initial `user_input` step.
 
     // Request
     const interaction = await client.interactions.create({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         input: 'Tell me a joke.'
     });
 
@@ -120,7 +107,7 @@ returns the full step timeline, including the initial `user_input` step.
 > [!NOTE]
 > **Note:** For details on SDK convenience properties (including `.output_text`, `.output_image`, and `.output_audio`), see \[Access outputs with SDK convenience properties\]\[sdk-convenience\] in the overview.
 
-\[sdk-convenience\]: /gemini-api/docs/interactions#convenience-properties
+\[sdk-convenience\]: /gemini-api/docs/interactions-overview#sdk-sugar
 
 ### REST
 
@@ -129,7 +116,7 @@ returns the full step timeline, including the initial `user_input` step.
       -H "Content-Type: application/json" \
       -H "Api-Revision: 2026-05-20" \\
       -d '{
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "input": "Tell me a joke."
       }'
 
@@ -190,7 +177,7 @@ The request structure remains unchanged, but the response replaces the flat
     // Accessing function call in legacy schema
     for (const output of interaction.outputs) {
         if (output.type === 'function_call') {
-            console.log(`Calling {output.name} with {JSON.stringify(output.arguments)}`);
+            console.log(`Calling ${output.name} with ${JSON.stringify(output.arguments)}`);
         }
     }
 
@@ -229,7 +216,7 @@ The request structure remains unchanged, but the response replaces the flat
     // Accessing function call in new steps schema
     for (const step of interaction.steps) {
         if (step.type === 'function_call') {
-            console.log(`Calling {step.name} with {JSON.stringify(step.arguments)}`);
+            console.log(`Calling ${step.name} with ${JSON.stringify(step.arguments)}`);
         }
     }
 
@@ -280,9 +267,9 @@ moves them into the `steps` array. The following examples use Google Search.
     // Accessing search results in legacy schema
     for (const output of interaction.outputs) {
         if (output.type === 'google_search_call') {
-            console.log(`Searched for: {output.arguments.queries}`);
+            console.log(`Searched for: ${output.arguments.queries}`);
         } else if (output.type === 'google_search_result') {
-            console.log(`Found results: {output.result.renderedContent}`);
+            console.log(`Found results: ${output.result.renderedContent}`);
         }
     }
 
@@ -291,7 +278,7 @@ moves them into the `steps` array. The following examples use Google Search.
     curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions?key=$GEMINI_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "input": "Who won the last Super Bowl?",
         "tools": [
           { "type": "google_search" }
@@ -339,16 +326,16 @@ moves them into the `steps` array. The following examples use Google Search.
         if step.type == "google_search_call":
             print(f"Searched for: {step.arguments.queries}")
         elif step.type == "google_search_result":
-            print(f"Found results: {step.result.search_suggestions}")
+            print(f"Found results: {step.result[0].search_suggestions}")
 
 ### JavaScript
 
     // Accessing search results in new steps schema
     for (const step of interaction.steps) {
         if (step.type === 'google_search_call') {
-            console.log(`Searched for: {step.arguments.queries}`);
+            console.log(`Searched for: ${step.arguments.queries}`);
         } else if (step.type === 'google_search_result') {
-            console.log(`Found results: {step.result.searchSuggestions}`);
+            console.log(`Found results: ${step.result[0].search_suggestions}`);
         }
     }
 
@@ -359,7 +346,7 @@ moves them into the `steps` array. The following examples use Google Search.
       -H "Content-Type: application/json" \
       -H "Api-Revision: 2026-05-20" \\
       -d '{
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "input": "Who won the last Super Bowl?",
         "tools": [
           { "type": "google_search" }
@@ -445,7 +432,7 @@ unary calls where you receive the complete function call object at once.
 
     # Legacy streaming used content.delta
     stream = client.interactions.create(
-        model="gemini-3.5-flash",
+        model="gemini-3.8-flash",
         input="Explain quantum entanglement in simple terms.",
         stream=True,
     )
@@ -459,7 +446,7 @@ unary calls where you receive the complete function call object at once.
 
     // Legacy streaming used content.delta
     const stream = await client.interactions.create({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         input: 'Explain quantum entanglement in simple terms.',
         stream: true,
     });
@@ -477,7 +464,7 @@ unary calls where you receive the complete function call object at once.
     curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions?key=$GEMINI_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "input": "Explain quantum entanglement in simple terms.",
         "stream": true
       }'
@@ -504,11 +491,11 @@ unary calls where you receive the complete function call object at once.
 
     # Consuming stream and handling new event types
     for event in client.interactions.create(
-        model="gemini-3.5-flash",
+        model="gemini-3.8-flash",
         input="Tell me a story.",
         stream=True,
     ):
-        if event.type == "step.delta":  # CHANGED: step.delta instead of content.delta
+        if event.event_type == "step.delta":  # CHANGED: step.delta instead of content.delta
             if event.delta.type == "text":
                 print(event.delta.text, end="")
 
@@ -516,13 +503,13 @@ unary calls where you receive the complete function call object at once.
 
     // Consuming stream and handling new event types
     const stream = await client.interactions.create({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         input: 'Tell me a story.',
         stream: true,
     });
 
     for await (const event of stream) {
-        if (event.type === 'step.delta') {  // CHANGED: step.delta instead of content.delta
+        if (event.event_type === 'step.delta') {  // CHANGED: step.delta instead of content.delta
             if (event.delta.type === 'text') {
                 process.stdout.write(event.delta.text);
             }
@@ -537,14 +524,14 @@ unary calls where you receive the complete function call object at once.
        -H "Accept: text/event-stream" \
        -H "Api-Revision: 2026-05-20" \\
        -d '{
-         "model": "gemini-3.5-flash",
+         "model": "gemini-3.8-flash",
          "input": "Tell me a story.",
          "stream": true
        }'
 
      // Response (SSE Lines)
      // event: interaction.created
-     // data: {"interaction": {"id": "int_xyz", "status": "in_progress", "object": "interaction", "model": "gemini-3.5-flash"}, "event_type": "interaction.created"}
+     // data: {"interaction": {"id": "int_xyz", "status": "in_progress", "object": "interaction", "model": "gemini-3.8-flash"}, "event_type": "interaction.created"}
      //
      // event: interaction.in_progress
      // data: {"interaction_id": "int_xyz", "event_type": "interaction.in_progress"}
@@ -599,7 +586,7 @@ MIME type and JSON schema inside a `response_format` object with
 ### Python
 
     interaction = client.interactions.create(
-        model="gemini-3.5-flash",
+        model="gemini-3.8-flash",
         input="Summarize this article.",
         response_mime_type="application/json",
         response_format={
@@ -615,7 +602,7 @@ MIME type and JSON schema inside a `response_format` object with
 ### JavaScript
 
     const interaction = await client.interactions.create({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         input: 'Summarize this article.',
         response_mime_type: 'application/json',
         response_format: {
@@ -633,7 +620,7 @@ MIME type and JSON schema inside a `response_format` object with
     curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions?key=$GEMINI_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "input": "Summarize this article.",
         "response_mime_type": "application/json",
         "response_format": {
@@ -649,7 +636,7 @@ MIME type and JSON schema inside a `response_format` object with
 ### Python
 
     interaction = client.interactions.create(
-        model="gemini-3.5-flash",
+        model="gemini-3.8-flash",
         input="Summarize this article.",
         # response_mime_type is removed --- specify mime_type inside response_format
         response_format={
@@ -670,7 +657,7 @@ MIME type and JSON schema inside a `response_format` object with
 ### JavaScript
 
     const interaction = await client.interactions.create({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         input: 'Summarize this article.',
         // response_mime_type is removed --- specify mime_type inside response_format
         response_format: {
@@ -695,7 +682,7 @@ MIME type and JSON schema inside a `response_format` object with
       -H "Content-Type: application/json" \
       -H "Api-Revision: 2026-05-20" \\
       -d '{
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "input": "Summarize this article.",
         "response_format": {
           "type": "text",
@@ -719,7 +706,7 @@ image output settings in a `response_format` entry with `"type": "image"`.
 ### Python
 
     interaction = client.interactions.create(
-        model="gemini-3.5-flash",
+        model="gemini-3.8-flash",
         input="Generate an image of a sunset over the ocean.",
         generation_config={
             "image_config": {
@@ -732,7 +719,7 @@ image output settings in a `response_format` entry with `"type": "image"`.
 ### JavaScript
 
     const interaction = await client.interactions.create({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         input: 'Generate an image of a sunset over the ocean.',
         generation_config: {
             image_config: {
@@ -747,7 +734,7 @@ image output settings in a `response_format` entry with `"type": "image"`.
     curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions?key=$GEMINI_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "input": "Generate an image of a sunset over the ocean.",
         "generation_config": {
           "image_config": {
@@ -762,7 +749,7 @@ image output settings in a `response_format` entry with `"type": "image"`.
 ### Python
 
     interaction = client.interactions.create(
-        model="gemini-3.5-flash",
+        model="gemini-3.8-flash",
         input="Generate an image of a sunset over the ocean.",
         # image_config is removed from generation_config --- use response_format
         response_format={
@@ -776,7 +763,7 @@ image output settings in a `response_format` entry with `"type": "image"`.
 ### JavaScript
 
     const interaction = await client.interactions.create({
-        model: 'gemini-3.5-flash',
+        model: 'gemini-3.8-flash',
         input: 'Generate an image of a sunset over the ocean.',
         // image_config is removed from generation_config --- use response_format
         response_format: {
@@ -794,13 +781,113 @@ image output settings in a `response_format` entry with `"type": "image"`.
       -H "Content-Type: application/json" \
       -H "Api-Revision: 2026-05-20" \\
       -d '{
-        "model": "gemini-3.5-flash",
+        "model": "gemini-3.8-flash",
         "input": "Generate an image of a sunset over the ocean.",
         "response_format": {
           "type": "image",
           "mime_type": "image/jpeg",
           "aspect_ratio": "1:1",
           "image_size": "1K"
+        }
+      }'
+
+### Audio configuration
+
+The new schema replaces `response_modalities: ["audio"]` with a `response_format` entry of `"type": "audio"`.
+
+#### Before (legacy)
+
+### Python
+
+    interaction = client.interactions.create(
+        model="gemini-3.1-flash-tts-preview",
+        input="Say cheerfully: Have a wonderful day!",
+        response_modalities=["audio"],
+        generation_config={
+            "speech_config": [
+                {"voice": "Kore"}
+            ]
+        }
+    )
+
+### JavaScript
+
+    const interaction = await client.interactions.create({
+        model: 'gemini-3.1-flash-tts-preview',
+        input: 'Say cheerfully: Have a wonderful day!',
+        response_modalities: ['audio'],
+        generation_config: {
+            speech_config: [
+                { voice: 'Kore' }
+            ]
+        },
+    });
+
+### REST
+
+    curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions?key=$GEMINI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "model": "gemini-3.1-flash-tts-preview",
+        "input": "Say cheerfully: Have a wonderful day!",
+        "response_modalities": ["audio"],
+        "generation_config": {
+          "speech_config": [
+            { "voice": "Kore" }
+          ]
+        }
+      }'
+
+#### After (new schema)
+
+### Python
+
+    interaction = client.interactions.create(
+        model="gemini-3.1-flash-tts-preview",
+        input="Say cheerfully: Have a wonderful day!",
+        # response_modalities is removed --- use response_format
+        response_format={
+            "type": "audio"
+        },
+        generation_config={
+            "speech_config": [
+                {"voice": "Kore"}
+            ]
+        }
+    )
+
+### JavaScript
+
+    const interaction = await client.interactions.create({
+        model: 'gemini-3.1-flash-tts-preview',
+        input: 'Say cheerfully: Have a wonderful day!',
+        // response_modalities is removed --- use response_format
+        response_format: {
+            type: 'audio'
+        },
+        generation_config: {
+            speech_config: [
+                { voice: 'Kore' }
+            ]
+        },
+    });
+
+### REST
+
+    # Opt-in needed before May 26th
+    curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions?key=$GEMINI_API_KEY" \
+      -H "Content-Type: application/json" \
+      -H "Api-Revision: 2026-05-20" \
+      -d '{
+        "model": "gemini-3.1-flash-tts-preview",
+        "input": "Say cheerfully: Have a wonderful day!",
+        "response_format": {
+          "type": "audio"
+        },
+        "generation_config": {
+          "speech_config": [
+            { "voice": "Kore" }
+          ]
         }
       }'
 
@@ -855,4 +942,5 @@ until **June 8**, when the API permanently removes the legacy schema.
 - Replace `response_mime_type` with a `mime_type` field inside `response_format`. [See examples](https://ai.google.dev/gemini-api/docs/interactions-breaking-changes-may-2026#structured-output).
 - Wrap your existing `response_format` JSON schema inside a `{"type": "text", "schema": ...}` object. [See examples](https://ai.google.dev/gemini-api/docs/interactions-breaking-changes-may-2026#structured-output).
 - (Image Generation) Move `image_config` from `generation_config` to a `{"type": "image", ...}` entry in `response_format`. [See examples](https://ai.google.dev/gemini-api/docs/interactions-breaking-changes-may-2026#image-config).
+- (Speech Generation) Replace `response_modalities=["audio"]` with a `{"type": "audio"}` entry in `response_format`. [See examples](https://ai.google.dev/gemini-api/docs/interactions-breaking-changes-may-2026#audio-config).
 - (Multimodal) Convert `response_format` from a single object to an array when requesting multiple output modalities.

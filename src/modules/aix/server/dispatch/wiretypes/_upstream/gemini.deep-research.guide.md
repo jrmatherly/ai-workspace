@@ -1,14 +1,12 @@
 <!--
   Upstream snapshot - DO NOT EDIT - run _upstream/sync.sh to refresh
   Source: https://ai.google.dev/gemini-api/docs/deep-research.md.txt
-  Synced: 2026-06-03
+  Synced: 2026-10-11
   Consumed by: gemini.interactions.wiretypes.ts, gemini.interactions.parser.ts, gemini.interactionsCreate.ts, gemini.interactionsPoller.ts
   Companion: ./gemini.interactions.guide.md (the Interactions API guide)
 -->
 
-# Gemini Deep Research Agent
-
-The Gemini Deep Research Agent autonomously plans, executes, and synthesizes
+The Gemini Deep Research agent autonomously plans, executes, and synthesizes
 multi-step research tasks. Powered by Gemini, it navigates complex
 information landscapes to produce detailed, cited reports. New
 capabilities allow you to collaboratively plan with the agent, connect to
@@ -16,14 +14,13 @@ external tools using MCP servers, include
 visualizations (like charts and graphs), and provide documents directly
 as input.
 
-Research tasks involve iterative searching and reading and can take several
-minutes to complete. You must use background execution (set `background=true`)
+Research tasks involve iterative searching and reading and can take several minutes to complete. You must use [background execution](https://ai.google.dev/gemini-api/docs/background-execution) (set `background=true`)
 to run the agent asynchronously and poll for results or stream updates. See
-[Handling long running tasks](https://ai.google.dev/gemini-api/docs/deep-research#long-running-tasks) for more details.
+[Handling long-running tasks](https://ai.google.dev/gemini-api/docs/deep-research#long-running-tasks) for more details.
 
 > [!WARNING]
-> **Preview:** The Gemini Deep Research Agent is currently in preview. The Deep Research agent is exclusively available using the [Interactions
-> API](https://ai.google.dev/gemini-api/docs/interactions). You cannot access it through `generate_content`.
+> **Preview:** The Gemini Deep Research agent is currently in preview. The Deep Research agent is exclusively available using the [Interactions
+> API](https://ai.google.dev/gemini-api/docs). You cannot access it through `generate_content`.
 
 The following example shows how to start a research task in the background
 and poll for results.
@@ -46,7 +43,7 @@ and poll for results.
     while True:
         interaction = client.interactions.get(interaction.id)
         if interaction.status == "completed":
-            print(interaction.outputs[-1].text)
+            print(interaction.steps[-1].content[0].text)
             break
         elif interaction.status == "failed":
             print(f"Research failed: {interaction.error}")
@@ -70,13 +67,112 @@ and poll for results.
     while (true) {
         const result = await client.interactions.get(interaction.id);
         if (result.status === 'completed') {
-            console.log(result.outputs[result.outputs.length - 1].text);
+            console.log(result.steps.at(-1).content[0].text);
             break;
         } else if (result.status === 'failed') {
             console.log(`Research failed: ${result.error}`);
             break;
         }
         await new Promise(resolve => setTimeout(resolve, 10000));
+    }
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionStatus;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import com.google.genai.gaos.models.operations.GetInteractionByIdRequest;
+    import java.util.Collections;
+
+    Client client = new Client();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of("Research the history of Google TPUs."))
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+    System.out.println("Research started: " + interaction.id().orElse(""));
+
+    while (true) {
+      interaction =
+          client.interactions
+              .get(GetInteractionByIdRequest.builder().id(interaction.id().get()).build())
+              .interaction()
+              .get();
+      if (InteractionStatus.COMPLETED.equals(interaction.status().orElse(null))) {
+        System.out.println(interaction.outputText().orElse(""));
+        break;
+      } else if (InteractionStatus.FAILED.equals(interaction.status().orElse(null))) {
+        System.out.println("Research failed: " + interaction.errors().orElse(Collections.emptyList()));
+        break;
+      }
+      Thread.sleep(10000);
+    }
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "fmt"
+        "log"
+        "time"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        res, err := client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent:      interactions.AgentOption("deep-research-preview-04-2026"),
+                Input:      interactions.NewInteractionsInput("Research the history of Google TPUs."),
+                Background: genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+        interaction := res.Interaction
+        if interaction.ID != nil {
+            fmt.Printf("Research started: %s\n", *interaction.ID)
+        }
+
+        for {
+            getRes, err := client.Interactions.Get(ctx, operations.GetInteractionByIDRequest{
+                ID: *interaction.ID,
+            })
+            if err != nil {
+                log.Fatal(err)
+            }
+            interaction = getRes.Interaction
+            if interaction.Status == interactions.InteractionStatusCompleted {
+                if interaction.OutputText != nil {
+                    fmt.Println(*interaction.OutputText)
+                }
+                break
+            } else if interaction.Status == interactions.InteractionStatusFailed {
+                fmt.Printf("Research failed: %v\n", interaction.Errors)
+                break
+            }
+            time.Sleep(10 * time.Second)
+        }
     }
 
 ### REST
@@ -95,7 +191,7 @@ and poll for results.
     # curl -X GET "https://generativelanguage.googleapis.com/v1beta/interactions/INTERACTION_ID" \
     # -H "x-goog-api-key: $GEMINI_API_KEY"
 
-## Supported Versions
+## Supported versions
 
 The Deep Research agent comes in two versions:
 
@@ -104,13 +200,11 @@ The Deep Research agent comes in two versions:
 
 ## Collaborative planning
 
-> [!WARNING]
-> **Preview:** Collaborative planning allows you to review and refine the research plan before execution.
-
-Collaborative planning gives you control over the research direction
-before the agent starts its work. When enabled, the agent returns a
-proposed research plan instead of executing immediately. You can then
-review, modify, or approve the plan through multi-turn interactions.
+Collaborative planning gives you control over the research direction before the
+agent starts its work by letting you review and refine the research plan before
+execution. When enabled, the agent returns a proposed research plan instead of
+executing immediately. You can then review, modify, or approve the plan through
+multi-turn interactions.
 
 ### Step 1: Request a plan
 
@@ -138,7 +232,7 @@ returns a research plan instead of a full report.
     # Wait for and retrieve the plan
     while (result := client.interactions.get(id=plan_interaction.id)).status != "completed":
         time.sleep(5)
-    print(result.outputs[-1].text)
+    print(result.steps[-1].content[0].text)
 
 ### JavaScript
 
@@ -157,7 +251,112 @@ returns a research plan instead of a full report.
     while ((result = await client.interactions.get(planInteraction.id)).status !== 'completed') {
         await new Promise(r => setTimeout(r, 5000));
     }
-    console.log(result.outputs[result.outputs.length - 1].text);
+    console.log(result.steps.at(-1).content[0].text);
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.DeepResearchAgentConfig;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionStatus;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.ThinkingSummaries;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import com.google.genai.gaos.models.operations.GetInteractionByIdRequest;
+
+    Client client = new Client();
+
+    // First interaction: request a research plan
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of("Do some research on Google TPUs."))
+            .agentConfig(
+                DeepResearchAgentConfig.builder()
+                    .thinkingSummaries(ThinkingSummaries.AUTO)
+                    .collaborativePlanning(true)
+                    .build())
+            .background(true)
+            .build();
+
+    Interaction planInteraction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+    // Wait for and retrieve the plan
+    Interaction result;
+    while (true) {
+      result =
+          client.interactions
+              .get(GetInteractionByIdRequest.builder().id(planInteraction.id().get()).build())
+              .interaction()
+              .get();
+      if (InteractionStatus.COMPLETED.equals(result.status().orElse(null))) {
+        break;
+      }
+      Thread.sleep(5000);
+    }
+    System.out.println(result.outputText().orElse(""));
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "fmt"
+        "log"
+        "time"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        agentCfg := interactions.NewCreateAgentInteractionAgentConfig(interactions.DeepResearchAgentConfig{
+            ThinkingSummaries:     interactions.ThinkingSummariesAuto.ToPointer(),
+            CollaborativePlanning: genai.Ptr(true),
+        })
+
+        // First interaction: request a research plan
+        planRes, err := client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent:       interactions.AgentOption("deep-research-preview-04-2026"),
+                Input:       interactions.NewInteractionsInput("Do some research on Google TPUs."),
+                AgentConfig: &agentCfg,
+                Background:  genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        // Wait for and retrieve the plan
+        var result *interactions.Interaction
+        for {
+            getRes, err := client.Interactions.Get(ctx, operations.GetInteractionByIDRequest{
+                ID: *planRes.Interaction.ID,
+            })
+            if err != nil {
+                log.Fatal(err)
+            }
+            result = getRes.Interaction
+            if result.Status == interactions.InteractionStatusCompleted {
+                break
+            }
+            time.Sleep(5 * time.Second)
+        }
+        if result.OutputText != nil {
+            fmt.Println(*result.OutputText)
+        }
+    }
 
 ### REST
 
@@ -198,7 +397,7 @@ mode.
 
     while (result := client.interactions.get(id=refined_plan.id)).status != "completed":
         time.sleep(5)
-    print(result.outputs[-1].text)
+    print(result.steps[-1].content[0].text)
 
 ### JavaScript
 
@@ -218,7 +417,116 @@ mode.
     while ((result = await client.interactions.get(refinedPlan.id)).status !== 'completed') {
         await new Promise(r => setTimeout(r, 5000));
     }
-    console.log(result.outputs[result.outputs.length - 1].text);
+    console.log(result.steps.at(-1).content[0].text);
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.DeepResearchAgentConfig;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionStatus;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.ThinkingSummaries;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import com.google.genai.gaos.models.operations.GetInteractionByIdRequest;
+
+    Client client = new Client();
+    String planInteractionId = "PLAN_INTERACTION_ID";
+
+    // Second interaction: refine the plan
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(
+                InteractionsInput.of(
+                    "Focus more on the differences between Google TPUs and competitor hardware, and less on the history."))
+            .agentConfig(
+                DeepResearchAgentConfig.builder()
+                    .thinkingSummaries(ThinkingSummaries.AUTO)
+                    .collaborativePlanning(true)
+                    .build())
+            .previousInteractionId(planInteractionId)
+            .background(true)
+            .build();
+
+    Interaction refinedPlan =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+    Interaction result;
+    while (true) {
+      result =
+          client.interactions
+              .get(GetInteractionByIdRequest.builder().id(refinedPlan.id().get()).build())
+              .interaction()
+              .get();
+      if (InteractionStatus.COMPLETED.equals(result.status().orElse(null))) {
+        break;
+      }
+      Thread.sleep(5000);
+    }
+    System.out.println(result.outputText().orElse(""));
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "fmt"
+        "log"
+        "time"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        planInteractionID := "PLAN_INTERACTION_ID"
+        agentCfg := interactions.NewCreateAgentInteractionAgentConfig(interactions.DeepResearchAgentConfig{
+            ThinkingSummaries:     interactions.ThinkingSummariesAuto.ToPointer(),
+            CollaborativePlanning: genai.Ptr(true),
+        })
+
+        // Second interaction: refine the plan
+        refinedRes, err := client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent:                 interactions.AgentOption("deep-research-preview-04-2026"),
+                Input:                 interactions.NewInteractionsInput("Focus more on the differences between Google TPUs and competitor hardware, and less on the history."),
+                AgentConfig:           &agentCfg,
+                PreviousInteractionID: genai.Ptr(planInteractionID),
+                Background:            genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        var result *interactions.Interaction
+        for {
+            getRes, err := client.Interactions.Get(ctx, operations.GetInteractionByIDRequest{
+                ID: *refinedRes.Interaction.ID,
+            })
+            if err != nil {
+                log.Fatal(err)
+            }
+            result = getRes.Interaction
+            if result.Status == interactions.InteractionStatusCompleted {
+                break
+            }
+            time.Sleep(5 * time.Second)
+        }
+        if result.OutputText != nil {
+            fmt.Println(*result.OutputText)
+        }
+    }
 
 ### REST
 
@@ -259,7 +567,7 @@ start the research.
 
     while (result := client.interactions.get(id=final_report.id)).status != "completed":
         time.sleep(5)
-    print(result.outputs[-1].text)
+    print(result.steps[-1].content[0].text)
 
 ### JavaScript
 
@@ -279,7 +587,114 @@ start the research.
     while ((result = await client.interactions.get(finalReport.id)).status !== 'completed') {
         await new Promise(r => setTimeout(r, 5000));
     }
-    console.log(result.outputs[result.outputs.length - 1].text);
+    console.log(result.steps.at(-1).content[0].text);
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.DeepResearchAgentConfig;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionStatus;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.ThinkingSummaries;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import com.google.genai.gaos.models.operations.GetInteractionByIdRequest;
+
+    Client client = new Client();
+    String refinedPlanId = "REFINED_PLAN_ID";
+
+    // Third interaction: approve the plan and kick off research
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of("Plan looks good!"))
+            .agentConfig(
+                DeepResearchAgentConfig.builder()
+                    .thinkingSummaries(ThinkingSummaries.AUTO)
+                    .collaborativePlanning(false)
+                    .build())
+            .previousInteractionId(refinedPlanId)
+            .background(true)
+            .build();
+
+    Interaction finalReport =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+    Interaction result;
+    while (true) {
+      result =
+          client.interactions
+              .get(GetInteractionByIdRequest.builder().id(finalReport.id().get()).build())
+              .interaction()
+              .get();
+      if (InteractionStatus.COMPLETED.equals(result.status().orElse(null))) {
+        break;
+      }
+      Thread.sleep(5000);
+    }
+    System.out.println(result.outputText().orElse(""));
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "fmt"
+        "log"
+        "time"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        refinedPlanID := "REFINED_PLAN_ID"
+        agentCfg := interactions.NewCreateAgentInteractionAgentConfig(interactions.DeepResearchAgentConfig{
+            ThinkingSummaries:     interactions.ThinkingSummariesAuto.ToPointer(),
+            CollaborativePlanning: genai.Ptr(false),
+        })
+
+        // Third interaction: approve the plan and kick off research
+        finalRes, err := client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent:                 interactions.AgentOption("deep-research-preview-04-2026"),
+                Input:                 interactions.NewInteractionsInput("Plan looks good!"),
+                AgentConfig:           &agentCfg,
+                PreviousInteractionID: genai.Ptr(refinedPlanID),
+                Background:            genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        var result *interactions.Interaction
+        for {
+            getRes, err := client.Interactions.Get(ctx, operations.GetInteractionByIDRequest{
+                ID: *finalRes.Interaction.ID,
+            })
+            if err != nil {
+                log.Fatal(err)
+            }
+            result = getRes.Interaction
+            if result.Status == interactions.InteractionStatusCompleted {
+                break
+            }
+            time.Sleep(5 * time.Second)
+        }
+        if result.OutputText != nil {
+            fmt.Println(*result.OutputText)
+        }
+    }
 
 ### REST
 
@@ -300,12 +715,9 @@ start the research.
 
 ## Visualization
 
-> [!WARNING]
-> **Preview:** Visualization allows the agent to generate charts and graphs to support its findings.
-
 When `visualization` is set to `"auto"`, the agent can generate charts,
 graphs, and other visual elements to support its research findings.
-Generated images are included in the response outputs and streamed as
+Generated images are included in the response steps and streamed as
 `image` deltas. For best results, explicitly ask for visuals in your
 query --- for example, "Include charts showing trends over time" or
 "Generate graphics comparing market share." Setting `visualization` to
@@ -315,7 +727,11 @@ when the prompt requests them.
 ### Python
 
     import base64
-    from IPython.display import Image, display
+    import time
+
+    from google import genai
+
+    client = genai.Client()
 
     interaction = client.interactions.create(
         agent="deep-research-preview-04-2026",
@@ -332,15 +748,14 @@ when the prompt requests them.
     while (result := client.interactions.get(id=interaction.id)).status != "completed":
         time.sleep(5)
 
-    for output in result.outputs:
-        if output.type == "text":
-            print(output.text)
-        elif output.type == "image" and output.data:
-            image_bytes = base64.b64decode(output.data)
-            print(f"Received image: {len(image_bytes)} bytes")
-            # To display in a Jupyter notebook:
-            # from IPython.display import display, Image
-            # display(Image(data=image_bytes))
+    for step in result.steps:
+        if step.type == "model_output":
+            for content_item in step.content:
+                if content_item.type == "text":
+                    print(content_item.text)
+                elif content_item.type == "image" and content_item.data:
+                    image_bytes = base64.b64decode(content_item.data)
+                    print(f"Received image: {len(image_bytes)} bytes")
 
 ### JavaScript
 
@@ -365,11 +780,153 @@ when the prompt requests them.
         await new Promise(r => setTimeout(r, 5000));
     }
 
-    for (const output of result.outputs) {
-        if (output.type === 'text') {
-            console.log(output.text);
-        } else if (output.type === 'image' && output.data) {
-            console.log(`[Image Output: ${output.data.substring(0, 20)}...]`);
+    for (const step of result.steps) {
+        if (step.type === 'model_output') {
+            for (const contentItem of step.content) {
+                if (contentItem.type === 'text') {
+                    console.log(contentItem.text);
+                } else if (contentItem.type === 'image' && contentItem.data) {
+                    console.log(`[Image Output: ${contentItem.data.substring(0, 20)}...]`);
+                }
+            }
+        }
+    }
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.Content;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.DeepResearchAgentConfig;
+    import com.google.genai.gaos.models.interactions.ImageContent;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionStatus;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.ModelOutputStep;
+    import com.google.genai.gaos.models.interactions.Step;
+    import com.google.genai.gaos.models.interactions.TextContent;
+    import com.google.genai.gaos.models.interactions.Visualization;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import com.google.genai.gaos.models.operations.GetInteractionByIdRequest;
+    import java.util.Base64;
+    import java.util.Collections;
+
+    Client client = new Client();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(
+                InteractionsInput.of(
+                    "Analyze global semiconductor market trends. Include graphics showing market share changes."))
+            .agentConfig(DeepResearchAgentConfig.builder().visualization(Visualization.AUTO).build())
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+    System.out.println("Research started: " + interaction.id().orElse(""));
+
+    Interaction result;
+    while (true) {
+      result =
+          client.interactions
+              .get(GetInteractionByIdRequest.builder().id(interaction.id().get()).build())
+              .interaction()
+              .get();
+      if (InteractionStatus.COMPLETED.equals(result.status().orElse(null))) {
+        break;
+      }
+      Thread.sleep(5000);
+    }
+
+    for (Step step : result.steps().orElse(Collections.emptyList())) {
+      if (step instanceof ModelOutputStep) {
+        for (Content contentItem : ((ModelOutputStep) step).content().orElse(Collections.emptyList())) {
+          if (contentItem instanceof TextContent) {
+            System.out.println(((TextContent) contentItem).text().orElse(""));
+          } else if (contentItem instanceof ImageContent) {
+            ImageContent img = (ImageContent) contentItem;
+            if (img.data().isPresent()) {
+              byte[] imageBytes = Base64.getDecoder().decode(img.data().get());
+              System.out.println("Received image: " + imageBytes.length + " bytes");
+            }
+          }
+        }
+      }
+    }
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "encoding/base64"
+        "fmt"
+        "log"
+        "time"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        agentCfg := interactions.NewCreateAgentInteractionAgentConfig(interactions.DeepResearchAgentConfig{
+            Visualization: interactions.VisualizationAuto.ToPointer(),
+        })
+
+        res, err := client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent:       interactions.AgentOption("deep-research-preview-04-2026"),
+                Input:       interactions.NewInteractionsInput("Analyze global semiconductor market trends. Include graphics showing market share changes."),
+                AgentConfig: &agentCfg,
+                Background:  genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+        if res.Interaction.ID != nil {
+            fmt.Printf("Research started: %s\n", *res.Interaction.ID)
+        }
+
+        var result *interactions.Interaction
+        for {
+            getRes, err := client.Interactions.Get(ctx, operations.GetInteractionByIDRequest{
+                ID: *res.Interaction.ID,
+            })
+            if err != nil {
+                log.Fatal(err)
+            }
+            result = getRes.Interaction
+            if result.Status == interactions.InteractionStatusCompleted {
+                break
+            }
+            time.Sleep(5 * time.Second)
+        }
+
+        for _, step := range result.Steps {
+            if outStep := step.ModelOutputStep; outStep != nil {
+                for _, contentItem := range outStep.Content {
+                    if textContent := contentItem.TextContent; textContent != nil {
+                        fmt.Println(textContent.GetText())
+                    } else if imgContent := contentItem.ImageContent; imgContent != nil && imgContent.Data != nil {
+                        imageBytes, err := base64.StdEncoding.DecodeString(*imgContent.Data)
+                        if err == nil {
+                            fmt.Printf("Received image: %d bytes\n", len(imageBytes))
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -425,6 +982,64 @@ Explicitly enable Google Search as the only tool:
         background: true
     });
 
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.GoogleSearch;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import java.util.Arrays;
+
+    Client client = new Client();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of("What are the latest developments in quantum computing?"))
+            .tools(Arrays.asList(GoogleSearch.builder().build()))
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        _, err = client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent: interactions.AgentOption("deep-research-preview-04-2026"),
+                Input: interactions.NewInteractionsInput("What are the latest developments in quantum computing?"),
+                Tools: []interactions.Tool{
+                    interactions.NewTool(interactions.GoogleSearch{}),
+                },
+                Background: genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
+
 ### REST
 
     curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions" \
@@ -458,6 +1073,64 @@ Give the agent the ability to read and summarize specific web pages:
         tools: [{ type: 'url_context' }],
         background: true
     });
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.URLContext;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import java.util.Arrays;
+
+    Client client = new Client();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of("Summarize the content of https://www.wikipedia.org/."))
+            .tools(Arrays.asList(URLContext.builder().build()))
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        _, err = client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent: interactions.AgentOption("deep-research-preview-04-2026"),
+                Input: interactions.NewInteractionsInput("Summarize the content of https://www.wikipedia.org/."),
+                Tools: []interactions.Tool{
+                    interactions.NewTool(interactions.URLContext{}),
+                },
+                Background: genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
 
 ### REST
 
@@ -493,24 +1166,83 @@ Allow the agent to execute code for calculations and data analysis:
         background: true
     });
 
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CodeExecution;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import java.util.Arrays;
+
+    Client client = new Client();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of("Calculate the 50th Fibonacci number."))
+            .tools(Arrays.asList(CodeExecution.builder().build()))
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        _, err = client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent: interactions.AgentOption("deep-research-preview-04-2026"),
+                Input: interactions.NewInteractionsInput("Calculate the 50th Fibonacci number."),
+                Tools: []interactions.Tool{
+                    interactions.NewTool(interactions.CodeExecution{}),
+                },
+                Background: genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
+
 ### REST
 
     curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions" \
     -H "Content-Type: application/json" \
     -H "x-goog-api-key: $GEMINI_API_KEY" \
     -d '{
-        "agent": "deep-research-preview-04-2026",
         "input": "Calculate the 50th Fibonacci number.",
+        "agent": "deep-research-preview-04-2026",
         "tools": [{"type": "code_execution"}],
         "background": true
     }'
 
 ### MCP servers
 
-> [!WARNING]
-> **Preview:** Connect to remote MCP servers to give the agent access to external tools and services.
+Connect to remote MCP servers to give the agent access to external tools and
+services.
 
-Provide the server `name` and `url` in the tools configuration. You can also pass authentication credentials and restrict which tools the agent can call.
+Provide the server `name` and `url` in the tools configuration. You can also
+pass authentication credentials and restrict which tools the agent can call.
 
 | Field | Type | Required | Description |
 |---|---|---|---|
@@ -553,6 +1285,77 @@ Provide the server `name` and `url` in the tools configuration. You can also pas
         ],
         background: true
     });
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.MCPServer;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import java.util.Arrays;
+    import java.util.Collections;
+
+    Client client = new Client();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of("Check the status of my last server deployment."))
+            .tools(
+                Arrays.asList(
+                    MCPServer.builder()
+                        .name("Deployment Tracker")
+                        .url("https://mcp.example.com/mcp")
+                        .headers(Collections.singletonMap("Authorization", "Bearer my-token"))
+                        .build()))
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        _, err = client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent: interactions.AgentOption("deep-research-preview-04-2026"),
+                Input: interactions.NewInteractionsInput("Check the status of my last server deployment."),
+                Tools: []interactions.Tool{
+                    interactions.NewTool(interactions.MCPServer{
+                        Name: genai.Ptr("Deployment Tracker"),
+                        URL:  genai.Ptr("https://mcp.example.com/mcp"),
+                        Headers: map[string]string{
+                            "Authorization": "Bearer my-token",
+                        },
+                    }),
+                },
+                Background: genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
 
 ### REST
 
@@ -606,6 +1409,72 @@ Give the agent access to your own data by using the [File Search](https://ai.goo
             { type: 'file_search', file_search_store_names: ['fileSearchStores/my-store-name'] },
         ]
     });
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.FileSearch;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import java.util.Arrays;
+
+    Client client = new Client();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(
+                InteractionsInput.of(
+                    "Compare our 2025 fiscal year report against current public web news."))
+            .tools(
+                Arrays.asList(
+                    FileSearch.builder()
+                        .fileSearchStoreNames(Arrays.asList("fileSearchStores/my-store-name"))
+                        .build()))
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        _, err = client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent: interactions.AgentOption("deep-research-preview-04-2026"),
+                Input: interactions.NewInteractionsInput("Compare our 2025 fiscal year report against current public web news."),
+                Tools: []interactions.Tool{
+                    interactions.NewTool(interactions.FileSearch{
+                        FileSearchStoreNames: []string{"fileSearchStores/my-store-name"},
+                    }),
+                },
+                Background: genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
 
 ### REST
 
@@ -664,6 +1533,71 @@ Define the desired output format explicitly in your input text.
         background: true,
     });
 
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+
+    Client client = new Client();
+
+    String prompt =
+        "Research the competitive landscape of EV batteries.\n\n"
+            + "Format the output as a technical report with the following structure:\n"
+            + "1. Executive Summary\n"
+            + "2. Key Players (Must include a data table comparing capacity and chemistry)\n"
+            + "3. Supply Chain Risks";
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of(prompt))
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        prompt := "Research the competitive landscape of EV batteries.\n\n" +
+            "Format the output as a technical report with the following structure:\n" +
+            "1. Executive Summary\n" +
+            "2. Key Players (Must include a data table comparing capacity and chemistry)\n" +
+            "3. Supply Chain Risks"
+
+        _, err = client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent:      interactions.AgentOption("deep-research-preview-04-2026"),
+                Input:      interactions.NewInteractionsInput(prompt),
+                Background: genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
+
 ### REST
 
     curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions" \
@@ -700,6 +1634,7 @@ contextualized by the provided inputs.
             {"type": "text", "text": prompt},
             {
                 "type": "image",
+                "mime_type": "image/jpeg",
                 "uri": "https://storage.googleapis.com/generativeai-downloads/images/generated_elephants_giraffes_zebras_sunset.jpg"
             }
         ],
@@ -712,7 +1647,7 @@ contextualized by the provided inputs.
     while True:
         interaction = client.interactions.get(interaction.id)
         if interaction.status == "completed":
-            print(interaction.outputs[-1].text)
+            print(interaction.steps[-1].content[0].text)
             break
         elif interaction.status == "failed":
             print(f"Research failed: {interaction.error}")
@@ -737,6 +1672,7 @@ contextualized by the provided inputs.
             { type: 'text', text: prompt },
             {
                 type: 'image',
+                mime_type: "image/jpeg",
                 uri: 'https://storage.googleapis.com/generativeai-downloads/images/generated_elephants_giraffes_zebras_sunset.jpg'
             }
         ],
@@ -749,13 +1685,145 @@ contextualized by the provided inputs.
     while (true) {
         const result = await client.interactions.get(interaction.id);
         if (result.status === 'completed') {
-            console.log(result.outputs[result.outputs.length - 1].text);
+            console.log(result.steps.at(-1).content[0].text);
             break;
         } else if (result.status === 'failed') {
             console.log(`Research failed: ${result.error}`);
             break;
         }
         await new Promise(resolve => setTimeout(resolve, 10000));
+    }
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.ImageContent;
+    import com.google.genai.gaos.models.interactions.ImageContentMimeType;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionStatus;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.TextContent;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import com.google.genai.gaos.models.operations.GetInteractionByIdRequest;
+    import java.util.Arrays;
+    import java.util.Collections;
+
+    Client client = new Client();
+
+    String prompt =
+        "Analyze the interspecies dynamics and behavioral risks present "
+            + "in the provided image of the African watering hole. Specifically, investigate "
+            + "the symbiotic relationship between the avian species and the pachyderms "
+            + "shown, and conduct a risk assessment for the reticulated giraffes based on "
+            + "their drinking posture relative to the specific predator visible in the "
+            + "foreground.";
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(
+                InteractionsInput.ofContent(
+                    Arrays.asList(
+                        TextContent.builder().text(prompt).build(),
+                        ImageContent.builder()
+                            .mimeType(ImageContentMimeType.IMAGE_JPEG)
+                            .uri(
+                                "https://storage.googleapis.com/generativeai-downloads/images/generated_elephants_giraffes_zebras_sunset.jpg")
+                            .build())))
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+    System.out.println("Research started: " + interaction.id().orElse(""));
+
+    while (true) {
+      interaction =
+          client.interactions
+              .get(GetInteractionByIdRequest.builder().id(interaction.id().get()).build())
+              .interaction()
+              .get();
+      if (InteractionStatus.COMPLETED.equals(interaction.status().orElse(null))) {
+        System.out.println(interaction.outputText().orElse(""));
+        break;
+      } else if (InteractionStatus.FAILED.equals(interaction.status().orElse(null))) {
+        System.out.println("Research failed: " + interaction.errors().orElse(Collections.emptyList()));
+        break;
+      }
+      Thread.sleep(10000);
+    }
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "fmt"
+        "log"
+        "time"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        prompt := "Analyze the interspecies dynamics and behavioral risks present " +
+            "in the provided image of the African watering hole. Specifically, investigate " +
+            "the symbiotic relationship between the avian species and the pachyderms " +
+            "shown, and conduct a risk assessment for the reticulated giraffes based on " +
+            "their drinking posture relative to the specific predator visible in the " +
+            "foreground."
+
+        res, err := client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent: interactions.AgentOption("deep-research-preview-04-2026"),
+                Input: interactions.NewInteractionsInput([]interactions.Content{
+                    interactions.NewContent(interactions.TextContent{Text: prompt}),
+                    interactions.NewContent(interactions.ImageContent{
+                        MimeType: interactions.ImageContentMimeType("image/jpeg").ToPointer(),
+                        URI:      genai.Ptr("https://storage.googleapis.com/generativeai-downloads/images/generated_elephants_giraffes_zebras_sunset.jpg"),
+                    }),
+                }),
+                Background: genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+        interaction := res.Interaction
+        if interaction.ID != nil {
+            fmt.Printf("Research started: %s\n", *interaction.ID)
+        }
+
+        for {
+            getRes, err := client.Interactions.Get(ctx, operations.GetInteractionByIDRequest{
+                ID: *interaction.ID,
+            })
+            if err != nil {
+                log.Fatal(err)
+            }
+            interaction = getRes.Interaction
+            if interaction.Status == interactions.InteractionStatusCompleted {
+                if interaction.OutputText != nil {
+                    fmt.Println(*interaction.OutputText)
+                }
+                break
+            } else if interaction.Status == interactions.InteractionStatusFailed {
+                fmt.Printf("Research failed: %v\n", interaction.Errors)
+                break
+            }
+            time.Sleep(10 * time.Second)
+        }
     }
 
 ### REST
@@ -767,7 +1835,7 @@ contextualized by the provided inputs.
     -d '{
         "input": [
             {"type": "text", "text": "Analyze the interspecies dynamics and behavioral risks present in the provided image of the African watering hole. Specifically, investigate the symbiotic relationship between the avian species and the pachyderms shown, and conduct a risk assessment for the reticulated giraffes based on their drinking posture relative to the specific predator visible in the foreground."},
-            {"type": "image", "uri": "https://storage.googleapis.com/generativeai-downloads/images/generated_elephants_giraffes_zebras_sunset.jpg"}
+            {"type": "image", "mime_type": "image/jpeg", "uri": "https://storage.googleapis.com/generativeai-downloads/images/generated_elephants_giraffes_zebras_sunset.jpg"}
         ],
         "agent": "deep-research-preview-04-2026",
         "background": true
@@ -779,10 +1847,8 @@ contextualized by the provided inputs.
 
 ### Document understanding
 
-> [!WARNING]
-> **Preview:** Document understanding allows passing documents directly as multimodal input.
-
-Pass documents directly as multimodal input. The agent analyzes the
+Document understanding allows passing documents directly as multimodal input.
+The agent analyzes the
 provided documents and conducts research grounded in their content.
 
 ### Python
@@ -823,6 +1889,75 @@ provided documents and conducts research grounded in their content.
         background: true
     });
 
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.DocumentContent;
+    import com.google.genai.gaos.models.interactions.DocumentContentMimeType;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.TextContent;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import java.util.Arrays;
+
+    Client client = new Client();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(
+                InteractionsInput.ofContent(
+                    Arrays.asList(
+                        TextContent.builder().text("What is this document about?").build(),
+                        DocumentContent.builder()
+                            .uri("https://arxiv.org/pdf/1706.03762")
+                            .mimeType(DocumentContentMimeType.APPLICATION_PDF)
+                            .build())))
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        _, err = client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent: interactions.AgentOption("deep-research-preview-04-2026"),
+                Input: interactions.NewInteractionsInput([]interactions.Content{
+                    interactions.NewContent(interactions.TextContent{Text: "What is this document about?"}),
+                    interactions.NewContent(interactions.DocumentContent{
+                        URI:      genai.Ptr("https://arxiv.org/pdf/1706.03762"),
+                        MimeType: interactions.DocumentContentMimeType("application/pdf").ToPointer(),
+                    }),
+                }),
+                Background: genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
+
 ### REST
 
     # 1. Start the research task with document input
@@ -847,7 +1982,7 @@ synchronous API calls.
 Agents are required to use `background=True`. The API returns a partial
 `Interaction` object immediately. You can use the `id` property to retrieve an
 interaction for polling. The interaction state will transition from
-`in_progress` to `completed` or `failed`.
+`in_progress` to `completed` or `failed`. For a comprehensive guide on managing background tasks, see [Background execution](https://ai.google.dev/gemini-api/docs/background-execution).
 
 ### Streaming
 
@@ -867,9 +2002,9 @@ final results.
 
 | Event type | Delta type | Description |
 |---|---|---|
-| `content.delta` | `thought_summary` | Intermediate reasoning step from the agent. |
-| `content.delta` | `text` | Part of the final text output. |
-| `content.delta` | `image` | A generated image (base64-encoded). |
+| `step.delta` | `thought` | Intermediate reasoning step from the agent. |
+| `step.delta` | `text` | Part of the final text output. |
+| `step.delta` | `image` | A generated image (base64-encoded). |
 
 The following example starts a research task and processes the stream with
 automatic reconnection. It tracks the `interaction_id` and `last_event_id` so
@@ -888,17 +2023,17 @@ resume from where it left off.
 
     def process_stream(stream):
         global interaction_id, last_event_id, is_complete
-        for chunk in stream:
-            if chunk.event_type == "interaction.start":
-                interaction_id = chunk.interaction.id
-            if chunk.event_id:
-                last_event_id = chunk.event_id
-            if chunk.event_type == "content.delta":
-                if chunk.delta.type == "text":
-                    print(chunk.delta.text, end="", flush=True)
-                elif chunk.delta.type == "thought_summary":
-                    print(f"Thought: {chunk.delta.content.text}", flush=True)
-            elif chunk.event_type in ("interaction.complete", "error"):
+        for event in stream:
+            if event.event_type == "interaction.created":
+                interaction_id = event.interaction.id
+            if event.event_id:
+                last_event_id = event.event_id
+            if event.event_type == "step.delta":
+                if event.delta.type == "text":
+                    print(event.delta.text, end="", flush=True)
+                elif event.delta.type == "thought":
+                    print(f"Thought: {event.delta.text}", flush=True)
+            elif event.event_type in ("interaction.completed", "interaction.error"):
                 is_complete = True
 
     stream = client.interactions.create(
@@ -931,18 +2066,18 @@ resume from where it left off.
     let isComplete = false;
 
     async function processStream(stream) {
-        for await (const chunk of stream) {
-            if (chunk.event_type === 'interaction.start') {
-                interactionId = chunk.interaction.id;
+        for await (const event of stream) {
+            if (event.type === 'interaction.created') {
+                interactionId = event.interaction.id;
             }
-            if (chunk.event_id) lastEventId = chunk.event_id;
-            if (chunk.event_type === 'content.delta') {
-                if (chunk.delta.type === 'text') {
-                    process.stdout.write(chunk.delta.text);
-                } else if (chunk.delta.type === 'thought_summary') {
-                    console.log(`Thought: ${chunk.delta.content.text}`);
+            if (event.event_id) lastEventId = event.event_id;
+            if (event.type === 'step.delta') {
+                if (event.delta.type === 'text') {
+                    process.stdout.write(event.delta.text);
+                } else if (event.delta.type === 'thought') {
+                    console.log(`Thought: ${event.delta.text}`);
                 }
-            } else if (['interaction.complete', 'error'].includes(chunk.event_type)) {
+            } else if (['interaction.completed', 'interaction.error'].includes(event.type)) {
                 isComplete = true;
             }
         }
@@ -965,6 +2100,201 @@ resume from where it left off.
             stream: true, last_event_id: lastEventId,
         });
         await processStream(resumeStream);
+    }
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.Content;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.DeepResearchAgentConfig;
+    import com.google.genai.gaos.models.interactions.ErrorEvent;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionCompletedEvent;
+    import com.google.genai.gaos.models.interactions.InteractionCreatedEvent;
+    import com.google.genai.gaos.models.interactions.InteractionSSEEvent;
+    import com.google.genai.gaos.models.interactions.InteractionSSEStreamEvent;
+    import com.google.genai.gaos.models.interactions.InteractionStatus;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.StepDelta;
+    import com.google.genai.gaos.models.interactions.TextContent;
+    import com.google.genai.gaos.models.interactions.TextDelta;
+    import com.google.genai.gaos.models.interactions.ThinkingSummaries;
+    import com.google.genai.gaos.models.interactions.ThoughtSummaryDelta;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+    import com.google.genai.gaos.models.operations.GetInteractionByIdRequest;
+    import com.google.genai.gaos.utils.EventStream;
+
+    class StreamProcessor {
+      String interactionId = null;
+      String lastEventId = null;
+      boolean isComplete = false;
+
+      void processStream(EventStream<InteractionSSEStreamEvent> stream) {
+        for (InteractionSSEStreamEvent streamEvent : stream) {
+          InteractionSSEEvent event = streamEvent.data().orElse(null);
+          if (event instanceof InteractionCreatedEvent) {
+            InteractionCreatedEvent created = (InteractionCreatedEvent) event;
+            interactionId = created.interaction().flatMap(i -> i.id()).orElse(null);
+            if (created.eventId().isPresent()) {
+              lastEventId = created.eventId().get();
+            }
+          } else if (event instanceof StepDelta) {
+            StepDelta stepDelta = (StepDelta) event;
+            if (stepDelta.eventId().isPresent()) {
+              lastEventId = stepDelta.eventId().get();
+            }
+            if (stepDelta.delta().isPresent()) {
+              if (stepDelta.delta().get() instanceof TextDelta) {
+                System.out.print(((TextDelta) stepDelta.delta().get()).text().orElse(""));
+                System.out.flush();
+              } else if (stepDelta.delta().get() instanceof ThoughtSummaryDelta) {
+                ThoughtSummaryDelta thought = (ThoughtSummaryDelta) stepDelta.delta().get();
+                Content content = thought.content().orElse(null);
+                if (content instanceof TextContent) {
+                  System.out.println("Thought: " + ((TextContent) content).text().orElse(""));
+                }
+              }
+            }
+          } else if (event instanceof InteractionCompletedEvent || event instanceof ErrorEvent) {
+            isComplete = true;
+          }
+        }
+      }
+    }
+
+    Client client = new Client();
+    StreamProcessor processor = new StreamProcessor();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of("Research the history of Google TPUs."))
+            .background(true)
+            .stream(true)
+            .agentConfig(
+                DeepResearchAgentConfig.builder().thinkingSummaries(ThinkingSummaries.AUTO).build())
+            .build();
+
+    try (EventStream<InteractionSSEStreamEvent> stream =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).events()) {
+      processor.processStream(stream);
+    }
+
+    // Reconnect if the connection drops
+    while (!processor.isComplete && processor.interactionId != null) {
+      Interaction status =
+          client.interactions
+              .get(GetInteractionByIdRequest.builder().id(processor.interactionId).build())
+              .interaction()
+              .get();
+      if (!InteractionStatus.IN_PROGRESS.equals(status.status().orElse(null))) {
+        break;
+      }
+      try (EventStream<InteractionSSEStreamEvent> stream =
+          client.interactions
+              .get(
+                  GetInteractionByIdRequest.builder()
+                      .id(processor.interactionId)
+                      .stream(true)
+                      .lastEventId(processor.lastEventId)
+                      .build())
+              .events()) {
+        processor.processStream(stream);
+      }
+    }
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "fmt"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+        "google.golang.org/genai/interactions/types/stream"
+    )
+
+    type StreamProcessor struct {
+        interactionID string
+        lastEventID   *string
+        isComplete    bool
+    }
+
+    func (p *StreamProcessor) processStream(s *stream.EventStream[interactions.InteractionSSEStreamEvent]) {
+        defer s.Close()
+        for s.Next() {
+            event := s.Value()
+            if created := event.GetDataInteractionCreated(); created != nil {
+                p.interactionID = created.Interaction.ID
+                if created.EventID != nil {
+                    p.lastEventID = created.EventID
+                }
+            } else if stepDelta := event.GetDataStepDelta(); stepDelta != nil {
+                if stepDelta.EventID != nil {
+                    p.lastEventID = stepDelta.EventID
+                }
+                if textDelta := stepDelta.GetDeltaText(); textDelta != nil {
+                    fmt.Print(textDelta.GetText())
+                } else if thoughtDelta := stepDelta.GetDeltaThoughtSummary(); thoughtDelta != nil {
+                    if textContent := thoughtDelta.GetContentText(); textContent != nil {
+                        fmt.Printf("Thought: %s\n", textContent.GetText())
+                    }
+                }
+            } else if event.GetDataInteractionCompleted() != nil || event.GetDataError() != nil {
+                p.isComplete = true
+            }
+        }
+    }
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        processor := &StreamProcessor{}
+        agentCfg := interactions.NewCreateAgentInteractionAgentConfig(interactions.DeepResearchAgentConfig{
+            ThinkingSummaries: interactions.ThinkingSummariesAuto.ToPointer(),
+        })
+
+        res, err := client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent:       interactions.AgentOption("deep-research-preview-04-2026"),
+                Input:       interactions.NewInteractionsInput("Research the history of Google TPUs."),
+                Background:  genai.Ptr(true),
+                Stream:      genai.Ptr(true),
+                AgentConfig: &agentCfg,
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+        processor.processStream(res.InteractionSSEStreamEvent)
+
+        // Reconnect if the connection drops
+        for !processor.isComplete && processor.interactionID != "" {
+            statusRes, err := client.Interactions.Get(ctx, operations.GetInteractionByIDRequest{
+                ID: processor.interactionID,
+            })
+            if err != nil || statusRes.Interaction.Status != interactions.InteractionStatusInProgress {
+                break
+            }
+            streamRes, err := client.Interactions.Get(ctx, operations.GetInteractionByIDRequest{
+                ID:          processor.interactionID,
+                Stream:      genai.Ptr(true),
+                LastEventID: processor.lastEventID,
+            })
+            if err != nil {
+                break
+            }
+            processor.processStream(streamRes.InteractionSSEStreamEvent)
+        }
     }
 
 ### REST
@@ -1009,7 +2339,7 @@ restarting the entire task.
         previous_interaction_id="COMPLETED_INTERACTION_ID"
     )
 
-    print(interaction.outputs[-1].text)
+    print(interaction.steps[-1].content[0].text)
 
 ### JavaScript
 
@@ -1018,7 +2348,66 @@ restarting the entire task.
         model: 'gemini-3.1-pro-preview',
         previous_interaction_id: 'COMPLETED_INTERACTION_ID'
     });
-    console.log(interaction.outputs[interaction.outputs.length - 1].text);
+    console.log(interaction.steps.at(-1).content[0].text);
+
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateModelInteraction;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+
+    Client client = new Client();
+
+    CreateModelInteraction params =
+        CreateModelInteraction.builder()
+            .model("gemini-3.1-pro-preview")
+            .input(InteractionsInput.of("Can you elaborate on the second point in the report?"))
+            .previousInteractionId("COMPLETED_INTERACTION_ID")
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+    System.out.println(interaction.outputText().orElse(""));
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "fmt"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        res, err := client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateModelInteraction{
+                Model:                 interactions.Model("gemini-3.1-pro-preview"),
+                Input:                 interactions.NewInteractionsInput("Can you elaborate on the second point in the report?"),
+                PreviousInteractionID: genai.Ptr("COMPLETED_INTERACTION_ID"),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        if res.Interaction.OutputText != nil {
+            fmt.Println(*res.Interaction.OutputText)
+        }
+    }
 
 ### REST
 
@@ -1031,12 +2420,12 @@ restarting the entire task.
         "previous_interaction_id": "COMPLETED_INTERACTION_ID"
     }'
 
-## When to use Gemini Deep Research Agent
+## When to use Gemini Deep Research agent
 
 Deep Research is an **agent**, not just a model. It is best suited for workloads
 that require an "analyst-in-a-box" approach rather than low-latency chat.
 
-| Feature | Standard Gemini Models | Gemini Deep Research Agent |
+| Feature | Standard Gemini Models | Gemini Deep Research agent |
 |---|---|---|
 | **Latency** | Seconds | Minutes (Async/Background) |
 | **Process** | Generate -\> Output | Plan -\> Search -\> Read -\> Iterate -\> Output |
@@ -1085,6 +2474,76 @@ Pass it as a dictionary with the following fields:
         background: true,
     });
 
+### Java
+
+    import com.google.genai.Client;
+    import com.google.genai.gaos.models.interactions.CreateAgentInteraction;
+    import com.google.genai.gaos.models.interactions.DeepResearchAgentConfig;
+    import com.google.genai.gaos.models.interactions.Interaction;
+    import com.google.genai.gaos.models.interactions.InteractionsInput;
+    import com.google.genai.gaos.models.interactions.ThinkingSummaries;
+    import com.google.genai.gaos.models.interactions.Visualization;
+    import com.google.genai.gaos.models.operations.CreateInteractionRequestBody;
+
+    Client client = new Client();
+
+    DeepResearchAgentConfig agentConfig =
+        DeepResearchAgentConfig.builder()
+            .thinkingSummaries(ThinkingSummaries.AUTO)
+            .visualization(Visualization.AUTO)
+            .collaborativePlanning(false)
+            .build();
+
+    CreateAgentInteraction params =
+        CreateAgentInteraction.builder()
+            .agent("deep-research-preview-04-2026")
+            .input(InteractionsInput.of("Research the competitive landscape of cloud GPUs."))
+            .agentConfig(agentConfig)
+            .background(true)
+            .build();
+
+    Interaction interaction =
+        client.interactions.create(CreateInteractionRequestBody.of(params)).interaction().get();
+
+### Go
+
+    package main
+
+    import (
+        "context"
+        "log"
+
+        "google.golang.org/genai"
+        "google.golang.org/genai/interactions/models/interactions"
+        "google.golang.org/genai/interactions/models/operations"
+    )
+
+    func main() {
+        ctx := context.Background()
+        client, err := genai.NewClient(ctx, nil)
+        if err != nil {
+            log.Fatal(err)
+        }
+
+        agentCfg := interactions.NewCreateAgentInteractionAgentConfig(interactions.DeepResearchAgentConfig{
+            ThinkingSummaries:     interactions.ThinkingSummariesAuto.ToPointer(),
+            Visualization:         interactions.VisualizationAuto.ToPointer(),
+            CollaborativePlanning: genai.Ptr(false),
+        })
+
+        _, err = client.Interactions.Create(ctx, operations.CreateInteractionRequest{
+            Body: operations.NewCreateInteractionRequestBody(interactions.CreateAgentInteraction{
+                Agent:       interactions.AgentOption("deep-research-preview-04-2026"),
+                Input:       interactions.NewInteractionsInput("Research the competitive landscape of cloud GPUs."),
+                AgentConfig: &agentCfg,
+                Background:  genai.Ptr(true),
+            }),
+        })
+        if err != nil {
+            log.Fatal(err)
+        }
+    }
+
 ### REST
 
     curl -X POST "https://generativelanguage.googleapis.com/v1beta/interactions" \
@@ -1104,7 +2563,7 @@ Pass it as a dictionary with the following fields:
 
 ## Availability and pricing
 
-You can access the Gemini Deep Research Agent using the Interactions API in Google AI Studio and the Gemini API.
+You can access the Gemini Deep Research agent using the Interactions API in Google AI Studio and the Gemini API.
 
 Pricing follows a [pay-as-you-go model](https://ai.google.dev/gemini-api/docs/pricing#pricing-for-agents) based on the underlying Gemini models and the specific tools the agent utilizes. Unlike standard chat requests, where a request leads to one output, a Deep Research task is an agentic workflow. A single request triggers an autonomous loop of planning, searching, reading, and reasoning.
 
@@ -1136,13 +2595,12 @@ consideration of safety risks.
   estimating"* to your prompt.
 - **Provide context:** Ground the agent's research by providing background information or constraints directly in the input prompt.
 - **Use collaborative planning:** For complex queries, enable collaborative planning to review and refine the research plan before execution.
-- **Multimodal inputs:** Deep Research Agent supports multi-modal inputs. Use cautiously, as this increases costs and risks context window overflow.
+- **Multimodal inputs:** Deep Research agent supports multi-modal inputs. Use cautiously, as this increases costs and risks context window overflow.
 
 ## Limitations
 
-- **Beta status**: The Interactions API is in public beta. Features and schemas may change.
 - **Custom tools:** You cannot currently provide custom Function Calling tools but you can use remote MCP (Model Context Protocol) servers with the Deep Research agent.
-- **Structured output:** The Deep Research Agent currently doesn't support structured outputs.
+- **Structured output:** The Deep Research agent currently doesn't support structured outputs.
 - **Max research time:** The Deep Research agent has a maximum research time of 60 minutes. Most tasks should complete within 20 minutes.
 - **Store requirement:** Agent execution using `background=True` requires `store=True`.
 - **Google search:** [Google
@@ -1151,6 +2609,5 @@ consideration of safety risks.
 
 ## What's next
 
-- Learn more about the [Interactions API](https://ai.google.dev/gemini-api/docs/interactions).
-- Try the [Deep Research in the Gemini API Cookbook](https://colab.research.google.com/github/google-gemini/cookbook/blob/main/quickstarts/Get_started_Deep_Research.ipynb).
+- Learn more about the [Interactions API](https://ai.google.dev/gemini-api/docs/interactions-overview).
 - Learn how to use your own data using the [File Search](https://ai.google.dev/gemini-api/docs/file-search) tool.
