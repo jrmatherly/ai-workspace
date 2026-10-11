@@ -10,7 +10,7 @@ import { useGlobalDragStore } from './volstore-drag-global';
 
 // constants
 const zIndexComposerOverlayDrop = 20;
-export const EXCLUDE_SELF_TYPE = 'x-app/agi';
+export const EXCLUDE_SELF_TYPE = 'x-app/aiw';
 
 
 // styles

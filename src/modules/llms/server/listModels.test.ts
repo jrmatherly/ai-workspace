@@ -32,15 +32,15 @@
 //                                       (or AWS_BEARER_TOKEN_BEDROCK)
 //   gemini              gemini          GEMINI_API_KEY          generativelanguage.googleapis.com
 //   ollama              ollama          (opt-in via             localhost:11434
-//                                        BIGAGI_TEST_OLLAMA_HOST)
+//                                        AIWORKSPACE_TEST_OLLAMA_HOST)
 //   openai-compatible   alibaba         ALIBABA_API_KEY         dashscope-intl.aliyuncs.com
 //   openai-compatible   cohere          COHERE_API_KEY          api.cohere.ai/compatibility
 //   openai-compatible   deepseek        DEEPSEEK_API_KEY        api.deepseek.com
 //   openai-compatible   groq            GROQ_API_KEY            api.groq.com
 //   openai-compatible   lmstudio        (opt-in via             localhost:1234
-//                                        BIGAGI_TEST_LMSTUDIO_HOST)
+//                                        AIWORKSPACE_TEST_LMSTUDIO_HOST)
 //   openai-compatible   localai         (opt-in via             localhost:8080
-//                                        BIGAGI_TEST_LOCALAI_HOST)
+//                                        AIWORKSPACE_TEST_LOCALAI_HOST)
 //   openai-compatible   metaai          METAAI_API_KEY          api.meta.ai
 //   openai-compatible   mistral         MISTRAL_API_KEY         api.mistral.ai
 //   openai-compatible   moonshot        MOONSHOT_API_KEY        api.moonshot.ai
@@ -209,9 +209,9 @@ describe('listModels enumeration', () => {
 
   // ================== Ollama protocol ==================
 
-  test('ollama: live listing', { skip: skipIfMissing('BIGAGI_TEST_OLLAMA_HOST') }, async () => {
+  test('ollama: live listing', { skip: skipIfMissing('AIWORKSPACE_TEST_OLLAMA_HOST') }, async () => {
     await expectOk(
-      { dialect: 'ollama', ollamaHost: E.BIGAGI_TEST_OLLAMA_HOST || '' } as AixAPI_Access,
+      { dialect: 'ollama', ollamaHost: E.AIWORKSPACE_TEST_OLLAMA_HOST || '' } as AixAPI_Access,
       0, 'ollama/live',
     );
   });
@@ -259,16 +259,16 @@ describe('listModels enumeration', () => {
     );
   });
 
-  test('openai-compat/lmstudio: live listing', { skip: skipIfMissing('BIGAGI_TEST_LMSTUDIO_HOST') }, async () => {
+  test('openai-compat/lmstudio: live listing', { skip: skipIfMissing('AIWORKSPACE_TEST_LMSTUDIO_HOST') }, async () => {
     await expectOk(
-      { dialect: 'lmstudio', ...openAIShape({ oaiHost: E.BIGAGI_TEST_LMSTUDIO_HOST || '' }) } as AixAPI_Access,
+      { dialect: 'lmstudio', ...openAIShape({ oaiHost: E.AIWORKSPACE_TEST_LMSTUDIO_HOST || '' }) } as AixAPI_Access,
       0, 'lmstudio/live',
     );
   });
 
-  test('openai-compat/localai: live listing', { skip: skipIfMissing('BIGAGI_TEST_LOCALAI_HOST') }, async () => {
+  test('openai-compat/localai: live listing', { skip: skipIfMissing('AIWORKSPACE_TEST_LOCALAI_HOST') }, async () => {
     await expectOk(
-      { dialect: 'localai', ...openAIShape({ oaiHost: E.BIGAGI_TEST_LOCALAI_HOST || '' }) } as AixAPI_Access,
+      { dialect: 'localai', ...openAIShape({ oaiHost: E.AIWORKSPACE_TEST_LOCALAI_HOST || '' }) } as AixAPI_Access,
       0, 'localai/live',
     );
   });

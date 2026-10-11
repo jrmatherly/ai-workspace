@@ -101,8 +101,8 @@ export async function posthogServerSendException(error: Error | unknown, distinc
 
     // immediate variant for serverless environments
     await client.captureExceptionImmediate(error, effectiveDistinctId, {
-      agi_domain: `server-${context.domain}`,
-      agi_runtime: context.runtime,
+      aiw_domain: `server-${context.domain}`,
+      aiw_runtime: context.runtime,
       // Context properties
       endpoint: context.endpoint,
       method: context.method,

@@ -130,8 +130,8 @@ class LoggerImplementation implements ClientLogger {
       // Only send to PostHog if we have a real Error with stack trace
       if (error) {
         posthogCaptureException(error, {
-          agi_domain: 'client-logger',
-          agi_runtime: 'browser',
+          aiw_domain: 'client-logger',
+          aiw_runtime: 'browser',
           component: finalSource,
           severity: level,
           log_message: message,

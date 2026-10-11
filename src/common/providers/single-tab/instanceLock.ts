@@ -23,8 +23,8 @@ import { type LocalActiveWorkSnapshot, localActiveWorkGet } from './localActiveW
  */
 
 // configuration
-const LOCK_NAME = 'big-agi-instance';
-const CHANNEL_NAME = 'big-agi-tabs';
+const LOCK_NAME = 'ai-workspace-instance';
+const CHANNEL_NAME = 'ai-workspace-tabs';
 const PEER_POLL_MS = 2000; // follower -> leader state poll, only while the follower is visible
 const PEER_UNRESPONSIVE_MS = 6000; // no reply for this long: the other window is frozen or gone
 const TRANSFER_GRACE_MS = 2500; // wait for a cooperative hand-over before taking the lock by force
@@ -446,22 +446,22 @@ class InstanceLockManager {
 // (PAGES_CONF noSingleTab: print, verify-email, oauth callback) hold the lock and block the real app
 
 declare global {
-  var __bigAgiInstanceLock: InstanceLockManager | undefined; // survives HMR: never claim the lock twice from the same page
+  var __aiWorkspaceInstanceLock: InstanceLockManager | undefined; // survives HMR: never claim the lock twice from the same page
 }
 
 function _manager(): InstanceLockManager | null {
   if (typeof window === 'undefined') return null; // SSR
   // first called from a useState initializer (render time): safe only because the singleton makes it
   // idempotent under StrictMode/concurrent double-invocation - this guard is load-bearing
-  if (!globalThis.__bigAgiInstanceLock)
-    globalThis.__bigAgiInstanceLock = new InstanceLockManager();
-  return globalThis.__bigAgiInstanceLock;
+  if (!globalThis.__aiWorkspaceInstanceLock)
+    globalThis.__aiWorkspaceInstanceLock = new InstanceLockManager();
+  return globalThis.__aiWorkspaceInstanceLock;
 }
 
 
 // Register a pre-hand-over flusher; returns the unregister, so the pair` is useEffect-shaped. Here in case we need to caiit in the future outside of the components tree.
 function _instanceLockAddFlusher(flusher: () => Promise<void>): () => void {
-  return globalThis.__bigAgiInstanceLock?.addFlusher(flusher) ?? (() => undefined);
+  return globalThis.__aiWorkspaceInstanceLock?.addFlusher(flusher) ?? (() => undefined);
 }
 
 /** Register a pre-hand-over stableFlushFn for the lifetime of the component. Pass a stable reference. */

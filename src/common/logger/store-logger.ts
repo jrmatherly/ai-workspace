@@ -208,7 +208,7 @@ export const useLoggerStore = create<LoggerState & LoggerActions>()(
     }),
     {
 
-      name: 'agi-logger-log',
+      name: 'aiw-logger-log',
 
       // persist non-debug, non-dismissed entries, or those with pending actions
       partialize: (state) => ({

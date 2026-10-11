@@ -66,8 +66,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
         return; // reloading now - fallback UI not needed
       console.warn(`Persistent chunk load error in ${componentName}: ${error.message}`);
       posthogCaptureException(error, {
-        agi_domain: 'client-error-boundary',
-        agi_runtime: 'browser',
+        aiw_domain: 'client-error-boundary',
+        aiw_runtime: 'browser',
         component: componentName,
         chunk_reload_failed: true,
       });
@@ -87,8 +87,8 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 
     // Capture exception in PostHog
     posthogCaptureException(error, {
-      agi_domain: 'client-error-boundary',
-      agi_runtime: 'browser',
+      aiw_domain: 'client-error-boundary',
+      aiw_runtime: 'browser',
       component: componentName,
       component_stack: errorInfo.componentStack,
     });
@@ -105,7 +105,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
    */
   private tryReloadOnceForChunkError(): boolean {
     if (typeof window === 'undefined') return false;
-    const RELOAD_GUARD_KEY = 'agi-chunk-reload-at';
+    const RELOAD_GUARD_KEY = 'aiw-chunk-reload-at';
     try {
       const prev = window.sessionStorage.getItem(RELOAD_GUARD_KEY);
       if (prev && (Date.now() - Number(prev)) < 30_000)

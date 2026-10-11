@@ -92,7 +92,7 @@ const useScratchClipStore = create<ScratchClipStore>()(persist(
   }),
   {
 
-    name: 'agi-scratch-clip',
+    name: 'aiw-scratch-clip',
 
     partialize: ({ history }) => ({
       history, // only persist history

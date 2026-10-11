@@ -39,7 +39,7 @@ export type AttachmentDraftsApi = ReturnType<typeof useAttachmentDrafts>;
  * @param attachmentsStoreApi A Per-Chat or standalone Attachment Drafts store.
  * @param enableLoadURLsOnPaste Only used if invoking attachAppendDataTransfer or attachAppendClipboardItems.
  * @param hintAddImages Attach an additional image representation of the attachment; only if Release.Features.ENABLE_TEXT_AND_IMAGES.
- * @param onFilterAGIFile If defined, run this async function on '.agi.json' files to decide whether to load them (if returns true) or attach them (if returns false).
+ * @param onFilterAGIFile If defined, run this async function on '.aiw.json' (and legacy '.agi.json') files to decide whether to load them (if returns true) or attach them (if returns false).
  * @param filterOnlyImages If true, only image attachments are allowed.
  * @param enhancersOptions If defined, input enhancers intercept single-line pasted/dropped text BEFORE the URL/text branches, adding a pending part instead of attaching.
  */
@@ -64,8 +64,8 @@ export function useAttachmentDrafts(attachmentsStoreApi: AttachmentDraftsStoreAp
     if (ATTACHMENTS_DEBUG_INTAKE)
       console.log('attachAppendFile', origin, fileWithHandle, overrideFileName);
 
-    // special case: intercept .agi.json files to potentially load them instead of attaching them
-    if (fileWithHandle.name.endsWith('.agi.json'))
+    // special case: intercept .aiw.json (and legacy .agi.json) files to potentially load them instead of attaching them
+    if (fileWithHandle.name.endsWith('.aiw.json') || fileWithHandle.name.endsWith('.agi.json'))
       if (onFilterAGIFile && await onFilterAGIFile(fileWithHandle))
         return;
 

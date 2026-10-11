@@ -244,7 +244,7 @@ export const useLiveFileStore = create<LiveFileState & LiveFileActions>()(persis
   }),
   {
 
-    name: 'agi-live-file',
+    name: 'aiw-live-file',
     // getStorage: () => ...?
 
     onRehydrateStorage: () => (state) => {

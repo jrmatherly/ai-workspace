@@ -133,7 +133,7 @@
         secureContext: !!window.isSecureContext,
         online: !!navigator.onLine,
         cookieEnabled: !!navigator.cookieEnabled,
-        broadcastChannel: (function () { try { var b = new BroadcastChannel('agi-inspect-probe'); b.close(); return true; } catch (e) { return false; } })(),
+        broadcastChannel: (function () { try { var b = new BroadcastChannel('aiw-inspect-probe'); b.close(); return true; } catch (e) { return false; } })(),
         localStorageOK: (function () { try { return !!window.localStorage; } catch (e) { return false; } })(),
         indexedDBOK: (function () { try { return !!window.indexedDB; } catch (e) { return false; } })(),
         viewport: window.innerWidth + ' × ' + window.innerHeight,

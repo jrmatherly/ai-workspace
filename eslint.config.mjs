@@ -68,7 +68,7 @@ export default defineConfig([{
         "no-control-regex": "warn",             // NUL-byte sanitizer regex (annottated)
         "prefer-rest-params": "warn",           // do not use `arguments` in TS
 
-        // Big-AGI hook
+        // AI Workspace hook
         "react-hooks/exhaustive-deps": ["warn", {
             additionalHooks: "(useMemoShallowStable)",
         }],

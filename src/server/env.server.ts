@@ -136,7 +136,7 @@ export const env = createEnv({
     AIX_STRICT_PARSING: z.enum(['true']).optional(),
 
     // Build-time configuration (ignore)
-    BIG_AGI_BUILD: z.enum(['standalone', 'static']).optional(),
+    AI_WORKSPACE_BUILD: z.enum(['standalone', 'static']).optional(),
 
   },
 

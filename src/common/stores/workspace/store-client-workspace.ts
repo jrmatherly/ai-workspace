@@ -126,7 +126,7 @@ export const useClientWorkspaceStore = create<WorkspaceState & WorkspaceActions>
 
   }),
   {
-    name: 'agi-client-workspace',
+    name: 'aiw-client-workspace',
 
     onRehydrateStorage: () => (state) => {
       if (!state) return;

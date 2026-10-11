@@ -78,7 +78,7 @@ export async function openConversationsAtRestPicker(): Promise<FileWithHandle[] 
   try {
     return await fileOpen({
       description: `${Brand.Title.Base} JSON Conversations`,
-      mimeTypes: ['application/json', 'application/big-agi'],
+      mimeTypes: ['application/json', 'application/vnd.ai-workspace'],
       multiple: true,
     });
   } catch (error) {
@@ -168,8 +168,8 @@ export async function downloadAllJsonV1B(): Promise<{ conversationCount: number;
 
   // save file - let errors (including AbortError on cancel) reach the caller, so the UI never fakes success
   await fileSave(blob, {
-    fileName: `backup_chats_${window?.location?.hostname || 'all'}_${payload.conversations.length}_${prettyTimestampForFilenames(false)}.agi.json`,
-    // mimeTypes: ['application/json', 'application/big-agi'],
+    fileName: `backup_chats_${window?.location?.hostname || 'all'}_${payload.conversations.length}_${prettyTimestampForFilenames(false)}.aiw.json`,
+    // mimeTypes: ['application/json', 'application/vnd.ai-workspace'],
     extensions: ['.json'],
   });
 
@@ -209,7 +209,7 @@ export async function downloadSingleChat(conversation: DConversation, format: 'j
 
   // save file - let errors (including AbortError on cancel) reach the caller, so the UI never fakes success
   await fileSave(blob, {
-    fileName: `conversation_${fileTitle}_${prettyTimestampForFilenames(false)}.agi${extension}`,
+    fileName: `conversation_${fileTitle}_${prettyTimestampForFilenames(false)}.aiw${extension}`,
     extensions: [extension],
   });
 }

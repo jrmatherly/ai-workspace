@@ -35,7 +35,7 @@
     // so a malformed value there white-screens the app uncaught. The others gate large parts of boot.
     var BOOT_CRITICAL = ['app-ui', 'app-models', 'app-device', 'app-app-chat'];
     var ZYNC_EXPECTED_STORES = ['atoms-chat', 'atoms-persona', 'atoms-asset', 'kv-zync'];
-    var LEGACY_DBS = { 'keyval-store': 'legacy chats', 'Big-AGI': 'legacy assets' };
+    var LEGACY_DBS = { 'keyval-store': 'legacy chats', 'AI-Workspace': 'legacy assets' };
     var CHECKS = [];
 
     function add(status, title, detail) { CHECKS.push({ status: status, title: title, detail: detail || '' }); }
@@ -96,7 +96,7 @@
     }
 
     function checkBroadcastChannel() {
-      try { var b = new BroadcastChannel('agi-inspect-probe'); b.close(); add('pass', 'BroadcastChannel', 'constructs OK (single-tab enforcer safe)'); }
+      try { var b = new BroadcastChannel('aiw-inspect-probe'); b.close(); add('pass', 'BroadcastChannel', 'constructs OK (single-tab enforcer safe)'); }
       catch (e) { add('warn', 'BroadcastChannel', 'unavailable - the single-tab enforcer can crash uncaught: ' + e); }
     }
 

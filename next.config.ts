@@ -18,20 +18,20 @@ if (!buildHash) try { // git-less checkout read, e.g. `docker build`: the contex
   const head = readGit('HEAD'), ref = head.startsWith('ref: ') ? head.slice(5) : null; // detached HEAD carries the raw sha
   buildHash = !ref ? head : (() => { try { return readGit(ref); /* loose ref */ } catch { return readGit('packed-refs').split('\n').find((line) => line.endsWith(' ' + ref))?.split(' ')[0]; /* packed ref */ } })();
 } catch { /* sha-less source (e.g. archive download) - throw below */ }
-if (!buildHash) throw new Error('Big-AGI build: missing build identity. Build from a git checkout, or pass NEXT_PUBLIC_BUILD_HASH (docker: --build-arg NEXT_PUBLIC_BUILD_HASH=..sha..).');
+if (!buildHash) throw new Error('AI Workspace build: missing build identity. Build from a git checkout, or pass NEXT_PUBLIC_BUILD_HASH (docker: --build-arg NEXT_PUBLIC_BUILD_HASH=..sha..).');
 
 // The following are used by/available to Release.buildInfo(...)
 process.env.NEXT_PUBLIC_BUILD_HASH = buildHash.slice(0, 10);
 process.env.NEXT_PUBLIC_BUILD_PKGVER = JSON.parse('' + readFileSync(new URL('./package.json', import.meta.url))).version;
 process.env.NEXT_PUBLIC_BUILD_TIMESTAMP = new Date().toISOString();
 process.env.NEXT_PUBLIC_DEPLOYMENT_TYPE ||= (process.env.VERCEL_ENV ? `vercel-${process.env.VERCEL_ENV}` : 'local'); // Docker or custom, Vercel
-log(`\x1b[1mBig-AGI\x1b[0m v${process.env.NEXT_PUBLIC_BUILD_PKGVER} (\x1b[2m@\x1b[0m${process.env.NEXT_PUBLIC_BUILD_HASH}, \x1b[2mN:\x1b[0m${process.env.NODE_ENV}${process.env.VERCEL_ENV ? `, \x1b[2mV:\x1b[0m${process.env.VERCEL_ENV}` : ''})`);
+log(`\x1b[1mAI Workspace\x1b[0m v${process.env.NEXT_PUBLIC_BUILD_PKGVER} (\x1b[2m@\x1b[0m${process.env.NEXT_PUBLIC_BUILD_HASH}, \x1b[2mN:\x1b[0m${process.env.NODE_ENV}${process.env.VERCEL_ENV ? `, \x1b[2mV:\x1b[0m${process.env.VERCEL_ENV}` : ''})`);
 
 
 // Handle non-default build types
 const buildType =
-  process.env.BIG_AGI_BUILD === 'standalone' ? 'standalone' as const
-    : process.env.BIG_AGI_BUILD === 'static' ? 'export' as const
+  process.env.AI_WORKSPACE_BUILD === 'standalone' ? 'standalone' as const
+    : process.env.AI_WORKSPACE_BUILD === 'static' ? 'export' as const
       : undefined;
 buildType && log(`🛠 building for ${buildType}...\n`);
 

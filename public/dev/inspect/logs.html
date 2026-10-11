@@ -12,7 +12,7 @@
     <header>
       <div class="brand"><a href="/dev">Inspect</a><span class="sub">/ logs</span></div>
     </header>
-    <div class="tagline">Reads the persisted client log buffer <code class="inline">agi-logger-log</code> directly, newest first. Up to 100 entries are persisted; <code class="inline">debug</code>-level and dismissed entries are not stored.</div>
+    <div class="tagline">Reads the persisted client log buffer <code class="inline">aiw-logger-log</code> directly, newest first. Up to 100 entries are persisted; <code class="inline">debug</code>-level and dismissed entries are not stored.</div>
 
     <div class="toolbar">
       <button class="primary" id="btn-copy">Copy for GitHub</button>
@@ -33,7 +33,7 @@
     'use strict';
     var esc = Inspect.esc;
 
-    var STORE_KEY = 'agi-logger-log';
+    var STORE_KEY = 'aiw-logger-log';
     var LEVELS = ['critical', 'error', 'warn', 'DEV', 'info', 'debug'];
     var ALL = null;
     var ACTIVE = {};
