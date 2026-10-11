@@ -27,6 +27,9 @@ WHITE='\033[0;37m'
 BOLD_WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
+# the [branch] of one `git worktree list` line; the line itself when it has none (bare, detached)
+wt_branch_of() { local s="${1##*\[}"; printf '%s\n' "${s%%\]*}"; }
+
 # Detect if output is not a terminal (disable colors)
 if [ ! -t 1 ]; then
     RED=''
@@ -109,7 +112,7 @@ list_worktrees() {
             else
                 # Simple fallback: if path starts with current dir's parent, make it relative
                 if [[ "$WORKTREE_PATH" == "$(dirname "$CURRENT_DIR")"* ]]; then
-                    DISPLAY_PATH="../${WORKTREE_PATH#$(dirname "$CURRENT_DIR")/}"
+                    DISPLAY_PATH="../${WORKTREE_PATH#"$(dirname "$CURRENT_DIR")"/}"
                 else
                     DISPLAY_PATH="$WORKTREE_PATH"
                 fi
@@ -143,7 +146,7 @@ list_worktrees() {
     
     # Show additional stats
     WORKTREE_COUNT=$(git worktree list | wc -l | tr -d '[:space:]')
-    if [ $WORKTREE_COUNT -gt 1 ]; then
+    if [ "$WORKTREE_COUNT" -gt 1 ]; then
         print_color "$GRAY" "Total: $WORKTREE_COUNT worktrees (1 main + $((WORKTREE_COUNT-1)) additional)  |  * = uncommitted changes (tracked files)"
     else
         print_color "$GRAY" "Total: 1 worktree (main only)"
@@ -196,7 +199,7 @@ materialize_worktree() {
     if [ -d ".idea/runConfigurations" ]; then
         local config_count
         config_count=$(find .idea/runConfigurations -name "*.xml" -type f 2>/dev/null | wc -l)
-        if [ $config_count -gt 0 ]; then
+        if [ "$config_count" -gt 0 ]; then
             cp -r .idea/runConfigurations/* "$target_path/.idea/runConfigurations/" 2>/dev/null || true
             printf "%b✓ %b(%d configurations)%b\n" "$GREEN" "$GRAY" "$config_count" "$NC"
         else
@@ -368,7 +371,7 @@ if [ "$1" = "--materialize" ] || [ "$1" = "-m" ]; then
             [ -z "$wt_line" ] && continue
             wt_path=$(echo "$wt_line" | awk '{print $1}')
             wt_base=$(basename "$wt_path")
-            wt_branch=$(echo "$wt_line" | sed 's/.*\[\([^]]*\)\].*/\1/')
+            wt_branch=$(wt_branch_of "$wt_line")
             if [ "$wt_branch" = "$MATERIALIZE_TARGET" ] \
                 || [ "$wt_base" = "ai-workspace_$MATERIALIZE_TARGET" ] \
                 || [ "$wt_base" = "$MATERIALIZE_TARGET" ]; then
@@ -426,13 +429,12 @@ if [ "$1" = "--remove" ]; then
     fi
     
     BRANCH_TO_REMOVE=$2
-    WORKTREE_TO_REMOVE="../ai-workspace_$BRANCH_TO_REMOVE"
     
     print_header
     
     # Get the main worktree to prevent its removal
     MAIN_WORKTREE=$(git worktree list 2>/dev/null | head -1 | awk '{print $1}')
-    MAIN_BRANCH=$(git worktree list 2>/dev/null | head -1 | sed 's/.*\[\([^]]*\)\].*/\1/')
+    MAIN_BRANCH=$(wt_branch_of "$(git worktree list 2>/dev/null | head -1)")
     
     # Check if trying to remove the main branch
     if [ "$BRANCH_TO_REMOVE" = "$MAIN_BRANCH" ]; then
@@ -464,7 +466,7 @@ if [ "$1" = "--remove" ]; then
         [ -z "$wt_line" ] && continue
         wt_path=$(echo "$wt_line" | awk '{print $1}')
         wt_base=$(basename "$wt_path")
-        wt_branch=$(echo "$wt_line" | sed 's/.*\[\([^]]*\)\].*/\1/')
+        wt_branch=$(wt_branch_of "$wt_line")
         if [ "$wt_branch" = "$BRANCH_TO_REMOVE" ] \
             || [ "$wt_base" = "ai-workspace_$BRANCH_TO_REMOVE" ] \
             || [ "$wt_base" = "$BRANCH_TO_REMOVE" ]; then
