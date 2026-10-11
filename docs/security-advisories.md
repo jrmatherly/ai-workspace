@@ -50,11 +50,12 @@ eslint-plugin-import 2.32.0, eslint-plugin-jsx-a11y 6.10.2 and eslint-plugin-rea
 
 ## npm outdated residue
 
-`npm outdated` on 2026-10-11, after the refactor tier (this machine's npm applies `min-release-age=7` to the `Latest` column):
+`npm outdated` on 2026-10-11, after the Next 16.4.0 bump. The `min-release-age` hold is removed from `~/.npmrc` as of 2026-10-11, so `Latest` is the registry `latest` tag:
 
 | Package | Current | Latest | Why it stays |
 | --- | --- | --- | --- |
-| @mui/icons-material | 7.3.11 | 9.4.0 | 9.x re-exports `createSvgIcon` from `@mui/material/SvgIcon`, which the webpack alias maps to `@mui/joy/SvgIcon`, a file without it. Blocked until the alias can supply it |
+| @mui/icons-material | 7.3.11 | 9.5.0 | 9.x re-exports `createSvgIcon` from `@mui/material/SvgIcon`, which the webpack alias maps to `@mui/joy/SvgIcon`, a file without it. Blocked until the alias can supply it |
 | pdfjs-dist | 5.4.54 | 6.4.299 | 6.0 requires `AbortSignal.any()`, `:dir()`, `light-dark()` and CSS nesting natively (Chrome 125, Safari 18); gated on raising the browser floor from Chrome 110 / Safari 16.4 |
+| prisma | 7.10.0 | 8.0.0-rc.22 | `latest` points at an 8.0 release candidate. `@prisma/client` and `@prisma/adapter-pg` stay on 7.10.0 with it; Dependabot ignores majors |
 
-Not listed by `npm outdated` but deliberately held: `prisma`, `@prisma/client` and `@prisma/adapter-pg` at 7.10.0 (8 is a release candidate; Dependabot ignores majors), and `typescript` as the `@typescript/typescript6` alias (6.0.2 is its only release; `tsc` is 7.0.2 from `@typescript/native`).
+Not listed by `npm outdated` but deliberately held: `typescript` as the `@typescript/typescript6` alias (6.0.2 is its only release; `tsc` is 7.0.2 from `@typescript/native`).
