@@ -67,6 +67,7 @@ For deploying a custom AI Workspace instance:
   - **[Kubernetes](deploy-k8s.md)**: Deploy on Kubernetes clusters
   - **[Analytics](deploy-analytics.md)**: Set up usage analytics
   - **[Environment Variables](environment-variables.md)**: Pre-configures models and services
+  - **[Security Advisories](security-advisories.md)**: The `npm audit` findings that are read and accepted, and why
 
 ## Community & Support
 

@@ -121,6 +121,7 @@ Local-first: Zustand in memory with `persist` to localStorage, except chats, whi
 ### Testing & Quality
 
 - Browser floor: `eslint.config.mjs` bans ES2023 `toSorted/toReversed/toSpliced/with` and `new Intl.Segmenter` via `no-restricted-syntax` at `error` level (they crash Chrome <110 / Win7-8 holdouts); other project rules stay at `warn`, and `eslint .` exits 0 on warnings; a separate `compat/compat` pass checks Web APIs against `browserslist`. Use `[...x].sort()` etc.; don't lower `browserslist` to "fix" the banned syntax - that rule doesn't read it, and SWC won't polyfill prototype methods
+- `npm audit` is not expected to be empty: `docs/security-advisories.md` lists the accepted entries and the baseline command. A new entry needs a decision there, not a silent `npm audit fix`
 
 ### Production errors
 

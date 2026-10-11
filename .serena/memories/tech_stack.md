@@ -1,6 +1,6 @@
 # Tech stack and build
 
-- Node: `.nvmrc` = 26; `engines` ^22||^24||^26; Dockerfile uses node:24-alpine. npm (package-lock), `allowScripts` allowlist in package.json.
+- Node: `.nvmrc` = 26; `engines` ^22.13||^24||^26; Dockerfile uses node:26-alpine. npm 11 with `min-release-age=7` (package-lock), `allowScripts` allowlist and `overrides` (katex, smol-toml) in package.json. `next-env.d.ts` is generated (`next typegen` in `pretscheck`), not tracked. Accepted `npm audit` entries: `docs/security-advisories.md`.
 - TypeScript ^6 strict, target es2022, `moduleResolution: Bundler`, `jsxImportSource @emotion/react`, `checkJs`. Path aliases `~/common/*`, `~/modules/*`, `~/server/*`, `~/extensions/*` -> `src/`.
 - Two tsc projects: root (excludes tests and `tools/`) and `tools/tsconfig.json` (tools + `src/**/*.test.ts`; `.mjs` only type-checked with a leading `// @ts-check`).
 - ESLint 9 flat config `eslint.config.mjs`, run as `eslint .` (not `next lint`). Ignores `.claude`, `public`, `tools/video`. `compat/compat` reads `browserslist` (Chrome 110 floor). ES2023 `toSorted/toReversed/toSpliced/with` and `Intl.Segmenter` are `no-restricted-syntax` **warnings** (CLAUDE.md calls it a hard ban). Typed-lint block on `src/**/*.ts(x)` (~15s).
