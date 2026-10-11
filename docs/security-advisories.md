@@ -46,3 +46,14 @@ sprintf-js
 ## Node floor
 
 `engines.node` is `^26.0.0 || ^24.0.0 || ^22.13.0`. The floor is set by puppeteer-core 25 (`>=22.12`, ESM-only) and rounded to the ESLint 10 line (`^22.13.0`) ahead of that upgrade; Prisma 7 (`^22.12`) landed; pdfjs-dist 6 (`>=22.13.0`) when it lands. Docker builds on `node:26-alpine`, CI reads `.nvmrc` (26).
+
+## npm outdated residue
+
+`npm outdated` on 2026-10-11, after the refactor tier (this machine's npm applies `min-release-age=7` to the `Latest` column):
+
+| Package | Current | Latest | Why it stays |
+| --- | --- | --- | --- |
+| @mui/icons-material | 7.3.11 | 9.4.0 | 9.x re-exports `createSvgIcon` from `@mui/material/SvgIcon`, which the webpack alias maps to `@mui/joy/SvgIcon`, a file without it. Blocked until the alias can supply it |
+| pdfjs-dist | 5.4.54 | 6.4.299 | 6.0 requires `AbortSignal.any()`, `:dir()`, `light-dark()` and CSS nesting natively (Chrome 125, Safari 18); gated on raising the browser floor from Chrome 110 / Safari 16.4 |
+
+Not listed by `npm outdated` but deliberately held: `prisma`, `@prisma/client` and `@prisma/adapter-pg` at 7.10.0 (8 is a release candidate; Dependabot ignores majors), and `typescript` as the `@typescript/typescript6` alias (6.0.2 is its only release; `tsc` is 7.0.2 from `@typescript/native`).
