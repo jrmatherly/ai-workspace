@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# /opens census - resolve the session transcript, measure its shape, compute the
+# /tape-opens census - resolve the session transcript, measure its shape, compute the
 # node budget, and extract a compact text spine for the writer subagent.
 #
 # Usage: census.sh [session-id] [override]
@@ -20,6 +20,8 @@
 # exact re-sends of live prompts are dropped, and the census counts live
 # prompts only - sizing follows the thread's real descents.
 set -euo pipefail
+
+command -v jq >/dev/null || { echo "jq required" >&2; exit 1; }
 
 find_by_id() {
   find "$HOME/.claude/projects" -maxdepth 2 -name "$1.jsonl" -print -quit 2>/dev/null || true
@@ -53,6 +55,8 @@ fi
 
 # First output line is "#CENSUS <live-prompts> <first-ts> <last-ts>", rest is the spine.
 RAW="$(mktemp -d "${TMPDIR:-/tmp}/opens.XXXXXX")"
+# Remove on failure only: on success the caller reads $RAW/spine.txt after this script exits.
+trap 'rm -rf "$RAW"' EXIT
 jq -rs '
   def utext: if (.message.content|type)=="string" then .message.content
     else ([.message.content[]? | select(.type=="text") | .text] | join(" ")) end;
@@ -115,6 +119,8 @@ if [[ "${U:-0}" -lt 2 ]]; then
   echo "ERROR: only ${U:-0} live user prompts found - nothing to unwind" >&2
   exit 1
 fi
+
+trap - EXIT
 
 BUDGET=$(awk -v u="$U" 'BEGIN { b = int(1.5 * sqrt(u) + 0.5); if (b < 5) b = 5; if (b > 30) b = 30; print b }')
 

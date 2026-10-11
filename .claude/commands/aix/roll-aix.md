@@ -1,6 +1,6 @@
 ---
 description: Increment the AIX monotonic version number
-allowed-tools: Bash(git add:*),Bash(git status:*),Bash(git commit:*),Edit,Write
+allowed-tools: Bash(git add:*),Bash(git status:*),Bash(git commit:*),Bash(git branch:*),Edit,Write
 model: sonnet
 disable-model-invocation: true
 ---
@@ -20,6 +20,7 @@ Reserve AIX rolls for protocol-level changes.
 1. Read current `Monotonics.Aix` value from `src/common/app.release.ts`
 2. Increment by 1
 3. Update ONLY that line
-4. Run: `git add src/common/app.release.ts && git commit -m "Roll AIX"`
+4. Run `git add src/common/app.release.ts`
+5. Run `git commit -m "AIX: roll monotonic version"`
 
 Confirm new version number.

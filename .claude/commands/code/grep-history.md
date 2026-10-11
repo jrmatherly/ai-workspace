@@ -9,27 +9,29 @@ This repo has a short history (copied from upstream at one commit, see CLAUDE.md
 
 ## Parameters
 
-- `$0` - The exact string to search for in file contents (not commit messages). Examples: `getLabsSUDO`, `EXPERIMENT_ON_SUDO`, `myFunctionName`
-- `$1` - A commit hash or unique commit message substring to identify the start of the range. Examples: `5af80b96a8`, `"Sudo Mode": 10-click`
+- `$0` - The exact string to search for in file contents (not commit messages). Examples: `NEXT_PUBLIC_POSTHOG_HOST`, `myFunctionName`
+- `$1` - A commit hash or unique commit message substring to identify the start of the range. Examples: `d7f178b35`, `Analytics: PostHog host configurable`
 
 ## Example
 
 ```
-/code:grep-history EXPERIMENT_ON_SUDO "Sudo Mode": 10-click
+/code:grep-history NEXT_PUBLIC_POSTHOG_HOST "first commit"
 ```
 
-This searches all commits between the `"Sudo Mode": 10-click` commit and HEAD for any that add or remove the string `EXPERIMENT_ON_SUDO` in file contents.
+This searches all commits between the `first commit` commit and HEAD for any that add or remove the string `NEXT_PUBLIC_POSTHOG_HOST` in file contents (finds `6333f0366 Analytics: PostHog host configurable via NEXT_PUBLIC_POSTHOG_HOST`).
 
 ## Procedure
 
 ### Step 1: Resolve the ancestor commit
 
 If `$1` looks like a commit hash (hex string), use it directly.
-Otherwise, search for it by message, restricting to ancestors of HEAD:
+Otherwise, search for it by message, restricting to ancestors of HEAD. Substitute `$1` as a fixed string, shell-quoted (single quotes, each `'` inside written as `'\''`):
 
 ```bash
-git log --oneline --grep='$1' HEAD | head -5
+git log --oneline -F --grep=<$1, shell-quoted> HEAD | head -5
 ```
+
+For `Analytics: PostHog host configurable` that is `--grep='Analytics: PostHog host configurable'`.
 
 This only walks commits reachable from HEAD, so every result is a guaranteed ancestor - no verification loop needed.
 

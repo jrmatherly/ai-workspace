@@ -1,5 +1,6 @@
 ---
 description: Review in-flight changes for coherence, completeness, and quality
+allowed-tools: Bash(git diff:*) Bash(git status:*) Bash(npm run tscheck) Bash(npm run lint)
 ---
 
 Review the current in-flight changes in this repository (single `main` line, see CLAUDE.md).
@@ -16,7 +17,7 @@ but don't stop here, continue to the full review in the same response.
 
 **Step 3: Validate**
 
-Run `tsc --noEmit --pretty` and `npm run lint` (in parallel). Report any errors with the review.
+Run `npm run tscheck && npm run lint`. Report any errors with the review.
 If the diff removes/renames identifiers, grep the codebase for stale references to the OLD names. This catches broken guards, stale imports, and incomplete migrations.
 
 **Step 4: Deep review**
