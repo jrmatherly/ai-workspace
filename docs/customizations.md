@@ -25,11 +25,10 @@ This necessitates a code change (file renaming) before build initiation, detaile
 ### Increase Vercel Functions Timeout
 
 For long-running operations, Vercel allows paid deployments to increase the timeout on Functions.
-Note that this applies to old-style Vercel Functions (based on Node.js) and not the new Edge Functions.
+The app's route handlers are Node.js Vercel Functions, so the Node function `maxDuration` limits apply.
 
-At time of writing, AI Workspace has only 2 operations that run on Node.js Functions:
-browsing (fetching web pages) and sharing. They both can exceed 10 seconds, especially
-when fetching large pages or waiting for websites to be completed.
+All tRPC calls run on one Node.js function at `/api/trpc`. AI streaming, browsing (fetching web pages)
+and sharing can all exceed 10 seconds, especially with long generations or large pages.
 
 From the Vercel Project > Settings > General > Build & Development Settings,
 you can for instance set the build command to:

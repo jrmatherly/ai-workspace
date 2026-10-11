@@ -1,6 +1,6 @@
 import { BrowsePageTransform, useBrowseStore } from '~/modules/browse/store-module-browsing';
 
-import { apiStreamNode } from '~/common/util/trpc.client';
+import { apiStream } from '~/common/util/trpc.client';
 
 
 /**
@@ -28,9 +28,9 @@ export async function callBrowseFetchPageOrThrow(
   const { wssEndpoint, pageTransform } = useBrowseStore.getState();
 
   // Connect to our service
-  let streamingResponse: Awaited<ReturnType<typeof apiStreamNode.browse.fetchPagesStreaming.mutate>>;
+  let streamingResponse: Awaited<ReturnType<typeof apiStream.browse.fetchPagesStreaming.mutate>>;
   try {
-    streamingResponse = await apiStreamNode.browse.fetchPagesStreaming.mutate({
+    streamingResponse = await apiStream.browse.fetchPagesStreaming.mutate({
       access: {
         dialect: 'browse-wss',
         ...(!!wssEndpoint && { wssEndpoint }),

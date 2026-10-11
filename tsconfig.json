@@ -47,6 +47,7 @@
   "exclude": [
     "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx",
     "tools",
+    "private",
     "dist",
     "node_modules"
   ]

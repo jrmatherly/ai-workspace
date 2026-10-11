@@ -1,7 +1,7 @@
 import * as z from 'zod/v4';
 import { TRPCError } from '@trpc/server';
 
-import { createTRPCRouter, edgeProcedure } from '~/server/trpc/trpc.server';
+import { createTRPCRouter, publicProcedure } from '~/server/trpc/trpc.server';
 import { fetchJsonOrTRPCThrow, fetchResponseOrTRPCThrow, fetchTextOrTRPCThrow, TRPCFetcherError } from '~/server/trpc/trpc.router.fetchers';
 import { serverCapitalizeFirstLetter } from '~/server/wire';
 
@@ -98,7 +98,7 @@ const createImagesInputSchema = z.object({
 export const llmOpenAIRouter = createTRPCRouter({
 
   /* [OpenAI] List the Models available */
-  listModels: edgeProcedure
+  listModels: publicProcedure
     .input(listModelsInputSchema)
     .output(ListModelsResponse_schema)
 
@@ -139,7 +139,7 @@ export const llmOpenAIRouter = createTRPCRouter({
 
 
   /* [OpenAI] Containers API - download a code-interpreter-generated container file (referenced by a container_file_citation annotation) */
-  containerFileDownload: edgeProcedure
+  containerFileDownload: publicProcedure
     .input(z.object({
       access: openAIAccessSchema,
       containerId: z.string(),
@@ -166,7 +166,7 @@ export const llmOpenAIRouter = createTRPCRouter({
     }),
 
   /* [OpenAI] Containers API - delete a container file (the container itself expires on its own) */
-  containerFileDelete: edgeProcedure
+  containerFileDelete: publicProcedure
     .input(z.object({
       access: openAIAccessSchema,
       containerId: z.string(),
@@ -187,7 +187,7 @@ export const llmOpenAIRouter = createTRPCRouter({
 
 
   /* [OpenAI/LocalAI] images/generations */
-  createImages: edgeProcedure
+  createImages: publicProcedure
     .input(createImagesInputSchema)
     .mutation(async function* ({ input, signal }): AsyncGenerator<T2ICreateImageAsyncStreamOp> {
 
@@ -325,7 +325,7 @@ export const llmOpenAIRouter = createTRPCRouter({
   // --- Dialect-specific procedures ---
 
   /* [OpenRouter] images generation - dedicated endpoint, different path and wire format than OpenAI */
-  dialectOpenRouter_createImages: edgeProcedure
+  dialectOpenRouter_createImages: publicProcedure
     .input(z.object({
       access: openAIAccessSchema,
       generationConfig: z.object({
@@ -416,7 +416,7 @@ export const llmOpenAIRouter = createTRPCRouter({
 
 
   /* [LocalAI] List all Model Galleries */
-  dialectLocalAI_galleryModelsAvailable: edgeProcedure
+  dialectLocalAI_galleryModelsAvailable: publicProcedure
     .input(listModelsInputSchema)
     .query(async ({ input: { access } }) => {
       const wireLocalAIModelsAvailable = await openaiGETOrThrow(access, '/models/available');
@@ -431,7 +431,7 @@ export const llmOpenAIRouter = createTRPCRouter({
     }),
 
   /* [LocalAI] Download a model from a Model Gallery */
-  dialectLocalAI_galleryModelsApply: edgeProcedure
+  dialectLocalAI_galleryModelsApply: publicProcedure
     .input(z.object({
       access: openAIAccessSchema,
       galleryName: z.string(),
@@ -444,7 +444,7 @@ export const llmOpenAIRouter = createTRPCRouter({
     }),
 
   /* [LocalAI] Poll for a Model download Job status */
-  dialectLocalAI_galleryModelsJob: edgeProcedure
+  dialectLocalAI_galleryModelsJob: publicProcedure
     .input(z.object({
       access: openAIAccessSchema,
       jobId: z.string(),

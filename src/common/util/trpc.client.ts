@@ -9,8 +9,7 @@
 import { createTRPCClient, httpBatchStreamLink, httpLink, loggerLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 
-import type { AppRouterEdge } from '~/server/trpc/trpc.router-edge';
-import type { AppRouterCloud } from '~/server/trpc/trpc.router-cloud';
+import type { AppRouter } from '~/server/trpc/trpc.router';
 import { transformer } from '~/server/trpc/trpc.transformer';
 
 import { getBaseUrl } from './urlUtils';
@@ -52,21 +51,21 @@ const streamingTransportFetch: typeof fetch = async (input, init) => {
 };
 
 
-/// Edge APIs: async, query, and stream
+/// tRPC clients: async, query, and stream
 
-/** Typesafe async/await hooks for the the Edge-Runtime API */
-export const apiAsync = createTRPCClient<AppRouterEdge>({
+/** Typesafe async/await hooks for the tRPC API */
+export const apiAsync = createTRPCClient<AppRouter>({
   links: [
     loggerLink({ enabled: enableLoggerLink }),
     httpLink({
-      url: `${getBaseUrl()}/api/edge`,
+      url: `${getBaseUrl()}/api/trpc`,
       transformer: transformer,
     }),
   ],
 });
 
-/** Typesafe React Query hooks for the tRPC Edge-Runtime API */
-export const apiQuery = createTRPCNext<AppRouterEdge>({
+/** Typesafe React Query hooks for the tRPC API */
+export const apiQuery = createTRPCNext<AppRouter>({
   config() {
     return {
       /**
@@ -79,7 +78,7 @@ export const apiQuery = createTRPCNext<AppRouterEdge>({
       links: [
         loggerLink({ enabled: enableLoggerLink }),
         httpLink({
-          url: `${getBaseUrl()}/api/edge`,
+          url: `${getBaseUrl()}/api/trpc`,
           transformer: transformer,
           // You can pass any HTTP headers you wish here
           // async headers() {
@@ -104,11 +103,11 @@ export const apiQuery = createTRPCNext<AppRouterEdge>({
 });
 
 /** Stream API: uses tRPC streaming to transfer partial updates to the client */
-export const apiStream = createTRPCClient<AppRouterEdge>({
+export const apiStream = createTRPCClient<AppRouter>({
   links: [
     loggerLink({ enabled: enableLoggerLink }),
     httpBatchStreamLink({
-      url: `${getBaseUrl()}/api/edge`,
+      url: `${getBaseUrl()}/api/trpc`,
       transformer: transformer,
       fetch: streamingTransportFetch,
       /**
@@ -122,29 +121,3 @@ export const apiStream = createTRPCClient<AppRouterEdge>({
   ],
 });
 
-
-/// Node.js runtime APIs
-
-/** Node/Immediate API: Typesafe async/await hooks for the the Node functions API */
-export const apiAsyncNode = createTRPCClient<AppRouterCloud>({
-  links: [
-    loggerLink({ enabled: enableLoggerLink }),
-    httpLink({
-      url: `${getBaseUrl()}/api/cloud`,
-      transformer: transformer,
-    }),
-  ],
-});
-
-/** Node/Streaming API: typesafe async generator hooks */
-export const apiStreamNode = createTRPCClient<AppRouterCloud>({
-  links: [
-    loggerLink({ enabled: enableLoggerLink }),
-    httpBatchStreamLink({
-      url: `${getBaseUrl()}/api/cloud`,
-      transformer: transformer,
-      fetch: streamingTransportFetch,
-      maxItems: 1, // to not wait for the last connection to close
-    }),
-  ],
-});

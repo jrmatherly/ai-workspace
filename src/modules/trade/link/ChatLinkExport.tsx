@@ -9,7 +9,7 @@ import { ConfirmationModal } from '~/common/components/modals/ConfirmationModal'
 import { DataAtRestV1 } from '~/common/stores/chat/chats.converters';
 import { Link } from '~/common/components/Link';
 import { addSnackbar } from '~/common/components/snackbar/useSnackbarsStore';
-import { apiAsyncNode } from '~/common/util/trpc.client';
+import { apiAsync } from '~/common/util/trpc.client';
 import { conversationTitle, DConversationId } from '~/common/stores/chat/chat.conversation';
 import { getConversation } from '~/common/stores/chat/store-chats';
 
@@ -48,7 +48,7 @@ export function ChatLinkExport(props: {
     try {
       const chatV1 = DataAtRestV1.formatChatToJsonV1(conversation);
       const chatTitle = conversationTitle(conversation) || undefined;
-      const response: StoragePutSchema = await apiAsyncNode.trade.storagePut.mutate({
+      const response: StoragePutSchema = await apiAsync.trade.storagePut.mutate({
         ownerId: linkStorageOwnerId,
         dataType: 'CHAT_V1',
         dataTitle: chatTitle,
@@ -76,7 +76,7 @@ export function ChatLinkExport(props: {
 
     // update it in the Storage
     try {
-      const response: StorageUpdateDeletionKeySchema = await apiAsyncNode.trade.storageUpdateDeletionKey.mutate({
+      const response: StorageUpdateDeletionKeySchema = await apiAsync.trade.storageUpdateDeletionKey.mutate({
         objectId,
         formerKey,
         newKey,

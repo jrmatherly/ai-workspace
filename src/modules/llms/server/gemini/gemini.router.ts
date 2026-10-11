@@ -1,7 +1,7 @@
 import * as z from 'zod/v4';
 import { TRPCError } from '@trpc/server';
 
-import { createTRPCRouter, edgeProcedure } from '~/server/trpc/trpc.server';
+import { createTRPCRouter, publicProcedure } from '~/server/trpc/trpc.server';
 import { fetchJsonOrTRPCThrow, fetchResponseOrTRPCThrow } from '~/server/trpc/trpc.router.fetchers';
 
 import { GeminiWire_API_Generate_Content, GeminiWire_ContentParts } from '~/modules/aix/server/dispatch/wiretypes/gemini.wiretypes';
@@ -89,7 +89,7 @@ const GeminiFileMetadata_schema = z.object({
 export const llmGeminiRouter = createTRPCRouter({
 
   /* [Gemini] models.list = /v1beta/models */
-  listModels: edgeProcedure
+  listModels: publicProcedure
     .input(accessOnlySchema)
     .output(ListModelsResponse_schema)
     .query(async ({ input, signal }) => {
@@ -106,7 +106,7 @@ export const llmGeminiRouter = createTRPCRouter({
    * One Nano Banana image per call: generateContent with the reference images (if any) before the prompt.
    * Thought images (drafts, emitted at thinking 'high') are skipped; the model's text becomes the alt text.
    */
-  createImages: edgeProcedure
+  createImages: publicProcedure
     .input(createImagesInputSchema)
     .mutation(async function* ({ input, signal }): AsyncGenerator<T2ICreateImageAsyncStreamOp> {
 
@@ -205,7 +205,7 @@ export const llmGeminiRouter = createTRPCRouter({
    * Download bytes. The media URL rejects unregistered callers (403), so we proxy it through the key.
    * Used by the hosted-video chip to download or re-play an Omni artifact within its 48h TTL.
    */
-  fileApiDownload: edgeProcedure
+  fileApiDownload: publicProcedure
     .input(z.object({ access: geminiAccessSchema, fileName: geminiFileNameSchema }))
     .query(async ({ input: { access, fileName } }) => {
       const { headers, url } = geminiAccess(access, null, `/v1beta/${fileName}:download?alt=media`, false);
@@ -231,7 +231,7 @@ export const llmGeminiRouter = createTRPCRouter({
    * Metadata (files.get): size, mime, expiry (createTime + 48h), state. A 404 means the
    * file has expired/been deleted - the chip surfaces that as 'no longer available'.
    */
-  fileApiGetMetadata: edgeProcedure
+  fileApiGetMetadata: publicProcedure
     .input(z.object({ access: geminiAccessSchema, fileName: geminiFileNameSchema }))
     .output(GeminiFileMetadata_schema)
     .query(async ({ input: { access, fileName } }) => {
@@ -254,7 +254,7 @@ export const llmGeminiRouter = createTRPCRouter({
    * verified 2026-08-28), and returns the key-free bearer upload URL (upload_id only). The BYTES
    * then go browser -> Google directly, so MB-scale payloads never traverse the edge fn.
    */
-  fileApiUploadStart: edgeProcedure
+  fileApiUploadStart: publicProcedure
     .input(z.object({
       access: geminiAccessSchema,
       sizeBytes: z.number().int().positive().max(2 * 1024 * 1024 * 1024), // Files API cap: 2GB
@@ -288,7 +288,7 @@ export const llmGeminiRouter = createTRPCRouter({
    * Delete a file from Google now (before its 48h TTL): DELETE /v1beta/files/{id} -> 200.
    * Used when the user removes a generated-video chip, so the artifact doesn't linger server-side.
    */
-  fileApiDelete: edgeProcedure
+  fileApiDelete: publicProcedure
     .input(z.object({ access: geminiAccessSchema, fileName: geminiFileNameSchema }))
     .mutation(async ({ input: { access, fileName } }) => {
       const { headers, url } = geminiAccess(access, null, `/v1beta/${fileName}`, false);

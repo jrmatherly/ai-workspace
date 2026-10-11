@@ -15,7 +15,7 @@ import { InlineError } from '~/common/components/InlineError';
 import { LogoProgress } from '~/common/components/LogoProgress';
 import { OptimaDrawerIn, OptimaPanelIn } from '~/common/layout/optima/portals/OptimaPortalsIn';
 import { addSnackbar } from '~/common/components/snackbar/useSnackbarsStore';
-import { apiAsyncNode } from '~/common/util/trpc.client';
+import { apiAsync } from '~/common/util/trpc.client';
 import { capitalizeFirstLetter } from '~/common/util/textUtils';
 import { conversationTitle } from '~/common/stores/chat/chat.conversation';
 import { navigateToChatLinkList } from '~/common/app.routes';
@@ -79,7 +79,7 @@ async function fetchStoredChatV1(objectId: string | null) {
     throw new Error('No Stored Chat');
 
   // fetch
-  const result = await apiAsyncNode.trade.storageGet.query({ objectId });
+  const result = await apiAsync.trade.storageGet.query({ objectId });
   if (result.type === 'error')
     throw result.error;
 
@@ -128,7 +128,7 @@ export function AppLinkChat(props: { chatLinkId: string | null }) {
     // delete from storage
     let err: string | null = null;
     try {
-      const response = await apiAsyncNode.trade.storageDelete.mutate({ objectId, deletionKey });
+      const response = await apiAsync.trade.storageDelete.mutate({ objectId, deletionKey });
       if (response.type === 'error')
         err = response.error || 'unknown error';
     } catch (error: any) {

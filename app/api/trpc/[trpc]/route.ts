@@ -1,21 +1,19 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 
-import { appRouterCloud } from '~/server/trpc/trpc.router-cloud';
+import { appRouter } from '~/server/trpc/trpc.router';
 import { createTRPCFetchContext } from '~/server/trpc/trpc.server';
 import { posthogServerSendException } from '~/server/posthog/posthog.server';
 
-const handlerNodeRoutes = (req: Request) => fetchRequestHandler({
-  endpoint: '/api/cloud',
-  router: appRouterCloud,
+const handler = (req: Request) => fetchRequestHandler({
+  endpoint: '/api/trpc',
+  router: appRouter,
   req,
   createContext: createTRPCFetchContext,
-  onError: async function({ path, error, type, ctx }) {
+  onError: async function({ path, error, type }) {
 
-    // -> DEV error logging
     if (process.env.NODE_ENV === 'development')
-      console.error(`❌ tRPC-cloud failed on ${path ?? 'unk-path'}: ${error.message}`);
+      console.error(`❌ tRPC failed on ${path ?? 'unk-path'}: ${error.message}`);
 
-    // -> Capture node errors
     await posthogServerSendException(error, undefined, {
       domain: 'trpc-onerror',
       runtime: 'nodejs',
@@ -30,10 +28,8 @@ const handlerNodeRoutes = (req: Request) => fetchRequestHandler({
   },
 });
 
-
-// NOTE: the following statement breaks the build on non-pro deployments, and conditionals don't work either
-//       so we resorted to raising the timeout from 10s to 60s in the vercel.json file instead
-// export const maxDuration = 60;
+// On Vercel, Node functions default to a short limit; raise it here or in the project settings
+// export const maxDuration = 300;
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export { handlerNodeRoutes as GET, handlerNodeRoutes as POST };
+export { handler as GET, handler as POST };

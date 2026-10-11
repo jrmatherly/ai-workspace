@@ -1,6 +1,6 @@
 import * as z from 'zod/v4';
 
-import { createTRPCRouter, edgeProcedure } from '~/server/trpc/trpc.server';
+import { createTRPCRouter, publicProcedure } from '~/server/trpc/trpc.server';
 
 import { _createDebugConfig } from '../dispatch/chatGenerate/chatGenerate.debug';
 import { createChatGenerateDispatch, createChatGenerateResumeDispatch, executeChatGenerateDelete } from '../dispatch/chatGenerate/chatGenerate.dispatch';
@@ -34,7 +34,7 @@ export const aixRouter = createTRPCRouter({
    * Chat content generation, streaming, multipart.
    * Architecture: Client <-- (intake) --> Server <-- (dispatch) --> AI Service
    */
-  chatGenerateContent: edgeProcedure
+  chatGenerateContent: publicProcedure
     .input(z.object({
       access: AixWire_API.Access_schema,
       model: AixWire_API.Model_schema,
@@ -59,7 +59,7 @@ export const aixRouter = createTRPCRouter({
    * Chat content generation - reattach to an in-progress upstream run by handle, streaming only.
    * Today: OpenAI Responses API (network-disconnect recovery) and Gemini Interactions (Deep Research across reloads).
    */
-  upstreamReattachContent: edgeProcedure
+  upstreamReattachContent: publicProcedure
     .input(z.object({
       access: AixWire_API.Access_schema,
       upstreamHandle: AixWire_API.UpstreamHandle_schema, // reattach uses a handle instead of 'model + chatGenerate'
@@ -83,7 +83,7 @@ export const aixRouter = createTRPCRouter({
    * Delete an upstream-stored run by handle. One-shot, non-streaming, terminal: removes the
    * server-side resource (Gemini interaction / OpenAI response). Symmetric to `reattachContent`.
    */
-  upstreamDeleteContent: edgeProcedure
+  upstreamDeleteContent: publicProcedure
     .input(z.object({
       access: AixWire_API.Access_schema,
       upstreamHandle: AixWire_API.UpstreamHandle_schema, // { uht, runId, ... } - the schema strips unknown fields (createdAt/expiresAt)

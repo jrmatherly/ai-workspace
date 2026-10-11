@@ -16,7 +16,7 @@ import { GoodModal } from '~/common/components/modals/GoodModal';
 import { InlineError } from '~/common/components/InlineError';
 import { InlineTextarea } from '~/common/components/InlineTextarea';
 import { Link } from '~/common/components/Link';
-import { apiAsyncNode } from '~/common/util/trpc.client';
+import { apiAsync } from '~/common/util/trpc.client';
 import { copyToClipboard } from '~/common/util/clipboardUtils';
 import { getChatLinkRelativePath } from '~/common/app.routes';
 import { getOriginUrl } from '~/common/util/urlUtils';
@@ -95,7 +95,7 @@ export function ChatLinkDetails(props: {
   const onDeleteCancelled = () => setConfirmDeletion(false);
 
   const onConfirmedDeletion = async () => {
-    const result: StorageDeleteSchema = await apiAsyncNode.trade.storageDelete.mutate({ objectId, deletionKey });
+    const result: StorageDeleteSchema = await apiAsync.trade.storageDelete.mutate({ objectId, deletionKey });
     setDeletionResponse(result);
     if (result.type === 'success')
       forgetChatLinkItem(objectId);

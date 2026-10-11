@@ -1,6 +1,6 @@
 import * as z from 'zod/v4';
 
-import { createTRPCRouter, edgeProcedure } from '~/server/trpc/trpc.server';
+import { createTRPCRouter, publicProcedure } from '~/server/trpc/trpc.server';
 import { fetchJsonOrTRPCThrow, fetchResponseOrTRPCThrow, fetchTextOrTRPCThrow } from '~/server/trpc/trpc.router.fetchers';
 
 import { convert_UInt8Array_To_Base64 } from '~/common/util/blobUtils';
@@ -31,7 +31,7 @@ const listModelsInputSchema = z.object({
 export const llmAnthropicRouter = createTRPCRouter({
 
   /* [Anthropic] list models - https://docs.anthropic.com/claude/docs/models-overview */
-  listModels: edgeProcedure
+  listModels: publicProcedure
     .input(listModelsInputSchema)
     .output(ListModelsResponse_schema)
     .query(async ({ input: { access }, signal }) => {
@@ -42,14 +42,14 @@ export const llmAnthropicRouter = createTRPCRouter({
     }),
 
   /* [Anthropic] list skills - https://docs.anthropic.com/en/docs/build-with-claude/skills-api */
-  listSkills: edgeProcedure
+  listSkills: publicProcedure
     .input(z.object({ access: anthropicAccessSchema }))
     .query(async ({ input: { access } }) => {
       return await anthropicGETOrThrow(access, ANTHROPIC_API_PATHS.skills, { enableSkills: true });
     }),
 
   /* [Anthropic] get skill details */
-  getSkill: edgeProcedure
+  getSkill: publicProcedure
     .input(z.object({
       access: anthropicAccessSchema,
       skillId: z.string(),
@@ -59,7 +59,7 @@ export const llmAnthropicRouter = createTRPCRouter({
     }),
 
   /* [Anthropic] Files API - delete file permanently from Anthropic servers */
-  fileApiDelete: edgeProcedure
+  fileApiDelete: publicProcedure
     .input(z.object({
       access: anthropicAccessSchema,
       fileId: z.string(),
@@ -71,7 +71,7 @@ export const llmAnthropicRouter = createTRPCRouter({
     }),
 
   /* [Anthropic] Files API - download file content */
-  fileApiDownload: edgeProcedure
+  fileApiDownload: publicProcedure
     .input(z.object({
       access: anthropicAccessSchema,
       fileId: z.string(),
@@ -97,7 +97,7 @@ export const llmAnthropicRouter = createTRPCRouter({
     }),
 
   /* [Anthropic] Files API - get file metadata */
-  fileApiGetMetadata: edgeProcedure
+  fileApiGetMetadata: publicProcedure
     .input(z.object({
       access: anthropicAccessSchema,
       fileId: z.string(),
