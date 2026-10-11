@@ -1,4 +1,4 @@
-/* AGI processing - nice effects */
+/* Processing - nice effects */
 @property --rotate {
     syntax: "<angle>";
     initial-value: 132deg;

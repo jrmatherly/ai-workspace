@@ -251,7 +251,7 @@ function AppLlmCapabilitiesAllowed() {
     const csv = lines.join('\n');
     await fileSave(
       new Blob([csv], { type: 'text/csv;charset=utf-8' }),
-      { fileName: `big-agi_llm-capabilities_${prettyTimestampForFilenames()}.csv`, extensions: ['.csv'] },
+      { fileName: `ai-workspace_llm-capabilities_${prettyTimestampForFilenames()}.csv`, extensions: ['.csv'] },
     ).catch(e => console.error('CSV save failed:', e));
   }, [rows, results, vendorNameById, serviceLabelById]);
 

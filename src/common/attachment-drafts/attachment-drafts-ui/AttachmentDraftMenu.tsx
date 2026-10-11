@@ -407,7 +407,7 @@ export function AttachmentDraftMenu(props: {
                   if (isDocPart(part)) {
                     return (
                       <Typography key={index} component='div' level='body-sm' textColor='primary.softColor' sx={{ display: 'flex', alignItems: 'center' }}>
-                        <span>{part.data.mimeType /* part.type: big-agi type, not source mime */} · {humanReadableBytes(part.data.text.length)} &nbsp;</span>
+                        <span>{part.data.mimeType /* part.type: internal type, not source mime */} · {humanReadableBytes(part.data.text.length)} &nbsp;</span>
                         {/*<Chip component='span' size='sm' color='primary' variant='outlined' startDecorator={<VisibilityIcon />} onClick={(event) => handleViewDocPart(event, part)} sx={{ ml: 'auto' }}>*/}
                         {/*  view*/}
                         {/*</Chip>*/}

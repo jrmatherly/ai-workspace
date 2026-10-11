@@ -499,7 +499,7 @@ const _geminiServerToolConfigs: Record<GeminiWire_ContentParts.ServerToolType, _
     mot: 'search-web',
     callLabel: 'Fetching web content...',
     doneLabel: 'Retrieved content',
-    // Wire format (verified): { urls: string[] } e.g. { urls: ["https://big-agi.com"] }
+    // Wire format (verified): { urls: string[] } e.g. { urls: ["https://example.com"] }
     parseArgs: (args) => {
       const a = _geminiAsObj(args);
       const urls = _geminiStrArray(a?.urls);

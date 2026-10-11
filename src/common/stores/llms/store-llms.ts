@@ -483,7 +483,7 @@ export const useModelsStore = create<LlmsStore>()(persist(
     /* versioning:
      *  1: adds maxOutputTokens (default to half of contextTokens)
      *  2: large changes on all LLMs, and reset chat/fast/func LLMs
-     *  3: big-AGI v2.x upgrade
+     *  3: v2 upgrade
      *  4: migrate .options to .initialParameters/.userParameters
      *  4B: we changed from .chatLLMId/.fastLLMId to modelAssignments: {}, without explicit migration (done on rehydrate, and for no particular reason)
      *  5: global model assignments default to dynamic Auto, stored as missing assignments
@@ -510,7 +510,7 @@ export const useModelsStore = create<LlmsStore>()(persist(
         }
       }
 
-      // 2 -> 3: big-AGI v2.x upgrade: update all models for pricing info
+      // 2 -> 3: v2 upgrade: update all models for pricing info
       if (fromVersion < 3) {
         try {
           state.llms.forEach(portModelPricingV2toV3);

@@ -10,11 +10,9 @@ import TextFieldsIcon from '@mui/icons-material/TextFields';
 import SpeedIcon from '@mui/icons-material/Speed';
 import WidthWideIcon from '@mui/icons-material/WidthWide';
 
-import { BaseProduct } from '~/common/app.release';
 import { FormLabelStart } from '~/common/components/forms/FormLabelStart';
 import { FormSelectControl, FormSelectOption } from '~/common/components/forms/FormSelectControl';
 import { FormSwitchControl } from '~/common/components/forms/FormSwitchControl';
-import { Link } from '~/common/components/Link';
 import { PhImageSquare } from '~/common/components/icons/phosphor/PhImageSquare';
 import { useIsMobile } from '~/common/components/useMatchMedia';
 import { useUIPreferencesStore } from '~/common/stores/store-ui';
@@ -105,7 +103,7 @@ export function UxLabsSettings() {
 
     {/*
       Other Graduated (removed or backlog):
-        - <Link href={BaseProduct.UpstreamIssue(359)} target='_blank'>Draw App</Link>
+        - Draw App
         - Text Tools: dinamically shown where applicable (e.g. Diff)
         - Chat Mode: follow-ups; moved to Chat Advanced UI
     */}
@@ -115,10 +113,10 @@ export function UxLabsSettings() {
       <Typography level='body-xs'>
         Screen Capture · Webcam · Cost Estimation · Enhanced Code Blocks
         {' · '}Beam
-        {' · '}<Link href={BaseProduct.UpstreamIssue(208)} target='_blank'>Split Chats</Link>
-        {' · '}<Link href={BaseProduct.UpstreamIssue(354)} target='_blank'>Call AGI</Link>
-        {' · '}<Link href={BaseProduct.UpstreamIssue(282)} target='_blank'>Persona Creator</Link>
-        {' · '}<Link href={BaseProduct.UpstreamIssue(192)} target='_blank'>Auto Diagrams</Link>
+        {' · '}Split Chats
+        {' · '}Call AI
+        {' · '}Persona Creator
+        {' · '}Auto Diagrams
         {' · '}Imagine · Chat Search · Text Tools · LLM Overheat
       </Typography>
     </FormControl>

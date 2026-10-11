@@ -37,7 +37,7 @@
     {
       "action": "/link/share_target",
       "accept": {
-        "application/big-agi": [
+        "application/vnd.ai-workspace": [
           ".agi",
           ".agi.json"
         ]

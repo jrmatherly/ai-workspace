@@ -126,7 +126,7 @@ function AppDebug() {
   const handleDownload = async () => {
     fileSave(
       new Blob([JSON.stringify({ client: cClient, agi: cProduct, backend: cBackend }, null, 2)], { type: 'application/json' }),
-      { fileName: `big-agi_debug_${prettyTimestampForFilenames()}.json`, extensions: ['.json'] },
+      { fileName: `ai-workspace_debug_${prettyTimestampForFilenames()}.json`, extensions: ['.json'] },
     )
       .then(() => setSaved(true))
       .catch(e => console.error('Error saving debug.json', e));
@@ -151,7 +151,7 @@ function AppDebug() {
         <Card>
           <CardContent sx={{ display: 'grid', gap: 3 }}>
             <DebugJsonCard title='Client' data={cClient} />
-            <DebugJsonCard title='AGI' data={cProduct} />
+            <DebugJsonCard title='Product' data={cProduct} />
             <DebugJsonCard title='Backend' data={cBackend} />
           </CardContent>
         </Card>

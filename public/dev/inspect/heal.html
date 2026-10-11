@@ -60,7 +60,7 @@
       var hasZync = dbs.some(function (d) { return d.name && d.name.indexOf('zync-storage-') === 0; });
 
       // 1. Legacy databases
-      [['keyval-store', 'legacy chats (pre-ZYNC, can be very large)'], ['Big-AGI', 'legacy assets / images']].forEach(function (pair) {
+      [['keyval-store', 'legacy chats (pre-ZYNC, can be very large)'], ['AI-Workspace', 'legacy assets / images']].forEach(function (pair) {
         var nm = pair[0];
         if (!dbs.some(function (d) { return d.name === nm; })) return;
         if (hasZync) F.push({ sev: 'bloat', title: 'Legacy database "' + nm + '"', detail: pair[1] + '. A zync-storage-* database exists, so migration has run - safe to drop and reclaim space.', actions: [{ label: 'Drop "' + nm + '"', danger: true, confirmPhrase: nm, confirmText: 'Permanently delete the legacy database "' + nm + '". Your current data lives in the zync-storage-* database and is unaffected.\n\nType the database name (' + nm + ') to confirm:', run: function () { return deleteDB(nm); } }] });

@@ -4,7 +4,6 @@ import type { SxProps } from '@mui/joy/styles/types';
 import { Avatar, Box, Card, CardContent, Checkbox, Chip, IconButton, Link as MuiLink, ListDivider, ListItemDecorator, MenuItem, Sheet, Typography } from '@mui/joy';
 import CallIcon from '@mui/icons-material/Call';
 
-import { GitHubProjectIssueCard } from '~/common/components/GitHubProjectIssueCard';
 import { OptimaPanelGroupedList } from '~/common/layout/optima/panel/OptimaPanelGroupedList';
 import { OptimaPanelIn } from '~/common/layout/optima/portals/OptimaPortalsIn';
 import { animationShadowRingLimey } from '~/common/util/animUtils';
@@ -255,7 +254,7 @@ export function Contacts(props: { setCallIntent: (intent: AppCallIntent) => void
     {/* -> Panel */}
     <OptimaPanelIn><ContactsMenuItems /></OptimaPanelIn>
 
-    {/* Header "Call AGI" */}
+    {/* Header "Call AI" */}
     <Box sx={{
       my: 6,
       display: 'flex', alignItems: 'center',
@@ -275,7 +274,7 @@ export function Contacts(props: { setCallIntent: (intent: AppCallIntent) => void
 
       <Box>
         <Typography level='title-lg'>
-          Call AGI
+          Call AI
         </Typography>
         <Typography level='title-sm' sx={{ mt: 1 }}>
           Explore ideas and ignite creativity
@@ -313,19 +312,11 @@ export function Contacts(props: { setCallIntent: (intent: AppCallIntent) => void
 
     {showSupport && <ListDivider sx={{ my: 1 }} />}
 
-    {showSupport && <GitHubProjectIssueCard
-      issue={354}
-      text='Call App: Support thread and compatibility matrix'
-      note={<>
-        Voice input uses the HTML Web Speech API.
-      </>}
-      // note2='Please report any issues you encounter'
-      sx={{
-        width: '100%',
-        mb: 2,
-        mt: 5,
-      }}
-    />}
+    {showSupport && <Card variant='outlined' color='primary' sx={{ width: '100%', mb: 2, mt: 5 }}>
+      <Typography level='body-sm'>
+        Call App: voice input uses the HTML Web Speech API.
+      </Typography>
+    </Card>}
 
   </>;
 }

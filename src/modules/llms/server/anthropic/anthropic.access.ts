@@ -46,7 +46,7 @@ const ANTHROPIC_HEADERS_VERSION = {
   // 2026-08-14, no observable effect on limits or routing); Anthropic reflects any requested header
   // in CORS preflight, so it is safe on the CSF path too.
   // 2026-08-14 NOTE: not necessary for now, so we don't se it
-  // 'x-app': 'big-agi',
+  // 'x-app': 'ai-workspace',
 } as const;
 
 const ANTHROPIC_HEADERS_CORS = {

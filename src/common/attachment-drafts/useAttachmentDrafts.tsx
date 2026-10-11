@@ -64,7 +64,7 @@ export function useAttachmentDrafts(attachmentsStoreApi: AttachmentDraftsStoreAp
     if (ATTACHMENTS_DEBUG_INTAKE)
       console.log('attachAppendFile', origin, fileWithHandle, overrideFileName);
 
-    // special case: intercept AGI files to potentially load them instead of attaching them
+    // special case: intercept .agi.json files to potentially load them instead of attaching them
     if (fileWithHandle.name.endsWith('.agi.json'))
       if (onFilterAGIFile && await onFilterAGIFile(fileWithHandle))
         return;

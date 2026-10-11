@@ -59,7 +59,6 @@ export const Release = {
 
 
 const REPO = 'https://github.com/jrmatherly/ai-workspace';
-const UPSTREAM_REPO = 'https://github.com/enricoros/big-AGI'; // fork origin: only for links to its historical issue threads
 
 export const BaseProduct = {
   ProductName: 'AI Workspace',
@@ -68,7 +67,6 @@ export const BaseProduct = {
   DocsBaseSite: REPO + '/blob/main/docs/',
   NewsSite: REPO + '/releases',
   OpenSourceRepo: REPO,
-  UpstreamIssue: (issue: number | string) => `${UPSTREAM_REPO}/issues/${issue}`,
   ReleaseNotes: '',
   SupportForm: (_userId?: string) => REPO + '/issues/new?template=ai-triage.yml',
 } as const;

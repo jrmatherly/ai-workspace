@@ -67,7 +67,6 @@ Experiment with different options to find the one that works best for your chat.
 //     mdContent: `
 // #### Human as a Judge
 // You, the user, provide creative direction and final judgement. The AI models are powerful tools that generate drafts for you to quickly evaluate and refine.
-// There are profound reasons why this approach works, which we explore [in our blog](https://big-agi.com/blog/introducing-beam).
 //
 // #### Best Use
 // This tool is designed for the **early stages** of a process, where it delivers unparalleled insights and perspectives precisely **when your

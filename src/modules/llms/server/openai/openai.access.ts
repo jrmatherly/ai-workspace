@@ -442,7 +442,7 @@ export function openAIAccess(access: OpenAIAccessSchema, modelRefId: string | nu
           'X-Source': BaseProduct.ProductName,
           'X-Title': BaseProduct.ProductName,
           // integration attribution (also on Perplexity's CORS allowlist)
-          'X-Pplx-Integration': 'big-agi',
+          'X-Pplx-Integration': 'ai-workspace',
         },
         url: perplexityHost + apiPath,
       };

@@ -2,10 +2,8 @@ import * as React from 'react';
 import * as z from 'zod/v4';
 
 import { Typography } from '@mui/joy';
-import YouTubeIcon from '@mui/icons-material/YouTube';
 
 import type { DModelsServiceId } from '~/common/stores/llms/llms.service.types';
-import { ExpanderAccordion } from '~/common/components/ExpanderAccordion';
 import { ExternalDocsLink } from '~/common/components/ExternalDocsLink';
 import { FormInputKey } from '~/common/components/forms/FormInputKey';
 import { InlineError } from '~/common/components/InlineError';
@@ -14,7 +12,6 @@ import { Link } from '~/common/components/Link';
 import { SetupFormClientSideToggle } from '~/common/components/forms/SetupFormClientSideToggle';
 import { SetupFormCorsHint } from '~/common/components/forms/SetupFormCorsHint';
 import { SetupFormRefetchButton } from '~/common/components/forms/SetupFormRefetchButton';
-import { VideoPlayerYouTube } from '~/common/components/VideoPlayerYouTube';
 
 import { useLlmUpdateModels } from '../../llm.client.hooks';
 import { useServiceSetup } from '../useServiceSetup';
@@ -41,16 +38,6 @@ export function LMStudioServiceSetup(props: { serviceId: DModelsServiceId }) {
     useLlmUpdateModels(false /* use button only (we don't have server-side conf) */, service);
 
   return <>
-
-    <ExpanderAccordion
-      title={<Typography level='title-sm' sx={{ mr: 'auto' }}>Video Tutorial</Typography>}
-      icon={<YouTubeIcon sx={{ color: '#f00' }} />}
-      // expandedVariant='solid'
-      startCollapsed
-    >
-      {/* play='auto': the accordion-expand click grants unmuted autoplay (the embed mounts on reveal, via its visibility gate), like the pre-2026-07 behavior */}
-      <VideoPlayerYouTube width='100%' height={360} youTubeVideoId='MqXzxVokMDk' title='Running big-AGI locally with LM Studio [TUTORIAL]' play='auto' rounded />
-    </ExpanderAccordion>
 
     <Typography level='body-sm'>
       You can use a running <Link href='https://lmstudio.ai/' target='_blank'>LM Studio</Link> instance as a source
