@@ -2,7 +2,8 @@ import * as z from 'zod/v4';
 
 import { Release } from '~/common/app.release';
 
-import { createTRPCRouter, publicProcedure } from '~/server/trpc/trpc.server';
+import { anonymousProcedure, createTRPCRouter, publicProcedure, resolveCaller } from '~/server/trpc/trpc.server';
+import type { AuthCaller } from '~/server/auth/auth.server';
 import { env } from '~/server/env.server';
 import { fetchJsonOrTRPCThrow } from '~/server/trpc/trpc.router.fetchers';
 
@@ -43,8 +44,8 @@ function generateLlmEnvConfigHash(env: Record<string, unknown>): string {
  */
 export const backendRouter = createTRPCRouter({
 
-  /* List server-side capabilities (pre-configured by the deployer) */
-  listCapabilities: publicProcedure
+  /* List server-side capabilities. ANONYMOUS: the k8s probe and the client boot gate; never resolves the caller. */
+  listCapabilities: anonymousProcedure
     .query(async ({ ctx: _unused }): Promise<BackendCapabilities> => {
       return {
         // llms
@@ -76,6 +77,14 @@ export const backendRouter = createTRPCRouter({
         // build data
         build: Release.buildInfo('backend'),
       };
+    }),
+
+  /* Who is calling. ANONYMOUS so the gate and /signin can ask; no input, the session rides in the cookie.
+   * Per-caller payload: no shared cache may keep it. */
+  whoami: anonymousProcedure
+    .query(async ({ ctx }): Promise<AuthCaller> => {
+      ctx.resHeaders.set('Cache-Control', 'private, no-store');
+      return await resolveCaller(ctx);
     }),
 
 

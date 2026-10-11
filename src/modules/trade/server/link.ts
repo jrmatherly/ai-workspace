@@ -3,7 +3,7 @@ import * as z from 'zod/v4';
 import { LinkStorageDataType, LinkStorageVisibility } from '~/server/prisma/generated/enums';
 
 import { prismaDb } from '~/server/prisma/prismaDb';
-import { publicProcedure } from '~/server/trpc/trpc.server';
+import { anonymousProcedure, publicProcedure } from '~/server/trpc/trpc.server';
 
 import { agiUuid } from '~/common/util/idUtils';
 
@@ -141,7 +141,7 @@ export const storagePutProcedure =
  * Reads an object from DB, if it exists, and is not expired, and is not marked as deleted
  */
 export const storageGetProcedure =
-  publicProcedure
+  anonymousProcedure
     .input(storageGetInputSchema)
     .output(storageGetOutputSchema)
     .query(async ({ input: { objectId, ownerId } }) => {

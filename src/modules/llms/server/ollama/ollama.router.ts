@@ -1,7 +1,7 @@
 import * as z from 'zod/v4';
 import { TRPCError } from '@trpc/server';
 
-import { createTRPCRouter, publicProcedure } from '~/server/trpc/trpc.server';
+import { createTRPCRouter, publicProcedure, tenantAdminProcedure } from '~/server/trpc/trpc.server';
 import { fetchTextOrTRPCThrow } from '~/server/trpc/trpc.router.fetchers';
 import { serverCapitalizeFirstLetter } from '~/server/wire';
 
@@ -81,7 +81,7 @@ export const llmOllamaRouter = createTRPCRouter({
     }),
 
   /* Ollama: pull a model */
-  adminPull: publicProcedure
+  adminPull: tenantAdminProcedure
     .input(adminPullModelSchema)
     .mutation(async ({ input }) => {
 
@@ -104,7 +104,7 @@ export const llmOllamaRouter = createTRPCRouter({
     }),
 
   /* Ollama: delete a model */
-  adminDelete: publicProcedure
+  adminDelete: tenantAdminProcedure
     .input(adminPullModelSchema)
     .mutation(async ({ input }) => {
       const { headers, url } = ollamaAccess(input.access, '/api/delete');
