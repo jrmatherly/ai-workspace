@@ -53,6 +53,8 @@ update the image to the latest version, you can run `docker-compose pull` before
 docker-compose up -d
 ```
 
+Coming from the upstream big-AGI compose file (service `big-agi`): run `docker-compose up -d --remove-orphans` once from the same directory, which removes the old service; from a new directory, stop the old container yourself (`docker ps`, `docker rm -f <container>`) or port 3000 stays taken.
+
 ### Make Local Services Visible to Docker 🌐
 
 To make local services running on your host machine accessible to a Docker container, such as a

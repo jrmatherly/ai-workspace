@@ -78,7 +78,7 @@ export async function openConversationsAtRestPicker(): Promise<FileWithHandle[] 
   try {
     return await fileOpen({
       description: `${Brand.Title.Base} JSON Conversations`,
-      mimeTypes: ['application/json', 'application/vnd.ai-workspace'],
+      mimeTypes: ['application/json', 'application/big-agi'],
       multiple: true,
     });
   } catch (error) {
@@ -169,7 +169,7 @@ export async function downloadAllJsonV1B(): Promise<{ conversationCount: number;
   // save file - let errors (including AbortError on cancel) reach the caller, so the UI never fakes success
   await fileSave(blob, {
     fileName: `backup_chats_${window?.location?.hostname || 'all'}_${payload.conversations.length}_${prettyTimestampForFilenames(false)}.agi.json`,
-    // mimeTypes: ['application/json', 'application/vnd.ai-workspace'],
+    // mimeTypes: ['application/json', 'application/big-agi'],
     extensions: ['.json'],
   });
 

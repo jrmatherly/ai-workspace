@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # PreToolUse(Bash) policy. Exit 2 blocks the call; settings.json sets onFailure=block so errors fail closed.
-#   1. No git push (CLAUDE.md: pushes are the user's call). Override: prefix the command with ALLOW_GIT_PUSH=1 (visible in the transcript) or set it in the hook env.
+#   1. No git push (CLAUDE.md: pushes are the user's call). Override: prefix the push segment itself with ALLOW_GIT_PUSH=1 (visible in the transcript), or set ALLOW_GIT_PUSH=1 (that exact value) in the hook env.
+#      The prefix is checked per segment: in a chained command it goes on the push segment, and `export` does not count.
 #   2. No reading .env* files into the transcript. Sourcing them (`.`/`source`) is allowed so keys reach curl as headers.
 set -euo pipefail
 command -v jq >/dev/null || { echo "guard-bash: jq is required" >&2; exit 2; }
@@ -25,7 +26,7 @@ while IFS= read -r seg; do
   if [[ "$first" == git && "$allow_push" != 1 ]]; then
     # the subcommand after leading global options; only -C and -c take a value
     if [[ "$seg" =~ ^[^[:space:]]+([[:space:]]+(-[Cc][[:space:]]+[^[:space:]]+|-[^[:space:]]+))*[[:space:]]+push([^[:alnum:]_-]|$) ]]; then
-      echo "Blocked: pushes are the user's call (CLAUDE.md). Prefix the command with ALLOW_GIT_PUSH=1 to override when the user asked for the push." >&2
+      echo "Blocked: pushes are the user's call (CLAUDE.md). Prefix the push segment with ALLOW_GIT_PUSH=1 to override when the user asked for the push." >&2
       exit 2
     fi
   fi

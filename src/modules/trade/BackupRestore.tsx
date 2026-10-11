@@ -15,8 +15,6 @@ import { Release } from '~/common/app.release';
 import { createModuleLogger } from '~/common/logger';
 import { downloadBlob } from '~/common/util/downloadUtils';
 
-import { DBLOBS_DB_NAME } from '~/modules/dblobs/dblobs.db';
-
 import { tradeFileVariant } from './trade.client';
 import { capitalizeFirstLetter, humanReadableBytes } from '~/common/util/textUtils';
 import { prettyTimestampForFilenames } from '~/common/util/timeUtils';
@@ -24,8 +22,6 @@ import { prettyTimestampForFilenames } from '~/common/util/timeUtils';
 
 // configuration
 const BACKUP_FILE_FORMAT = 'AI Workspace Backup File';
-const BACKUP_APPLICATION = 'AI-Workspace';
-const BACKUP_APPLICATIONS_ACCEPTED = [BACKUP_APPLICATION, 'Big-AGI']; // 'Big-AGI': files written before the rename (and by upstream), same layout
 const BACKUP_FORMAT_VERSION = '1.2';
 const BACKUP_FORMAT_VERSION_NUMBER = 102000;
 const WINDOW_RELOAD_DELAY = 300;
@@ -33,7 +29,7 @@ const EXCLUDED_LOCAL_STORAGE_KEYS = [
   'agi-logger-log', // the log cannot be restored as it's in-mem and being persisted while this is running
 ];
 const EXCLUDED_IDB_DATABASES = [
-  DBLOBS_DB_NAME, // exclude DBlobs IDB
+  'Big-AGI', // exclude DBlobs IDB
 ];
 const INCLUDED_IDB_KEYS: { [dbName: string]: { [storeName: string]: string[]; }; } = {
   'keyval-store': { 'keyval': ['app-chats'] }, // include ONLY the chats IDB
@@ -43,7 +39,7 @@ const INCLUDED_IDB_KEYS: { [dbName: string]: { [storeName: string]: string[]; };
 // Flashing Backup Schema
 // NOTE: ABSOLUTELY NOT CHANGE WITHOUT CHANGING THE saveFlashObjectOrThrow_Streaming TOO (!)
 interface DFlashSchema {
-  schema: 'vnd.ai-workspace.flash-backup';
+  schema: 'vnd.agi.flash-backup';
   schemaVersion: number;
   tenantSlug: string; // mirrors Release.TenantSlug
   metadata: {
@@ -279,7 +275,7 @@ async function restoreIndexedDB(allDbData: Record<string, any>): Promise<void> {
   // expected local DBs to restore over, from the latest `main` (was: `v2-dev`, 2025-05-14)
   const dbTargetVersions: { [dbName: string]: number } = {
     'keyval-store': 1,
-    [DBLOBS_DB_NAME]: 10, // Dexie multiplied the version (1) by 10 (https://github.com/dexie/Dexie.js/issues/59)
+    'Big-AGI': 10, // Dexie multiplied the version (1) by 10 (https://github.com/dexie/Dexie.js/issues/59)
   };
 
   // process each database in sequence
@@ -306,7 +302,7 @@ async function restoreIndexedDB(allDbData: Record<string, any>): Promise<void> {
                 db.createObjectStore('keyval');
                 logger.info(`Created keyval object store in keyval-store database`);
               }
-            } else if (dbName === DBLOBS_DB_NAME) {
+            } else if (dbName === 'Big-AGI') {
               // Create the largeAssets object store with all its indices if it doesn't exist
               if (!db.objectStoreNames.contains('largeAssets')) {
                 const largeAssetsStore = db.createObjectStore('largeAssets', { keyPath: 'id' });
@@ -320,7 +316,7 @@ async function restoreIndexedDB(allDbData: Record<string, any>): Promise<void> {
                 largeAssetsStore.createIndex('origin.source', 'origin.source');
                 largeAssetsStore.createIndex('createdAt', 'createdAt');
                 largeAssetsStore.createIndex('updatedAt', 'updatedAt');
-                logger.info(`Created largeAssets object store with all indices in ${DBLOBS_DB_NAME} database`);
+                logger.info(`Created largeAssets object store with all indices in Big-AGI database`);
               }
             } else {
               // For any unknown database, try to create the object stores that are in the backup
@@ -568,12 +564,12 @@ async function saveFlashObjectOrThrow(backupType: 'full' | 'partial' | 'auto-bef
 //         try {
 //           // start the JSON object
 //           controller.enqueue(encoder.encode('{\n'));
-//           controller.enqueue(encoder.encode(`  "schema": "vnd.ai-workspace.flash-backup",\n`));
+//           controller.enqueue(encoder.encode(`  "schema": "vnd.agi.flash-backup",\n`));
 //           controller.enqueue(encoder.encode(`  "schemaVersion": ${BACKUP_FORMAT_VERSION_NUMBER},\n`));
 //           controller.enqueue(encoder.encode(`  "metadata": ${JSON.stringify({
 //             version: BACKUP_FORMAT_VERSION,
 //             timestamp: new Date().toISOString(),
-//             application: BACKUP_APPLICATION,
+//             application: 'Big-AGI',
 //             backupType,
 //           }, null, spacesForMobile).replace(/^/gm, '  ')},\n`));
 //
@@ -639,13 +635,13 @@ async function saveFlashObjectOrThrow(backupType: 'full' | 'partial' | 'auto-bef
 
 async function createFlashObject(backupType: 'full' | 'partial' | 'auto-before-restore', ignoreExclusions: boolean, includeSettings: boolean, includeIndexedDB: boolean): Promise<DFlashSchema> {
   return {
-    schema: 'vnd.ai-workspace.flash-backup',
+    schema: 'vnd.agi.flash-backup',
     schemaVersion: BACKUP_FORMAT_VERSION_NUMBER,
     tenantSlug: Release.TenantSlug,
     metadata: {
       version: BACKUP_FORMAT_VERSION,
       timestamp: new Date().toISOString(),
-      application: BACKUP_APPLICATION,
+      application: 'Big-AGI',
       backupType,
     },
     storage: {
@@ -657,7 +653,7 @@ async function createFlashObject(backupType: 'full' | 'partial' | 'auto-before-r
 
 
 /**
- * Backup and Restore (Flashing) functionality for AI Workspace client-side data.
+ * Backup and Restore (Flashing) functionality for Big-AGI client-side data.
  * Saves and fully restores localStorage and IndexedDB data.
  */
 export function FlashRestore(props: { unlockRestore?: boolean }) {
@@ -727,10 +723,10 @@ export function FlashRestore(props: { unlockRestore?: boolean }) {
         logger.warn('User selected invalid backup file format', { data: { hasMetadata: !!data?.metadata, hasStorage: !!data?.storage } }, undefined, { skipReporting: true });
         return;
       }
-      if (!BACKUP_APPLICATIONS_ACCEPTED.includes(data.metadata.application)) {
+      if (data.metadata.application !== 'Big-AGI') {
         // User selected incompatible file - this is expected, not a system error
         setRestoreState('error');
-        setErrorMessage(`Incompatible backup file. Found application "${data.metadata.application}" but expected "${BACKUP_APPLICATION}".`);
+        setErrorMessage(`Incompatible backup file. Found application "${data.metadata.application}" but expected "Big-AGI".`);
         logger.warn('User selected incompatible backup file', { application: data.metadata.application }, undefined, { skipReporting: true });
         return;
       }
@@ -778,7 +774,7 @@ export function FlashRestore(props: { unlockRestore?: boolean }) {
       //     'auto-before-restore',
       //     true, // auto-backup with streaming
       //     false, // auto-backup without images
-      //     `AI-Workspace-auto-pre-flash-${dateStr}.json`,
+      //     `Big-AGI-auto-pre-flash-${dateStr}.json`,
       //   );
       //   logger.info('Created auto-backup before restore');
       // } catch (error: any) {

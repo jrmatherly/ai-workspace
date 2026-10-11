@@ -33,17 +33,6 @@
       "purpose": "any"
     }
   ],
-  "file_handlers": [
-    {
-      "action": "/link/share_target",
-      "accept": {
-        "application/vnd.ai-workspace": [
-          ".agi",
-          ".agi.json"
-        ]
-      }
-    }
-  ],
   "share_target": {
     "action": "/link/share_target",
     "method": "GET",
