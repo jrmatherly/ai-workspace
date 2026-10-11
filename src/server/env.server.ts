@@ -123,9 +123,22 @@ export const env = createEnv({
     ELEVENLABS_API_KEY: z.string().optional(),
 
 
-    // Backend: HTTP Basic Authentication
-    HTTP_BASIC_AUTH_USERNAME: z.string().optional(),
-    HTTP_BASIC_AUTH_PASSWORD: z.string().optional(),
+    // Backend: Authentication - off unless one provider is fully set; cross-field rules in src/server/auth/auth.config.ts
+    AUTH_SECRET: z.string().min(32).optional(),
+    AUTH_URL: z.url().optional(),
+    AUTH_OIDC_ISSUER: z.url().optional(),
+    AUTH_OIDC_NAME: z.string().optional(),
+    AUTH_OIDC_CLIENT_ID: z.string().optional(),
+    AUTH_OIDC_CLIENT_SECRET: z.string().optional(),
+    AUTH_GOOGLE_CLIENT_ID: z.string().optional(),
+    AUTH_GOOGLE_CLIENT_SECRET: z.string().optional(),
+    AUTH_GITHUB_CLIENT_ID: z.string().optional(),
+    AUTH_GITHUB_CLIENT_SECRET: z.string().optional(),
+    AUTH_MICROSOFT_CLIENT_ID: z.string().optional(),
+    AUTH_MICROSOFT_CLIENT_SECRET: z.string().optional(),
+    AUTH_MICROSOFT_TENANT_ID: z.string().optional(),
+    AUTH_ALLOWED_EMAILS: z.string().optional(),
+    AUTH_ADMIN_EMAILS: z.string().optional(),
 
     // AIX: Strict parsing mode - if omitted: strict in dev (throws on unknown API values), tolerant in prod (warns)
     // Set to 'true' to force strict mode in production (useful for debugging API drift)
