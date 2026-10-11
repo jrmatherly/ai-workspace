@@ -6,12 +6,6 @@
 
 </div>
 
-## Provenance
-
-Derived from [enricoros/big-AGI](https://github.com/enricoros/big-AGI) at commit `99b3bf9c` (2026-10-07, v2.1.1), MIT licensed. Upstream changes are reviewed with the `upstream-review` skill (`.claude/skills/upstream-review/`). Issues and releases for this repo: [jrmatherly/ai-workspace](https://github.com/jrmatherly/ai-workspace).
-
-<br/>
-
 # AI Workspace 🧠
 
 **AI Workspace** is a self-hosted, local-first, multi-model AI workspace for experts.
@@ -115,3 +109,7 @@ Self-host with Docker, deploy on Vercel, or develop locally. Full setup guide:
 MIT License · [Third-Party Notices](src/modules/3rdparty/THIRD_PARTY_NOTICES.md)
 
 Copyright (c) 2026 Jason Matherly and (c) 2023-2026 Enrico Ros, see [LICENSE](LICENSE).
+
+## Provenance
+
+Derived from [enricoros/big-AGI](https://github.com/enricoros/big-AGI) at commit `99b3bf9c` (2026-10-07, v2.1.1), MIT licensed.
