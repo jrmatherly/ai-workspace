@@ -61,7 +61,7 @@ For deploying a custom AI Workspace instance:
 
 - **Advanced Setup**:
   - **[Source Code Customization](customizations.md)**: Modify the source code
-  - **[Access Control](deploy-authentication.md)**: Optional, add basic user authentication
+  - **[Authentication](deploy-authentication.md)**: Optional sign-in with Pocket ID (any OIDC), Google, GitHub or Microsoft, with an email allowlist
   - **[Reverse Proxy](deploy-reverse-proxy.md)**: Optional, enables custom domains and SSL
   - **[Docker Deployment](deploy-docker.md)**: Deploy with Docker containers
   - **[Kubernetes](deploy-k8s.md)**: Deploy on Kubernetes clusters

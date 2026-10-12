@@ -136,6 +136,8 @@ Local-first: Zustand in memory with `persist` to localStorage, except chats, whi
 
 One tRPC router, `/src/server/trpc/trpc.router.ts`, mounts every module router: AIX streaming, per-vendor LLM routers, unified Speex TTS, Google search, YouTube, backend capabilities, Browse (fetch and extract page content), and the shared-link store. `app/api/trpc/[trpc]/route.ts` serves it on the Node.js runtime with PostHog error reporting. Until 2026-10 there were two routers, Edge for AI and Node for data; Next 16 deprecated the Edge runtime. Client handles are `apiAsync`, `apiQuery` and `apiStream` in `src/common/util/trpc.client.ts`.
 
+Postgres is optional until an `AUTH_*` provider is set. Its schema ships as committed Prisma migrations in `src/server/prisma/migrations/`: edit `schema.prisma`, run `npx prisma migrate dev --name <change>` against a local database and commit the directory; the app image applies them with `prisma migrate deploy` once per release (`docs/deploy-database.md`).
+
 AIX, LLM and Speex also support **client-side fetch (CSF)**: the same code is rebundled with stubs and included client-side, so the browser can call the vendor directly where CORS allows, cutting latency and network barriers.
 
 @kb/KB.md
