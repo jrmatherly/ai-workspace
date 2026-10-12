@@ -186,7 +186,7 @@ Enable the app to Talk, Draw, and Google things up.
 | `AUTH_MICROSOFT_CLIENT_SECRET` | Microsoft Entra ID client secret |
 | `AUTH_MICROSOFT_TENANT_ID` | One concrete tenant id; `common`, `organizations` and `consumers` are rejected |
 | `AUTH_ALLOWED_EMAILS` | Who may sign in: comma list of addresses and `@domains` |
-| `AUTH_ADMIN_EMAILS` | Who has the admin role: comma list of addresses |
+| `AUTH_ADMIN_EMAILS` | Who has the admin role: comma list of exact addresses, each admitted by `AUTH_ALLOWED_EMAILS` |
 | **AIX** | |
 | `AIX_STRICT_PARSING` | Set to `true` to throw on unknown API values in production too. Unset: strict in development, warn-only in production |
 | **Build** | |

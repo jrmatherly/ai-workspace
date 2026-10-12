@@ -114,13 +114,17 @@ export function parseAuthConfig(e: AuthEnv): AuthConfig | null {
   if (!allowedEmails && providers.some(p => p.access === 'open'))
     throw new Error('Auth misconfigured: AUTH_ALLOWED_EMAILS is required when Google or GitHub is set');
 
-  return {
-    providers: [first, ...rest],
-    secret,
-    baseURL: url.replace(/\/+$/, ''),
-    allowedEmails,
-    adminEmails: emailList(e.AUTH_ADMIN_EMAILS),
-  };
+  const config: AuthConfig = { providers: [first, ...rest], secret, baseURL: url.replace(/\/+$/, ''), allowedEmails, adminEmails: emailList(e.AUTH_ADMIN_EMAILS) };
+
+  // roleFor matches exact addresses: a '@domain' entry or an address outside the allowlist would silently make nobody admin
+  const notAddress = config.adminEmails.filter(entry => !/^[^@\s]+@[^@\s]+$/.test(entry));
+  if (notAddress.length)
+    throw new Error(`Auth misconfigured: AUTH_ADMIN_EMAILS entries must be an address, got ${notAddress.join(', ')}`);
+  const unlisted = config.adminEmails.filter(entry => !isEmailListed(config, entry));
+  if (unlisted.length)
+    throw new Error(`Auth misconfigured: AUTH_ADMIN_EMAILS entries ${unlisted.join(', ')} are not on AUTH_ALLOWED_EMAILS`);
+
+  return config;
 }
 
 /** Parsed once at module load. Everything else reads this, never process.env. */

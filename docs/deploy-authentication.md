@@ -60,7 +60,8 @@ POSTGRES_URL_NON_POOLING=...
   Microsoft emails are trusted as the IdP holds them.
 - Removing an address from `AUTH_ALLOWED_EMAILS` takes effect on that user's next request: they are signed out.
 - `AUTH_ADMIN_EMAILS`: comma list of addresses with the admin role (Ollama model pull and delete). Roles are
-  derived on every request; there is no role column.
+  derived on every request; there is no role column. Each entry must be an exact address (no `@domain`) that
+  `AUTH_ALLOWED_EMAILS` admits; anything else fails at startup.
 - Accounts with the same email link to one user when the existing account's email is verified and the new sign-in
   comes from Pocket ID or Microsoft (trusted providers), or from Google or GitHub with a verified email claim. A
   refused link shows "could not be linked" on the sign-in page; use the provider you signed up with.

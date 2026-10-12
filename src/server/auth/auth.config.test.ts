@@ -45,6 +45,14 @@ test('allowlist entries are an address or an @domain, anything else throws at lo
     assert.throws(() => parseAuthConfig({ ...BASE, ...OIDC, AUTH_ALLOWED_EMAILS: `ok@example.com, ${bad}` }), /AUTH_ALLOWED_EMAILS/, bad);
 });
 
+test('admin entries are exact addresses on the allowlist; a domain or an unlisted address throws at load', () => {
+  for (const bad of ['@example.com', 'family.example', 'me@', 'a@b@c'])
+    assert.throws(() => parseAuthConfig({ ...BASE, ...OIDC, AUTH_ADMIN_EMAILS: `ok@example.com, ${bad}` }), /AUTH_ADMIN_EMAILS entries must be an address/, bad);
+  assert.throws(() => parseAuthConfig({ ...BASE, ...OIDC, AUTH_ALLOWED_EMAILS: 'me@example.com', AUTH_ADMIN_EMAILS: 'boss@example.com' }), /AUTH_ADMIN_EMAILS.*boss@example.com.*AUTH_ALLOWED_EMAILS/);
+  assert.deepEqual(parseAuthConfig({ ...BASE, ...OIDC, AUTH_ALLOWED_EMAILS: '@example.com', AUTH_ADMIN_EMAILS: ' Boss@Example.com ,' })?.adminEmails, ['boss@example.com']);
+  assert.deepEqual(parseAuthConfig({ ...BASE, ...OIDC, AUTH_ADMIN_EMAILS: 'anyone@anywhere.org' })?.adminEmails, ['anyone@anywhere.org'], 'no allowlist: any address');
+});
+
 test('microsoft needs a concrete tenant', () => {
   const MS = { AUTH_MICROSOFT_CLIENT_ID: 'm', AUTH_MICROSOFT_CLIENT_SECRET: 'ms' };
   assert.throws(() => parseAuthConfig({ ...BASE, ...MS }), /AUTH_MICROSOFT_TENANT_ID/);
