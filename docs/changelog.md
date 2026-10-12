@@ -2,6 +2,15 @@
 
 AI Workspace started from the big-AGI 2.1.1 codebase on 2026-10-10; earlier history is upstream's and is not carried here. Releases are tracked on GitHub Releases: <https://github.com/jrmatherly/ai-workspace/releases>
 
+## 2026.10.11.2
+
+- Client Logs capture AI failures, failed server calls and sign-in or sign-out failures
+- LocalAI behind llama-server: the per-slot context becomes the model's window, and tool calling follows the loaded chat template, so auto-diagrams and generative UIs skip models that cannot call tools
+- LocalAI voice synthesis honours the server-side `LOCALAI_API_HOST` and key
+- Beam explainer illustrations redrawn in the logo system
+- Browsing docs: browserless v2 with a token; the `/browse` command was retired earlier
+- Release images also get the bare version tag (`2026.10.11.2`)
+
 ## 2026.10.11.1
 
 - Authentication (optional): Pocket ID or any OIDC provider, Google, GitHub and Microsoft Entra ID through Better Auth, with an email allowlist, an admin list, a sign-in page and fail-closed API guards (`docs/deploy-authentication.md`)

@@ -1,6 +1,6 @@
 {
   "name": "ai-workspace",
-  "version": "2026.10.1-1.1",
+  "version": "2026.10.1-1.2",
   "description": "Self-hosted, local-first, multi-model AI workspace",
   "license": "MIT",
   "private": true,
