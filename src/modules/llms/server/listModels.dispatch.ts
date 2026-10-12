@@ -419,6 +419,14 @@ function _listModelsCreateDispatch(access: AixAPI_Access, signal?: AbortSignal):
             signal,
           });
           _wire?.logResponse(wireModels);
+
+          // [llama-server as LocalAI] GET /props says whether the loaded chat template renders and parses tool calls;
+          // the listing cannot. Best effort: no /props (LocalAI proper, older builds) leaves the heuristics in place.
+          if (dialect === 'localai' && wireModels?.data?.some(m => (m as { owned_by?: string }).owned_by === 'llamacpp')) {
+            const propsUrl = openAIAccess(access, null, '/props').url;
+            const props = await fetchJsonOrTRPCThrow<Record<string, unknown>>({ url: propsUrl, headers: oaiHeaders, name: 'OpenAI/Localai/props', signal }).catch(() => undefined);
+            return { ...wireModels, props };
+          }
           return wireModels;
         },
 

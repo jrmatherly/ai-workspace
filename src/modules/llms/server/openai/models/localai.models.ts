@@ -44,22 +44,30 @@ export function localAIModelSortFn(a: ModelDescriptionSchema, b: ModelDescriptio
 /**
  * llama-server's /v1/models (also reachable as LocalAI) adds per-model `meta` (n_ctx is the served slot context, the real
  * limit; n_ctx_train the architecture's) and an Ollama-style `models[]` whose `capabilities` are 'completion' plus
- * 'multimodal' when a projector is loaded (tools/server/server-context.cpp; there is no tool-calling flag, that is a
- * /props chat_template_caps matter). LocalAI proper sends neither, so every field is optional and the id heuristics
- * stay as the fallback.
+ * 'multimodal' when a projector is loaded (tools/server/server-context.cpp). Tool calling is not in the listing: the
+ * dispatch attaches llama-server's GET /props as `props`, whose chat_template_caps.supports_tool_calls says whether
+ * the loaded template renders tools and parses calls (Phi-4's does not, 2026-10-11). LocalAI proper sends none of
+ * this, so every field is optional and the id heuristics stay as the fallback.
  */
 export interface LocalAIModelHints {
   nCtx?: number;
   capabilities?: string[];
+  toolCalls?: boolean;
 }
 
 export function localAIModelHints(wireResponse: unknown, modelId: string): LocalAIModelHints {
-  const r = wireResponse as { data?: { id?: string; meta?: { n_ctx?: unknown } }[]; models?: { name?: string; model?: string; capabilities?: unknown }[] } | null | undefined;
+  const r = wireResponse as {
+    data?: { id?: string; meta?: { n_ctx?: unknown } }[];
+    models?: { name?: string; model?: string; capabilities?: unknown }[];
+    props?: { chat_template_caps?: { supports_tool_calls?: unknown } };
+  } | null | undefined;
   const nCtx = r?.data?.find(m => m.id === modelId)?.meta?.n_ctx;
   const capabilities = r?.models?.find(m => m.name === modelId || m.model === modelId)?.capabilities;
+  const toolCalls = r?.props?.chat_template_caps?.supports_tool_calls;
   return {
     ...(typeof nCtx === 'number' && nCtx > 0 && { nCtx }),
     ...(Array.isArray(capabilities) && capabilities.every(c => typeof c === 'string') && { capabilities: capabilities as string[] }),
+    ...(typeof toolCalls === 'boolean' && { toolCalls }),
   };
 }
 
@@ -79,8 +87,10 @@ export function localAIModelToModelDescription(modelId: string, hints: LocalAIMo
 
   const description = `LocalAI model. File: ${modelId}`;
 
-  // very dull heuristics; vision also from llama-server's stated 'multimodal'
-  const interfaces = [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn];
+  // very dull heuristics; llama-server states vision ('multimodal') and tool calls (/props), used when present
+  const interfaces = [LLM_IF_OAI_Chat];
+  if (hints.toolCalls !== false)
+    interfaces.push(LLM_IF_OAI_Fn);
   if (hints.capabilities?.includes('multimodal') || ['vision', 'llava', '-vl-', 'minicpm-v'].some(match => modelId.includes(match)))
     interfaces.push(LLM_IF_OAI_Vision);
   if (['r1', 'thinking', 'reasoning', 'qwq'].some(match => modelId.includes(match)))
