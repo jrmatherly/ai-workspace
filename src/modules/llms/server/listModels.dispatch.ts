@@ -427,6 +427,15 @@ function _listModelsCreateDispatch(access: AixAPI_Access, signal?: AbortSignal):
             const props = await fetchJsonOrTRPCThrow<Record<string, unknown>>({ url: propsUrl, headers: oaiHeaders, name: 'OpenAI/Localai/props', signal }).catch(() => undefined);
             return { ...wireModels, props };
           }
+          // [LocalAI proper] lists ids only; the config route carries context_size. 401/404 leave the window unknown as before.
+          if (dialect === 'localai' && wireModels?.data?.length) {
+            const ids = wireModels.data.slice(0, 20).map(m => m.id);
+            const bodies = await Promise.all(ids.map(id => fetchJsonOrTRPCThrow<Record<string, unknown>>({
+              url: openAIAccess(access, null, '/api/models/config-json/' + encodeURIComponent(id)).url,
+              headers: oaiHeaders, name: 'OpenAI/Localai/config', signal,
+            }).catch(() => undefined)));
+            return { ...wireModels, configs: Object.fromEntries(ids.map((id, i) => [id, bodies[i]])) };
+          }
           return wireModels;
         },
 

@@ -40,3 +40,14 @@ test('LocalAI proper (no meta, no models array): unknown window, heuristics keep
   assert.deepEqual(md.interfaces, [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn, LLM_IF_OAI_Vision]);
   assert.deepEqual(localAIModelToModelDescription('x').interfaces, [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn], 'hints optional');
 });
+
+test('LocalAI proper config route: context_size becomes the window; a failed fetch or no configs leaves it unknown; meta.n_ctx wins', () => {
+  const listing = { object: 'list', data: [{ id: 'qwen-3.5-4b', object: 'model' }] };
+  const hints = localAIModelHints({ ...listing, configs: { 'qwen-3.5-4b': { context_size: 65536, backend: 'llama-cpp' } } }, 'qwen-3.5-4b');
+  assert.deepEqual(hints, { nCtx: 65536 });
+  assert.equal(localAIModelToModelDescription('qwen-3.5-4b', hints).contextWindow, 65536);
+  assert.deepEqual(localAIModelHints({ ...listing, configs: { 'qwen-3.5-4b': undefined } }, 'qwen-3.5-4b'), {});
+  assert.deepEqual(localAIModelHints(listing, 'qwen-3.5-4b'), {});
+  const both = { ...LLAMA_SERVER, configs: { 'phi-4-mini': { context_size: 65536 } } };
+  assert.equal(localAIModelHints(both, 'phi-4-mini').nCtx, 2048);
+});

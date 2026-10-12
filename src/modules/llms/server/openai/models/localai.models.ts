@@ -46,8 +46,9 @@ export function localAIModelSortFn(a: ModelDescriptionSchema, b: ModelDescriptio
  * limit; n_ctx_train the architecture's) and an Ollama-style `models[]` whose `capabilities` are 'completion' plus
  * 'multimodal' when a projector is loaded (tools/server/server-context.cpp). Tool calling is not in the listing: the
  * dispatch attaches llama-server's GET /props as `props`, whose chat_template_caps.supports_tool_calls says whether
- * the loaded template renders tools and parses calls (Phi-4's does not, 2026-10-11). LocalAI proper sends none of
- * this, so every field is optional and the id heuristics stay as the fallback.
+ * the loaded template renders tools and parses calls (Phi-4's does not, 2026-10-11). LocalAI proper lists ids only; the
+ * dispatch attaches its GET /api/models/config-json/<id> bodies as `configs`, whose `context_size` is the window when
+ * llama-server's n_ctx is absent. Every field is optional and the id heuristics stay as the fallback.
  */
 export interface LocalAIModelHints {
   nCtx?: number;
@@ -60,8 +61,10 @@ export function localAIModelHints(wireResponse: unknown, modelId: string): Local
     data?: { id?: string; meta?: { n_ctx?: unknown } }[];
     models?: { name?: string; model?: string; capabilities?: unknown }[];
     props?: { chat_template_caps?: { supports_tool_calls?: unknown } };
+    configs?: Record<string, { context_size?: unknown } | undefined>;
   } | null | undefined;
-  const nCtx = r?.data?.find(m => m.id === modelId)?.meta?.n_ctx;
+  const metaNCtx = r?.data?.find(m => m.id === modelId)?.meta?.n_ctx;
+  const nCtx = typeof metaNCtx === 'number' && metaNCtx > 0 ? metaNCtx : r?.configs?.[modelId]?.context_size;
   const capabilities = r?.models?.find(m => m.name === modelId || m.model === modelId)?.capabilities;
   const toolCalls = r?.props?.chat_template_caps?.supports_tool_calls;
   return {
