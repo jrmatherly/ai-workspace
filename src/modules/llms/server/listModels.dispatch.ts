@@ -50,7 +50,7 @@ import { nousResearchHeuristic, nousResearchModelsToModelDescriptions } from './
 import { novitaHeuristic, novitaModelsToModelDescriptions } from './openai/models/novita.models';
 import { nvidiaNIMHeuristic, nvidiaNIMModelsToModelDescriptions } from './openai/models/nvidianim.models';
 import { lmStudioFetchModels, lmStudioModelsToModelDescriptions } from './openai/models/lmstudio.models';
-import { localAIModelSortFn, localAIModelToModelDescription } from './openai/models/localai.models';
+import { localAIModelHints, localAIModelSortFn, localAIModelToModelDescription } from './openai/models/localai.models';
 import { metaAIModelsToModelDescriptions } from './openai/models/metaai.models';
 import { mistralModels } from './openai/models/mistral.models';
 import { modularModelsToModelDescriptions } from './openai/models/modular.models';
@@ -481,7 +481,7 @@ function _listModelsCreateDispatch(access: AixAPI_Access, signal?: AbortSignal):
 
             case 'localai':
               return maybeModels
-                .map(({ id }) => localAIModelToModelDescription(id))
+                .map(({ id }) => localAIModelToModelDescription(id, localAIModelHints(openAIWireModelsResponse, id)))
                 .sort(localAIModelSortFn);
 
             case 'metaai':

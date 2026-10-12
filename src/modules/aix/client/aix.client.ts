@@ -27,6 +27,8 @@ import { webGeolocationCached } from '~/common/util/webGeolocationUtils';
 // NOTE: pay particular attention to the "import type", as this is importing from the server-side Zod definitions
 import type { AixAPI_Access, AixAPI_ConnectionOptions_ChatGenerate, AixAPI_Context_ChatGenerate, AixAPI_Model, AixAPIChatGenerate_Request, AixTools_ToolDefinition, AixTools_ToolsPolicy } from '../server/api/aix.wiretypes';
 
+import { logger } from '~/common/logger';
+
 import { AixStreamRetry } from './aix.client.retry';
 import { ReassemblerParticleTransforms, ContentReassembler } from './ContentReassembler';
 import { aixCGR_ChatSequence_FromDMessagesOrThrow, aixCGR_FromSimpleText, aixCGR_SystemMessage_FromDMessageOrThrow, AixChatGenerate_TextMessages, clientHotFixGenerateRequest_ApplyAll } from './aix.client.chatGenerateRequest';
@@ -388,6 +390,7 @@ export async function aixChatGenerateContent_DMessage_FromConversation(
     // pre-LL error (e.g. LLM not found, service misconfigured, content assembly error) - the LL likly never ran
     console.warn('[DEV] aixChatGenerateContent error:', { error });
     const errorMessage = error.message || (typeof error === 'string' ? error : 'Chat stopped.');
+    logger.error('AI request failed before generation', { error, llmId, context: aixContextName }, 'ai', { skipReporting: true, skipDebuggerBreak: true });
     lastDMessage = {
       fragments: [...lastDMessage.fragments, createErrorContentFragment(`Issue: ${errorMessage}`)],
       generator: { ...lastDMessage.generator, tokenStopReason: 'issue', endedAt: Date.now() },

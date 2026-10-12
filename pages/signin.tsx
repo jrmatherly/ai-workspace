@@ -5,6 +5,7 @@ import { Box, Button, Typography } from '@mui/joy';
 
 import { InlineError } from '~/common/components/InlineError';
 import { authSignIn, useAuthUser } from '~/common/auth/auth.client';
+import { logger } from '~/common/logger';
 import { SIGN_IN_START_FAILED, signInErrorText } from '~/common/auth/signInErrorText';
 import { getAuthProviders } from '~/common/app.serverconf';
 import { safeNextPath } from '~/common/app.routes.auth';
@@ -60,7 +61,7 @@ function SignInPage(props: { next: string; error: string | null }) {
             setPendingId(provider.id);
             setSignInError(null);
             authSignIn(provider.id, props.next).catch((error: unknown) => {
-              console.warn('[auth] sign-in start failed:', error);
+              logger.error('Sign-in start failed', { error, providerId: provider.id }, 'auth');
               setPendingId(null);
               setSignInError(SIGN_IN_START_FAILED);
             });

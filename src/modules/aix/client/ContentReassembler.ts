@@ -9,6 +9,7 @@ import { ellipsizeMiddle } from '~/common/util/textUtils';
 import { imageBlobTransform, PLATFORM_IMAGE_MIMETYPE } from '~/common/util/imageUtils';
 import { metricsChatGenerateLgToMd, metricsFinishChatGenerateLg, metricsPendChatGenerateLg } from '~/common/stores/metrics/metrics.chatgenerate';
 import { nanoidToUuidV4 } from '~/common/util/idUtils';
+import { logger } from '~/common/logger';
 
 import type { AixWire_Particles } from '../server/api/aix.wiretypes';
 import { AixWire_Vendors } from '../server/api/aix.wiretypes';
@@ -1332,10 +1333,13 @@ export class ContentReassembler {
       if (excess > 0)
         errorText = ellipsizeMiddle(errorText, ELLIPSIZE_DEV_ISSUE_MESSAGES - truncationMessage.length, truncationMessage);
     }
-    this._appendErrorFragment((omitPrefix ? '' : 'AIX Content Reassembler: ') + errorText);
+    this._appendErrorFragment((omitPrefix ? '' : 'AIX Content Reassembler: ') + errorText, undefined, false);
   }
 
-  private _appendErrorFragment(errorText: string, errorHint?: DMessageErrorPart['hint']): void {
+  private _appendErrorFragment(errorText: string, errorHint?: DMessageErrorPart['hint'], log = true): void {
+    // every user-facing error part is also a log entry (the vendor message is text, so PostHog is not involved);
+    // the per-particle dev-error path above opts out, or an unknown stream shape would log once per particle
+    if (log) logger.error('AI response issue', { error: errorText, hint: errorHint }, 'ai', { skipReporting: true, skipDebuggerBreak: true });
     this._pushFragment(createErrorContentFragment(errorText, errorHint));
     this.S._textFragmentIndex = null;
   }

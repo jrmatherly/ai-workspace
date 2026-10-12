@@ -14,6 +14,7 @@ import { SherpaLoading } from '~/common/providers/single-tab/ProviderSingleTab';
 import { posthogReset, posthogUser } from '~/common/components/3rdparty/PostHogAnalytics';
 import { isAuthPublicPath, ROUTE_SIGNIN, signInPath } from '~/common/app.routes.auth';
 import { authSignOut, useAuthUser } from '~/common/auth/auth.client';
+import { logger } from '~/common/logger';
 
 
 const LAST_USER_KEY = 'aiw-auth-last-user';
@@ -99,7 +100,10 @@ export function ProviderAuthGate(props: { children: React.ReactNode }) {
     if (auth.kind !== 'not_allowed') return;
     posthogReset();
     // local only: Pocket ID's logout returns to the registered /signin and would drop ?error=not_allowed
-    authSignOut({ localOnly: true, landing: `${ROUTE_SIGNIN}?error=not_allowed` }).catch(() => setSignOutFailed(true));
+    authSignOut({ localOnly: true, landing: `${ROUTE_SIGNIN}?error=not_allowed` }).catch((error: unknown) => {
+      logger.error('Sign-out after allowlist removal failed', { error }, 'auth');
+      setSignOutFailed(true);
+    });
   }, [auth.kind]);
 
   React.useEffect(() => {
@@ -127,7 +131,10 @@ export function ProviderAuthGate(props: { children: React.ReactNode }) {
     return <SherpaLoading stage='auth' />;
 
   if (switchPending)
-    return <AccountSwitchPrompt onSignOut={() => authSignOut().catch(() => setSignOutFailed(true))} onContinue={handleContinue} />;
+    return <AccountSwitchPrompt onSignOut={() => authSignOut().catch((error: unknown) => {
+      logger.error('Sign-out from the account-switch prompt failed', { error }, 'auth');
+      setSignOutFailed(true);
+    })} onContinue={handleContinue} />;
 
   return props.children;
 }

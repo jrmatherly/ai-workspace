@@ -39,7 +39,9 @@ export type LogSource =
   | 'unknown'   // DO NOT USE
   | 'unhandled' // uncaught exceptions
   | 'client'    // includes uncaught exceptions
-  | 'network'   // network errors - includes the automatic fetch interceptor
+  | 'network'   // network errors - tRPC request failures, and the (off by default) fetch interceptor
+  | 'ai'        // AI generation failures: error parts shown in chat, follow-up tools
+  | 'auth'      // sign-in and sign-out failures
 // add new sources here as we continue using this system
 // | 'server'
 // | 'storage'

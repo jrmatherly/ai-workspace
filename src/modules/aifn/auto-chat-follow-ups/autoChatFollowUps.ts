@@ -8,7 +8,9 @@ import { aixChatGenerateContent_DMessage_orThrow, aixCreateChatGenerateContext }
 import { ConversationsManager } from '~/common/chat-overlay/ConversationsManager';
 import { createDMessageTextContent, messageFragmentsReduceText } from '~/common/stores/chat/chat.message';
 import { createErrorContentFragment, createPlaceholderVoidFragment, createTextContentFragment } from '~/common/stores/chat/chat.fragments';
-import { getDomainModelIdOrThrow } from '~/common/stores/llms/store-llms';
+import { findLLMOrThrow, getDomainModelIdOrThrow } from '~/common/stores/llms/store-llms';
+import { LLM_IF_OAI_Fn } from '~/common/stores/llms/llms.types';
+import { logger } from '~/common/logger';
 import { marshallWrapText } from '~/common/stores/chat/chat.tokens';
 import { processPromptTemplate } from '~/common/util/promptUtils';
 import { useChatStore } from '~/common/stores/chat/store-chats';
@@ -124,6 +126,9 @@ Please follow closely the following requirements:
 } satisfies DumbToolTBD;
 
 
+// one log line per model per session, not one per assistant turn
+const _warnedCodeModels = new Set<string>();
+
 /**
  * Formulates proposals (based on 2 messages, at least) for:
  * - Diagrams: will process the message and append diagrams
@@ -144,7 +149,20 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
   try {
     codeLlmId = getDomainModelIdOrThrow(['codeApply'], true, false, 'chat-followups');
   } catch (error) {
-    return console.log(`autoSuggestions: ${error}`);
+    if (!_warnedCodeModels.has('none')) {
+      _warnedCodeModels.add('none');
+      logger.warn('Auto-augment skipped: no Code model available', { error }, 'ai', { skipReporting: true });
+    }
+    return;
+  }
+
+  // the follow-ups force a tool call; a model without function calling answers in prose and the call fails every turn
+  if (!findLLMOrThrow(codeLlmId).interfaces.includes(LLM_IF_OAI_Fn)) {
+    if (!_warnedCodeModels.has(codeLlmId)) {
+      _warnedCodeModels.add(codeLlmId);
+      logger.warn(`Auto-augment skipped: the Code model ${codeLlmId} has no function calling`, { codeLlmId }, 'ai', { skipReporting: true });
+    }
+    return;
   }
 
   // find the index of the assistant message
@@ -218,6 +236,7 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
       // no diagram generated
       cHandler.messageFragmentDelete(assistantMessageId, placeholderFragment.fId, false, false);
     }).catch(error => {
+      logger.warn('Auto-Diagram generation failed', { error, codeLlmId }, 'ai', { skipReporting: true });
       cHandler.messageFragmentReplace(assistantMessageId, placeholderFragment.fId, createErrorContentFragment(`Auto-Diagram generation issue: ${error?.message || error}`), false);
     });
   }
@@ -269,6 +288,7 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
       // no UI generated
       cHandler.messageFragmentDelete(assistantMessageId, placeholderFragment.fId, false, false);
     }).catch(error => {
+      logger.warn('Auto-UI generation failed', { error, codeLlmId }, 'ai', { skipReporting: true });
       cHandler.messageFragmentReplace(assistantMessageId, placeholderFragment.fId, createErrorContentFragment(`Auto-UI generation issue: ${error?.message || error}`), false);
     });
   }

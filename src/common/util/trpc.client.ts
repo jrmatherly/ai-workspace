@@ -14,6 +14,8 @@ import type { AppRouter } from '~/server/trpc/trpc.router';
 import { transformer } from '~/server/trpc/trpc.transformer';
 
 import { getBaseUrl } from './urlUtils';
+import { isAbortErrorLike } from './abortUtils';
+import { logger } from '../logger';
 import { getAuthProviders } from '../app.serverconf';
 import { isAuthPublicPath, signInPath } from '../app.routes.auth';
 import { reactQueryClientSingleton } from '../app.queryclient';
@@ -64,12 +66,25 @@ const unauthorizedRedirectLink: TRPCLink<AppRouter> = () => ({ next, op }) => ne
 }));
 
 
+/**
+ * Every failed non-streaming tRPC call is a Client Logs entry. Aborts are not failures, UNAUTHORIZED is the redirect
+ * below, and the streaming client is left out: AIX reports its own failures as error parts, which are logged there.
+ */
+const errorLogLink: TRPCLink<AppRouter> = () => ({ next, op }) => next(op).pipe(tap({
+  error: error => {
+    if (isAbortErrorLike(error) || error.data?.code === 'UNAUTHORIZED') return;
+    logger.error(`Request failed: ${op.path}`, { path: op.path, type: op.type, code: error.data?.code, httpStatus: error.data?.httpStatus, message: error.message }, 'network', { skipReporting: true, skipDebuggerBreak: true });
+  },
+}));
+
+
 /// tRPC clients: async, query, and stream
 
 /** Typesafe async/await hooks for the tRPC API */
 export const apiAsync = createTRPCClient<AppRouter>({
   links: [
     loggerLink({ enabled: enableLoggerLink }),
+    errorLogLink,
     unauthorizedRedirectLink,
     httpLink({
       url: `${getBaseUrl()}/api/trpc`,
@@ -91,6 +106,7 @@ export const apiQuery = createTRPCNext<AppRouter>({
       queryClient: reactQueryClientSingleton(),
       links: [
         loggerLink({ enabled: enableLoggerLink }),
+        errorLogLink,
         unauthorizedRedirectLink,
         httpLink({
           url: `${getBaseUrl()}/api/trpc`,
