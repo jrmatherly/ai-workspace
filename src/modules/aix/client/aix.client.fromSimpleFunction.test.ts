@@ -22,15 +22,11 @@ test('a reasoning void fragment before the invocation is accepted', () => {
 });
 
 test('prose only is a typed "Missing function invocation": the model declined to call (qwen3-4b on the Auto-UI prompt, measured 2026-10-12)', () => {
-  assert.throws(() => aixRequireSingleFunctionCallInvocation([createTextContentFragment('Rating: 1. STOP.')], 'draw_plantuml_diagram', 't'), (e: unknown) => e instanceof AixFunctionCallDeclinedError && /Missing function invocation/.test((e as Error).message));
+  assert.throws(() => aixRequireSingleFunctionCallInvocation([createTextContentFragment('Rating: 1. STOP.')], 'draw_plantuml_diagram', 't'), (e: unknown) => e instanceof AixFunctionCallDeclinedError);
 });
 
-test('an upstream error is not a decline', () => {
-  assert.throws(() => aixRequireSingleFunctionCallInvocation([createErrorContentFragment('upstream 400')], 'draw_plantuml_diagram', 't'), (e: unknown) => !(e instanceof AixFunctionCallDeclinedError));
-});
-
-test('an upstream error is the message when there is no call', () => {
-  assert.throws(() => aixRequireSingleFunctionCallInvocation([createErrorContentFragment('upstream 400')], 'draw_plantuml_diagram', 't'), /Error invoking function: upstream 400/);
+test('an upstream error is the message when there is no call, and not a decline', () => {
+  assert.throws(() => aixRequireSingleFunctionCallInvocation([createErrorContentFragment('upstream 400')], 'draw_plantuml_diagram', 't'), (e: unknown) => e instanceof Error && !(e instanceof AixFunctionCallDeclinedError) && /Error invoking function: upstream 400/.test(e.message));
 });
 
 test('a call survives a trailing advisory error fragment', () => {

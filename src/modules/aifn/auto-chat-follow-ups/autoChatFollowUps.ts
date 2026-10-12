@@ -1,15 +1,16 @@
 import * as z from 'zod/v4';
 
 import type { AixAPIChatGenerate_Request } from '~/modules/aix/server/api/aix.wiretypes';
-import { AixClientFunctionCallToolDefinition, aixFunctionCallTool, aixRequireSingleFunctionCallInvocation } from '~/modules/aix/client/aix.client.fromSimpleFunction';
+import { AixClientFunctionCallToolDefinition, AixFunctionCallDeclinedError, aixFunctionCallTool, aixRequireSingleFunctionCallInvocation } from '~/modules/aix/client/aix.client.fromSimpleFunction';
 import { aixCGR_ChatSequence_FromDMessagesOrThrow, aixCGR_SystemMessageText } from '~/modules/aix/client/aix.client.chatGenerateRequest';
 import { aixChatGenerateContent_DMessage_orThrow, aixCreateChatGenerateContext } from '~/modules/aix/client/aix.client';
 
+import type { ConversationHandler } from '~/common/chat-overlay/ConversationHandler';
 import { ConversationsManager } from '~/common/chat-overlay/ConversationsManager';
-import { createDMessageTextContent, messageFragmentsReduceText } from '~/common/stores/chat/chat.message';
-import { createErrorContentFragment, createPlaceholderVoidFragment, createTextContentFragment } from '~/common/stores/chat/chat.fragments';
+import { createDMessageTextContent, DMessageId, messageFragmentsReduceText, messageWasOutOfTokens } from '~/common/stores/chat/chat.message';
+import { createErrorContentFragment, createPlaceholderVoidFragment, createTextContentFragment, DMessageFragmentId } from '~/common/stores/chat/chat.fragments';
 import { findLLMOrThrow, getDomainModelIdOrThrow } from '~/common/stores/llms/store-llms';
-import { LLM_IF_OAI_Fn } from '~/common/stores/llms/llms.types';
+import { DLLMId, LLM_IF_OAI_Fn } from '~/common/stores/llms/llms.types';
 import { logger } from '~/common/logger';
 import { marshallWrapText } from '~/common/stores/chat/chat.tokens';
 import { processPromptTemplate } from '~/common/util/promptUtils';
@@ -129,6 +130,17 @@ Please follow closely the following requirements:
 // one log line per model per session, not one per assistant turn
 const _warnedCodeModels = new Set<string>();
 
+function _settleFollowUpError(label: 'Auto-Diagram' | 'Auto-UI', error: unknown, codeLlmId: DLLMId, cHandler: ConversationHandler, assistantMessageId: DMessageId, placeholderFId: DMessageFragmentId) {
+  // the model answered in prose instead of calling (qwen3-4b rates the UI 1 and stops, measured 2026-10-12): no suggestion, not a failure
+  if (error instanceof AixFunctionCallDeclinedError) {
+    logger.info(`${label} skipped: the Code model declined to call the function`, { codeLlmId }, 'ai', { skipReporting: true });
+    cHandler.messageFragmentDelete(assistantMessageId, placeholderFId, false, false);
+    return;
+  }
+  logger.warn(`${label} generation failed`, { error, codeLlmId }, 'ai', { skipReporting: true });
+  cHandler.messageFragmentReplace(assistantMessageId, placeholderFId, createErrorContentFragment(`${label} generation issue: ${error instanceof Error ? error.message : String(error)}`), false);
+}
+
 /**
  * Formulates proposals (based on 2 messages, at least) for:
  * - Diagrams: will process the message and append diagrams
@@ -211,7 +223,11 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
       aixCreateChatGenerateContext('chat-followup-diagram', conversationId),
       false,
       { abortSignal: 'NON_ABORTABLE' },
-    ).then(({ fragments }) => {
+    ).then(({ fragments, generator }) => {
+
+      // truncated before the call completed (a long html argument, or prose until the cap): a failure, not a decline
+      if (messageWasOutOfTokens(generator))
+        throw new Error('AIX: Out of tokens before the function call.');
 
       // extract the function call
       const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, diagramsTool.fun.name, 'chat-followup-diagram');
@@ -235,10 +251,7 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
 
       // no diagram generated
       cHandler.messageFragmentDelete(assistantMessageId, placeholderFragment.fId, false, false);
-    }).catch(error => {
-      logger.warn('Auto-Diagram generation failed', { error, codeLlmId }, 'ai', { skipReporting: true });
-      cHandler.messageFragmentReplace(assistantMessageId, placeholderFragment.fId, createErrorContentFragment(`Auto-Diagram generation issue: ${error?.message || error}`), false);
-    });
+    }).catch(error => _settleFollowUpError('Auto-Diagram', error, codeLlmId, cHandler, assistantMessageId, placeholderFragment.fId));
   }
 
   // Follow-up: Auto-HTML-UI if the assistant text does not contain <html> already
@@ -263,7 +276,11 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
       aixCreateChatGenerateContext('chat-followup-htmlui', conversationId),
       false,
       { abortSignal: 'NON_ABORTABLE' },
-    ).then(({ fragments }) => {
+    ).then(({ fragments, generator }) => {
+
+      // truncated before the call completed (a long html argument, or prose until the cap): a failure, not a decline
+      if (messageWasOutOfTokens(generator))
+        throw new Error('AIX: Out of tokens before the function call.');
 
       // extract the function call
       const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, uiTool.fun.name, 'chat-followup-htmlui');
@@ -287,10 +304,7 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
 
       // no UI generated
       cHandler.messageFragmentDelete(assistantMessageId, placeholderFragment.fId, false, false);
-    }).catch(error => {
-      logger.warn('Auto-UI generation failed', { error, codeLlmId }, 'ai', { skipReporting: true });
-      cHandler.messageFragmentReplace(assistantMessageId, placeholderFragment.fId, createErrorContentFragment(`Auto-UI generation issue: ${error?.message || error}`), false);
-    });
+    }).catch(error => _settleFollowUpError('Auto-UI', error, codeLlmId, cHandler, assistantMessageId, placeholderFragment.fId));
   }
 
 }

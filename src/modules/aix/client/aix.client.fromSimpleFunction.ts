@@ -57,6 +57,15 @@ export function aixFunctionCallTool(functionCall: AixClientFunctionCallToolDefin
 }
 
 
+/** The model answered in prose and never called: a decline, which best-effort callers treat as 'no result' rather than a failure. */
+export class AixFunctionCallDeclinedError extends Error {
+  constructor() {
+    super('AIX: Missing function invocation.');
+    this.name = 'AixFunctionCallDeclinedError';
+  }
+}
+
+
 /**
  * The one function call a forced-tool request must produce, wherever it sits among the content fragments.
  * Chat-tuned models (Qwen3 through llama-server, measured 2026-10-12) narrate before calling, and reasoning
@@ -81,7 +90,7 @@ export function aixRequireSingleFunctionCallInvocation(fragments: (DMessageConte
       throw new Error('AIX: Error invoking function: ' + errorFragment.part.error);
     if (AIX_DEBUG_CLIENT_TOOLS)
       console.error(`[DEV] single-function-call (${debugLabel}): no invocation among fragments:`, { parts: fragments.map(f => f.ft === 'content' ? f.part.pt : f.ft) });
-    throw new Error('AIX: Missing function invocation.');
+    throw new AixFunctionCallDeclinedError();
   }
 
   // the first call of the expected function wins: parallel_tool_calls is left at the vendor default, so a forced
