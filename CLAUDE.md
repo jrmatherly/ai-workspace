@@ -35,7 +35,7 @@ The `gh` command is available for GitHub reads (issues, PRs, labels), but **NEVE
 
 - **Always use `git mv` instead of `mv`** when renaming or moving files - preserves git history tracking
 - **NEVER run `git stash`** - it causes work loss
-- **Versions** are CalVer, `YYYY.M.D[.MICRO]` unpadded (`2026.10.11`, a second release that day `2026.10.11.1`): accepted by `npm version`; the image workflow derives the bare version tag with a match rule, since a four-part MICRO version is not semver. Release tags are `vYYYY.M.D`. Bump with `npm version <ver> --no-git-tag-version` so `package-lock.json` follows.
+- **Versions** are CalVer, `YYYY.M.D[.MICRO]` unpadded (`2026.10.11`, a second release that day `2026.10.11.1`): the image workflow derives the bare version tag with a match rule, since a four-part MICRO version is not semver. Release tags are `vYYYY.M.D[.MICRO]`. Bump with `npm pkg set version=<ver>` then `npm install --package-lock-only --ignore-scripts` so `package-lock.json` follows; `npm version` mangles a four-part version (`2026.10.11.2` became `2026.10.1-1.2` in the 10.11.x releases, shown on the News page and in analytics).
 - **Commit subjects**: `Area: terse imperative` (e.g. `LLMs: OpenAI: ...`, `Build: ...`, `Tooling: ...`), single line, no body unless needed, no `Co-Authored-By` trailer. Same scheme as upstream, so adopted upstream commits read consistently in `git log`.
 - Vendor API keys for live protocol work go in `.env.api-keys` (gitignored, one `VENDOR_API_KEY` per line). The file does not exist until you create it; key-gated tests and the live probes in `/sync-api` and `/update-models` skip without it.
 
