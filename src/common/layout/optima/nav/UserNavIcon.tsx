@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Avatar, Chip, Dropdown, ListDivider, ListItem, ListItemDecorator, Menu, MenuButton, MenuItem, Tooltip, Typography } from '@mui/joy';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-import { authSignOut, useAuthUser } from '~/common/auth/auth.client';
+import { authSignOutFromMenu, useAuthUser } from '~/common/auth/auth.client';
 
 import { DesktopNavIcon, navItemClasses } from './DesktopNavIcon';
 
@@ -32,7 +32,7 @@ export function UserNavIcon(): React.ReactNode {
           <Chip size='sm' variant='soft' color={role === 'admin' ? 'primary' : 'neutral'}>{role}</Chip>
         </ListItem>
         <ListDivider />
-        <MenuItem onClick={() => authSignOut().catch(error => console.warn('[auth] sign-out failed:', error))}>
+        <MenuItem onClick={authSignOutFromMenu}>
           <ListItemDecorator><LogoutIcon /></ListItemDecorator>
           Sign out
         </MenuItem>

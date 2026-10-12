@@ -5,7 +5,7 @@ import { Box, Button, ButtonGroup, ColorPaletteProp, Sheet } from '@mui/joy';
 
 import { ROUTE_APP_NEWS } from '~/common/app.routes';
 import { checkDivider, checkVisibileIcon, NavItemApp, navItems } from '~/common/app.nav';
-import { authSignOut, useAuthUser } from '~/common/auth/auth.client';
+import { authSignOutFromMenu, useAuthUser } from '~/common/auth/auth.client';
 
 import { BringTheLove } from './BringTheLove';
 import { optimaCloseDrawer, optimaOpenModels } from '../useOptima';
@@ -157,7 +157,7 @@ export function MobileNavItems(props: { currentApp?: NavItemApp }) {
             size='sm'
             color='neutral'
             variant='plain'
-            onClick={() => authSignOut().catch(error => console.warn('[auth] sign-out failed:', error))}
+            onClick={authSignOutFromMenu}
             sx={_styles.button}
           >
             Sign out

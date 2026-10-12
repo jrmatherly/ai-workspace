@@ -7,6 +7,7 @@ import { createAuthClient } from 'better-auth/react';
 import type { AuthProviderInfo } from '~/modules/backend/store-backend-capabilities';
 import type { AuthUser } from '~/server/auth/auth.server';
 
+import { addSnackbar } from '~/common/components/snackbar/useSnackbarsStore';
 import { getAuthProviders } from '~/common/app.serverconf';
 import { ROUTE_SIGNIN, signInPath } from '~/common/app.routes.auth';
 import { apiQuery } from '~/common/util/trpc.client';
@@ -74,4 +75,12 @@ export async function authSignOut({ localOnly = false, landing = ROUTE_SIGNIN }:
   const { data, error } = await authClient.signOut({ callbackURL: ROUTE_SIGNIN, disableRedirect: true });
   if (error) throw new Error(error.message ?? error.statusText ?? 'sign-out failed');
   window.location.assign(!localOnly && data?.url ? data.url : landing);
+}
+
+/** The account menus' Sign out: the session is still live after a failure, so the user is told instead of a console line. */
+export function authSignOutFromMenu(): void {
+  authSignOut().catch((error: unknown) => {
+    console.warn('[auth] sign-out failed:', error);
+    addSnackbar({ key: 'auth-sign-out-failed', message: 'Could not sign out. Check the connection and try again.', type: 'issue' });
+  });
 }
