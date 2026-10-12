@@ -21,10 +21,8 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Positive list: every page under pages/ except _app/_document and /signin, plus /dev/:path* (pages/dev/* and the
-  // /dev, /dev/inspect/* static rewrites). public/ assets, /_next and /api/* are never matched.
-  // Public pages (/news, /link/chat/*) are listed on purpose: one list of every page, pinned by proxy.matcher.test.ts.
-  // A new page adds a line here; an unlisted page is still covered by ProviderAuthGate and the tRPC guards.
+  // AUTH_PAGE_MATCHER, repeated: Next reads this literal at build time and ignores an imported value.
+  // proxy.matcher.test.ts pins the two equal. public/ assets, /_next and /api/* are never matched.
   matcher: [
     '/', '/call', '/diff', '/draw', '/personas', '/tokens', '/workspace',
     '/news', '/link/:path*',

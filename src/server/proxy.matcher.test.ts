@@ -4,6 +4,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { config } from '../../proxy';
+import { AUTH_PAGE_MATCHER, isAuthPagePath } from '~/common/app.routes.auth';
 
 /** Every page route under pages/, Next-style ('/link/chat/[chatLinkId]'), minus the framework files. */
 function pageRoutes(dir: string, prefix = ''): string[] {
@@ -16,16 +17,12 @@ function pageRoutes(dir: string, prefix = ''): string[] {
   });
 }
 
-function matches(matcher: string, route: string): boolean {
-  const star = matcher.match(/^(.*)\/:path\*$/);
-  return star ? route === star[1] || route.startsWith(`${star[1]}/`) : route === matcher;
-}
-
-test('the proxy matcher covers every page under pages/ except /signin, plus the /dev rewrites', () => {
+test('the proxy matcher is AUTH_PAGE_MATCHER and covers every page under pages/ except /signin, plus the /dev rewrites', () => {
+  assert.deepEqual(config.matcher, AUTH_PAGE_MATCHER);
   const routes = pageRoutes(join(process.cwd(), 'pages')).filter(r => r !== '/signin');
   assert.ok(routes.length > 5, `found ${routes.length} pages`);
   for (const route of routes)
-    assert.ok(config.matcher.some(m => matches(m, route)), `${route} is not in the proxy matcher`);
-  assert.ok(config.matcher.some(m => matches(m, '/dev/inspect/storage')), '/dev rewrites are not matched');
-  assert.ok(!config.matcher.some(m => matches(m, '/signin')), '/signin must not be matched');
+    assert.ok(isAuthPagePath(route), `${route} is not in the proxy matcher`);
+  assert.ok(isAuthPagePath('/dev/inspect/storage'), '/dev rewrites are not matched');
+  assert.ok(!isAuthPagePath('/signin'), '/signin must not be matched');
 });
