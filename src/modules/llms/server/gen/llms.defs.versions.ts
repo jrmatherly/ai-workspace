@@ -20,7 +20,7 @@ export const LLMS_DEFS_VERSIONS = {
   googleai: '42221f0d7545',
   groq: 'e52792347a29',
   lmstudio: '59d3f64cb8d4',
-  localai: '40343ba32ed3',
+  localai: 'f076d18a6687',
   metaai: '8ba420b6f5bd',
   mistral: 'd84854aa01ed',
   modular: '0255898b0a1d',

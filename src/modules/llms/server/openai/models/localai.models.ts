@@ -68,7 +68,7 @@ export function localAIModelHints(wireResponse: unknown, modelId: string): Local
   const capabilities = r?.models?.find(m => m.name === modelId || m.model === modelId)?.capabilities;
   const toolCalls = r?.props?.chat_template_caps?.supports_tool_calls;
   return {
-    ...(typeof nCtx === 'number' && nCtx > 0 && { nCtx }),
+    ...(typeof nCtx === 'number' && Number.isInteger(nCtx) && nCtx > 0 && { nCtx }),
     ...(Array.isArray(capabilities) && capabilities.every(c => typeof c === 'string') && { capabilities: capabilities as string[] }),
     ...(typeof toolCalls === 'boolean' && { toolCalls }),
   };

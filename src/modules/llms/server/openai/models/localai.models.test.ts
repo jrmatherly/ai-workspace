@@ -51,3 +51,11 @@ test('LocalAI proper config route: context_size becomes the window; a failed fet
   const both = { ...LLAMA_SERVER, configs: { 'phi-4-mini': { context_size: 65536 } } };
   assert.equal(localAIModelHints(both, 'phi-4-mini').nCtx, 2048);
 });
+
+test('LocalAI config: a non-integer context_size is ignored', () => {
+  for (const bad of [16384.5, 0, -1, '16384', null]) {
+    const wire = { object: 'list', data: [{ id: 'm', object: 'model' }], configs: { m: { context_size: bad } } };
+    assert.deepEqual(localAIModelHints(wire, 'm'), {}, `context_size ${String(bad)}`);
+    assert.equal(localAIModelToModelDescription('m', localAIModelHints(wire, 'm')).contextWindow, null);
+  }
+});
