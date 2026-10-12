@@ -2,6 +2,10 @@
 
 AI Workspace started from the big-AGI 2.1.1 codebase on 2026-10-10; earlier history is upstream's and is not carried here. Releases are tracked on GitHub Releases: <https://github.com/jrmatherly/ai-workspace/releases>
 
+## 2026.10.12
+
+- LocalAI behind llama-server: auto-diagrams and generative UIs no longer fail with "Missing function invocation"; forced tool calls go out as `tool_choice: auto` with a system hint, since llama-server ignores `required`, and a call preceded by prose is accepted
+
 ## 2026.10.11.2
 
 - Client Logs capture AI failures, failed server calls and sign-in or sign-out failures
