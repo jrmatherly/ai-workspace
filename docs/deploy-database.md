@@ -33,11 +33,13 @@ The schema is versioned by committed migrations in `src/server/prisma/migrations
 - **Database created with `npx prisma db push`:** run `npx prisma migrate resolve --applied 0_init` once, then
   `npm run db:migrate`.
 - **Every release:** run `npm run db:migrate` once, on `POSTGRES_URL_NON_POOLING`, before the new version serves traffic.
-  - Kubernetes: one Job before the rollout, or an init container with replicas 1, from the `migrate` image target
-    (`docker build --target migrate`). Never in every replica at start: a second concurrent run times out on the
-    advisory lock (`P1002`) and must be re-run.
+  - Kubernetes: one Job before the rollout, or an init container with replicas 1, running the app image with the
+    command `/app/node_modules/.bin/prisma migrate deploy` (see [Kubernetes](deploy-k8s.md)). Never in every
+    replica at start: a second concurrent run times out on the advisory lock (`P1002`) and must be re-run.
   - Vercel: in the build command before `next build`; `POSTGRES_URL_NON_POOLING` must be available at build time.
-  - Docker: `docker build --target migrate -t <migrate image> .`, then `docker run --rm -e POSTGRES_URL_NON_POOLING=... <migrate image>`.
+  - Docker: `docker run --rm -e POSTGRES_URL_NON_POOLING=... <app image> /app/node_modules/.bin/prisma migrate deploy`.
+    The app image carries the Prisma CLI, the schema and the migrations; it runs read-only as uid 1001 and needs
+    no other variable.
 - The database role needs DDL rights (`CREATE TABLE`, `CREATE TYPE`, write on `_prisma_migrations`); production
   never needs `CREATEDB`.
 - **Development:** after editing `src/server/prisma/schema.prisma`, run `npx prisma migrate dev --name <change>`

@@ -72,9 +72,9 @@ https host users open, the gateway host behind a gateway), one provider's variab
 `AUTH_ADMIN_EMAILS`, and both Postgres URLs. The readiness and liveness probes stay on
 `/api/trpc/backend.listCapabilities`, which answers without a session.
 
-Run the database migrations once per release, before the rollout, as a Job from the `migrate` image target
-(`docker build --target migrate -t <registry>/ai-workspace-migrate:<tag> .`). CI does not publish the `migrate`
-image; build and push it with that command:
+Run the database migrations once per release, before the rollout, as a Job that runs the app image (same tag or
+digest as the Deployment) with the migrate command. The image carries the Prisma CLI, the schema and the migrations,
+runs read-only as uid 1001, and needs only `POSTGRES_URL_NON_POOLING`:
 
 ```yaml
 apiVersion: batch/v1
@@ -89,7 +89,8 @@ spec:
       restartPolicy: Never
       containers:
         - name: migrate
-          image: <registry>/ai-workspace-migrate:<tag>
+          image: ghcr.io/jrmatherly/ai-workspace:<tag>
+          command: ["/app/node_modules/.bin/prisma", "migrate", "deploy"]
           envFrom:
             - secretRef:
                 name: env

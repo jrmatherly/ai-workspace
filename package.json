@@ -73,6 +73,7 @@
     "pdfjs-dist": "6.4.299",
     "posthog-js": "1.438.7",
     "posthog-node": "5.55.2",
+    "prisma": "7.10.0",
     "prismjs": "^1.30.0",
     "puppeteer-core": "25.13.0",
     "react": "^19.3.0",
@@ -112,7 +113,6 @@
     "eslint-plugin-compat": "^7.0.2",
     "markdownlint-cli2": "0.23.3",
     "prettier": "^3.9.10",
-    "prisma": "7.10.0",
     "tsx": "^4.23.15",
     "typescript": "npm:@typescript/typescript6@^6.0.2"
   },

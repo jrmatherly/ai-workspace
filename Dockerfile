@@ -18,14 +18,6 @@ ENV NODE_ENV=development
 RUN npm ci
 
 
-# Migrate: run once per release before the rollout (k8s Job, or an init container with replicas 1).
-# The runner image has dev dependencies pruned (builder stage), so the prisma CLI is only available in this stage.
-# Needs POSTGRES_URL_NON_POOLING. Runs as the unprivileged node user: migrate deploy only reads the image.
-FROM deps AS migrate
-USER node
-CMD ["npx", "prisma", "migrate", "deploy"]
-
-
 # Builder
 FROM base AS builder
 WORKDIR /app
@@ -61,7 +53,8 @@ ENV NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_DRIVE_CLIENT_ID}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build the application (the generated Prisma client lives under src/ and is dockerignored, so regenerate here)
+# Build the application (the generated Prisma client lives under src/ and is dockerignored, so regenerate here).
+# The prune keeps `prisma` (a runtime dependency in package.json) so the runner image can run `migrate deploy`.
 ENV NODE_ENV=production
 RUN npx prisma generate --no-hints \
   && npm run build \
@@ -85,12 +78,19 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/.next/server ./.next/server
 COPY --from=builder --chown=nextjs:nodejs /app/.next/types ./.next/types
 COPY --from=builder --chown=nextjs:nodejs /app/.next/*.json ./.next/
+# Migrations: the same image runs `prisma migrate deploy` once per release before the rollout (docs/deploy-k8s.md)
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
+COPY --from=builder --chown=nextjs:nodejs /app/src/server/prisma/schema.prisma ./src/server/prisma/
+COPY --from=builder --chown=nextjs:nodejs /app/src/server/prisma/migrations ./src/server/prisma/migrations/
 
 # Minimal ENV for production
 ENV NODE_ENV=production
 
 # Run as non-root user
 USER 1001:1001
+
+# The migrate command (docs/deploy-k8s.md) must work from this image: fail the build, not the rollout, if the CLI, its engine or the config is missing
+RUN /app/node_modules/.bin/prisma --version
 
 # Expose port 3000 for the application to listen on
 EXPOSE 3000
