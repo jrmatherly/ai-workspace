@@ -47,8 +47,8 @@ export function localAIModelSortFn(a: ModelDescriptionSchema, b: ModelDescriptio
  * 'multimodal' when a projector is loaded (tools/server/server-context.cpp). Tool calling is not in the listing: the
  * dispatch attaches llama-server's GET /props as `props`, whose chat_template_caps.supports_tool_calls says whether
  * the loaded template renders tools and parses calls (Phi-4's does not, 2026-10-11). LocalAI proper lists ids only; the
- * dispatch attaches its GET /api/models/config-json/<id> bodies as `configs`, whose `context_size` is the window when
- * llama-server's n_ctx is absent. Every field is optional and the id heuristics stay as the fallback.
+ * dispatch attaches its GET /api/models/config-json/<id> bodies as `configs`, whose `context_size` is the server total, divided by
+ * the `parallel:N` slot count in `options`, when llama-server's n_ctx is absent. Every field is optional and the id heuristics stay as the fallback.
  */
 export interface LocalAIModelHints {
   nCtx?: number;
@@ -61,10 +61,15 @@ export function localAIModelHints(wireResponse: unknown, modelId: string): Local
     data?: { id?: string; meta?: { n_ctx?: unknown } }[];
     models?: { name?: string; model?: string; capabilities?: unknown }[];
     props?: { chat_template_caps?: { supports_tool_calls?: unknown } };
-    configs?: Record<string, { context_size?: unknown } | undefined>;
+    configs?: Record<string, { context_size?: unknown; options?: unknown } | undefined>;
   } | null | undefined;
   const metaNCtx = r?.data?.find(m => m.id === modelId)?.meta?.n_ctx;
-  const nCtx = typeof metaNCtx === 'number' && metaNCtx > 0 ? metaNCtx : r?.configs?.[modelId]?.context_size;
+  const config = r?.configs?.[modelId];
+  // [LocalAI, 2026-10-12] config context_size is the server total; the llama-cpp backend splits it across the `parallel:N` slots
+  // (an options string): measured 65536 with parallel:4, and the server rejects a prompt past 16384 tokens
+  const slots = Array.isArray(config?.options) ? Number(config.options.find((o): o is string => typeof o === 'string' && o.startsWith('parallel:'))?.slice(9) ?? 1) : 1;
+  const configNCtx = typeof config?.context_size === 'number' && Number.isInteger(config.context_size) ? Math.floor(config.context_size / slots) : undefined;
+  const nCtx = typeof metaNCtx === 'number' && metaNCtx > 0 ? metaNCtx : configNCtx;
   const capabilities = r?.models?.find(m => m.name === modelId || m.model === modelId)?.capabilities;
   const toolCalls = r?.props?.chat_template_caps?.supports_tool_calls;
   return {
@@ -106,7 +111,7 @@ export function localAIModelToModelDescription(modelId: string, hints: LocalAIMo
     contextWindow: hints.nCtx ?? null, // llama-server slot context, or 'not provided'
     interfaces,
     // parameterSpecs
-    // maxCompletionTokens
+    ...(hints.nCtx !== undefined && { maxCompletionTokens: Math.floor(hints.nCtx / 2) }), // llama.cpp bounds output only by the remaining context: half the window is the limit and the initial budget
     // benchmark
     chatPrice: _knownLocalAIPrice,
     hidden: _hideLocalAIModels.some(match => modelId.toLowerCase().includes(match)),

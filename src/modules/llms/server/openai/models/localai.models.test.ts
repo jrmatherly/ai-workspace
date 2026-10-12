@@ -17,6 +17,7 @@ test('llama-server listing: the slot context becomes the window; multimodal adds
   assert.deepEqual(hints, { nCtx: 2048, capabilities: ['completion'] });
   const md = localAIModelToModelDescription('phi-4-mini', hints);
   assert.equal(md.contextWindow, 2048);
+  assert.equal(md.maxCompletionTokens, 1024, 'half the window: llama.cpp bounds output only by the remaining context');
   assert.deepEqual(md.interfaces, [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn], 'the listing cannot say whether tool calls are parsed');
   const multimodal = localAIModelToModelDescription('gemma-3-4b', { nCtx: 4096, capabilities: ['completion', 'multimodal'] });
   assert.deepEqual(multimodal.interfaces, [LLM_IF_OAI_Chat, LLM_IF_OAI_Fn, LLM_IF_OAI_Vision]);
@@ -56,6 +57,32 @@ test('LocalAI config: a non-integer context_size is ignored', () => {
   for (const bad of [16384.5, 0, -1, '16384', null]) {
     const wire = { object: 'list', data: [{ id: 'm', object: 'model' }], configs: { m: { context_size: bad } } };
     assert.deepEqual(localAIModelHints(wire, 'm'), {}, `context_size ${String(bad)}`);
-    assert.equal(localAIModelToModelDescription('m', localAIModelHints(wire, 'm')).contextWindow, null);
+    const md = localAIModelToModelDescription('m', localAIModelHints(wire, 'm'));
+    assert.equal(md.contextWindow, null);
+    assert.equal(md.maxCompletionTokens, undefined);
   }
+});
+
+test('LocalAI config: context_size becomes the window and half of it the output limit', () => {
+  const wire = { object: 'list', data: [{ id: 'qwen-3.5-4b', object: 'model' }], configs: { 'qwen-3.5-4b': { context_size: 16384, backend: 'llama-cpp' } } };
+  const hints = localAIModelHints(wire, 'qwen-3.5-4b');
+  assert.deepEqual(hints, { nCtx: 16384 });
+  const md = localAIModelToModelDescription('qwen-3.5-4b', hints);
+  assert.equal(md.contextWindow, 16384);
+  assert.equal(md.maxCompletionTokens, 8192);
+});
+
+// verbatim LocalAI v4.11.0 GET /api/models/config-json/qwen-3.5-4b, 2026-10-12 (fields unused here elided); a 20,012-token
+// prompt to this server gets HTTP 400 "exceeds the available context size (16384 tokens)": the window is context_size / parallel
+test('LocalAI config: context_size is the server total, split across the parallel slots in options', () => {
+  const config = { parameters: { max_tokens: 4096 }, name: 'qwen-3.5-4b', backend: 'llama-cpp', context_size: 65536, options: ['use_jinja:true', 'parallel:4', 'kv_unified:false', 'cache_reuse:256'] };
+  const wire = { object: 'list', data: [{ id: 'qwen-3.5-4b', object: 'model' }], configs: { 'qwen-3.5-4b': config } };
+  const hints = localAIModelHints(wire, 'qwen-3.5-4b');
+  assert.deepEqual(hints, { nCtx: 16384 });
+  const md = localAIModelToModelDescription('qwen-3.5-4b', hints);
+  assert.equal(md.contextWindow, 16384);
+  assert.equal(md.maxCompletionTokens, 8192);
+  for (const options of [['parallel:0'], ['parallel:'], ['parallel:x']])
+    assert.deepEqual(localAIModelHints({ ...wire, configs: { 'qwen-3.5-4b': { context_size: 65536, options } } }, 'qwen-3.5-4b'), {}, `options ${options[0]}: no window`);
+  assert.equal(localAIModelHints({ ...wire, configs: { 'qwen-3.5-4b': { context_size: 65536, options: ['parallel:3'] } } }, 'qwen-3.5-4b').nCtx, 21845, 'floored');
 });
