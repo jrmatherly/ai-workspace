@@ -2,6 +2,11 @@
 
 AI Workspace started from the big-AGI 2.1.1 codebase on 2026-10-10; earlier history is upstream's and is not carried here. Releases are tracked on GitHub Releases: <https://github.com/jrmatherly/ai-workspace/releases>
 
+## 2026.10.12.2
+
+- Auto-diagrams and generative UIs hold the model to the rating bar the prompt states (4 for diagrams, 3 for UIs); a call rated below it is no suggestion, the same as no call
+- LocalAI: the model listing reads the context window from the server's model config route, splits it across the parallel slots (65536 with parallel:4 is a 16384 window) and declares half of it as the output limit, so a chat gets an 8192-token budget without touching the model options
+
 ## 2026.10.12.1
 
 - Auto-diagrams and generative UIs: a Code model that declines in prose, as qwen3-4b does for the UI prompt, now yields no suggestion instead of a red "Missing function invocation" line; a reply cut off by the token cap still shows as a failure
