@@ -42,6 +42,7 @@ interface DumbToolTBD {
   sys: string;
   usr: string;
   fun: AixClientFunctionCallToolDefinition,
+  minRating: number; // the bar the prompt states; a call rated below it is 'no suggestion', the same as no call
 }
 
 
@@ -70,6 +71,7 @@ Only if the rating is 4 or 5, include the diagram code, otherwise leave it empty
 # Instructions
 Analyze the following short exchange and call the function {{functionName}} with the results of your analysis including code only if the score is 4 or 5.`,
   usr: 'Analyze the conversation and call {{functionName}} to assess diagram relevance and generate PlantUML if highly relevant.',
+  minRating: 4,
   fun: {
     name: 'draw_plantuml_diagram',
     description: 'Generates a PlantUML diagram or mindmap from the last message, if applicable, very useful to the user, and no other diagrams are present.',
@@ -113,6 +115,7 @@ Please follow closely the following requirements:
 - **Incorporate Trends:** Selectively use abstract gradients, color clashing, vintage minimalism, geometric shapes, or 3D bubble text where they enhance the UI's purpose and user experience.
 - **Functional Requirements:** The UI must solve the user's problem, demonstrate a complete feature or concept, be visually impressive, and renderable in isolation.`,
   usr: 'Analyze the conversation and call {{functionName}} to evaluate UI relevance and generate HTML code if sufficiently useful.',
+  minRating: 3,
   fun: {
     name: suggestUIFunctionName,
     description: 'Renders a web UI when provided with a single concise HTML5 string (can include CSS and JS), if applicable and relevant.',
@@ -231,8 +234,8 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
 
       // extract the function call
       const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, diagramsTool.fun.name, 'chat-followup-diagram');
-      const { code, type } = diagramsTool.fun.inputSchema.parse(argsObject);
-      if (code && type) {
+      const { code, type, rating_number } = diagramsTool.fun.inputSchema.parse(argsObject);
+      if (code && type && rating_number >= diagramsTool.minRating) {
 
         // validate the code
         const plantUML = code.trim();
@@ -284,8 +287,8 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
 
       // extract the function call
       const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, uiTool.fun.name, 'chat-followup-htmlui');
-      const { html, file_name } = uiTool.fun.inputSchema.parse(argsObject);
-      if (html && file_name) {
+      const { html, file_name, rating_number } = uiTool.fun.inputSchema.parse(argsObject);
+      if (html && file_name && rating_number >= uiTool.minRating) {
 
         // validate the code
         const htmlUI = html.trim();
