@@ -5,8 +5,9 @@
 const ERROR_TEXT: Record<string, string> = {
   email_not_allowed: 'This account is not allowed on this workspace.',
   not_allowed: 'This account is no longer allowed on this workspace.',
-  // refused links are not retries: the same button gives the same answer
-  unable_to_link_account: 'This sign-in could not be linked to your existing account. Use the provider you signed up with.',
+  // refused links are not retries: the same button gives the same answer (Better Auth reports a refused implicit link
+  // as "account not linked", which the callback turns into this code; unable_to_link_account is the explicit-link path)
+  account_not_linked: 'This sign-in could not be linked to your existing account. Use the provider you signed up with.',
   email_does_not_match: 'This sign-in could not be linked: the provider reports a different email than your existing account. Use the provider you signed up with.',
   account_already_linked_to_different_user: 'This provider account is already linked to another user.',
   email_not_verified: 'This provider has not verified your email address. Verify it there, then sign in again.',

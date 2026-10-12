@@ -105,7 +105,7 @@ Local-first: Zustand in memory with `persist` to localStorage, except chats, whi
 
 #### API Patterns
 
-- Auth is fail-closed: `publicProcedure` (and `authedProcedure`, `premiumProcedure`, `authGatedProcedure`) require a member session when an `AUTH_*` provider is set, and pass everything when none is; `tenantAdminProcedure` requires the admin role. The only open procedures use `anonymousProcedure` and are listed in `ANONYMOUS_PROCEDURES` (`trpc.server.ts`), pinned by `src/server/trpc/trpc.access.test.ts`. Resolvers read `ctx.user` (`AuthUser | null`, null = auth off), never headers. the Better Auth instance and client live only in `src/server/auth/auth.server.ts` and `src/common/auth/auth.client.ts` (`proxy.ts` uses its cookie helper) (see `kb/systems/auth.md`)
+- Auth is fail-closed: `publicProcedure` (and `authedProcedure`, `premiumProcedure`, `authGatedProcedure`) require a member session when an `AUTH_*` provider is set, and pass everything when none is; `tenantAdminProcedure` requires the admin role. The only open procedures use `anonymousProcedure` and are listed in `ANONYMOUS_PROCEDURES` (`trpc.server.ts`), pinned by `src/server/trpc/trpc.access.test.ts`. Resolvers read `ctx.user` (`AuthUser | null`, null = auth off), never headers. The Better Auth instance and client live only in `src/server/auth/auth.server.ts` and `src/common/auth/auth.client.ts` (`proxy.ts` uses its cookie helper) (see `kb/systems/auth.md`)
 
 #### Security Considerations
 

@@ -41,7 +41,10 @@ procedures never do (except `whoami`). Infrastructure failures become a detail-f
 | `microsoft` (one tenant) | closed | IdP |
 | `google`, `github` | open, allowlist required | verified claim only |
 
-`isEmailAllowed` gates sign-in (`validateUserInfo`); `isEmailListed` re-checks on every request.
+`isEmailAllowed` gates sign-in (`validateUserInfo`); `isEmailListed` re-checks on every request. OAuth access and refresh
+tokens are encrypted at rest (`encryptOAuthTokens`); the ID token is stored as is because RP-initiated logout sends it as
+`id_token_hint`. Trusted providers (Pocket ID, pinned-tenant Microsoft) link into a same-email user without a verified
+claim, so the Pocket ID deployment disables self-service email edits (`docs/deploy-authentication.md`).
 
 ## Client
 

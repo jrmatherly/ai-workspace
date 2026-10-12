@@ -61,8 +61,12 @@ POSTGRES_URL_NON_POOLING=...
 - Removing an address from `AUTH_ALLOWED_EMAILS` takes effect on that user's next request: they are signed out.
 - `AUTH_ADMIN_EMAILS`: comma list of addresses with the admin role (Ollama model pull and delete). Roles are
   derived on every request; there is no role column.
-- Accounts with the same email link to one user when the new sign-in comes from Pocket ID or Microsoft (trusted
-  providers), or from Google or GitHub with a verified email claim.
+- Accounts with the same email link to one user when the existing account's email is verified and the new sign-in
+  comes from Pocket ID or Microsoft (trusted providers), or from Google or GitHub with a verified email claim. A
+  refused link shows "could not be linked" on the sign-in page; use the provider you signed up with.
+- Because Pocket ID is trusted, a Pocket ID user who could change their own email to another member's address would
+  be linked into that member's account. Turn off self-service email edits in Pocket ID (the "allow users to edit
+  their own account details" setting) before letting members in.
 
 ## Sessions
 
