@@ -18,13 +18,16 @@ services:
     env_file:
       - .env
     environment:
-      - PUPPETEER_WSS_ENDPOINT=ws://browserless:3000
+      - PUPPETEER_WSS_ENDPOINT=ws://browserless:3000/chromium?token=change-me
     depends_on:
       - browserless
 
   browserless:
-    image: browserless/chrome:latest
+    # browserless v2 (browserless/chrome on Docker Hub is the abandoned v1); pin a release tag, :latest tracks main
+    image: ghcr.io/browserless/chromium:v2.57.0
     ports:
       - "9222:3000"  # Map host's port 9222 to container's port 3000
     environment:
-      - MAX_CONCURRENT_SESSIONS=10
+      - TOKEN=change-me
+      - CONCURRENT=4
+      - TIMEOUT=60000  # ms per session; a page load plus screenshot can take ~30 s, over the 30000 default
