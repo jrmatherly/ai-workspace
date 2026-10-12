@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 import { create_FunctionCallInvocation_ContentFragment, createErrorContentFragment, createModelAuxVoidFragment, createTextContentFragment } from '~/common/stores/chat/chat.fragments';
 
-import { aixRequireSingleFunctionCallInvocation } from './aix.client.fromSimpleFunction';
+import { AixFunctionCallDeclinedError, aixRequireSingleFunctionCallInvocation } from './aix.client.fromSimpleFunction';
 
 
 const CALL = create_FunctionCallInvocation_ContentFragment('c1', 'draw_plantuml_diagram', '{"rating_short_reason":"no fit","rating_number":1}');
@@ -21,8 +21,12 @@ test('a reasoning void fragment before the invocation is accepted', () => {
   assert.deepEqual(aixRequireSingleFunctionCallInvocation([createModelAuxVoidFragment('reasoning', 'thinking...'), CALL], 'draw_plantuml_diagram', 't').argsObject, ARGS);
 });
 
-test('prose only is "Missing function invocation" (llama-server ignoring tool_choice required, measured 2026-10-12)', () => {
-  assert.throws(() => aixRequireSingleFunctionCallInvocation([createTextContentFragment('Rating: 1. STOP.')], 'draw_plantuml_diagram', 't'), /Missing function invocation/);
+test('prose only is a typed "Missing function invocation": the model declined to call (qwen3-4b on the Auto-UI prompt, measured 2026-10-12)', () => {
+  assert.throws(() => aixRequireSingleFunctionCallInvocation([createTextContentFragment('Rating: 1. STOP.')], 'draw_plantuml_diagram', 't'), (e: unknown) => e instanceof AixFunctionCallDeclinedError && /Missing function invocation/.test((e as Error).message));
+});
+
+test('an upstream error is not a decline', () => {
+  assert.throws(() => aixRequireSingleFunctionCallInvocation([createErrorContentFragment('upstream 400')], 'draw_plantuml_diagram', 't'), (e: unknown) => !(e instanceof AixFunctionCallDeclinedError));
 });
 
 test('an upstream error is the message when there is no call', () => {
