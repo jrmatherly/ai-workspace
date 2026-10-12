@@ -2,6 +2,10 @@
 
 AI Workspace started from the big-AGI 2.1.1 codebase on 2026-10-10; earlier history is upstream's and is not carried here. Releases are tracked on GitHub Releases: <https://github.com/jrmatherly/ai-workspace/releases>
 
+## 2026.10.12.1
+
+- Auto-diagrams and generative UIs: a Code model that declines in prose, as qwen3-4b does for the UI prompt, now yields no suggestion instead of a red "Missing function invocation" line; a reply cut off by the token cap still shows as a failure
+
 ## 2026.10.12
 
 - LocalAI behind llama-server: auto-diagrams and generative UIs no longer fail with "Missing function invocation"; forced tool calls go out as `tool_choice: auto` with a system hint, since llama-server ignores `required`, and a call preceded by prose is accepted
