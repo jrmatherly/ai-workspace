@@ -11,7 +11,8 @@ guide: `docs/deploy-authentication.md`. Design record: `docs/superpowers/specs/2
 - `anonymous`: no valid session.
 - `not_allowed`: valid session, address since removed from `AUTH_ALLOWED_EMAILS`.
 - `user`: `AuthUser { id, email, name, image, role }`. `id` is Better Auth's `User.id`, the key future per-user
-  tables reference. `role` is derived per request from `AUTH_ADMIN_EMAILS`.
+  tables reference. `role` is derived per request from `AUTH_ADMIN_EMAILS`, whose entries must be exact addresses
+  the allowlist admits (checked at load, like the allowlist itself).
 
 `createTRPCFetchContext` puts a memoised `caller()` and `resHeaders` on the context. Guards await it; anonymous
 procedures never do (except `whoami`). Infrastructure failures become a detail-free `INTERNAL_SERVER_ERROR`.
@@ -50,7 +51,12 @@ claim, so the Pocket ID deployment disables self-service email edits (`docs/depl
 
 - `useAuthUser()` (`src/common/auth/auth.client.ts`): `off | loading | error | anonymous | not_allowed | user`.
 - `getAuthProviders()` (`src/common/app.serverconf.ts`): from `BackendCapabilities.authProviders`; empty = off.
-- `proxy.ts`: optimistic cookie check on page routes and `/dev/*`; public pages from `src/common/app.routes.auth.ts`.
+- `proxy.ts`: optimistic cookie check on page routes and `/dev/*`. The route table (`AUTH_PAGE_MATCHER`, public
+  pages, `safeNextPath`) lives in `src/common/app.routes.auth.ts`; the proxy's static matcher repeats it, and
+  `src/server/proxy.test.ts` pins the two equal. `safeNextPath` admits only a same-origin page from that table,
+  never `/signin`, `/api/*` or `/_next/*`.
+- `account` is unique per (`providerId`, `accountId`): Better Auth looks accounts up by that pair and refuses to
+  proceed on duplicates, so the database enforces what the find-then-create path assumes.
 - `ProviderAuthGate`: blocks the app until identity is known, redirects anonymous visitors, runs the account-switch
   prompt and PostHog identify.
 - The tRPC `unauthorizedRedirectLink` sends a mid-session 401 to `/signin?next=`.

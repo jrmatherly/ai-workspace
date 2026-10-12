@@ -41,14 +41,15 @@ test('memoUntilReady: one build while ready; a not-ready value is rebuilt once p
   let builds = 0;
   let readyFrom = Infinity;
   let failNext = false;
-  const get = memoUntilReady(async () => {
+  const build = async () => {
     builds++;
     if (failNext) {
       failNext = false;
       throw new Error('boom');
     }
     return builds;
-  }, async value => value >= readyFrom, 60_000, () => clock);
+  };
+  const get = memoUntilReady(build, async value => value >= readyFrom, 60_000, () => clock);
 
   assert.equal(await get(), 1);
   clock += 10_000;
@@ -64,14 +65,7 @@ test('memoUntilReady: one build while ready; a not-ready value is rebuilt once p
   assert.equal(await get(), 3, 'ready: never rebuilt again');
   assert.equal(builds, 3);
 
-  const fresh = memoUntilReady(async () => {
-    builds++;
-    if (failNext) {
-      failNext = false;
-      throw new Error('boom');
-    }
-    return builds;
-  }, async () => true, 60_000, () => clock);
+  const fresh = memoUntilReady(build, async () => true, 60_000, () => clock);
   failNext = true;
   await assert.rejects(fresh(), /boom/);
   assert.equal(await fresh(), 5, 'the rejected build is not memoized');

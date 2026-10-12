@@ -5,11 +5,7 @@
 
 export const ROUTE_SIGNIN = '/signin';
 
-/**
- * Every page the app serves except /signin, in Next matcher syntax. proxy.ts repeats this list as its static
- * `config.matcher` (Next reads that literal at build time, so it cannot import this); proxy.test.ts pins
- * the two equal and checks every file under pages/ is covered.
- */
+/** Every page the app serves except /signin, in Next matcher syntax. proxy.ts repeats it as its static matcher. */
 export const AUTH_PAGE_MATCHER: readonly string[] = [
   '/', '/call', '/diff', '/draw', '/personas', '/tokens', '/workspace',
   '/news', '/link/:path*',
@@ -42,14 +38,14 @@ export function isAuthPagePath(pathname: string): boolean {
 /**
  * Validates the `next` redirect target; input is `pathname + search`.
  * Invariant: the result is a same-origin page (`pathname + search`), never a host, scheme, protocol-relative URL,
- * API route or the sign-in page itself. '/\evil.com' and '/..//evil.com' resolve to the pathname '//evil.com',
- * which no page pattern matches.
+ * API route or the sign-in page itself. Browsers read '/\evil.com' as '//evil.com', and '/..//evil.com' normalises
+ * to it, so a backslash or an empty segment anywhere rejects the whole value.
  */
 export function safeNextPath(next: string | string[] | undefined, origin: string): string {
-  if (typeof next !== 'string') return '/';
+  if (typeof next !== 'string' || next.includes('\\')) return '/';
   try {
     const url = new URL(next, origin);
-    if (url.origin !== origin || !isAuthPagePath(url.pathname)) return '/';
+    if (url.origin !== origin || url.pathname.includes('//') || !isAuthPagePath(url.pathname)) return '/';
     return url.pathname + url.search;
   } catch {
     return '/';

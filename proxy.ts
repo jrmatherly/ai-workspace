@@ -10,7 +10,7 @@ import { getSessionCookie } from 'better-auth/cookies';
 import { type AuthConfig, authConfig } from '~/server/auth/auth.config';
 import { isAuthPublicPath, ROUTE_SIGNIN, safeNextPath } from '~/common/app.routes.auth';
 
-/** Pure: config in, response out. proxy() binds the module config; proxy.test.ts calls this with its own. */
+/** Pure: config in, response out. */
 export function pageGate(request: NextRequest, config: AuthConfig | null): NextResponse {
   if (!config) return NextResponse.next();
   const { pathname, search, origin } = request.nextUrl;

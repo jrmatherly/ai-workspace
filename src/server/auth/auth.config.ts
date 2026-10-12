@@ -55,6 +55,9 @@ function allOrNone<K extends keyof AuthEnv>(e: AuthEnv, keys: readonly K[]): Rec
   return Object.fromEntries(keys.map(k => [k, e[k]])) as Record<K, string>;
 }
 
+const ADDRESS = /^[^@\s]+@[^@\s]+$/;
+const DOMAIN_RULE = /^@[^@\s]+$/;
+
 function normEmail(value: string): string {
   return value.trim().toLowerCase();
 }
@@ -108,7 +111,7 @@ export function parseAuthConfig(e: AuthEnv): AuthConfig | null {
   const listed = emailList(e.AUTH_ALLOWED_EMAILS);
   const allowedEmails = listed.length ? listed : null;
   // 'family.example' without the '@' would be an address nobody has: reject at load instead of locking everyone out
-  const malformed = listed.filter(rule => !/^(@|[^@\s]+@)[^@\s]+$/.test(rule));
+  const malformed = listed.filter(rule => !ADDRESS.test(rule) && !DOMAIN_RULE.test(rule));
   if (malformed.length)
     throw new Error(`Auth misconfigured: AUTH_ALLOWED_EMAILS entries must be an address or @domain, got ${malformed.join(', ')}`);
   if (!allowedEmails && providers.some(p => p.access === 'open'))
@@ -117,7 +120,7 @@ export function parseAuthConfig(e: AuthEnv): AuthConfig | null {
   const config: AuthConfig = { providers: [first, ...rest], secret, baseURL: url.replace(/\/+$/, ''), allowedEmails, adminEmails: emailList(e.AUTH_ADMIN_EMAILS) };
 
   // roleFor matches exact addresses: a '@domain' entry or an address outside the allowlist would silently make nobody admin
-  const notAddress = config.adminEmails.filter(entry => !/^[^@\s]+@[^@\s]+$/.test(entry));
+  const notAddress = config.adminEmails.filter(entry => !ADDRESS.test(entry));
   if (notAddress.length)
     throw new Error(`Auth misconfigured: AUTH_ADMIN_EMAILS entries must be an address, got ${notAddress.join(', ')}`);
   const unlisted = config.adminEmails.filter(entry => !isEmailListed(config, entry));

@@ -35,7 +35,7 @@ test('safeNextPath admits only pages: no API routes, Next internals, assets or t
 });
 
 test('safeNextPath rejects anything that leaves the origin', () => {
-  for (const bad of ['//evil.com', '/\\evil.com', '\\\\evil.com', 'https://evil.com/x', 'javascript:alert(1)', '/\t/evil.com', 'http://ai.example.com/x', '/..//evil.com', '/a/..//evil.com', '/.//evil.com'])
+  for (const bad of ['//evil.com', '/\\evil.com', '\\\\evil.com', 'https://evil.com/x', 'javascript:alert(1)', '/\t/evil.com', 'http://ai.example.com/x', '/..//evil.com', '/a/..//evil.com', '/.//evil.com', '/link/\\evil.com', '/link//evil.com', '/call//'])
     assert.equal(safeNextPath(bad, ORIGIN), '/', JSON.stringify(bad));
   assert.equal(safeNextPath(undefined, ORIGIN), '/');
   assert.equal(safeNextPath(['/a', '/b'], ORIGIN), '/');
