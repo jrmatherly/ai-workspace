@@ -7,7 +7,7 @@ export const ROUTE_SIGNIN = '/signin';
 
 /**
  * Every page the app serves except /signin, in Next matcher syntax. proxy.ts repeats this list as its static
- * `config.matcher` (Next reads that literal at build time, so it cannot import this); proxy.matcher.test.ts pins
+ * `config.matcher` (Next reads that literal at build time, so it cannot import this); proxy.test.ts pins
  * the two equal and checks every file under pages/ is covered.
  */
 export const AUTH_PAGE_MATCHER: readonly string[] = [

@@ -7,11 +7,12 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { getSessionCookie } from 'better-auth/cookies';
 
-import { authConfig } from '~/server/auth/auth.config';
+import { type AuthConfig, authConfig } from '~/server/auth/auth.config';
 import { isAuthPublicPath, ROUTE_SIGNIN, safeNextPath } from '~/common/app.routes.auth';
 
-export function proxy(request: NextRequest) {
-  if (!authConfig) return NextResponse.next();
+/** Pure: config in, response out. proxy() binds the module config; proxy.test.ts calls this with its own. */
+export function pageGate(request: NextRequest, config: AuthConfig | null): NextResponse {
+  if (!config) return NextResponse.next();
   const { pathname, search, origin } = request.nextUrl;
   if (isAuthPublicPath(pathname) || getSessionCookie(request)) return NextResponse.next();
   const url = new URL(ROUTE_SIGNIN, origin);
@@ -20,9 +21,13 @@ export function proxy(request: NextRequest) {
   return NextResponse.redirect(url);
 }
 
+export function proxy(request: NextRequest) {
+  return pageGate(request, authConfig);
+}
+
 export const config = {
   // AUTH_PAGE_MATCHER, repeated: Next reads this literal at build time and ignores an imported value.
-  // proxy.matcher.test.ts pins the two equal. public/ assets, /_next and /api/* are never matched.
+  // proxy.test.ts pins the two equal. public/ assets, /_next and /api/* are never matched.
   matcher: [
     '/', '/call', '/diff', '/draw', '/personas', '/tokens', '/workspace',
     '/news', '/link/:path*',

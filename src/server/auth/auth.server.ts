@@ -1,6 +1,6 @@
 /**
  * The only server file that imports Better Auth. Public surface: AuthUser, AuthCaller, getAuthCaller,
- * authRouteHandlers, and the pure, tested admit and callerFromSession. Callers never see a Better Auth type.
+ * authRouteHandlers, and the pure, tested admit, callerFromSession and memoUntilReady. Callers never see a Better Auth type.
  */
 import { betterAuth } from 'better-auth';
 import { genericOAuth } from 'better-auth/plugins';
@@ -90,35 +90,52 @@ function createBetterAuth(config: AuthConfig) {
 type BetterAuthInstance = ReturnType<typeof createBetterAuth>;
 
 /**
+ * Memoizes build(); while ready(value) is false, rebuilds at most once per retryMs. A rejected build is forgotten,
+ * so the next call retries at once. `now` is injectable for tests.
+ */
+export function memoUntilReady<T>(build: () => Promise<T>, ready: (value: T) => Promise<boolean>, retryMs: number, now: () => number = Date.now): () => Promise<T> {
+  let memo: Promise<T> | null = null;
+  let retryAt = 0;
+  return () => {
+    if (memo && retryAt && now() >= retryAt) {
+      memo = null;
+      retryAt = 0;
+    }
+    memo ??= (async () => {
+      const value = await build();
+      if (!await ready(value)) retryAt = now() + retryMs;
+      return value;
+    })().catch(error => {
+      memo = null;
+      throw error;
+    });
+    return memo;
+  };
+}
+
+/**
  * Lazy: nothing runs on import, so anonymous procedures never construct Better Auth or touch Postgres.
  * Better Auth omits an OIDC provider whose discovery failed until the instance is recreated. Keep the instance
  * (the other providers keep working) and rebuild at most once per 60 s until discovery succeeds; each rebuild is
  * a fresh instance, so the in-memory /api/auth rate limiter restarts with it.
  */
-let memo: Promise<BetterAuthInstance> | null = null;
-let retryAfter = 0;
-
-function getAuth(config: AuthConfig): Promise<BetterAuthInstance> {
-  if (memo && retryAfter && Date.now() >= retryAfter) {
-    memo = null;
-    retryAfter = 0;
-  }
-  memo ??= (async () => {
-    const auth = createBetterAuth(config);
-    if (config.providers.some(p => p.id === 'oidc')) {
-      const ctx = await auth.$context;
-      if (!ctx.socialProviders.some(p => p.id === 'oidc')) {
-        console.warn('[auth] OIDC discovery unavailable; retrying in 60 s');
-        retryAfter = Date.now() + 60_000;
-      }
-    }
-    return auth;
-  })().catch(error => {
-    memo = null;
-    throw error;
-  });
-  return memo;
+function liveFor(config: AuthConfig) {
+  return {
+    config,
+    getAuth: memoUntilReady(
+      async () => createBetterAuth(config),
+      async (auth: BetterAuthInstance) => {
+        if (!config.providers.some(p => p.id === 'oidc')) return true;
+        const discovered = (await auth.$context).socialProviders.some(p => p.id === 'oidc');
+        if (!discovered) console.warn('[auth] OIDC discovery unavailable; retrying in 60 s');
+        return discovered;
+      },
+      60_000,
+    ),
+  };
 }
+
+const live = authConfig && liveFor(authConfig);
 
 
 type SessionLike = { user: { id: string; email: string; name: string; image?: string | null } };
@@ -137,16 +154,16 @@ export function callerFromSession(config: AuthConfig, session: SessionLike | nul
  * to resHeaders.
  */
 export async function getAuthCaller(headers: Headers, resHeaders: Headers): Promise<AuthCaller> {
-  if (!authConfig) return { mode: 'off' };
-  const auth = await getAuth(authConfig);
+  if (!live) return { mode: 'off' };
+  const auth = await live.getAuth();
   const { headers: setHeaders, response: session } = await auth.api.getSession({ headers, returnHeaders: true });
   for (const cookie of setHeaders.getSetCookie()) resHeaders.append('set-cookie', cookie);
-  return callerFromSession(authConfig, session);
+  return callerFromSession(live.config, session);
 }
 
 async function handleAuthRoute(req: Request): Promise<Response> {
-  if (!authConfig) return new Response(null, { status: 404 });
-  return (await getAuth(authConfig)).handler(req);
+  if (!live) return new Response(null, { status: 404 });
+  return (await live.getAuth()).handler(req);
 }
 
 /** /api/auth/* handlers. Auth off: 404, so the endpoints do not exist on auth-less deployments. */

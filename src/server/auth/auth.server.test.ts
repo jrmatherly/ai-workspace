@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { parseAuthConfig } from './auth.config';
-import { admit, callerFromSession } from './auth.server';
+import { admit, callerFromSession, memoUntilReady } from './auth.server';
 
 const CFG = parseAuthConfig({
   AUTH_SECRET: 's'.repeat(32), AUTH_URL: 'https://ai.example.com',
@@ -34,4 +34,45 @@ test('admit: fresh provider email must be trusted and listed; unknown providers 
   assert.equal(admit(CFG, { email: 'me@example.com' }, oauth('nope')), false, 'unknown provider');
   assert.equal(admit(CFG, { email: null }, oauth('oidc')), false, 'no email');
   assert.equal(admit(CFG, { email: 'me@example.com' }, {}), false, 'no oauth source');
+});
+
+test('memoUntilReady: one build while ready; a not-ready value is rebuilt once per retry window; a rejected build is retried at once', async () => {
+  let clock = 1_000;
+  let builds = 0;
+  let readyFrom = Infinity;
+  let failNext = false;
+  const get = memoUntilReady(async () => {
+    builds++;
+    if (failNext) {
+      failNext = false;
+      throw new Error('boom');
+    }
+    return builds;
+  }, async value => value >= readyFrom, 60_000, () => clock);
+
+  assert.equal(await get(), 1);
+  clock += 10_000;
+  assert.equal(await get(), 1, 'same instance inside the window');
+  clock += 50_000;
+  assert.equal(await get(), 2, 'rebuilt once the window elapsed');
+  assert.equal(await get(), 2);
+
+  readyFrom = 3;
+  clock += 60_000;
+  assert.equal(await get(), 3, 'rebuilt, and ready');
+  clock += 600_000;
+  assert.equal(await get(), 3, 'ready: never rebuilt again');
+  assert.equal(builds, 3);
+
+  const fresh = memoUntilReady(async () => {
+    builds++;
+    if (failNext) {
+      failNext = false;
+      throw new Error('boom');
+    }
+    return builds;
+  }, async () => true, 60_000, () => clock);
+  failNext = true;
+  await assert.rejects(fresh(), /boom/);
+  assert.equal(await fresh(), 5, 'the rejected build is not memoized');
 });
