@@ -34,8 +34,10 @@ const getWeatherTool = aixFunctionCallTool({
  *  - OpenAI/xAI/Gemini/Bedrock: 'any' maps to native forced-call equivalents and works.
  *  - DeepSeek V4 (flash and pro): 'any' -> 'required' 400s while thinking is on (the vendor default), so the adapter
  *    forces thinking off for restrictive policies - see openai.chatCompletions.ts.
- *  - Models with always-on thinking (Fable/Mythos 5, DeepSeek V4): client-side
- *    aixRequireSingleFunctionCallInvocation filters void fragments, so extraction works.
+ *  - LocalAI (llama-server): 'any' is degraded to 'auto' + system steering hint (llama-server ignores 'required',
+ *    measured 2026-10-12 on Qwen3-4B); a pass means the model called on steering, not that the wire forced it.
+ *  - Prose or reasoning before the call (Qwen3 narrates, Fable/Mythos 5 and DeepSeek V4 think): client-side
+ *    aixRequireSingleFunctionCallInvocation searches the content parts for the single invocation, so extraction works.
  */
 export const PROBE_SCENARIOS: ProbeScenario[] = [
   {

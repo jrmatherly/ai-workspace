@@ -81,13 +81,14 @@ export function aixToOpenAIChatCompletions(openAIDialect: OpenAIDialects, model:
   if (openAIDialect === 'openrouter')
     _capTrailingCacheBreakpoints(chatMessages, 4);
 
-  // [OpenRouter -> Anthropic, 2026-09-01] Fable/Mythos 5.x reject forced tool use upstream: _toOpenAIToolChoice degrades
-  // 'required' to 'auto', and this steering hint keeps the call rate at forced level (mirrors the native adapter's downgrade)
-  if (openAIDialect === 'openrouter' && chatGenerate.toolsPolicy?.type === 'any' && chatGenerate.tools?.length && _isOrtForcedToolRejectingAnt(model.id)) {
+  // _toOpenAIToolChoice turns 'required' into 'auto' for these: steer by prompt instead (mirrors the native Anthropic adapter's downgrade)
+  if (chatGenerate.toolsPolicy?.type === 'any' && chatGenerate.tools?.length && _steersForcedToolByPrompt(openAIDialect, model)) {
     const mustUseHint = 'IMPORTANT: You MUST respond by calling one of the provided tools. Do not respond with text.';
     const firstMessage = chatMessages[0];
     if (firstMessage?.role === 'system' && typeof firstMessage.content === 'string')
       firstMessage.content += '\n\n' + mustUseHint;
+    else if (firstMessage?.role === 'system' && Array.isArray(firstMessage.content))
+      firstMessage.content.push(OpenAIWire_ContentParts.TextContentPart(mustUseHint)); // cache-controlled system prompt: keep one system message
     else
       chatMessages.unshift({ role: 'system', content: mustUseHint });
   }
@@ -984,15 +985,7 @@ function _toOpenAIToolChoice(openAIDialect: OpenAIDialects, itp: AixTools_ToolsP
     case 'auto':
       return 'auto';
     case 'any':
-      // [Moonshot, 2026-08-17] 'required' 400s while thinking is on (k2.5/k2.6/k2.7-code, probed); K3, moonshot-v1
-      // and thinking-off requests accept it. Degrade to 'auto' rather than hard-fail.
-      if (openAIDialect === 'moonshot' && model.reasoningEffort !== 'none'
-        && !(model.id === 'k3' || model.id.startsWith('kimi-k3') || model.id.startsWith('moonshot-v1')))
-        return 'auto';
-      // [OpenRouter -> Anthropic, 2026-09-01] Fable/Mythos 5.x reject forced tool use and OR relays the 400 ('tool_choice: type "tool"
-      // and "any" are not supported for this model.', probed on claude-fable-5.1; Fable 5 400s with the older wording). Degrade to
-      // 'auto' - the steering hint injected into the system message above keeps our single-tool callers calling the tool.
-      if (openAIDialect === 'openrouter' && _isOrtForcedToolRejectingAnt(model.id))
+      if (_steersForcedToolByPrompt(openAIDialect, model))
         return 'auto';
       return 'required';
     // DISABLED 2026-07-17 - forced named tool, see ToolsPolicy_schema. [Moonshot] probe-verified: named tool_choice
@@ -1003,6 +996,30 @@ function _toOpenAIToolChoice(openAIDialect: OpenAIDialects, itp: AixTools_ToolsP
   }
 }
 
+
+/**
+ * Where a forced tool ('required') becomes 'auto' plus the system steering hint, because the wire cannot force it:
+ * - [Moonshot, 2026-08-17] 'required' 400s while thinking is on (k2.5/k2.6/k2.7-code, probed); K3, moonshot-v1 and
+ *   thinking-off requests accept it
+ * - [OpenRouter -> Anthropic, 2026-09-01] Fable/Mythos 5.x reject forced tool_choice upstream and OR relays the 400
+ *   ('tool_choice: type "tool" and "any" are not supported for this model.', probed on claude-fable-5.1)
+ * - [LocalAI, 2026-10-12] llama-server (b11146, --jinja, Qwen3-4B-Instruct-2507) ignores 'required': prose until max_tokens,
+ *   no tool_calls, finish_reason 'length'; 'auto' returns the call on the first try. Measured in-pod with the auto-diagram request.
+ *   The 'localai' dialect is the generic local OpenAI-compatible transport, so backends that do honour 'required' (vLLM,
+ *   LocalAI with guided decoding) also lose wire forcing here; a per-service signal from the listing would narrow this.
+ */
+function _steersForcedToolByPrompt(openAIDialect: OpenAIDialects, model: AixAPI_Model): boolean {
+  switch (openAIDialect) {
+    case 'localai':
+      return true;
+    case 'moonshot':
+      return model.reasoningEffort !== 'none' && !(model.id === 'k3' || model.id.startsWith('kimi-k3') || model.id.startsWith('moonshot-v1'));
+    case 'openrouter':
+      return _isOrtForcedToolRejectingAnt(model.id);
+    default:
+      return false;
+  }
+}
 
 /**
  * OpenRouter ids of Anthropic models that reject forced tool_choice upstream: Fable/Mythos 5 and 5.x, Opus 5.5, Sonnet 5.5, and the '~' router

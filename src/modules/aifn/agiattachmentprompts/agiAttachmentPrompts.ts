@@ -76,7 +76,7 @@ Analyze the provided content to determine its nature, identify any relationships
   );
 
   // extract the function call
-  const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, 'propose_user_actions_for_attachments', false, 'agiAttachmentPrompts');
+  const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, 'propose_user_actions_for_attachments', 'agiAttachmentPrompts');
 
   const args = inputSchema.parse(argsObject);
   if (!args.top_orthogonal_user_actions?.length)

@@ -214,7 +214,7 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
     ).then(({ fragments }) => {
 
       // extract the function call
-      const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, diagramsTool.fun.name, false, 'chat-followup-diagram');
+      const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, diagramsTool.fun.name, 'chat-followup-diagram');
       const { code, type } = diagramsTool.fun.inputSchema.parse(argsObject);
       if (code && type) {
 
@@ -266,7 +266,7 @@ export async function autoChatFollowUps(conversationId: string, assistantMessage
     ).then(({ fragments }) => {
 
       // extract the function call
-      const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, uiTool.fun.name, false, 'chat-followup-diagram');
+      const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, uiTool.fun.name, 'chat-followup-htmlui');
       const { html, file_name } = uiTool.fun.inputSchema.parse(argsObject);
       if (html && file_name) {
 

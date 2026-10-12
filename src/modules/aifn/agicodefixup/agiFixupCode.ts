@@ -74,7 +74,7 @@ export async function agiFixupCode(issueType: CodeFixType, codeToFix: string, er
   );
 
   // Validate and parse the AI's response
-  const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, config.functionName, config.functionPolicy === 'think-then-invoke', issueType);
+  const { argsObject } = aixRequireSingleFunctionCallInvocation(fragments, config.functionName, issueType);
   const argsZod = config.outputSchema.parse(argsObject);
 
   // Return the corrected code

@@ -1,7 +1,7 @@
 import * as z from 'zod/v4';
 
 import type { AixTools_FunctionCallDefinition } from '../server/api/aix.wiretypes';
-import { DMessageContentFragment, DMessageToolInvocationPart, DMessageVoidFragment, isContentFragment } from '~/common/stores/chat/chat.fragments';
+import { DMessageContentFragment, DMessageToolInvocationPart, DMessageVoidFragment, isContentFragment, isErrorContentFragment, isToolInvocationPart } from '~/common/stores/chat/chat.fragments';
 
 
 // configuration
@@ -57,8 +57,12 @@ export function aixFunctionCallTool(functionCall: AixClientFunctionCallToolDefin
 }
 
 
-/** Extract the function name from the Aix FunctionCall Tool Definition */
-export function aixRequireSingleFunctionCallInvocation(fragments: (DMessageContentFragment | DMessageVoidFragment)[], expectedFunctionName: string, allowThinkPart: boolean, debugLabel: string): {
+/**
+ * The one function call a forced-tool request must produce, wherever it sits among the content fragments.
+ * Chat-tuned models (Qwen3 through llama-server, measured 2026-10-12) narrate before calling, and reasoning
+ * models prepend 'ma' void fragments, so the invocation is searched for, not read at a fixed position.
+ */
+export function aixRequireSingleFunctionCallInvocation(fragments: (DMessageContentFragment | DMessageVoidFragment)[], expectedFunctionName: string, debugLabel: string): {
   invocation: Extract<DMessageToolInvocationPart['invocation'], { type: 'function_call' }>;
   argsObject: object;
 } {
@@ -69,27 +73,23 @@ export function aixRequireSingleFunctionCallInvocation(fragments: (DMessageConte
     throw new Error('AIX: Unexpected response.');
   }
 
-  // Positional logic over CONTENT fragments only: void fragments (e.g. 'ma' reasoning, which always-on
-  // adaptive thinking models like Fable/Mythos 5 prepend) must not shift the expected invocation position
-  const contentFragments = fragments.filter(isContentFragment);
-  const toolIdx = allowThinkPart ? contentFragments.length - 1 : 0;
-  const toolFragment = contentFragments[toolIdx];
-  if (!toolFragment || toolFragment.part.pt !== 'tool_invocation') {
+  const invocations = fragments.filter(isContentFragment).map(f => f.part).filter(isToolInvocationPart);
+  if (!invocations.length) {
+    // an upstream error is the better message
+    const errorFragment = fragments.find(isErrorContentFragment);
+    if (errorFragment)
+      throw new Error('AIX: Error invoking function: ' + errorFragment.part.error);
     if (AIX_DEBUG_CLIENT_TOOLS)
-      console.error(`[DEV] single-function-call (${debugLabel}): invalid fragment part:`, { part: toolFragment?.part });
-
-    // special case, if we have an error part, rethrow that message instead (better error message)
-    if (toolFragment?.part.pt === 'error')
-      throw new Error('AIX: Error invoking function: ' + toolFragment.part.error);
-
+      console.error(`[DEV] single-function-call (${debugLabel}): no invocation among fragments:`, { parts: fragments.map(f => f.ft === 'content' ? f.part.pt : f.ft) });
     throw new Error('AIX: Missing function invocation.');
   }
 
-  const { invocation } = toolFragment.part;
-
-  if (invocation.type !== 'function_call' || invocation.name !== expectedFunctionName) {
+  // the first call of the expected function wins: parallel_tool_calls is left at the vendor default, so a forced
+  // single-tool request can come back with the same function called twice
+  const invocation = invocations.map(i => i.invocation).find(i => i.type === 'function_call' && i.name === expectedFunctionName);
+  if (!invocation || invocation.type !== 'function_call') {
     if (AIX_DEBUG_CLIENT_TOOLS)
-      console.error(`[DEV] single-function-call (${debugLabel}): invalid invocation:`, { invocation });
+      console.error(`[DEV] single-function-call (${debugLabel}): invalid invocations:`, { invocations });
     throw new Error('AIX: Expected a function call.');
   }
 
