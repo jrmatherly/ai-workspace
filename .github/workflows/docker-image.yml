@@ -172,9 +172,9 @@ jobs:
             # Stable: release tags (alias)
             type=raw,value=stable,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
 
-            # Version tags (v2026.10.11, 2026.10.11)
+            # Version tags (v2026.10.11.1 and 2026.10.11.1). Not type=semver: a CalVer MICRO version has four parts, which semver drops silently
             type=ref,event=tag
-            type=semver,pattern={{version}}
+            type=match,pattern=^v(.+)$,group=1
 
       - name: 🚀 Publish manifest list
         working-directory: ${{ runner.temp }}/digests
