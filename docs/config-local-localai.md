@@ -15,7 +15,7 @@ We are deepening the integration between the two products. As of the time of wri
 - ✖️ [Constrained grammars](https://localai.io/features/constrained_grammars/) (JSON output)
 - ✖️ Voice cloning 🆕
 
-*Last updated Feb 21, 2024.*
+*Feature list last updated Feb 21, 2024; the troubleshooting section Oct 12, 2026.*
 
 ## Guide
 
@@ -52,12 +52,21 @@ If the running LocalAI instance is configured with a [Model Gallery](https://loc
 
 ## Troubleshooting
 
-### Unknown Context Window Size
+### Context window and max output
 
-At the time of writing, LocalAI does not publish the model `context window size`.
-Every model is assumed to be capable of chatting, and with a context window of 4096 tokens.
-Please update the [src/modules/llms/server/models.mappings.ts](../src/modules/llms/server/models.mappings.ts)
-file with the mapping information between LocalAI model IDs and names/descriptions/tokens, etc.
+The model listing reads each model's `GET /api/models/config-json/<id>` from LocalAI with the configured API key. That route needs
+the LocalAI WebUI enabled (it answers 404 with it off, 401 without the key). `context_size` there is the server total, which the
+llama-cpp backend splits across its `parallel:N` slots, so the window shown is `context_size / N` (65536 with `parallel:4` is a
+16,384-token window) and the max output is half of it, which also becomes the chat's initial response budget. Where LocalAI is
+really a llama.cpp `llama-server`, the listing reads `meta.n_ctx` from `/v1/models` and `/props` for tool-call support instead.
+If the server declares nothing, the window stays unknown and no `max_tokens` is sent: set it in the model's options under
+Expert Overrides.
+
+### Function calling
+
+Auto-diagrams and generative UIs send a tool definition with `tool_choice: auto` plus a system hint, since llama.cpp ignores
+`required`. A model that answers in prose instead of calling the tool is treated as "no suggestion" (an info line in the
+client logs, no red error), as is a call it rates below the prompt's bar.
 
 ## 🤝 Support
 

@@ -68,6 +68,7 @@ These vendors do NOT have hardcoded model lists - they fetch models from APIs at
 **LocalAI** - `src/modules/llms/server/openai/models/localai.models.ts`
 
 - Local service. Substring hide list for the non-chat gallery models it also serves (image/TTS/STT/embedding/reranker/VAD), vision/reasoning detection by name pattern.
+- Backend hints (`localAIModelHints`, tests in `localai.models.test.ts`): llama-server `meta.n_ctx` and `/props` `supports_tool_calls`; LocalAI proper `/api/models/config-json/<id>` (fetched by the dispatch with the key, WebUI on) where `context_size` is the server total divided by the `parallel:N` options string. Half the window is declared as `maxCompletionTokens`. Nothing declared leaves the window `null`.
 
 **FastAPI** - `src/modules/llms/server/openai/models/fastapi.models.ts`
 

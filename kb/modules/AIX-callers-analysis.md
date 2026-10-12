@@ -40,7 +40,7 @@ This document analyzes all AIX function callers and their patterns for message r
 
 | **Caller** | **Context** | **Message Removal** | **Error Handling** |
 | ------------ | ------------- | ------------------- | ------------------- |
-| **Auto Follow-ups** | `'chat-followup-*'` | `fragmentDelete()` on failure | `fragmentReplace()` with error |
+| **Auto Follow-ups** | `'chat-followup-*'` | `fragmentDelete()` on a decline (prose, no call) or a call rated below the prompt's bar (4 diagram, 3 UI) | `fragmentReplace()` with error on out-of-tokens and other failures; a decline is an info log only |
 | **Gen CR Diffs** | `'aifn-gen-cr-diffs'` | None | State-based handling |
 | **Code Fixup** | `'fixup-code'` | None | Throw errors |
 | **Attachment Prompts** | `'chat-attachment-prompts'` | None | Throw errors |
@@ -69,7 +69,7 @@ This document analyzes all AIX function callers and their patterns for message r
 ### 2. Fragment-Level Management
 
 - **Beam Gather**: Clear fragments array but keep message structure
-- **Auto Follow-ups**: Delete specific placeholder fragments on failure
+- **Auto Follow-ups**: Delete the placeholder fragment when the Code model declines or rates the suggestion below the bar; replace it with an error fragment only on a real failure
 - **Purpose**: Maintain message structure while removing failed content
 
 ### 3. Empty Message Replacement
