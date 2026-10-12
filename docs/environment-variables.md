@@ -137,7 +137,7 @@ requiring the user to enter an API key
 | `DEEPSEEK_API_KEY` | The API key for Deepseek AI | Optional |
 | `GEMINI_API_KEY` | The API key for Google AI's Gemini | Optional |
 | `GROQ_API_KEY` | The API key for Groq Cloud | Optional |
-| `LOCALAI_API_HOST` | Sets the URL of the LocalAI server, or defaults to <http://127.0.0.1:8080> | Optional |
+| `LOCALAI_API_HOST` | Sets the URL of the LocalAI server, or defaults to <http://127.0.0.1:8080>; also used by LocalAI voice synthesis linked to that service | Optional |
 | `LOCALAI_API_KEY` | The (Optional) API key for LocalAI | Optional |
 | `METAAI_API_KEY` | The API key for Meta AI (dev.meta.ai) | Optional, see note below |
 | `METAAI_API_HOST` | Changes the Meta AI host, defaults to <https://api.meta.ai> | Optional |
