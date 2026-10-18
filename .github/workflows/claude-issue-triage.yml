@@ -31,7 +31,7 @@ jobs:
           fetch-depth: 0 # 1 -> 0: full history helps with git blame, etc.
 
       - name: 🤖 Analyze and reply
-        uses: anthropics/claude-code-action@1d6de8cb0c237e7c15e9e1bdf973826ebae490cc # v1.0.248
+        uses: anthropics/claude-code-action@374f254f5efaf968abfe15d399fd90972e8138b9 # v1.0.251
         env:
           CLAUDE_CODE_SUBAGENT_MODEL: claude-opus-5-5 # brains on Fable (--model below), delegated subagents on the latest Opus
         with:
